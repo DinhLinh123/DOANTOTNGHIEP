@@ -34,7 +34,7 @@ function ClientPage(props) {
         <div className="client-page-container">
             <div className="client-page-container__menu">
                 <div className="client-page-container__menu-logo">
-                    <img src={logoRes} />
+                    <img src={logoRes} onClick={() => { setMenuTab(MENU_TAB.HOME_PAGE) }}/>
                 </div>
                 <div className="client-page-container__menu-nav">
                     <div className="client-page-container__menu-nav-item"

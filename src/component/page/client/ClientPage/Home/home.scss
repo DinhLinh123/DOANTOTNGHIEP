@@ -1,0 +1,16 @@
+.home-container{
+    &__banner{
+        img{
+            width: 100%;
+        }
+    }
+
+    &__content{
+        padding: 0 15%;
+        display: flex;
+
+        &-left{
+            width: 50%;
+        }
+    }
+}

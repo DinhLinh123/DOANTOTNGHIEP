@@ -17,6 +17,15 @@ function Home(props) {
             <div className="home-container__banner">
                 <img src={banner}/>
             </div>
+
+            <div className="home-container__content">
+                <div className="home-container__content-left">
+                    hahaah
+                </div>
+                <div className="home-container__content-left">
+                    hahaah
+                </div>
+            </div>
         </div>
     )
 }
