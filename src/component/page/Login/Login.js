@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import PropType from 'prop-types'
 import './login.css'
-import Input from '../../../base/Input/Input';
-import Button from '../../../base/Button/Button';
+import Input from '../../base/Input/Input';
+import Button from '../../base/Button/Button';
 
 
 Login.PropType = {}
