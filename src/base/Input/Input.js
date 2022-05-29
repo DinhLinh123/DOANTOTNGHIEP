@@ -7,7 +7,8 @@ Input.propTypes={
     defaultValue: PropTypes.string,
     value: PropTypes.string,
     required: PropTypes.bool,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    type: PropTypes.string
 }
 
 Input.defaultValue={
@@ -15,15 +16,11 @@ Input.defaultValue={
 }
 
 function Input(props) {
-    const {placeholder, defaultValue, required, onChange, value} = props;
-
-    // useEffect(() => {
-    //     console.log(value)
-    // }, [value]);
+    const {placeholder, defaultValue, required, onChange, value, type} = props;
 
     return (
         <div className={`container-input`}>
-            <input placeholder={placeholder} defaultValue={defaultValue} value={value} required={required} onChange={onChange}/>
+            <input type={type} placeholder={placeholder} defaultValue={defaultValue} value={value} required={required} onChange={(val)=>{onChange(val?.target?.value)}}/>
             <div className='container-inpu__mess'>
 
             </div>

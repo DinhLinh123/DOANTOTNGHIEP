@@ -9,6 +9,7 @@ Button.propTypes = {
   color: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  style: PropTypes.object
 };
 
 Button.defaultProps = {
@@ -21,7 +22,7 @@ Button.defaultProps = {
 };
 
 function Button(props) {
-  const { className, name, background, onClick, color, disabled } = props;
+  const { className, name, background, onClick, color, disabled, style } = props;
   return (
     <div className="button-common">
       <button
@@ -37,7 +38,10 @@ function Button(props) {
               background === "#95a5a6"
             ? "#000000"
             : "#ffffff",
-        }}
+            ...style
+
+        }
+        }
         onClick={onClick}
         disabled={disabled}
       >
