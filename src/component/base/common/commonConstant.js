@@ -1,3 +1,11 @@
 const COLOR = '#01a3a4';
+const MENU_TAB_CLIENT = {
+    HOME_PAGE: "HOME_PAGE",
+    INTRODUCE: "INTRODUCE",
+    BOOKING: "BOOKING",
+    OFFER: "OFFER",
+    FEEDBACK: "FEEDBACK",
+    CONTACT: "CONTACT"
+}
 
-export {COLOR}
+export {COLOR,MENU_TAB_CLIENT}

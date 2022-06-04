@@ -17,7 +17,7 @@ Button.defaultProps = {
   name: "Button",
   background: "",
   onClick: () => {},
-  color: "",
+  color: "#fff",
   disabled: false,
 };
 
@@ -37,7 +37,8 @@ function Button(props) {
               background === "#efefef" ||
               background === "#95a5a6"
             ? "#000000"
-            : "#ffffff",
+            : color,
+          padding:'0 10px',
             ...style
 
         }
