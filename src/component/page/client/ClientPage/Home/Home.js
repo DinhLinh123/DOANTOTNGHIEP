@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./home.scss";
 import banner from '../../../../../image/banner-home.jpg';
-import banne1 from '../../../../../image/banner1.jpg';
-import banne2 from '../../../../../image/banner2.jpg';
-import banne3 from '../../../../../image/banner3.jpg';
+import banner1 from '../../../../../image/banner1.jpg';
+import banner2 from '../../../../../image/banner2.jpg';
+import banner3 from '../../../../../image/banner3.jpg';
 
 import home1 from '../../../../../image/home1.png';
 import home2 from '../../../../../image/home2.png';
@@ -17,6 +17,7 @@ import home8 from '../../../../../image/home8.jpg';
 import home9 from '../../../../../image/home9.jpg';
 import Button from '../../../../base/Button/Button'
 import { MENU_TAB_CLIENT } from "../../../../base/common/commonConstant";
+import ImageGallery from 'react-image-gallery';
 
 Home.propTypes = {
     setMenuTab: PropTypes.func
@@ -30,12 +31,70 @@ function Home(props) {
     const { setMenuTab } = props
     useEffect(() => {
     }, [])
-    
+
+    const imgData = [
+        {
+            original: banner
+        },
+        {
+            original: banner1
+        },
+        {
+            original: banner2
+        }
+        , {
+            original: banner3
+        }
+    ]
+
+    const images = [
+        {
+          original: banner,
+          thumbnail: banner,
+        },
+        {
+          original: banner1,
+          thumbnail: banner1,
+        },
+        {
+          original: banner2,
+          thumbnail: banner2,
+        },
+      ];
+
+    const [current, setCurrent] = useState(0)
+
+    const length = imgData.length;
+
+    const nextSlide = () =>{
+        setCurrent(current === length - 1 ?0: current+1)
+    }
+
+    const backSlide = () =>{
+        setCurrent(current === 0  ?length - 1: current-1)
+    }
+
+    function renderImgSlide(img) {
+
+        return (
+            <section className="slide-img">
+                <Button name="<" className={"back-slide"} onClick={()=>{backSlide()}}/>
+                <Button name=">" className={"next-slide"} onClick={()=>{nextSlide()}}/>
+                {img?.map((item, index) => {
+                    return <div className={index === current? 'slide active': 'slide'} key={index}>
+                        {index === current && ( <img src={item?.img} className="image"/>)}
+                       
+                    </div>
+                })}
+            </section>
+
+        )
+    }
+
     return (
         <div className="home-container">
             <div className="home-container__banner">
-                {/* <img src={banner} /> */}
-                <FontAwesomeIcon icon="fa-solid fa-code" />
+            <ImageGallery items={imgData} />
             </div>
 
             <div className="home-container__cpn1">
