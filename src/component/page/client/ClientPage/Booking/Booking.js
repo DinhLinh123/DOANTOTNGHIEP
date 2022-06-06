@@ -23,11 +23,14 @@ function Booking(props) {
 
     console.log(time)
     return(
-        <div className="offer-container">
-            <div className="offer-container__banner" 
-                style={{backgroundImage: banner1}}
+        <div className="booking-container">
+            <div className="booking-container__banner" 
+                style={{backgroundImage: `url(${banner1})`}}
             >
-                <img src={banner1}/>
+            </div>
+            <div className="booking-container__booke" 
+                style={{backgroundImage: `url(${banner1})`}}
+            >
             </div>
             <ConfigProvider locale={viVN} >
             <DatePicker onChange={(val)=>{setTime(val)}} defaultValue={time} format={"DD-MM-yyyy"}/>
