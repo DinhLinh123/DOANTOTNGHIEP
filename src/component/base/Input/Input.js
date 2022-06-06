@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './input.css'
+import './input.scss'
 
 Input.propTypes={
     placeholder: PropTypes.string,
@@ -8,7 +8,8 @@ Input.propTypes={
     value: PropTypes.string,
     required: PropTypes.bool,
     onChange: PropTypes.func,
-    type: PropTypes.string
+    type: PropTypes.string,
+    label: PropTypes.string,
 }
 
 Input.defaultValue={
@@ -16,12 +17,15 @@ Input.defaultValue={
 }
 
 function Input(props) {
-    const {placeholder, defaultValue, required, onChange, value, type} = props;
+    const {placeholder, defaultValue, required, onChange, value, type, label} = props;
 
     return (
         <div className={`container-input`}>
+             <div className='container-input__label'>
+{label}
+</div>
             <input type={type} placeholder={placeholder} defaultValue={defaultValue} value={value} required={required} onChange={(val)=>{onChange(val?.target?.value)}}/>
-            <div className='container-inpu__mess'>
+            <div className='container-input__mess'>
 
             </div>
         </div>

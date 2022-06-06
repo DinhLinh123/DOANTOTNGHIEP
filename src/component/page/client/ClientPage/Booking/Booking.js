@@ -4,7 +4,7 @@ import "./booking.scss";
 import { DatePicker, ConfigProvider, Checkbox, } from 'antd';
 import viVN from 'antd/lib/locale/vi_VN';
 import banner1 from '../../../../../image/banner1.jpg';
-
+import Input from '../../../../base/Input/Input'
 
 import 'antd/dist/antd.css';
 import moment from "moment";
@@ -17,9 +17,13 @@ Booking.defaultProps = {
 };
 //giới thiệu
 function Booking(props) {
+    let minDate =moment(new Date())
 
-    const [time, setTime] = useState(moment(new Date()))
-    let minDate = new Date()
+    //state
+    const [time, setTime] = useState(moment(new Date()));
+    const [adults, setAdults] = useState(0);
+    const [children, setChildren] = useState(0);
+
 
     console.log(time)
     return (
@@ -34,20 +38,26 @@ function Booking(props) {
                         SET TABLE
                     </div>
                     <div className="booking-container__book-left-content">
-                        SET TABLE
+                        Quý khách vui lòng đặt bàn trước để có trải nghiệm thưởng thức ẩm thực tốt nhất tại Sun Homes BBQ.
+                    </div>
+                    <div className="booking-container__book-left-person">
+                        <Input defaultValue={adults} onChange={(val)=>{setAdults(val)}} type={"number"} label={"Số người lớn"} required/>
+                    </div>
+                     <div className="booking-container__book-left-person">
+                        <Input defaultValue={children} onChange={(val)=>{setChildren(val)}} type={"number"} label={"Số trẻ em"} required/>
                     </div>
                 </div>
                 <div className="booking-container__book-right">
-
-                </div>
-            </div>
-            <ConfigProvider locale={viVN} >
+                <ConfigProvider locale={viVN} >
                 <DatePicker onChange={(val) => { setTime(val) }} defaultValue={time} format={"DD-MM-yyyy"} />
             </ConfigProvider>
             {/* 
             <DateTimePicker disableClock={true} onChange={setTime} value={time} format={"dd-MM-yyyy"} minDate={minDate}/> */}
 
             <Checkbox />
+                </div>
+            </div>
+           
 
         </div>
     )
