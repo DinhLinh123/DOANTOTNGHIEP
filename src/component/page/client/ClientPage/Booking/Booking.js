@@ -21,8 +21,11 @@ function Booking(props) {
 
     //state
     const [time, setTime] = useState(moment(new Date()));
-    const [adults, setAdults] = useState(0);
+    const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
+    const [customerName, setCustomerName] = useState('');
+    const [customerNamePhone, setCustomerPhone] = useState('');
+
 
 
     console.log(time)
@@ -48,11 +51,12 @@ function Booking(props) {
                     </div>
                 </div>
                 <div className="booking-container__book-right">
-                <ConfigProvider locale={viVN} >
-                <DatePicker onChange={(val) => { setTime(val) }} defaultValue={time} format={"DD-MM-yyyy"} />
-            </ConfigProvider>
-            {/* 
-            <DateTimePicker disableClock={true} onChange={setTime} value={time} format={"dd-MM-yyyy"} minDate={minDate}/> */}
+                    <Input defaultValue={customerName} onChange={(val)=>{setCustomerName(val)}}  label={"Họ và tên"} placeholder="Tên của bạn..." required/>
+                    <Input defaultValue={customerNamePhone} onChange={(val)=>{setCustomerPhone(val)}}  label={"Số điện thoại"} required placeholder="Số điện thoại của bạn..."/>
+                    <ConfigProvider locale={viVN} >
+                        <DatePicker onChange={(val) => { setTime(val) }} defaultValue={time} format={"DD-MM-yyyy"} />
+                    </ConfigProvider>
+           
 
             <Checkbox />
                 </div>
