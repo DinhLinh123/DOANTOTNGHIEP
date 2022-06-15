@@ -53,9 +53,7 @@ function Booking(props) {
                 <div className="booking-container__book-right">
                     <Input defaultValue={customerName} onChange={(val)=>{setCustomerName(val)}}  label={"Họ và tên"} placeholder="Tên của bạn..." required/>
                     <Input defaultValue={customerNamePhone} onChange={(val)=>{setCustomerPhone(val)}}  label={"Số điện thoại"} required placeholder="Số điện thoại của bạn..."/>
-                    <ConfigProvider locale={viVN} >
-                        <DatePicker onChange={(val) => { setTime(val) }} defaultValue={time} format={"DD-MM-yyyy"} />
-                    </ConfigProvider>
+                    
            
 
             <Checkbox />
