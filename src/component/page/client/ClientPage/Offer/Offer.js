@@ -179,7 +179,7 @@ function Offer(props) {
                     <Button2 name={'Đóng'} onClick={()=>setIsShowPopupDetail(false)} />
                 ]}
                 width={800}
-                body={[
+                body={
                         <div className="popup-detail-body">
                             <div className="popup-detail-body__img">
                                 <img src={offerDetail.img} />
@@ -191,7 +191,7 @@ function Offer(props) {
                                 {offerDetail.contentMore} 
                             </div>
                         </div>
-                ]}
+            }
             />
         </>
     )

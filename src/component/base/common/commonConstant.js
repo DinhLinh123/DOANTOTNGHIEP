@@ -9,4 +9,8 @@ const MENU_TAB_CLIENT = {
 }
 const ONE_DAY = 86399000
 
-export {COLOR,MENU_TAB_CLIENT, ONE_DAY}
+const PATTETN ={
+    EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+}
+
+export {COLOR,MENU_TAB_CLIENT, ONE_DAY, PATTETN}

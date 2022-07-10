@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import "./feedback.scss";
 import Input from '../../../../base/Input/Input'
 import home9 from '../../../../../image/home9.jpg';
+import Button2 from "../../../../base/Button/Button";
+import { PATTETN } from "../../../../base/common/commonConstant";
 Feedback.propTypes = {
 
 };
@@ -16,6 +18,12 @@ function Feedback(props) {
     const [customerEmail, setCustomerEmail] = useState('')
     const [customerPhone, setCustomerPhone] = useState('')
     const [customercontent, setCustomerContent] = useState('')
+    const [disabledButton, setDisabledButton] = useState(true)
+
+    useEffect(() => {
+      console.log(disabledButton)
+    }, [disabledButton])
+    
     return (
         <div className="feedback-container">
             <div className="feedback-container__banner"
@@ -40,10 +48,22 @@ function Feedback(props) {
                     </div>
                 </div>
                 <div className="feedback-container__book-right">
-                    <Input defaultValue={customerName} onChange={(val) => { setCustomerName(val) }} label={"Họ và tên"} placeholder="Tên của bạn..." required autoFocus />
-                    <Input defaultValue={customerEmail} onChange={(val) => { setCustomerEmail(val) }} label={"Email"} placeholder="Email của bạn..." required />
+                    <Input defaultValue={customerName} onChange={(val) => { setCustomerName(val) }} label={"Họ và tên"} placeholder="Tên của bạn..." autoFocus />
+                    <Input
+                        defaultValue={customerEmail}
+                        onChange={(val) => { setCustomerEmail(val) }}
+                        label={"Email"}
+                        placeholder="Email của bạn..."
+                        required
+                        pattern={PATTETN.EMAIL}
+                        messageNote={"Nhập đúng định dạng email!"} 
+                        setDangerNote={val=>{setDisabledButton(val)}}
+                    />
                     <Input defaultValue={customerPhone} onChange={(val) => { setCustomerPhone(val) }} label={"Số điện thoại"} required placeholder="Số điện thoại của bạn..." />
-                    <Input isTextAria={true} defaultValue={customercontent} onChange={(val) => { setCustomerContent(val) }} label={"Nội dung"} placeholder="Lời nhắn..." required />
+                    <Input isTextAria={true} defaultValue={customercontent} onChange={(val) => { setCustomerContent(val) }} label={"Nội dung"} placeholder="Lời nhắn..." />
+                    <div className="feedback-container__book-right-button">
+                        <Button2 name="Gửi góp ý" background="#F3E385" color="#000" disabled={disabledButton} onClick={()=>alert("khỏe")} />
+                    </div>
 
                 </div>
             </div>
