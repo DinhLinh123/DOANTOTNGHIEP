@@ -1,31 +1,35 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import "./button.css";
-Button.propTypes = {
+import "./button.scss";
+import { Button } from 'antd';
+
+Button2.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   background: PropTypes.string,
   color: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  style: PropTypes.object
+  style: PropTypes.object,
+  isLoading: PropTypes.bool
 };
 
-Button.defaultProps = {
+Button2.defaultProps = {
   className: "",
   name: "Button",
   background: "",
   onClick: () => {},
   color: "#fff",
   disabled: false,
+  isLoading: false
 };
 
-function Button(props) {
-  const { className, name, background, onClick, color, disabled, style } = props;
+function Button2(props) {
+  const { className, name, background, onClick, color, disabled, style, isLoading } = props;
   return (
     <div className="button-common">
-      <button
+      <Button
         className={
           !className ? "button-common-item" : `${className} button-common-item`
         }
@@ -45,10 +49,11 @@ function Button(props) {
         }
         onClick={onClick}
         disabled={disabled}
+        loading={isLoading}
       >
         {name}
-      </button>
+      </Button>
     </div>
   );
 }
-export default Button;
+export default Button2;

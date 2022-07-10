@@ -1,50 +1,23 @@
 .home-container{
     @import "~react-image-gallery/styles/scss/image-gallery.scss";
     &__banner{
-      
+        height: 500px;
 
-        .slide-img{
-            display: flex;
-            position: relative;
-
-            .button-common{
-                &:hover .button-common-item     {
-                    color: #ff9f43;
+        .ant-carousel{
+            .slick-slider{
+                .slick-list{
                 }
-                .button-common-item{
-                    font-size: 61px;
-                    background-color: unset;
-                    color: #fff !important;
-
-                    &:hover{
-                        color: #ff9f43 !important;
-                    }
-                }
-            }
-
-            .slide{
-                .image{
-                width: 100vw;
-                height: 742px;
-            }
-}
-            
-
-            .back-slide{
-                position: absolute;
-                top: 50%;
-                left: 32px;
-                z-index: 1000;
-            }
-
-            .next-slide{
-                position: absolute;
-                top: 50%;
-                right: 32px;
-                z-index: 1000;
             }
         }
-    }
+
+            img{
+            width: 100vw;
+            height: 500px;
+        }
+
+       
+}
+        
 
     &__cpn1{
         padding: 0 15%;

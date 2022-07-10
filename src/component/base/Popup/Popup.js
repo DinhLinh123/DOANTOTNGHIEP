@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from 'prop-types'
-import './popup.css'
+import './popup.scss'
+import Button2 from "../Button/Button";
 
 Popup.propTypes = {
     show: PropTypes.bool,
@@ -29,7 +30,7 @@ function Popup(props) {
     const { show, button, onClickClose, mess, width, height, body ,title} = props;
     const [showPopupMess, setShowPopupMess] = useState(false);
 
-    let list = button ? button.map((item, index) => {
+    let list = button ? button?.map((item, index) => {
         return (
             <div key={index} className="item-button">
                 {item}
@@ -37,7 +38,7 @@ function Popup(props) {
         )
     }) : '';
 
-    let listBody = body ? body.map((item, index) => {
+    let listBody = body ? body?.map((item, index) => {
         return (
             <div key={index} className="item-body">
                 {item}
@@ -51,7 +52,7 @@ function Popup(props) {
             <div className="popup-mess" style={{ width: width}}>
                 <div className="popup-mess-header">
                     <span className="label-mess-header">{title}</span>
-                    <button className="close-mess-popup" onClick={onClickClose}>x</button>
+                    <Button2 className="close-mess-popup" onClick={onClickClose} name={'x'}/>
                 </div>
                 {mess != '' ? <div className="popup-content-mess">
                     {mess}

@@ -1,0 +1,44 @@
+.contact-container {
+    &__banner {
+        height: 300px;
+        background-repeat: no-repeat;
+    }
+
+    &__book{
+        padding: 0 15%;
+        display: flex;
+        margin: 50px 0 24px 0;
+
+        &-left{
+            width: 50%;
+            font-size: 18px;
+            text-align: left;
+
+            &-label{
+                font-family: Cursive;
+                font-size: 35px;
+            }
+
+            &-info{
+                margin-top: 24px;
+                &-address{
+                    span{
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        &-right{
+            width: 50%;
+            margin: 0 50px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 5px;
+
+            iframe{
+                border-radius: 8px;
+            }
+        }
+    }
+}

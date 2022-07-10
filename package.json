@@ -15,8 +15,10 @@
     "react-dom": "^18.0.0",
     "react-image-gallery": "^1.2.8",
     "react-native-validator-form": "^1.0.0",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
+    "react-timeit": "^1.2.12",
     "sass": "^1.50.0",
     "tar": "^6.1.11",
     "web-vitals": "^2.1.4"

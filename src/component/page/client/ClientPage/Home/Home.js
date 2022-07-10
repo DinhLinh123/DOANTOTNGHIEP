@@ -18,6 +18,7 @@ import home9 from '../../../../../image/home9.jpg';
 import Button from '../../../../base/Button/Button'
 import { MENU_TAB_CLIENT } from "../../../../base/common/commonConstant";
 import ImageGallery from 'react-image-gallery';
+import { Carousel } from 'antd';
 
 Home.propTypes = {
     setMenuTab: PropTypes.func
@@ -49,41 +50,41 @@ function Home(props) {
 
     const images = [
         {
-          original: banner,
-          thumbnail: banner,
+            original: banner,
+            thumbnail: banner,
         },
         {
-          original: banner1,
-          thumbnail: banner1,
+            original: banner1,
+            thumbnail: banner1,
         },
         {
-          original: banner2,
-          thumbnail: banner2,
+            original: banner2,
+            thumbnail: banner2,
         },
-      ];
+    ];
 
     const [current, setCurrent] = useState(0)
 
     const length = imgData.length;
 
-    const nextSlide = () =>{
-        setCurrent(current === length - 1 ?0: current+1)
+    const nextSlide = () => {
+        setCurrent(current === length - 1 ? 0 : current + 1)
     }
 
-    const backSlide = () =>{
-        setCurrent(current === 0  ?length - 1: current-1)
+    const backSlide = () => {
+        setCurrent(current === 0 ? length - 1 : current - 1)
     }
 
     function renderImgSlide(img) {
 
         return (
             <section className="slide-img">
-                <Button name="<" className={"back-slide"} onClick={()=>{backSlide()}}/>
-                <Button name=">" className={"next-slide"} onClick={()=>{nextSlide()}}/>
+                <Button name="<" className={"back-slide"} onClick={() => { backSlide() }} />
+                <Button name=">" className={"next-slide"} onClick={() => { nextSlide() }} />
                 {img?.map((item, index) => {
-                    return <div className={index === current? 'slide active': 'slide'} key={index}>
-                        {index === current && ( <img src={item?.img} className="image"/>)}
-                       
+                    return <div className={index === current ? 'slide active' : 'slide'} key={index}>
+                        {index === current && (<img src={item?.img} className="image" />)}
+
                     </div>
                 })}
             </section>
@@ -94,19 +95,28 @@ function Home(props) {
     return (
         <div className="home-container">
             <div className="home-container__banner">
-            <ImageGallery items={imgData} />
+                <Carousel autoplay>
+                    {imgData?.map((item)=>{
+                        return(
+                            <div>
+                                <img src={item?.original}/>
+                            </div>
+                        )
+                    })}
+                </Carousel>
+
             </div>
 
             <div className="home-container__cpn1">
                 <div className="home-container__cpn1-left">
                     <div className="home-container__cpn1-left-title">
-                        Sun Homes BBQ
+                        House of Hongdae BBQ
                     </div>
                     <div className="home-container__cpn1-left-content">
-                        Sun Homes BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại Sun Homes BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
                     </div>
                     <div className="home-container__cpn1-left-content">
-                        Sun Homes BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại Sun Homes BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
                     </div>
                 </div>
                 <div className="home-container__cpn1-right">
@@ -140,10 +150,10 @@ function Home(props) {
                         Menu
                     </div>
                     <div className="home-container__cpn2-right-content">
-                        Sun Homes BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại Sun Homes BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
                     </div>
                     <div className="home-container__cpn2-right-content">
-                        Sun Homes BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại Sun Homes BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
                     </div>
                 </div>
             </div>
@@ -152,13 +162,12 @@ function Home(props) {
                 <div className="home-container__cpn3-left">
                     <div className="home-container__cpn3-left-title">
                         Restaurant
-
                     </div>
                     <div className="home-container__cpn3-left-content">
                         Khi nói đến Hàn Quốc, ẩm thực là nét văn hóa đặc trưng không thể bỏ qua và thịt nướng Hàn Quốc luôn được “truyền tai” về độ tươi ngon, đậm đà qua những trang cẩm nang du lịch hay những bộ phim Hàn gây bão.
                     </div>
                     <div className="home-container__cpn3-left-content">
-                        Hệ thống Sun Homes BBQ hiện có 17 nhà hàng trong đó 7 nhà hàng chuyên về Buffet tự chọn (Buffet) và 10 nhà hàng chuyên về gọi món (Alacarte).
+                        Hệ thống House of Hongdae BBQ hiện có 17 nhà hàng trong đó 7 nhà hàng chuyên về Buffet tự chọn (Buffet) và 10 nhà hàng chuyên về gọi món (Alacarte).
                     </div>
                     <div className="home-container__cpn3-left-content">
                         Hãy lựa chọn địa điểm gần bạn nhất và liên hệ đặt bàn ngay nhé!
@@ -174,21 +183,7 @@ function Home(props) {
                 </div>
             </div>
 
-            <div className="home-container__cpn4"
-                style={{ backgroundImage: `url(${home9})` }}
-            >
-                <div className="home-container__cpn4-overlay">
-
-                </div>
-                <div className="home-container__cpn4-content">
-                    <div className="home-container__cpn4-content-title">
-                        Quý khách vui lòng đặt bàn trước để có trải nghiệm thưởng thức ẩm thực tốt nhất tại Sun Homes BBQ.
-                    </div>
-                    <div className="home-container__cpn4-content-button">
-                        <Button name="ĐẶT BÀN NGAY" background="#F3E385" color="#000" onClick={() => setMenuTab(MENU_TAB_CLIENT.BOOKING)} />
-                    </div>
-                </div>
-            </div>
+            
         </div>
     )
 }
