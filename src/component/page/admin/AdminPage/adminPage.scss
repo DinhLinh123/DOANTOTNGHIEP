@@ -1,0 +1,50 @@
+.admin-page-container{
+    display: flex;
+    padding: 16px;
+
+    &__nav{
+        width: 350px;
+        background-color: #34495e;
+        height: calc(100vh - 32px);
+        border-radius: 8px;
+
+        &-logo{
+            border-bottom: 1px solid #bdc3c7;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding: 0 16px;
+            font-size: 20px;
+            color: #fff;
+            font-family: 'Comic Sans MS';
+
+            img {
+                height: 100px;
+                cursor: pointer;
+            }
+        }
+
+        &-list{
+            
+        }
+    }
+
+    &__page{
+        height: calc(100vh - 32px);
+        width: calc(100vw - 32px - 350px - 24px);
+        margin-left: 24px;
+        position: relative;
+
+        &-header{
+            border-bottom: 1px solid #bdc3c7;
+            height: 56px;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
+        }
+
+        &-content{
+        }
+    }
+}
