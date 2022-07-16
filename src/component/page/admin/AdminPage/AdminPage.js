@@ -48,10 +48,6 @@ function AdminPage(props) {
     const dispatch = useDispatch();
 
     const typeMenu = useSelector((state)=> state?.menu?.menuType);
-
-    useEffect(() => {
-      console.log(typeMenu)
-    }, [typeMenu])
     
 
     let listMenu = [

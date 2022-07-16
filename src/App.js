@@ -37,7 +37,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/">
-             <Redirect to="/login" /> 
+             <Redirect to="/client/home" /> 
           </Route>
           <Route path={"/login"}><Login /></Route>
 
@@ -45,7 +45,6 @@ function App() {
           <Route exact path="/admin">
              <Redirect to="/admin/menu" /> 
           </Route>
-          <Route path={"/admin"}><AdminPage /></Route>
           <Route path={"/admin/menu"} ><Menu /></Route>
           <Route path={"/admin/area"} ><Area /></Route>
           <Route path={"/admin/spending"} ><Spending /></Route>

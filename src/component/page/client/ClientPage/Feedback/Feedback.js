@@ -21,9 +21,9 @@ function Feedback(props) {
     const [customercontent, setCustomerContent] = useState('')
     const [disabledButton, setDisabledButton] = useState(true)
 
-    useEffect(() => {
-        console.log(disabledButton)
-    }, [disabledButton])
+    // useEffect(() => {
+    //     console.log(disabledButton)
+    // }, [disabledButton])
 
     return (
         <ClientPage index={MENU_TAB_CLIENT.FEEDBACK}>
