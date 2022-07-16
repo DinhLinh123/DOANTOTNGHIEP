@@ -9,6 +9,9 @@ import {
   Routes, // instead of "Switch"
   Route,
   Navigate,
+  Switch,
+  Redirect,
+  Router
 } from "react-router-dom";
 import Kitchen from './component/page/admin/AdminPage/Kitchen/kitchen';
 import Book from './component/page/admin/AdminPage/Book/Book';
@@ -32,40 +35,38 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          {/* <Route
-            exact
-            path="/"
-            render={() => {
-              return (
-                <Route path={"/login"} element={<Login />} />
-              )
-            }}
-          /> */}
-          <Route path={"/"} element={<Login />} />
-          <Route path={"/login"} element={<Login />} />
-          {/* admin  */}
-          <Route path={"/admin"} element={<AdminPage />} />
-          <Route path={"/admin/menu"} element={<Menu />} />
-          <Route path={"/admin/area"} element={<Area />} />
-          <Route path={"/admin/spending"} element={<Spending />} />
-          <Route path={"/admin/turnover"} element={<Turnover />} />
-          <Route path={"/admin/book"} element={<Book />} />
-          <Route path={"/admin/kitchen"} element={<Kitchen />} />
-          <Route path={"/admin/bar"} element={<Bar />} />
-          <Route path={"/admin/staff"} element={<Staff />} />
+        <Switch>
+          <Route exact path="/">
+             <Redirect to="/login" /> 
+          </Route>
+          <Route path={"/login"}><Login /></Route>
+
+          {/* admin */}
+          <Route exact path="/admin">
+             <Redirect to="/admin/menu" /> 
+          </Route>
+          <Route path={"/admin"}><AdminPage /></Route>
+          <Route path={"/admin/menu"} ><Menu /></Route>
+          <Route path={"/admin/area"} ><Area /></Route>
+          <Route path={"/admin/spending"} ><Spending /></Route>
+          <Route path={"/admin/turnover"}> <Turnover /></Route>
+          <Route path={"/admin/book"}><Book /></Route>
+          <Route path={"/admin/kitchen"}><Kitchen /></Route>
+          <Route path={"/admin/bar"}><Bar /></Route>
+          <Route path={"/admin/staff"}> <Staff /></Route>
 
           {/* client */}
-
-          <Route path={"/client"} element={<ClientPage />} />
-          <Route path={"/client/home"} element={<Home />} />
-          <Route path={"/client/booking"} element={<Booking />} />
-          <Route path={"/client/feedback"} element={<Feedback />} />
-          <Route path={"/client/offer"} element={<Offer />} />
-          <Route path={"/client/contact"} element={<Contact />} />
-        </Routes>
+          <Route exact path="/client">
+             <Redirect to="/client/home" /> 
+          </Route>
+          {/* <Route path={"/client"}> <ClientPage /></Route> */}
+          <Route path={"/client/home"}><Home /></Route>
+          <Route path={"/client/booking"}><Booking /></Route>
+          <Route path={"/client/feedback"}><Feedback /></Route>
+          <Route path={"/client/offer"}><Offer /></Route>
+          <Route path={"/client/contact"}><Contact /></Route>
+        </Switch>
       </BrowserRouter>
-
     </div>
   );
 }

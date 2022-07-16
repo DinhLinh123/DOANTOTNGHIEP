@@ -17,7 +17,7 @@
     "react-native-validator-form": "^1.0.0",
     "react-redux": "^8.0.2",
     "react-responsive-carousel": "^3.2.23",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^5.3.3",
     "react-scripts": "^5.0.1",
     "react-timeit": "^1.2.12",
     "redux": "^4.2.0",
