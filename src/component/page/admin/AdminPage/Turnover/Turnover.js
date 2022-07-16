@@ -1,11 +1,16 @@
-import React  from "react";
+import React from "react";
+import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
+import AdminPage from "../AdminPage";
 
-function Turnover (props) {
+function Turnover(props) {
 
     return (
-        <div>
-            trang ql doanh thu
-        </div>
+        <AdminPage
+            title={"Quản lý doanh thu"}
+            index={MENU_TAB_ADMIN.TURNOVER}
+        >
+            Quản lý doanh thu
+        </AdminPage>
 
     )
 

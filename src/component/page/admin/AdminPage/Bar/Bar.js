@@ -1,11 +1,16 @@
 import React  from "react";
+import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
+import AdminPage from "../AdminPage";
 
 function Bar(props) {
 
     return (
-        <div>
-            trang quầy bar
-        </div>
+        <AdminPage 
+        title={"Quản lý bar"}
+        index={MENU_TAB_ADMIN.BAR}
+    >
+        Quản lý bar
+    </AdminPage>
 
     )
 

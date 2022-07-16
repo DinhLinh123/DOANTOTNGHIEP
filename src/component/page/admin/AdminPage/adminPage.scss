@@ -43,7 +43,7 @@
             justify-content: start;
             padding: 0 16px;
             font-size: 20px;
-            color: #f8715f;
+            color: #01a3a4;
             background-color: #fcfcfc;
             font-family: 'Comic Sans MS';
             border-top-left-radius: 8px;
@@ -76,8 +76,8 @@
                 margin-bottom: 8px;
 
                 &:hover {
-                    background-color: #fcf1ef;
-                    color: #da624a;
+                    background-color: #6ec4c5;
+                    color: #fff;
                 }
                 // &:active{
                 //     background-color: yellow;
@@ -86,6 +86,11 @@
                 &-icon {
                     margin-right: 8px;
                 }
+            }
+
+            .selected-item{
+                color: #fff;
+                background-color: #01a3a4;
             }
         }
     }
@@ -175,6 +180,9 @@
             }
         }
 
-        &-content {}
+        &-content {
+            // overflow-y: auto;
+            height: calc(100% - 56px);
+        }
     }
 }

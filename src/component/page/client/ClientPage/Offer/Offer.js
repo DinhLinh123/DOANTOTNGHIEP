@@ -11,6 +11,8 @@ import ud6 from '../../../../../image/ud6.png';
 import "./offer.scss";
 import Button2 from "../../../../base/Button/Button";
 import Popup from "../../../../base/Popup/Popup";
+import { MENU_TAB_CLIENT } from "../../../../base/common/commonConstant";
+import ClientPage from "../ClientPage";
 Offer.propTypes = {
 
 };
@@ -66,7 +68,7 @@ function Offer(props) {
         setIsShowPopupDetail(true)
     }
     return (
-        <>
+        <ClientPage index={MENU_TAB_CLIENT.OFFER}>
             <div className="offer-container">
                 <div className="offer-container__banner"
                     style={{ backgroundImage: `url(${home9})` }}
@@ -193,7 +195,7 @@ function Offer(props) {
                         </div>
             }
             />
-        </>
+        </ClientPage>
     )
 }
 

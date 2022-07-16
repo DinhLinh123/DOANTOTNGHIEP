@@ -14,9 +14,10 @@ import {
     FacebookFilled
 } from '@ant-design/icons';
 import Button2 from "../../../base/Button/Button";
+import { Link } from "react-router-dom";
 
 ClientPage.propTypes = {
-
+    index: PropTypes.string
 };
 
 ClientPage.defaultProps = {
@@ -27,8 +28,46 @@ ClientPage.defaultProps = {
 function ClientPage(props) {
 
 
-
+const {children, index } = props
     const [menuTab, setMenuTab] = useState(MENU_TAB_CLIENT.HOME_PAGE)
+
+    let listMenu = [
+        {
+            link: MENU_TAB_CLIENT.HOME_PAGE,
+            title: 'Trang chủ'
+        },
+        {
+            link: MENU_TAB_CLIENT.BOOKING,
+            title: 'Đặt bàn'
+        },
+        {
+            link: MENU_TAB_CLIENT.OFFER,
+            title: 'Ưu đãi'
+        },
+        {
+            link: MENU_TAB_CLIENT.FEEDBACK,
+            title: 'Góp ý'
+        },
+        {
+            link: MENU_TAB_CLIENT.CONTACT,
+            title: 'Thông tin liên hệ'
+        },
+    ]
+
+    function renderMenuPage() {
+        let list = listMenu?.map((item) => {
+            return (
+                <Link to={`/client/${item?.link}`}>
+                   <div className={`client-page-container__menu-nav-item ${index == item?.link ? 'selected-item' : ''}`}
+                        
+                    >
+                        {item?.title}
+                    </div>
+                </Link>
+            )
+        })
+        return list
+    }
     return (
         <div className="client-page-container">
             <div className="client-page-container__menu">
@@ -36,50 +75,13 @@ function ClientPage(props) {
                     <img src={logoRes} onClick={() => { setMenuTab(MENU_TAB_CLIENT.HOME_PAGE) }} />
                 </div>
                 <div className="client-page-container__menu-nav">
-                    <div className="client-page-container__menu-nav-item"
-                        onClick={() => { setMenuTab(MENU_TAB_CLIENT.HOME_PAGE) }}
-                        style={{ color: menuTab == MENU_TAB_CLIENT.HOME_PAGE ? COLOR : '#fff' }}
-                    >
-                        Trang chủ
-                    </div>
-                    <div className="client-page-container__menu-nav-item"
-                        onClick={() => { setMenuTab(MENU_TAB_CLIENT.BOOKING) }}
-                        style={{ color: menuTab == MENU_TAB_CLIENT.BOOKING ? COLOR : '#fff' }}
-                    >
-                        Đặt bàn
-                    </div>
-                    <div className="client-page-container__menu-nav-item"
-                        onClick={() => { setMenuTab(MENU_TAB_CLIENT.OFFER) }}
-                        style={{ color: menuTab == MENU_TAB_CLIENT.OFFER ? COLOR : '#fff' }}
-                    >
-                        Ưu đãi
-                    </div>
-                    <div className="client-page-container__menu-nav-item"
-                        onClick={() => { setMenuTab(MENU_TAB_CLIENT.FEEDBACK) }}
-                        style={{ color: menuTab == MENU_TAB_CLIENT.FEEDBACK ? COLOR : '#fff' }}
-                    >
-                        Góp ý
-                    </div>
-                    <div className="client-page-container__menu-nav-item"
-                        onClick={() => { setMenuTab(MENU_TAB_CLIENT.CONTACT) }}
-                        style={{ color: menuTab == MENU_TAB_CLIENT.CONTACT ? COLOR : '#fff' }}
-                    >
-                        Thông tin liên hệ
-                    </div>
+                   {renderMenuPage()}
                 </div>
 
             </div>
             <div className="client-page-container__content">
                 {
-                    menuTab == MENU_TAB_CLIENT.HOME_PAGE ?
-                        <Home setMenuTab={(val) => setMenuTab(val)} /> :
-                        menuTab == MENU_TAB_CLIENT.BOOKING ?
-                            <Booking /> :
-                            menuTab == MENU_TAB_CLIENT.OFFER ?
-                                <Offer /> :
-                                menuTab == MENU_TAB_CLIENT.FEEDBACK ?
-                                    <Feedback /> :
-                                    <Contact />
+                  children
                 }
             </div>
 

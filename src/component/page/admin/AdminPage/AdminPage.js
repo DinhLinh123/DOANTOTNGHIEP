@@ -1,7 +1,7 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types'
 import "./adminPage.scss"
-import { BACKGROUND_MENU_ADMIN, COLOR, COLOR_ADMIN, COLOR_MENU_ADMIN, MENU_TAB_ADMIN } from '../../../base/common/commonConstant';
+import { BACKGROUND_MENU_ADMIN, COLOR, COLOR_ADMIN, COLOR_MENU_ADMIN, MENU_TAB_ADMIN, TYPE_MENU } from '../../../base/common/commonConstant';
 import logoRes from '../../../../image/banner1.jpg'
 import {
     UnorderedListOutlined,
@@ -16,7 +16,7 @@ import {
     CaretDownOutlined,
     CaretUpOutlined,
     LogoutOutlined,
-    ShoppingOutlined, 
+    ShoppingOutlined,
 } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import Menu from './Menu/Menu';
@@ -27,163 +27,96 @@ import Kitchen from './Kitchen/kitchen';
 import Spending from './Spending/Spending';
 import Staff from './Staff/Staff';
 import Turnover from './Turnover/Turnover';
+import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import { changeMenuType } from '../../../../reudux/action/menuAction';
 
 AdminPage.propTypes = {
-
+    title: PropTypes.string,
+    index: PropTypes.string
 }
 
 AdminPage.defaultProps = {
 
 }
 
-const TYPE_MENU = {
-    BIG: 'big',
-    SMALL: 'small'
-}
-
 function AdminPage(props) {
 
-    const [menuTab, setMenuTab] = useState(MENU_TAB_ADMIN.HOME_PAGE)
-    const [typeMenu, setTypeMenu] = useState(TYPE_MENU.BIG)
+    const { children, title, index } = props;
     const [displayLogout, setDisplayLogout] = useState(false)
 
+    const dispatch = useDispatch();
+
+    const typeMenu = useSelector((state)=> state?.menu?.menuType);
+
+    useEffect(() => {
+      console.log(typeMenu)
+    }, [typeMenu])
+    
+
+    let listMenu = [
+        {
+            link: MENU_TAB_ADMIN.MENU,
+            icon: <UnorderedListOutlined />,
+            title: 'Menu'
+        },
+        {
+            link: MENU_TAB_ADMIN.SPENDING,
+            icon: <ShoppingCartOutlined />,
+            title: 'Chi tiêu'
+        },
+        {
+            link: MENU_TAB_ADMIN.TURNOVER,
+            icon: <DollarCircleOutlined />,
+            title: 'Doanh thu'
+        },
+        {
+            link: MENU_TAB_ADMIN.BAR,
+            icon: <ShopOutlined />,
+            title: 'Bếp'
+        },
+        {
+            link: MENU_TAB_ADMIN.STAFF,
+            icon: <ShoppingOutlined />,
+            title: 'Nhân viên'
+        },
+        {
+            link: MENU_TAB_ADMIN.BOOK,
+            icon: <CalendarOutlined />,
+            title: 'Đặt bàn'
+        },
+        {
+            link: MENU_TAB_ADMIN.AREA,
+            icon: <AppstoreOutlined />,
+            title: 'Khu vực'
+        },
+    ]
+
     function renderMenuPage() {
-        return (
-            <>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.MENU) }} 
-                    style={{ color: menuTab == MENU_TAB_ADMIN.MENU ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.MENU ? BACKGROUND_MENU_ADMIN: '#fff' }}
+        let list = listMenu?.map((item) => {
+            return (
+                <Link to={`/admin/${item?.link}`}>
+                    <div className={`admin-page-container__nav-list-item ${index == item?.link ? 'selected-item' : ''}`}
+                    // style={{ color: menuTab == MENU_TAB_ADMIN.MENU ? COLOR_MENU_ADMIN: '#01a3a4', 
+                    // background: menuTab == MENU_TAB_ADMIN.MENU ? BACKGROUND_MENU_ADMIN: '#fff' }}
                     >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Menu" placement="right">
-                            <UnorderedListOutlined />
-                        </Tooltip>
-                        :
-                        <UnorderedListOutlined />}
+                        <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
+                            <Tooltip title={item?.title} placement="right">
+                                {item?.icon}
+                            </Tooltip>
+                            :
+                            item?.icon}
+                        </div>
+                        {
+                            typeMenu === TYPE_MENU.BIG &&
+                            <div className='admin-page-container__nav-list-item-text'>{item?.title}</div>
+                        }
                     </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Menu</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.SPENDING) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.SPENDING ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.SPENDING ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Chi tiêu" placement="right">
-                            <ShoppingCartOutlined />
-                        </Tooltip>
-                        :
-                        <ShoppingCartOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Chi tiêu</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.TURNOVER) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.TURNOVER ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.TURNOVER ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Doanh thu" placement="right">
-                            <DollarCircleOutlined />
-                        </Tooltip>
-                        :
-                        <DollarCircleOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Doanh thu</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.KITCHEN) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.KITCHEN ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.KITCHEN ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="bep" placement="right">
-                            <ShopOutlined />
-                        </Tooltip>
-                        :
-                        <ShopOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Bếp</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.BAR) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.BAR ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.BAR ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="bar" placement="right">
-                            <ShoppingOutlined />
-                        </Tooltip>
-                        :
-                        <ShoppingOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'> Quầy Bar</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.STAFF) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.STAFF ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.STAFF ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Nhân viên" placement="right">
-                            <UserOutlined />
-                        </Tooltip>
-                        :
-                        <UserOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Nhân viên</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.BOOK) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.BOOK ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.BOOK ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Đặt bàn" placement="right">
-                            <CalendarOutlined />
-                        </Tooltip>
-                        :
-                        <CalendarOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Đặt bàn</div>
-                    }
-                </div>
-                <div className='admin-page-container__nav-list-item' onClick={() => { setMenuTab(MENU_TAB_ADMIN.AREA) }}
-                    style={{ color: menuTab == MENU_TAB_ADMIN.AREA ? COLOR_MENU_ADMIN: '#01a3a4', 
-                    background: menuTab == MENU_TAB_ADMIN.AREA ? BACKGROUND_MENU_ADMIN: '#fff' }}
-                    >
-                    <div className='admin-page-container__nav-list-item-icon'> {typeMenu === TYPE_MENU.SMALL ?
-                        <Tooltip title="Khu vực" placement="right">
-                            <AppstoreOutlined />
-                        </Tooltip>
-                        :
-                        <AppstoreOutlined />}
-                    </div>
-                    {
-                        typeMenu === TYPE_MENU.BIG &&
-                        <div className='admin-page-container__nav-list-item-text'>Khu vực</div>
-                    }
-                </div>
-
-                
-            </>
-        )
+                </Link>
+            )
+        })
+        return list
     }
-
 
 
     return (
@@ -200,7 +133,7 @@ function AdminPage(props) {
                         </div>}
                     <div className='admin-page-container__nav-logo-icon'
                         onClick={() => {
-                            typeMenu === TYPE_MENU.BIG ? setTypeMenu(TYPE_MENU.SMALL) : setTypeMenu(TYPE_MENU.BIG)
+                            typeMenu === TYPE_MENU.BIG ? dispatch(changeMenuType(TYPE_MENU.SMALL)) : dispatch(changeMenuType(TYPE_MENU.BIG))
                         }}
                     >
                         {typeMenu === TYPE_MENU.BIG ?
@@ -221,21 +154,21 @@ function AdminPage(props) {
             >
                 <div className='admin-page-container__page-header'>
                     <div className='admin-page-container__page-header-title-page'>
-                        Quản lý menu
+                        {title}
                     </div>
                     <div className='admin-page-container__page-header-account'>
                         <div className='admin-page-container__page-header-account-button'
                             onClick={() => { !displayLogout ? setDisplayLogout(true) : setDisplayLogout(false) }}
                         >
                             <img src={logoRes} onMouseLeave />
-                            {!displayLogout ? <CaretDownOutlined /> : <CaretUpOutlined />}
+                            {!displayLogout ? <CaretDownOutlined style={{transition: '2s'}}/> : <CaretUpOutlined style={{transition: '2s'}}/>}
                         </div>
                         {
                             displayLogout && <div className='admin-page-container__page-header-account-logout'>
                                 <div className='admin-page-container__page-header-account-logout-item'>
                                     <div className='admin-page-container__page-header-account-logout-item-text'>Đăng xuất</div>
                                     <div className='admin-page-container__page-header-account-logout-item-icon'><LogoutOutlined /></div>
-                                    
+
                                 </div>
 
 
@@ -245,23 +178,7 @@ function AdminPage(props) {
                     </div>
                 </div>
                 <div className='admin-page-container__page-content'>
-                {
-                    menuTab == MENU_TAB_ADMIN.MENU ?
-                        <Menu setMenuTab={(val) => setMenuTab(val)} />:
-                        menuTab == MENU_TAB_ADMIN.AREA ?
-                            <Area /> :
-                            menuTab == MENU_TAB_ADMIN.BAR ?
-                                <Bar /> :
-                                menuTab == MENU_TAB_ADMIN.SPENDING ?
-                                <Spending /> :
-                                    menuTab == MENU_TAB_ADMIN.STAFF ?
-                                    <Staff /> :
-                                        menuTab == MENU_TAB_ADMIN.TURNOVER ?
-                                        <Turnover /> :
-                                            menuTab == MENU_TAB_ADMIN.BOOK ?
-                                            <Book /> :
-                                                <Kitchen />
-                }
+                    {children}
                 </div>
             </div>
         </div>

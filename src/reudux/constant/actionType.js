@@ -1,0 +1,3 @@
+const CHANGE_TYPE_MENU="CHANGE_TYPE_MENU"
+
+export default{CHANGE_TYPE_MENU}

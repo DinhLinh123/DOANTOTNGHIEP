@@ -19,6 +19,7 @@ import Button from '../../../../base/Button/Button'
 import { MENU_TAB_CLIENT } from "../../../../base/common/commonConstant";
 import ImageGallery from 'react-image-gallery';
 import { Carousel } from 'antd';
+import ClientPage from "../ClientPage";
 
 Home.propTypes = {
     setMenuTab: PropTypes.func
@@ -93,98 +94,100 @@ function Home(props) {
     }
 
     return (
-        <div className="home-container">
-            <div className="home-container__banner">
-                <Carousel autoplay>
-                    {imgData?.map((item)=>{
-                        return(
-                            <div>
-                                <img src={item?.original}/>
-                            </div>
-                        )
-                    })}
-                </Carousel>
+        <ClientPage index={MENU_TAB_CLIENT.HOME_PAGE} >
+            <div className="home-container">
+                <div className="home-container__banner">
+                    <Carousel autoplay>
+                        {imgData?.map((item) => {
+                            return (
+                                <div>
+                                    <img src={item?.original} />
+                                </div>
+                            )
+                        })}
+                    </Carousel>
+
+                </div>
+
+                <div className="home-container__cpn1">
+                    <div className="home-container__cpn1-left">
+                        <div className="home-container__cpn1-left-title">
+                            House of Hongdae BBQ
+                        </div>
+                        <div className="home-container__cpn1-left-content">
+                            House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        </div>
+                        <div className="home-container__cpn1-left-content">
+                            House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        </div>
+                    </div>
+                    <div className="home-container__cpn1-right">
+                        <div className="home-container__cpn1-right-img">
+                            <img src={home1} />
+                        </div>
+                        <div className="home-container__cpn1-right-img">
+                            <img src={home2} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="home-container__cpn2">
+                    <div className="home-container__cpn2-left">
+                        <div className="home-container__cpn2-left-img">
+                            <img src={home3} />
+                        </div>
+                        <div className="home-container__cpn2-left-img">
+                            <img src={home4} />
+                        </div>
+                        <div className="home-container__cpn2-left-img">
+                            <img src={home5} />
+                        </div>
+                        <div className="home-container__cpn2-left-img">
+                            <img src={home6} />
+                        </div>
+
+                    </div>
+                    <div className="home-container__cpn2-right">
+                        <div className="home-container__cpn2-right-title">
+                            Menu
+                        </div>
+                        <div className="home-container__cpn2-right-content">
+                            House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        </div>
+                        <div className="home-container__cpn2-right-content">
+                            House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
+                        </div>
+                    </div>
+                </div>
+
+                <div className="home-container__cpn3">
+                    <div className="home-container__cpn3-left">
+                        <div className="home-container__cpn3-left-title">
+                            Restaurant
+                        </div>
+                        <div className="home-container__cpn3-left-content">
+                            Khi nói đến Hàn Quốc, ẩm thực là nét văn hóa đặc trưng không thể bỏ qua và thịt nướng Hàn Quốc luôn được “truyền tai” về độ tươi ngon, đậm đà qua những trang cẩm nang du lịch hay những bộ phim Hàn gây bão.
+                        </div>
+                        <div className="home-container__cpn3-left-content">
+                            Hệ thống House of Hongdae BBQ hiện có 17 nhà hàng trong đó 7 nhà hàng chuyên về Buffet tự chọn (Buffet) và 10 nhà hàng chuyên về gọi món (Alacarte).
+                        </div>
+                        <div className="home-container__cpn3-left-content">
+                            Hãy lựa chọn địa điểm gần bạn nhất và liên hệ đặt bàn ngay nhé!
+                        </div>
+                    </div>
+                    <div className="home-container__cpn3-right">
+                        <div className="home-container__cpn3-right-img">
+                            <img src={home7} />
+                        </div>
+                        <div className="home-container__cpn3-right-img">
+                            <img src={home8} />
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
-
-            <div className="home-container__cpn1">
-                <div className="home-container__cpn1-left">
-                    <div className="home-container__cpn1-left-title">
-                        House of Hongdae BBQ
-                    </div>
-                    <div className="home-container__cpn1-left-content">
-                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
-                    </div>
-                    <div className="home-container__cpn1-left-content">
-                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
-                    </div>
-                </div>
-                <div className="home-container__cpn1-right">
-                    <div className="home-container__cpn1-right-img">
-                        <img src={home1} />
-                    </div>
-                    <div className="home-container__cpn1-right-img">
-                        <img src={home2} />
-                    </div>
-                </div>
-            </div>
-
-            <div className="home-container__cpn2">
-                <div className="home-container__cpn2-left">
-                    <div className="home-container__cpn2-left-img">
-                        <img src={home3} />
-                    </div>
-                    <div className="home-container__cpn2-left-img">
-                        <img src={home4} />
-                    </div>
-                    <div className="home-container__cpn2-left-img">
-                        <img src={home5} />
-                    </div>
-                    <div className="home-container__cpn2-left-img">
-                        <img src={home6} />
-                    </div>
-
-                </div>
-                <div className="home-container__cpn2-right">
-                    <div className="home-container__cpn2-right-title">
-                        Menu
-                    </div>
-                    <div className="home-container__cpn2-right-content">
-                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
-                    </div>
-                    <div className="home-container__cpn2-right-content">
-                        House of Hongdae BBQ (Quán thịt nướng Hàn Quốc) sẽ đưa bạn đến Seoul, nơi những con phố bình dị, những quán ăn dân dã đã trở nên quen thuộc và gắn bó với người dân xứ Hàn. Nếu đã một lần thưởng thức thịt nướng tại House of Hongdae BBQ, bạn sẽ không thể quên được hương vị “ngất ngây” của những món sườn non bò Mỹ, nạc vai bò Mỹ, dẻ sườn tươi…. khi hòa quyện vào với các loại gia vị đặc trưng của xứ sở Kimchi đã trở nên hấp dẫn đến thế nào.
-                    </div>
-                </div>
-            </div>
-
-            <div className="home-container__cpn3">
-                <div className="home-container__cpn3-left">
-                    <div className="home-container__cpn3-left-title">
-                        Restaurant
-                    </div>
-                    <div className="home-container__cpn3-left-content">
-                        Khi nói đến Hàn Quốc, ẩm thực là nét văn hóa đặc trưng không thể bỏ qua và thịt nướng Hàn Quốc luôn được “truyền tai” về độ tươi ngon, đậm đà qua những trang cẩm nang du lịch hay những bộ phim Hàn gây bão.
-                    </div>
-                    <div className="home-container__cpn3-left-content">
-                        Hệ thống House of Hongdae BBQ hiện có 17 nhà hàng trong đó 7 nhà hàng chuyên về Buffet tự chọn (Buffet) và 10 nhà hàng chuyên về gọi món (Alacarte).
-                    </div>
-                    <div className="home-container__cpn3-left-content">
-                        Hãy lựa chọn địa điểm gần bạn nhất và liên hệ đặt bàn ngay nhé!
-                    </div>
-                </div>
-                <div className="home-container__cpn3-right">
-                    <div className="home-container__cpn3-right-img">
-                        <img src={home7} />
-                    </div>
-                    <div className="home-container__cpn3-right-img">
-                        <img src={home8} />
-                    </div>
-                </div>
-            </div>
-
-            
-        </div>
+        </ClientPage>
     )
 }
 
