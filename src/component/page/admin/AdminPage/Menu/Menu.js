@@ -58,6 +58,13 @@ function Menu(props) {
         },
     ];
 
+    function convertDataTable(dataTable) {
+        let listData;
+        listData = dataTable.map((item)=>{
+            
+        })
+    }
+
     return (
         <AdminPage 
             title={"Quản lý menu"}
@@ -67,7 +74,7 @@ function Menu(props) {
                 // onChangePagination={(page, pageSize)=>{}}
                 columns={columns}
                 total={90}
-                data={data}
+                data={convertDataTable(data)}
                 loading={false}
             />
         </AdminPage>

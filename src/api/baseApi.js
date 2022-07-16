@@ -14,7 +14,7 @@ const generateQueryParam = function (objParam) {
                     query = query + keys[i] + '=' + objParam[keys[i]];
                 }
             }
-            if(query === '?') return '';npms
+            if(query === '?') return '';
             return query;
         }
     }
