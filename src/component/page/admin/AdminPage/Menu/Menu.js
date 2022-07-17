@@ -1,35 +1,39 @@
-import React  from "react";
-import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
+import React, { useEffect, useState }  from "react";
+import { MENU_TAB_ADMIN, SORT_TYPE } from "../../../../base/common/commonConstant";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 
 function Menu(props) {
 
+    const [sortType, setSortType] = useState();
+
+
     const COLUMN_TABLE_INDEX_MENU={
-        NAME: 'NAME',
-        AGE: 'AGE',
-        ADDRESS: 'ADDRESS'
+        NAME: 'name',
+        AGE: 'age',
+        ADDRESS: 'address'
     }
+
+
 
     const columns = [
         {
             title: 'Name',
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: (a, b) => a.name - b.name,
-            defaultSortOrder: 'descend',
+            sorter: true,
             width: '300px',
         },
         {
             title: 'Age',
             dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
-            defaultSortOrder: 'descend',
-            sorter: (a, b) => a.age - b.age,
-            width: '800px',
+            defaultSortOrder: SORT_TYPE.DESC,
+            sorter: true,
+            width: '300px',
         },
         {
             title: 'Address',
             dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: '800px',
+            width: '300px',
         },
     ];
 
@@ -63,17 +67,17 @@ function Menu(props) {
     const OPTION_MORE_TABLE=[
         {
             title: "Thêm",
-            onclick:()=> alert("thêm")
+            onSelect:()=> alert("thêm")
         },
         {
             title: "Sửa",
-            onclick:()=>{
+            onSelect:()=>{
                 alert("Sửa")
             }
         },
         {
             title: "Xóa",
-            onclick:()=>{
+            onSelect:()=>{
                 alert("Xóa")
             }
         }
@@ -114,6 +118,10 @@ function Menu(props) {
         return[...listData]
     }
 
+    useEffect(()=>{
+        console.log(sortType)
+    },[sortType])
+
     return (
         <AdminPage 
             title={"Quản lý menu"}
@@ -127,6 +135,10 @@ function Menu(props) {
                 loading={false}
                 hasMoreOption
                 option={OPTION_MORE_TABLE}
+                setObjectSort={(field, order)=>{setSortType({
+                    field :field, 
+                    order: order
+                })}}
             />
         </AdminPage>
 
