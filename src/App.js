@@ -26,6 +26,7 @@ import Booking from './component/page/client/ClientPage/Booking/Booking';
 import Feedback from './component/page/client/ClientPage/Feedback/Feedback';
 import Offer from './component/page/client/ClientPage/Offer/Offer';
 import Contact from './component/page/client/ClientPage/Contact/Contact';
+import Order from './component/page/admin/AdminPage/Order/Order';
 
 let historyApp;
 function App() {
@@ -53,6 +54,7 @@ function App() {
           <Route path={"/admin/kitchen"}><Kitchen /></Route>
           <Route path={"/admin/bar"}><Bar /></Route>
           <Route path={"/admin/staff"}> <Staff /></Route>
+          <Route path={"/admin/table/order"}> <Order /></Route>
 
           {/* client */}
           <Route exact path="/client">

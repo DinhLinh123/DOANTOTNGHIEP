@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 // import Draggable from "react-draggable";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import AdminPage from "../AdminPage";
-import { Draggable } from 'drag-react';
+import { Draggable } from "drag-react";
 import Button2 from "../../../../base/Button/Button";
-import baseApi from "../../../../../api/baseApi"
-import $ from 'jquery';
-import "./area.scss"
+import baseApi from "../../../../../api/baseApi";
+import $ from "jquery";
+import "./area.scss";
 
 function Area(props) {
 
@@ -65,4 +65,4 @@ function Area(props) {
     )
 
 }
-export default Area
+export default Area;

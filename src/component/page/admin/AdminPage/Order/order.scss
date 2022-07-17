@@ -1,0 +1,71 @@
+.order-page-container {
+    display: flex;
+    width: 100%;
+
+    &__food-list{
+        width: 60%;
+        display: block;
+        &__top{
+            background-color: #01a3a4;
+            display: flex;
+            &__logo{
+                width: 30%;
+                background-color: aliceblue;
+                img {
+                    height: 80px;
+                    width: 100%;
+                    
+                }
+            }
+            &__search{
+                width: 70%;
+                background-color:aquamarine;
+            }
+        }
+        &__list {
+            margin: 20px 0;
+            padding: 0 2%;
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 24px ;
+    
+    
+                &-item{
+                    height: fit-content;
+                    border-radius: 24px;
+                    padding: 6px;
+                    box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
+                    cursor: pointer;
+    
+                    &-img{
+                        img{
+                            width: 100%;
+                            border-radius: 24px;
+                        }
+                    }
+    
+                    &-title{
+                        margin: 8px 0;
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+    
+                    &-detail{
+                       text-align: right;
+    
+                       &:hover{
+                        color: #01a3a4;
+                       }
+                    }
+                }
+        }
+        &__choose{
+            background-color: #01a3a4;
+        }
+    }
+    
+    &__selected-dish{
+        background-color:bisque;
+        width: 40%;
+    }
+}
