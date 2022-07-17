@@ -15,23 +15,13 @@ function Area(props) {
 
     const [list, setList] = useState([
         {
-            title: "hahaaa",
-            top: 0,
-            left: 0
+          title: "hahaaa",
+          top: 68.72,
+          left: 87.5,
         },
-
-        {
-            title: "hihiiii",
-            top: 0,
-            left: 0
-        },
-
-        {
-            title: "hohoooo",
-            top: 0,
-            left: 0
-        },
-    ])
+        { title: "hihiiii", top: 49.57, left: 41.15 },
+        { title: "hohoooo", top: 38.12, left: 41.67 },
+      ])
 
     function updatePosition(item, value) {
         // debugger

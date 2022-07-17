@@ -17,17 +17,19 @@ function Menu(props) {
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
             sorter: (a, b) => a.name - b.name,
             defaultSortOrder: 'descend',
-            width: '200px',
+            width: '300px',
         },
         {
             title: 'Age',
             dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.age - b.age,
+            width: '800px',
         },
         {
             title: 'Address',
             dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
+            width: '800px',
         },
     ];
 
@@ -58,11 +60,58 @@ function Menu(props) {
         },
     ];
 
+    const OPTION_MORE_TABLE=[
+        {
+            title: "Thêm",
+            onclick:()=> alert("thêm")
+        },
+        {
+            title: "Sửa",
+            onclick:()=>{
+                alert("Sửa")
+            }
+        },
+        {
+            title: "Xóa",
+            onclick:()=>{
+                alert("Xóa")
+            }
+        }
+    ]
+
+    function columnName(item) {
+        return(
+            <div>
+                {item?.name}
+            </div>
+        )
+    }
+    function columnAge(item) {
+        return(
+            <div>
+                {item?.age}
+            </div>
+        )
+    }
+    function columnAddress(item) {
+        return(
+            <div>
+                {item?.address}
+            </div>
+        )
+    }
+
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item)=>{
-            
-        })
+        listData = dataTable.map((item, idx)=>{
+            return{
+                [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+                [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
+                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                key: idx
+            }
+        });
+        return[...listData]
     }
 
     return (
@@ -76,6 +125,8 @@ function Menu(props) {
                 total={90}
                 data={convertDataTable(data)}
                 loading={false}
+                hasMoreOption
+                option={OPTION_MORE_TABLE}
             />
         </AdminPage>
 
