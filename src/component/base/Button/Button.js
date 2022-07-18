@@ -14,6 +14,7 @@ Button2.propTypes = {
   style: PropTypes.object,
   isLoading: PropTypes.bool,
   leftIcon: PropTypes.any,
+  isOnlyIcon: PropTypes.bool
 };
 
 Button2.defaultProps = {
@@ -24,20 +25,11 @@ Button2.defaultProps = {
   color: "#fff",
   disabled: false,
   isLoading: false,
+  isOnlyIcon: false
 };
 
 function Button2(props) {
-  const {
-    className,
-    name,
-    background,
-    onClick,
-    color,
-    disabled,
-    style,
-    isLoading,
-    leftIcon,
-  } = props;
+  const { className, name, background, onClick, color, disabled, style, isLoading, isOnlyIcon, leftIcon } = props;
   return (
     <div className="button-common">
       <Button
@@ -46,6 +38,7 @@ function Button2(props) {
         }
         style={{
           backgroundColor: disabled ? "#ecf0f1" : background,
+          border: disabled ? "1px solid #a4b0be" :'',
           color: disabled
             ? "#95a5a6"
             : background === "" ||
@@ -64,7 +57,7 @@ function Button2(props) {
           {leftIcon && (
             <div className="button-common-item__content-icon">{leftIcon}</div>
           )}
-          {name}
+          { !isOnlyIcon && name}
         </div>
       </Button>
     </div>

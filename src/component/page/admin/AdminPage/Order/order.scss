@@ -2,71 +2,353 @@
     display: flex;
     width: 100%;
 
-    &__food-list{
-        width: 60%;
+    &__food-list {
+        width: calc(100vw - 600px);
         display: block;
-        &__top{
+
+        &__top {
             background-color: #01a3a4;
             display: flex;
-            &__logo{
-                width: 30%;
-                background-color: aliceblue;
-                img {
-                    height: 80px;
-                    width: 100%;
 
+            &__logo {
+                width: 30%;
+                height: 80px;
+
+                //background-color: aliceblue;
+                img {
+
+                    width: 200px;
+                    object-fit: cover
                 }
             }
-            &__search{
+
+            &__search {
                 width: 70%;
-                background-color:aquamarine;
-                
+                display: flex;
+                align-items: center;
+                margin-left: 56px;
+
+                &__textbox {
+                    width: 80%;
+
+                    .container-input {
+                        margin-bottom: 0;
+
+                        &__label {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+
+                &__icon {
+                    margin-left: 16px;
+
+                }
+
             }
         }
+
         &__list {
             margin: 20px 0;
             padding: 0 2%;
             display: grid;
             grid-template-columns: auto auto auto auto;
-            grid-gap: 24px ;
+            grid-gap: 24px;
+            overflow-y: auto;
+            height: calc(100vh - 56px - 120px);
+
+
+            &-item {
+                // width: 272px;
+                height: fit-content;
+                border-radius: 10px;
+                padding: 2px;
+                box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
+                cursor: pointer;
+
+                &-img {
+                    img {
+                        width: 100%;
+                        border-radius: 10px;
+                    }
+                }
+
+                &-title {
+                    margin: 8px 0;
+                    font-size: 18px;
+                    font-weight: bold;
+                    height: 56px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                &-money {
+                    text-align: right;
+                    padding-right: 16px;
+                    color: red;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        &__choose {
+            background-color: #01a3a4;
+            height: 56px;
+            display: flex;
+
+
+            &__children {
+                padding: 0 16px;
+                cursor: pointer;
+                color: #fff;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                transition: 0.2s;
+                justify-content: center;
+
+                &:hover {
+                    background-color: #00d2d3;
+                    color: #fff;
+                    ;
+                }
+            }
+
+            .order-selected {
+                background-color: #006266;
+            }
+        }
+    }
+
+    &__selected-dish {
+        width: 600px;
+
+        &-top {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            color: #01a3a4;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 0 16px;
+
+            &-title {
+                width: 50%;
+                text-align: left;
+            }
+
+            &-table {
+                width: 50%;
+                text-align: right;
+            }
+        }
+
+        &-content {
+            height: calc(100vh - 230px);
+            overflow-y: auto;
+            border-top: 1px solid #a4b0be;
+            padding: 16px;
+
+            &-header{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                color: #01a3a4;
+
+                &-name {
+                    width: 375px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    text-align: left;
+                }
+
+                &-count{
+                    width: 100px;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                &-money {
+                    text-align: right;
+                    width: 125px;
+                    font-weight: bold;
+                }
+            }
+
+            &-choose {
+                min-height: 50px;
+                border-bottom: 1px solid #ced6e0;
+
+                &-line1 {
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+
+                    .food-name {
+                        width: 400px;
+                        font-size: 18px;
+                        text-align: left;
+                    }
+
+                    .line1-food-count{
+                        width: 50px;
+                        font-size: 18px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .food-money {
+                        text-align: right;
+                        width: 150px;
+                        font-weight: bold;
+                        font-size: 18px;
+                    }
+
+                }
+
+                &-line2 {
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+
+                    .food-count {
+                        display: flex;
+                        align-items: center;
+                        width: 90px;
+                        justify-content: space-between;
+                        margin-left: auto;
     
+                        &-number {
+                            margin: 0 10px;
+                        }
     
-                &-item{
-                    height: fit-content;
-                    border-radius: 24px;
-                    padding: 6px;
-                    box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
-                    cursor: pointer;
+                        &-button {
+                            .button-common {
+                                width: 26px;
     
-                    &-img{
-                        img{
-                            width: 100%;
-                            border-radius: 24px;
+                                button {
+                                    display: flex;
+                                    height: 24px;
+                                    width: 24px;
+                                    border-radius: 50%;
+                                    border: 1px solid #1e90ff;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: #1e90ff;
+                                }
+                            }
                         }
                     }
     
-                    &-title{
-                        margin: 8px 0;
-                        font-size: 18px;
-                        font-weight: bold;
-                    }
     
-                    &-detail{
-                       text-align: right;
+                    .food-close {
+                        width: 50px;
+                        margin-left: 68px;
+                        display: flex;
+                        justify-content: center;
     
-                       &:hover{
-                        color: #01a3a4;
-                       }
+                        .button-common {
+                            button {
+                                border: 1px solid red;
+                                width: 24px;
+                                height: 24px;
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: red !important;
+                            }
+                        }
                     }
                 }
+
+                
+            }
+
+            &-no-data{
+                height: calc(100% - 50px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         }
-        &__choose{
-            background-color: #01a3a4;
+
+        &-footer {
+            height: 150px;
+            border-top: 1px solid #a4b0be;
+            padding: 16px;
+
+            &-total {
+                display: flex;
+                align-items: center;
+                color: #01a3a4;
+                font-size: 18px;
+                font-weight: bold;
+                height: 50px;
+                margin-bottom: 24px;
+
+                &-title {
+                    width: 50%;
+                    text-align: left;
+                }
+
+                &-money {
+                    width: 50%;
+                    text-align: right;
+                }
+            }
+
+            &-confirm {
+                .button-common {
+                    button {
+                        width: 70%;
+                        border-radius: 50px;
+                    }
+                }
+            }
         }
+
     }
-    
-    &__selected-dish{
-        background-color:bisque;
-        width: 40%;
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #ced6e0;
+    }
+}
+
+@media only screen and (max-width: 1700px) {
+    .order-page-container {
+        &__food-list {
+            &__list {
+                margin: 20px 0;
+                padding: 0 2%;
+                display: grid;
+                grid-template-columns: auto auto auto;
+                grid-gap: 24px;
+                overflow-y: auto;
+                height: calc(100vh - 56px - 120px);
+            }
+
+        }
     }
 }
