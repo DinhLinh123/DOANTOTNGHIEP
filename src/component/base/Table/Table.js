@@ -18,6 +18,8 @@ TableBase.propTypes = {
   setObjectSort: PropTypes.func,
   setCheckAll: PropTypes.func,
   setListObjectSelected: PropTypes.func,
+  onClickRow: PropTypes.func,
+  onDoubleClickRow : PropTypes.func,
 };
 
 TableBase.defaultProps = {
@@ -44,36 +46,33 @@ function TableBase(props) {
     setObjectSort,
     setCheckAll,
     setListObjectSelected,
+    onClickRow,
+    onDoubleClickRow
   } = props;
 
   const [indexShowMenu, setIndexShowMenu] = useState(-1);
   const [showMenuItem, setShowMenuItem] = useState(false);
 
   const wrapperRef = useRef(null);
+  const onClickClose = () => {
+    setIndexShowMenu(-1);
+    setShowMenuItem(false);
+  };
+  commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
   const rowSelection = {
-    // onChange: (selectedRowKeys, selectedRows) => {
-    //     debugger
-    //   console.log(
-    //     `selectedRowKeys: ${selectedRowKeys}`,
-    //     "selectedRows: ",
-    //     selectedRows
-    //   );
-    // },
+    onChange: (selectedRowKeys, selectedRows) => {
+        debugger
+      
+    },
     onSelect: (record, selected, selectedRows) => {
+      debugger
       setListObjectSelected(selectedRows);
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
       setCheckAll(selected);
     },
   };
-
-  const onClickClose = () => {
-    setIndexShowMenu(-1);
-    setShowMenuItem(false);
-  };
-
-  commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
   const onChange = (pagination, filters, sorter) => {
     setObjectSort(sorter.field, sorter.order);
@@ -160,6 +159,15 @@ function TableBase(props) {
           scroll={{ x: "calc(700px + 50%)", y: 240 }}
           onChange={onChange}
           loading={loading}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event => {onClickRow(record, rowIndex, event)}, // click row
+              onDoubleClick: event => {onDoubleClickRow(record, rowIndex, event)}, // double click row
+              onContextMenu: event => {}, // right button click row
+              onMouseEnter: event => {}, // mouse enter row
+              onMouseLeave: event => {}, // mouse leave row
+            };
+          }}
         />
       </div>
       <div className="table-container__paging">

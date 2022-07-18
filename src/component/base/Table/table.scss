@@ -9,6 +9,8 @@
                 table {
                   .ant-table-tbody {
                     .ant-table-row {
+                      cursor: pointer;
+                      
                       .ant-table-cell {
                         .table-more-option {
                           &__button {

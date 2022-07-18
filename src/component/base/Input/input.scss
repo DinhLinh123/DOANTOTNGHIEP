@@ -1,5 +1,4 @@
 .container-input{
-    margin-bottom: 24px;
     &__label{
         font-size: 16px;
         font-weight: bold;
@@ -17,5 +16,9 @@
     &__mess{
         text-align: left;
         color: red;
+    }
+
+    input{
+        height: 36px;
     }
 }

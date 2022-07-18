@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "./button.scss";
-import { Button } from 'antd';
+import { Button } from "antd";
 
 Button2.propTypes = {
   className: PropTypes.string,
@@ -12,7 +12,8 @@ Button2.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   style: PropTypes.object,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  leftIcon: PropTypes.any,
 };
 
 Button2.defaultProps = {
@@ -22,11 +23,21 @@ Button2.defaultProps = {
   onClick: () => {},
   color: "#fff",
   disabled: false,
-  isLoading: false
+  isLoading: false,
 };
 
 function Button2(props) {
-  const { className, name, background, onClick, color, disabled, style, isLoading } = props;
+  const {
+    className,
+    name,
+    background,
+    onClick,
+    color,
+    disabled,
+    style,
+    isLoading,
+    leftIcon,
+  } = props;
   return (
     <div className="button-common">
       <Button
@@ -42,16 +53,19 @@ function Button2(props) {
               background === "#95a5a6"
             ? "#000000"
             : color,
-          padding:'0 10px',
-            ...style
-
-        }
-        }
+          padding: "0 10px",
+          ...style,
+        }}
         onClick={onClick}
         disabled={disabled}
         loading={isLoading}
       >
-        {name}
+        <div className="button-common-item__content">
+          {leftIcon && (
+            <div className="button-common-item__content-icon">{leftIcon}</div>
+          )}
+          {name}
+        </div>
       </Button>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import "./adminPage.scss";
 import {
@@ -37,6 +37,7 @@ import Turnover from "./Turnover/Turnover";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuType } from "../../../../reudux/action/menuAction";
+import commonFunction from "../../../base/common/commonFunction";
 
 AdminPage.propTypes = {
   title: PropTypes.string,
@@ -50,6 +51,12 @@ function AdminPage(props) {
   const [displayLogout, setDisplayLogout] = useState(false);
 
   const dispatch = useDispatch();
+
+  const wrapperRef = useRef(null);
+  const onClickClose = () => {
+    setDisplayLogout(false);
+  };
+  commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
   const typeMenu = useSelector((state) => state?.menu?.menuType);
 
@@ -186,7 +193,7 @@ function AdminPage(props) {
               )}
             </div>
             {displayLogout && (
-              <div className="admin-page-container__page-header-account-logout">
+              <div className="admin-page-container__page-header-account-logout" ref={wrapperRef}>
                 <div className="admin-page-container__page-header-account-logout-item">
                   <div className="admin-page-container__page-header-account-logout-item-text">
                     Đăng xuất

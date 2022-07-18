@@ -1,0 +1,10 @@
+.menu-manager{
+    &__filter{
+        display: flex;
+        margin: 24px 0;
+
+        &-create-new{
+            margin-left: auto;
+        }
+    }
+}
