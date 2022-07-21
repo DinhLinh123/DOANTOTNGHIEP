@@ -38,6 +38,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuType } from "../../../../reudux/action/menuAction";
 import commonFunction from "../../../base/common/commonFunction";
+import { changeAccountType } from "../../../../reudux/action/accountTypeAction";
 
 AdminPage.propTypes = {
   title: PropTypes.string,
@@ -49,6 +50,8 @@ AdminPage.defaultProps = {};
 function AdminPage(props) {
   const { children, title, index } = props;
   const [displayLogout, setDisplayLogout] = useState(false);
+  const roleType = useSelector((state) => state.account.accountType)
+  const typeMenu = useSelector((state) => state?.menu?.menuType);
 
   const dispatch = useDispatch();
 
@@ -58,7 +61,22 @@ function AdminPage(props) {
   };
   commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
-  const typeMenu = useSelector((state) => state?.menu?.menuType);
+
+  // useEffect(() => {
+  //   let role = localStorage.getItem('roleType')
+  //   if(role != '')
+  //   {
+  //     let account = JSON.parse(role);
+  //     dispatch(changeAccountType({
+  //       userName: account.userName,
+  //       userAvatar: account.userAvatar,
+  //       roleType: account.roleType
+  //     }))
+  //   }else{
+  //     window.open("/login", '_self')
+  //   }
+   
+  // }, [])
 
   let listMenu = [
     {
@@ -102,41 +120,56 @@ function AdminPage(props) {
     let list = listMenu?.map((item) => {
       return (
         <Link to={`/admin/${item?.link}`}>
-          <Tooltip title={item?.title} placement="right">
-            <div
-              className={`admin-page-container__nav-list-item ${
-                index == item?.link ? "selected-item" : ""
-              }`}
-              // style={{ color: menuTab == MENU_TAB_ADMIN.MENU ? COLOR_MENU_ADMIN: '#01a3a4',
-              // background: menuTab == MENU_TAB_ADMIN.MENU ? BACKGROUND_MENU_ADMIN: '#fff' }}
+          {typeMenu !== TYPE_MENU.SMALL ?  <div
+              className={`admin-page-container__nav-list-item ${index == item?.link ? "selected-item" : ""
+                }`}
+            // style={{ color: menuTab == MENU_TAB_ADMIN.MENU ? COLOR_MENU_ADMIN: '#01a3a4',
+            // background: menuTab == MENU_TAB_ADMIN.MENU ? BACKGROUND_MENU_ADMIN: '#fff' }}
             >
               <div className="admin-page-container__nav-list-item-icon">
-                {typeMenu === TYPE_MENU.SMALL ? item?.icon : item?.icon}
+                { item?.icon}
               </div>
               {typeMenu === TYPE_MENU.BIG && (
                 <div className="admin-page-container__nav-list-item-text">
                   {item?.title}
                 </div>
               )}
+            </div>: <Tooltip title={item?.title} placement="right">
+            <div
+              className={`admin-page-container__nav-list-item ${index == item?.link ? "selected-item" : ""
+                }`}
+            // style={{ color: menuTab == MENU_TAB_ADMIN.MENU ? COLOR_MENU_ADMIN: '#01a3a4',
+            // background: menuTab == MENU_TAB_ADMIN.MENU ? BACKGROUND_MENU_ADMIN: '#fff' }}
+            >
+              <div className="admin-page-container__nav-list-item-icon">
+                { item?.icon}
+              </div>
             </div>
-          </Tooltip>
+          </Tooltip>}
+          
         </Link>
       );
     });
     return list;
   }
 
+  function onclickLogout() {
+    localStorage.setItem('roleType', '')
+  }
+
+  
+  useEffect(()=>{console.log(typeMenu)},[typeMenu])
+
   return (
     <div className="admin-page-container">
       <div
-        className={`admin-page-container__nav ${
-          typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__nav ${typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-nav"
             : "admin-page-container__small-nav"
-        }`}
-        // style={{
-        //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
-        // }}
+          }`}
+      // style={{
+      //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
+      // }}
       >
         <div className="admin-page-container__nav-logo">
           {typeMenu === TYPE_MENU.BIG && (
@@ -166,11 +199,10 @@ function AdminPage(props) {
         <div className="admin-page-container__nav-list">{renderMenuPage()}</div>
       </div>
       <div
-        className={`admin-page-container__page ${
-          typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__page ${typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-page"
             : "admin-page-container__small-page"
-        }`}
+          }`}
       >
         <div className="admin-page-container__page-header">
           <div className="admin-page-container__page-header-title-page">
@@ -186,6 +218,7 @@ function AdminPage(props) {
               }}
             >
               <img src={logoRes} onMouseLeave />
+              <div className="admin-page-container__page-header-account-button-name">{roleType.userName}</div>
               {!displayLogout ? (
                 <CaretDownOutlined style={{ transition: "2s" }} />
               ) : (
@@ -194,13 +227,15 @@ function AdminPage(props) {
             </div>
             {displayLogout && (
               <div className="admin-page-container__page-header-account-logout" ref={wrapperRef}>
-                <div className="admin-page-container__page-header-account-logout-item">
-                  <div className="admin-page-container__page-header-account-logout-item-text">
-                    Đăng xuất
-                  </div>
-                  <div className="admin-page-container__page-header-account-logout-item-icon">
-                    <LogoutOutlined />
-                  </div>
+                <div className="admin-page-container__page-header-account-logout-item" onClick={() => { onclickLogout() }}>
+                  <Link to={`/login`}>
+                    <div className="admin-page-container__page-header-account-logout-item-text" >
+                      Đăng xuất
+                    </div>
+                    <div className="admin-page-container__page-header-account-logout-item-icon">
+                      <LogoutOutlined />
+                    </div>
+                  </Link>
                 </div>
               </div>
             )}

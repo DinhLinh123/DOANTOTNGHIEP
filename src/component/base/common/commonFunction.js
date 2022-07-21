@@ -1,5 +1,7 @@
 import { Tooltip } from 'antd';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeAccountType } from '../../../reudux/action/accountTypeAction';
 
 
 function useOutsideAlerter(ref, onclickClose) {
@@ -44,7 +46,7 @@ function numberWithCommas(x) {
   x = x.toString();
   var pattern = /(-?\d+)(\d{3})/;
   while (pattern.test(x))
-      x = x.replace(pattern, "$1,$2");
+    x = x.replace(pattern, "$1,$2");
   return x;
 }
 
