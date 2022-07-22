@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
 import PropType from 'prop-types'
-import './login.css'
-import Input from '../../base/Input/Input';
+import './login.scss'
+import Input2 from '../../base/Input/Input';
 import Button from '../../base/Button/Button';
 import { useDispatch, useSelector } from "react-redux";
 import { changeAccountType } from '../../../reudux/action/accountTypeAction';
+import {
+  UserOutlined,
+  UnlockOutlined
+} from '@ant-design/icons';
+import posterLogin1 from "../../../image/posterLogin1.png";
+import { Input, message } from 'antd';
+import { PATTETN } from '../../base/common/commonConstant';
 
 
 Login.PropType = {}
@@ -17,8 +24,16 @@ function Login() {
   const [input, setInput] = useState('');
   const [userName, setUserName] = useState('');
   const [passWord, setPassWard] = useState('');
+  const [passWordConFirm, setPassWardConFirm] = useState('');
   const [disabled, setDisabled] = useState(false);
   const roleType = useSelector(state=>state.account.accountType)
+  const [isDangerMoreInput, setIsDangerMoreInput] = useState(false);
+  const [isDangerMoreInputPassConfirm, setIsDangerMoreInputPassConfirm] = useState(false);
+  const [isCreateNewAccount, setIsCreateNewAccount] = useState(false);
+  const [emailNewAccount, setEmailNewAccount] = useState('')
+  const [mesInputPassConfirm, setMesInputPassConfirm] = useState('')
+
+
 
   useEffect(() => {
     if (passWord?.length == 0 || userName?.length == 0) {
@@ -49,28 +64,163 @@ function Login() {
       window.open("/admin/menu", '_self')
     }
 
+  function onBlurInputPass() {
+    if (passWord?.length == 0) {
+      setIsDangerMoreInput(true)
+    } else {
+      setIsDangerMoreInput(false)
+    }
+
+  }
+
+  function onBlurInputPassConfirm() {
+    if (passWordConFirm?.length == 0) {
+      setIsDangerMoreInputPassConfirm(true)
+      setMesInputPassConfirm('')
+    } else {
+      setIsDangerMoreInputPassConfirm(false)
+      setMesInputPassConfirm('')
+    }
+
+  }
+
+  function onClickSubmit() {
+     let obj = {
+        userName: userName,
+        userAvatar: passWord,
+        roleType: 'admin'
+      }
+      localStorage.setItem( 'roleType', JSON.stringify(obj))
+
+      let account = JSON.parse(localStorage.getItem('roleType'));
+      dispatch(changeAccountType({
+        userName: account.userName,
+        userAvatar: account.userAvatar,
+        roleType: account.roleType
+      }))
+
+      window.open("/admin/menu", '_self')
+
+  }
+
+  function onClickRigister() {
+    debugger
+    if(passWord != passWordConFirm)
+    {
+      setIsDangerMoreInputPassConfirm(true)
+      setMesInputPassConfirm("Mật khẩu không trùng khớp. Vui lòng nhập lại")
+    }
+    else{
+      setMesInputPassConfirm('')
+    }
+
+  }
 
   return (
-    <div class="datn-login-system">
-      <div class="datn-login-system__container">
-        <div class="header">
-          <span>Đăng nhập</span>
+    <div className="data-login-system">
+      <div className="data-login-system__container">
+        <div className="data-login-system__container-left">
+          <img src={posterLogin1} />
         </div>
-        <div class="login">
-          <form action="#">
-            <div class="input">
-              <i class="fas fa-user-alt"></i>
-              <Input type={'text'} placeholder={"Tên đăng nhập"} defaultValue={userName} onChange={(val) => { setUserName(val) }} />
-            </div>
-            <div class="input">
-              <i class="fas fa-lock"></i>
-              <Input type={'password'} placeholder={"Mật khẩu"} defaultValue={passWord} onChange={(val) => { setPassWard(val) }} />
-            </div>
-            <div class="submit">
-              <Button name={"Đăng nhập"} background={"#27ae60"} onClick={() => { onsubmit() }} style={{ width: '100%' }} disabled={disabled} />
-            </div>
-          </form>
+        <div className="data-login-system__container-right">
+          {!isCreateNewAccount ?
+            <>
+              <div className="data-login-system__container-right-header">
+                <span>Welcome!</span>
+              </div>
+              <div className="data-login-system__container-right-login">
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UserOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input2 type={'text'} placeholder={"Tên đăng nhập"} required defaultValue={userName} onChange={(val) => { setUserName(val) }} />
+                </div>
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UnlockOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input.Password
+                    type={'password'}
+                    placeholder={"Mật khẩu"}
+                    required
+                    efaultValue={passWord}
+                    onChange={(val) => { setPassWard(val.target.value); setIsDangerMoreInput(false) }}
+                    status={isDangerMoreInput && "error"}
+                    onBlur={() => onBlurInputPass()}
+                    onPressEnter={() => onClickSubmit()}
+                  />
+                  {isDangerMoreInput && <div className="data-login-system__container-right-login-input-mes">Trường này không được bỏ trống</div>}
+
+                </div>
+                <div className="data-login-system__container-right-login-submit">
+                  <Button name={"Đăng nhập"} background={"#1cc0a9"} onClick={() => { onClickSubmit() }} style={{ width: '100%' }} disabled={disabled} />
+                </div>
+
+                <div className="data-login-system__container-right-login-more">
+                  <Button name={"Đăng ký mới"} onClick={() => { setIsCreateNewAccount(true) }} style={{ width: '150px' }} className={"button-login-more"} />
+                </div>
+              </div>
+            </>
+            :
+            <>
+              <div className="data-login-system__container-right-header">
+                <span>Create New Account!</span>
+              </div>
+              <div className="data-login-system__container-right-login">
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UserOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input2 type={'text'} placeholder={"Tên đăng nhập"} required defaultValue={userName} onChange={(val) => { setUserName(val) }} />
+                </div>
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UnlockOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input2
+                    defaultValue={emailNewAccount}
+                    onChange={(val) => { setEmailNewAccount(val) }}
+                    placeholder="Email của bạn..."
+                    required
+                    pattern={PATTETN.EMAIL}
+                    messageNote={"Nhập đúng định dạng email!"}
+                  // setDangerNote={(val) => { setDisabledButton(val) }}
+                  />
+                </div>
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UnlockOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input.Password
+                    type={'password'}
+                    placeholder={"Mật khẩu"}
+                    required
+                    efaultValue={passWord}
+                    onChange={(val) => { setPassWard(val.target.value); setIsDangerMoreInput(false) }}
+                    status={isDangerMoreInput && "error"}
+                    onBlur={() => onBlurInputPass()}
+                  />
+                  {isDangerMoreInput && <div className="data-login-system__container-right-login-input-mes">Trường này không được bỏ trống</div>}
+
+                </div>
+                <div className="data-login-system__container-right-login-input">
+                  <div className="data-login-system__container-right-login-input-icon"><UnlockOutlined style={{ fontSize: '18px' }} /></div>
+                  <Input.Password
+                    type={'password'}
+                    placeholder={"Nhập lại mật khẩu"}
+                    required
+                    efaultValue={passWordConFirm}
+                    onChange={(val) => { setPassWardConFirm(val.target.value); setIsDangerMoreInputPassConfirm(false) }}
+                    status={isDangerMoreInputPassConfirm && "error"}
+                    onBlur={() => onBlurInputPassConfirm()}
+                    onPressEnter={() => onClickRigister()}
+                  />
+                  {isDangerMoreInputPassConfirm && <div className="data-login-system__container-right-login-input-mes">{mesInputPassConfirm?.length == 0 ? 'Trường này không được bỏ trống':mesInputPassConfirm}</div>}
+
+                </div>
+                
+                <div className="data-login-system__container-right-login-submit">
+                  <Button name={"Đăng ký"} background={"#1cc0a9"} onClick={() => { onClickRigister() }} style={{ width: '100%' }} disabled={disabled} />
+                </div>
+
+                <div className="data-login-system__container-right-login-more">
+                  <Button name={"Đăng nhập"} onClick={() => { setIsCreateNewAccount(false) }} style={{ width: '150px' }} className={"button-login-more"} />
+                </div>
+              </div>
+            </>}
+
         </div>
+
       </div>
     </div>
   );

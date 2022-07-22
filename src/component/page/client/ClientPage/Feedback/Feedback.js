@@ -59,7 +59,7 @@ function Feedback(props) {
                             required
                             pattern={PATTETN.EMAIL}
                             messageNote={"Nhập đúng định dạng email!"}
-                            setDangerNote={val => { setDisabledButton(val) }}
+                            setDangerNote={(val) => { setDisabledButton(val) }}
                         />
                         <Input defaultValue={customerPhone} onChange={(val) => { setCustomerPhone(val) }} label={"Số điện thoại"} required placeholder="Số điện thoại của bạn..." />
                         <Input isTextAria={true} defaultValue={customercontent} onChange={(val) => { setCustomerContent(val) }} label={"Nội dung"} placeholder="Lời nhắn..." />

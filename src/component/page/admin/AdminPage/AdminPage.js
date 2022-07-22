@@ -62,21 +62,21 @@ function AdminPage(props) {
   commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
 
-  // useEffect(() => {
-  //   let role = localStorage.getItem('roleType')
-  //   if(role != '')
-  //   {
-  //     let account = JSON.parse(role);
-  //     dispatch(changeAccountType({
-  //       userName: account.userName,
-  //       userAvatar: account.userAvatar,
-  //       roleType: account.roleType
-  //     }))
-  //   }else{
-  //     window.open("/login", '_self')
-  //   }
+  useEffect(() => {
+    let role = localStorage.getItem('roleType')
+    if(role != '')
+    {
+      let account = JSON.parse(role);
+      dispatch(changeAccountType({
+        userName: account.userName,
+        userAvatar: account.userAvatar,
+        roleType: account.roleType
+      }))
+    }else{
+      window.open("/login", '_self')
+    }
    
-  // }, [])
+  }, [])
 
   let listMenu = [
     {

@@ -50,7 +50,7 @@ function Area(props) {
                 {list.map((item) => {
                     return (
                         <Draggable onDragEnd={(val, val2) => { updatePosition(item, val) }} key={1} style={{ top: `${item.top}%`, left: `${item.left}%` }} className={item?.title}>
-                            <div style={{ border: '1px solid #000', borderRadius: '8px', width: '100px' }} className="table-item">{item?.title}</div>
+                            <div style={{ border: '1px solid #000', borderRadius: '8px', width: '100px' }} className="table-item" onClick={()=> alert(item?.title)}>{item?.title}</div>
                         </Draggable>
                     )
                 })}

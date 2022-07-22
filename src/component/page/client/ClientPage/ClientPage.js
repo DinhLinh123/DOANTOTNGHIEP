@@ -28,7 +28,7 @@ ClientPage.defaultProps = {
 function ClientPage(props) {
 
 
-const {children, index } = props
+    const { children, index } = props
     const [menuTab, setMenuTab] = useState(MENU_TAB_CLIENT.HOME_PAGE)
 
     let listMenu = [
@@ -58,8 +58,8 @@ const {children, index } = props
         let list = listMenu?.map((item) => {
             return (
                 <Link to={`/client/${item?.link}`}>
-                   <div className={`client-page-container__menu-nav-item ${index == item?.link ? 'selected-item' : ''}`}
-                        
+                    <div className={`client-page-container__menu-nav-item ${index == item?.link ? 'selected-item' : ''}`}
+
                     >
                         {item?.title}
                     </div>
@@ -75,13 +75,13 @@ const {children, index } = props
                     <img src={logoRes} onClick={() => { setMenuTab(MENU_TAB_CLIENT.HOME_PAGE) }} />
                 </div>
                 <div className="client-page-container__menu-nav">
-                   {renderMenuPage()}
+                    {renderMenuPage()}
                 </div>
 
             </div>
             <div className="client-page-container__content">
                 {
-                  children
+                    children
                 }
             </div>
 
@@ -113,13 +113,13 @@ const {children, index } = props
                     <div className="client-page-container__footer-network-icon">
                         <InstagramOutlined style={{ fontSize: '30px', color: '#fff', cursor: 'pointer' }} /></div>
                 </div>
-                {menuTab !== MENU_TAB_CLIENT.BOOKING && <div className="client-page-container__footer-book">
+                {index !== MENU_TAB_CLIENT.BOOKING && <div className="client-page-container__footer-book">
                     <div className="client-page-container__footer-book-title">
                         Quý khách vui lòng đặt bàn trước để có trải nghiệm thưởng thức ẩm thực tốt nhất tại Sun Homes BBQ.
                     </div>
-                    <div className="client-page-container__footer-book-button">
-                        <Button2 name="ĐẶT BÀN NGAY" background="#F3E385" color="#000" onClick={() => setMenuTab(MENU_TAB_CLIENT.BOOKING)} />
-                    </div>
+                    <Link to={`/client/${MENU_TAB_CLIENT.BOOKING}`}>
+                        <Button2 name="ĐẶT BÀN NGAY" background="#F3E385" color="#000" />
+                    </Link>
                 </div>}
 
             </div>

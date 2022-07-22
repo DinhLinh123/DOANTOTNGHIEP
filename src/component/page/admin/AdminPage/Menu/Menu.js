@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 
 import "./menu.scss"
+import Popup from "../../../../base/Popup/Popup";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
@@ -89,6 +90,8 @@ function Menu(props) {
     },
   ];
 
+  const [isShowPopupAddnew, setIsShowPopupAddnew]= useState(false)
+
   function columnName(item) {
     return <div>{item?.name}</div>;
   }
@@ -112,9 +115,12 @@ function Menu(props) {
     return [...listData];
   }
 
-  useEffect(() => {
-    console.log(sortType);
-  }, [sortType]);
+  // useEffect(() => {
+  //   console.log(sortType);
+  // }, [sortType]);
+  function handleClickAddnew(type) {
+    setIsShowPopupAddnew(true)
+}
 
   return (
     <AdminPage title={"Quản lý menu"} index={MENU_TAB_ADMIN.MENU}>
@@ -124,7 +130,7 @@ function Menu(props) {
             <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400}/>
           </div>
           <div className="menu-manager__filter-create-new">
-            <Button2 name={"Thêm mới món ăn"} leftIcon={<PlusOutlined />}/>
+            <Button2 name={"Thêm mới món ăn"} leftIcon={<PlusOutlined />} onClick={() => handleClickAddnew()}/>
           </div>
         </div>
         <div className="menu-manager__content">
@@ -145,6 +151,20 @@ function Menu(props) {
           />
         </div>
       </div>
+      <Popup
+        title={"Thêm mới menu"}
+        show={isShowPopupAddnew}
+        onClickClose={()=>setIsShowPopupAddnew(false)}
+        button={[
+            <Button2 name={'Đóng'} onClick={()=>setIsShowPopupAddnew(false)} />
+        ]}
+        width={800}
+        body={
+                <div className="popup-detail-body">
+                    abc
+                </div>
+    }
+      />
     </AdminPage>
   );
 }

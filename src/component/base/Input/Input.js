@@ -17,6 +17,7 @@ InputField.propTypes = {
   pattern: PropTypes.any,
   messageNote: PropTypes.string,
   setDangerNote: PropTypes.func,
+  onPressEnter: PropTypes.func,
   showCount: PropTypes.bool,
   width: PropTypes.number
 };
@@ -27,6 +28,7 @@ InputField.defaultValue = {
   isTextAria: true,
   messageNote: "email",
   setDangerNote: () => {},
+  onPressEnter: () => {},
   showCount: false,
   width: 250
 };
@@ -46,7 +48,8 @@ function InputField(props) {
     messageNote,
     setDangerNote,
     showCount,
-    width
+    width,
+    onPressEnter
   } = props;
   let regex = new RegExp(pattern);
   const [isDanger, setIsDanger] = useState(false);
@@ -56,8 +59,8 @@ function InputField(props) {
     let value = event.target.value;
     if (required && (value?.length == 0 || value == undefined)) {
       setIsDanger(true);
-      setDangerNote(true);
       setMessage("Trường này không được bỏ trống");
+      setDangerNote(true);
     } else {
       if (pattern && !regex.test(value)) {
         setIsDanger(true);
@@ -118,6 +121,7 @@ function InputField(props) {
           showCount={showCount}
           pattern={regex}
           onBlur={(val) => onBlur(val)}
+          onPressEnter={onPressEnter}
         />
       )}
 
