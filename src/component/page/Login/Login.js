@@ -5,7 +5,7 @@ import './login.scss'
 import Input2 from '../../base/Input/Input';
 import Button from '../../base/Button/Button';
 import { useDispatch, useSelector } from "react-redux";
-import { changeAccountType } from '../../../reudux/action/accountTypeAction';
+import { changeAccount } from '../../../reudux/action/accountAction';
 import {
   UserOutlined,
   UnlockOutlined
@@ -26,7 +26,7 @@ function Login() {
   const [passWord, setPassWard] = useState('');
   const [passWordConFirm, setPassWardConFirm] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const roleType = useSelector(state=>state.account.accountType)
+  const roleType = useSelector(state=>state.account.accountInfo)
   const [isDangerMoreInput, setIsDangerMoreInput] = useState(false);
   const [isDangerMoreInputPassConfirm, setIsDangerMoreInputPassConfirm] = useState(false);
   const [isCreateNewAccount, setIsCreateNewAccount] = useState(false);
@@ -55,7 +55,7 @@ function Login() {
       localStorage.setItem( 'roleType', JSON.stringify(obj))
 
       let account = JSON.parse(localStorage.getItem('roleType'));
-      dispatch(changeAccountType({
+      dispatch(changeAccount({
         userName: account.userName,
         userAvatar: account.userAvatar,
         roleType: account.roleType
@@ -93,7 +93,7 @@ function Login() {
       localStorage.setItem( 'roleType', JSON.stringify(obj))
 
       let account = JSON.parse(localStorage.getItem('roleType'));
-      dispatch(changeAccountType({
+      dispatch(changeAccount({
         userName: account.userName,
         userAvatar: account.userAvatar,
         roleType: account.roleType
@@ -104,7 +104,6 @@ function Login() {
   }
 
   function onClickRigister() {
-    debugger
     if(passWord != passWordConFirm)
     {
       setIsDangerMoreInputPassConfirm(true)

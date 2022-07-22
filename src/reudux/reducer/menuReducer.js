@@ -1,5 +1,5 @@
 import { TYPE_MENU } from '../../component/base/common/commonConstant'
-import CHANGE_TYPE_MENU from '../constant/actionType'
+import {CHANGE_TYPE_MENU} from '../constant/actionType'
 
 const initialState = {
     menuType: TYPE_MENU.BIG

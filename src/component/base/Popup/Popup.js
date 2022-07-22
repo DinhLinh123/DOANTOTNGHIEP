@@ -48,6 +48,9 @@ function Popup(props) {
         onCancel={onClickClose}
         width={width}
         className={`popup-container ${className ?? ''}`}
+        style={{
+            top: 40,
+          }}
       >
         {body}
       </Modal>

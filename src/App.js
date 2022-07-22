@@ -54,7 +54,7 @@ function App() {
           <Route path={"/admin/kitchen"}><Kitchen /></Route>
           <Route path={"/admin/bar"}><Bar /></Route>
           <Route path={"/admin/staff"}> <Staff /></Route>
-          <Route path={"/admin/table/order"}> <Order /></Route>
+          <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
 
           {/* client */}
           <Route exact path="/client">

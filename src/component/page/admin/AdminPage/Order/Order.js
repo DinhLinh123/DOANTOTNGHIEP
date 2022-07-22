@@ -267,6 +267,7 @@ function Order(props) {
                   onMouseEnter={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
                   onMouseLeave={() => setDisplayLine2ChooseOrder({ show: false, index: "" })}
                   onClick={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
+                  style={{backgroundColor: displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id && '#dff9fb'}}
                 >
                   <div className="food-name">{commonFunction.smartText(35, item.title)}</div>
                   <div className="line1-food-count">{item.count}</div>
@@ -278,6 +279,7 @@ function Order(props) {
                   <div className="order-page-container__selected-dish-content-choose-line2"
                     onMouseEnter={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
                     onMouseLeave={() => setDisplayLine2ChooseOrder({ show: false, index: "" })}
+                    style={{backgroundColor: displayLine2ChooseOrder.show&& displayLine2ChooseOrder.index == item.id && '#dff9fb'}}
                   >
                     <div className="food-count">
                       <div className="food-count-button"><Tooltip title={"Giảm số lượng"} placement="bottom"><Button2 name={"-"} onClick={() => handleClickDownCount(item)} disabled={item?.count <= 1} /></Tooltip> </div>

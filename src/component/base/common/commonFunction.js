@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { changeAccountType } from '../../../reudux/action/accountTypeAction';
 
 
 function useOutsideAlerter(ref, onclickClose) {

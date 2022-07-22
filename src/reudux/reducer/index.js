@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
-import accountTypeReducer from './accountTypeReducer'
+import accountReducer from './accoutReducer'
 import menuReducer from './menuReducer'
 
 const rootReducer = combineReducers({
     menu: menuReducer,
-    account: accountTypeReducer,
+    account: accountReducer
 })
 
 export default rootReducer

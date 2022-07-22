@@ -38,7 +38,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMenuType } from "../../../../reudux/action/menuAction";
 import commonFunction from "../../../base/common/commonFunction";
-import { changeAccountType } from "../../../../reudux/action/accountTypeAction";
+import { changeAccount } from "../../../../reudux/action/accountAction";
 
 AdminPage.propTypes = {
   title: PropTypes.string,
@@ -50,7 +50,7 @@ AdminPage.defaultProps = {};
 function AdminPage(props) {
   const { children, title, index } = props;
   const [displayLogout, setDisplayLogout] = useState(false);
-  const roleType = useSelector((state) => state.account.accountType)
+  const roleType = useSelector((state) => state.account.accountInfo)
   const typeMenu = useSelector((state) => state?.menu?.menuType);
 
   const dispatch = useDispatch();
@@ -67,9 +67,9 @@ function AdminPage(props) {
     if(role != '')
     {
       let account = JSON.parse(role);
-      dispatch(changeAccountType({
+      dispatch(changeAccount({
         userName: account.userName,
-        userAvatar: account.userAvatar,
+        userAvata: account.userAvatar,
         roleType: account.roleType
       }))
     }else{
