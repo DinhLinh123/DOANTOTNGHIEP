@@ -157,8 +157,6 @@ function AdminPage(props) {
     localStorage.setItem('roleType', '')
   }
 
-  
-  useEffect(()=>{console.log(typeMenu)},[typeMenu])
 
   return (
     <div className="admin-page-container">
