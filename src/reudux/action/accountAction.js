@@ -5,7 +5,6 @@ export const changeAccount = function({
     userAvata,
     roleType
 }){
-    debugger
     return{
         type: CHANGE_ACCOUNT,
         payload: {

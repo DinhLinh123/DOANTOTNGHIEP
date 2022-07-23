@@ -1,6 +1,7 @@
-import { Tooltip } from 'antd';
+import { message, Tooltip } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { TYPE_MESSAGE } from './commonConstant';
 
 
 function useOutsideAlerter(ref, onclickClose) {
@@ -49,4 +50,21 @@ function numberWithCommas(x) {
   return x;
 }
 
-export default { useOutsideAlerter, smartText, numberWithCommas }
+const messages = (type, title) => {
+  if(type == TYPE_MESSAGE.SUCCESS)
+  {
+    message.success({
+      content: title,
+      className: 'message-success',
+    })
+  }
+  if(type == TYPE_MESSAGE.ERROR)
+  {
+    message.error({
+      content: title,
+      className: 'message-error',
+    })
+  }
+};
+
+export default { useOutsideAlerter, smartText, numberWithCommas, messages }

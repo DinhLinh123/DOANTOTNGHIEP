@@ -37,6 +37,11 @@ const PATTETN = {
   EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
 };
 
+const TYPE_MESSAGE={
+  SUCCESS: "SUCCESS",
+  ERROR: 'ERROR'
+}
+
 export {
   COLOR,
   COLOR_MENU_ADMIN,
@@ -46,5 +51,6 @@ export {
   PATTETN,
   MENU_TAB_ADMIN,
   TYPE_MENU,
-  SORT_TYPE
+  SORT_TYPE,
+  TYPE_MESSAGE
 };

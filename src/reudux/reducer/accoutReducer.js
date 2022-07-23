@@ -8,7 +8,6 @@ const initalState = {
     }
 }
 export default function accountReducer(state = initalState, action ) {
-    debugger
     switch (action.type) {
         case CHANGE_ACCOUNT:
             return{

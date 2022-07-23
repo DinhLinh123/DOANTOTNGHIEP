@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-message div .message-error .ant-message-notice-content{
+ background-color: red;
+ color: #fff;
+ border-radius: 8px;
+}
+
+.ant-message div .message-success .ant-message-notice-content{
+  background-color: #4cd137;
+  color: #fff;
+  border-radius: 8px;
+ }
+
+
+ .ant-message div .ant-message-notice .ant-message-notice-content .ant-message-custom-content .anticon {
+  display: none;
+ }
+ 

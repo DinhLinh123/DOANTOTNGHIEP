@@ -29,7 +29,7 @@ function Offer(props) {
         img: ud1,
         title: 'hahahaha',
         content: "hahahahaa hahahahaha hahahhahah ...",
-        contentMore: 'hihihihihihi hihihihihih hihihihihi'
+        contentMore: 'hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihihihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi'
     }
 
     const offer2 = {

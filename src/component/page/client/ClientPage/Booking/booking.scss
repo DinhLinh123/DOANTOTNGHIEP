@@ -48,6 +48,10 @@
             width: 50%;
             padding: 0 20px;
 
+            &-item{
+                margin-bottom: 16px;
+            }
+
             &-date {
                 display: flex;
                 justify-content: space-between;

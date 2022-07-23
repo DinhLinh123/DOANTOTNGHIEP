@@ -86,7 +86,7 @@ function InputField(props) {
       {label && (
         <div className="container-input__label">
           {label}
-          {required && <span>bb</span>}
+          {required && <span className="container-input__label-required"></span>}
         </div>
       )}
       {isTextAria ? (

@@ -4,6 +4,18 @@
         font-weight: bold;
         margin-bottom: 8px;
         text-align: left;
+        
+        &-required{
+            &::after {
+                display: inline-block;
+                margin-left: 4px;
+                color: #ff4d4f;
+                font-size: 14px;
+                font-family: SimSun,sans-serif;
+                line-height: 1;
+                content: "*";
+            }
+        }
     }
 
     .ant-input-affix-wrapper{
