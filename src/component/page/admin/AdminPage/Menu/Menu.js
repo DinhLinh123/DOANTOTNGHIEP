@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Radio } from 'antd';
 import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
@@ -18,9 +19,17 @@ import Input from "../../../../base/Input/Input";
 function Menu(props) {
   const [sortType, setSortType] = useState();
   const [index, setIndex] = useState(1);
-  const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({show: false, newIndex: 0});
+  const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({ show: false, newIndex: 0 });
+  // thêm mới món riêng
   const [foodName, setFoodName] = useState("");
-  const [listFood, setListFood] = useState([{food: "rau"}]);
+  const [foodUnit, setFoodUnit] = useState("");
+  const [foodPrice, setFoodPrice] = useState("");
+  const [foodDescribe, setFoodDescribe] = useState("");
+  const [foodImage, setFoodImage] = useState("");
+  const [foodStatus, setFoodStatus] = useState(1);
+  const [foodNote, setFoodNote] = useState("");
+
+  const [listFood, setListFood] = useState([{ food: "rau" }]);
 
 
   const COLUMN_TABLE_INDEX_MENU = {
@@ -149,23 +158,33 @@ function Menu(props) {
 
   function onChangeTab(item) {
     debugger
-    if (foodName?.length > 0) {
-      setShowPopupWarningChangeTab({show: true, newIndex: item.index})
+    if (foodName?.length > 0 || foodUnit?.length > 0 || foodPrice?.length > 0 || foodDescribe?.length > 0 || foodNote?.length > 0) {
+
+      setShowPopupWarningChangeTab({ show: true, newIndex: item.index })
     }
-    else{
+    else {
+      setFoodName("")
+      setFoodUnit("")
+      setFoodPrice("")
+      setFoodDescribe("")
+      setFoodNote("")
       setIndex(item.index)
     }
   }
 
   function onSuccessChangeTab() {
-    setFoodName('')
-    setShowPopupWarningChangeTab({show: false, newIndex: 0});
+    setFoodName("")
+    setFoodUnit("")
+    setFoodPrice("")
+    setFoodDescribe("")
+    setFoodNote("")
+    setShowPopupWarningChangeTab({ show: false, newIndex: 0 });
     setIndex(showPopupWarningChangeTab.newIndex)
   }
 
-  
-  
-  useEffect(()=>{console.log(index)},[index])
+
+
+  useEffect(() => { console.log(index) }, [index])
 
   function ChangeNameFood(val, index) {
     let _listFood = [...listFood]
@@ -174,7 +193,7 @@ function Menu(props) {
   }
 
   function deleteNameFood(item, index) {
-    
+
   }
 
   return (
@@ -211,7 +230,7 @@ function Menu(props) {
           onClickClose={() => setIsShowPopupAddnew(false)}
           button={[
             <Button2 name={'Đóng'} onClick={() => setIsShowPopupAddnew(false)} />,
-            <Button2 name={'Lưu'} onClick={() => setIsShowPopupAddnew(false)} background="#fa983a"/>
+            <Button2 name={'Lưu'} onClick={() => setIsShowPopupAddnew(false)} background="#fa983a" />
           ]}
           width={600}
           className={"menu-popup-create"}
@@ -223,7 +242,7 @@ function Menu(props) {
                     return (
                       <div className="menu-manager__popup-header-menu"
                         style={{ width: `calc(100% / ${listMenu?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
-                        onClick={(val) =>  { onChangeTab(item) }}
+                        onClick={() => { onChangeTab(item) }}
                       >
                         {item.title}
                       </div>
@@ -244,12 +263,12 @@ function Menu(props) {
                       />
                     </div>
                     <div className="menu-manager_popup_content-food">
-                    <div className="menu-manager_popup_content-food-add"><Button2 onClick={()=>addNameFood()}/></div>
-                      {listFood?.map((item, index)=>{
-                        return(
+                      <div className="menu-manager_popup_content-food-add"><Button2 /></div>
+                      {listFood?.map((item, index) => {
+                        return (
                           <>
-                            <div className="menu-manager_popup_content-food-input"><Input defaultValue={item.food} onChange={(val)=>ChangeNameFood(val, index)}/></div>
-                            <div className="menu-manager_popup_content-food-button"><Button2 onClick={()=>deleteNameFood(item, index)}/></div>
+                            <div className="menu-manager_popup_content-food-input"><Input defaultValue={item.food} onChange={(val) => ChangeNameFood(val, index)} /></div>
+                            <div className="menu-manager_popup_content-food-button"><Button2 onClick={() => deleteNameFood(item, index)} /></div>
                           </>
                         )
                       })}
@@ -257,21 +276,128 @@ function Menu(props) {
                   </>
                 }
                 {
-                  index == 2 && 
-                  <div>
+                  index == 2 &&
+                  <div className="menu-manager__popup-content_privateDish">
                     <Input
                       label={"Tên món"}
                       defaultValue={foodName}
                       onChange={(val) => { setFoodName(val) }}
                       autoFocus
                     />
+                    <Input
+                      label={"Đơn vị tính"}
+                      defaultValue={foodUnit}
+                      onChange={(val) => { setFoodUnit(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Giá tiền"}
+                      defaultValue={foodPrice}
+                      onChange={(val) => { setFoodPrice(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Mô tả"}
+                      defaultValue={foodDescribe}
+                      onChange={(val) => { setFoodDescribe(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
+                    <img alt="example" style={{ width: '100%' }} />
+                    <Input
+                      label={"Ghi chú"}
+                      defaultValue={foodNote}
+                      onChange={(val) => { setFoodNote(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
+                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
+                      <Radio value={1}>Còn</Radio>
+                      <Radio value={2}>Hết</Radio>
+                    </Radio.Group>
                   </div>
                 }
                 {
-                  index == 3 && <div>ddo uoongs</div>
+                  index == 3 && <div>
+                    <Input
+                      label={"Tên đồ uống"}
+                      defaultValue={foodName}
+                      onChange={(val) => { setFoodName(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Đơn vị tính"}
+                      defaultValue={foodUnit}
+                      onChange={(val) => { setFoodUnit(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Giá tiền"}
+                      defaultValue={foodPrice}
+                      onChange={(val) => { setFoodPrice(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Mô tả"}
+                      defaultValue={foodDescribe}
+                      onChange={(val) => { setFoodDescribe(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
+                    <img alt="example" style={{ width: '100%' }} />
+                    <Input
+                      label={"Ghi chú"}
+                      defaultValue={foodNote}
+                      onChange={(val) => { setFoodNote(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
+                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
+                      <Radio value={1}>Còn</Radio>
+                      <Radio value={2}>Hết</Radio>
+                    </Radio.Group>
+                  </div>
                 }
                 {
-                  index == 4 && <div>khcas</div>
+                  index == 4 && <div>
+                    <Input
+                      label={"Tên"}
+                      defaultValue={foodName}
+                      onChange={(val) => { setFoodName(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Đơn vị tính"}
+                      defaultValue={foodUnit}
+                      onChange={(val) => { setFoodUnit(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Giá tiền"}
+                      defaultValue={foodPrice}
+                      onChange={(val) => { setFoodPrice(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Mô tả"}
+                      defaultValue={foodDescribe}
+                      onChange={(val) => { setFoodDescribe(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
+                    <img alt="example" style={{ width: '100%' }} />
+                    <Input
+                      label={"Ghi chú"}
+                      defaultValue={foodNote}
+                      onChange={(val) => { setFoodNote(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
+                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
+                      <Radio value={1}>Còn</Radio>
+                      <Radio value={2}>Hết</Radio>
+                    </Radio.Group>
+                  </div>
                 }
               </div>
             </div>
@@ -280,11 +406,11 @@ function Menu(props) {
         <Popup
           title={"Cảnh báo"}
           show={showPopupWarningChangeTab.show}
-          onClickClose={() => setShowPopupWarningChangeTab({show: false, newIndex: 0})}
+          onClickClose={() => setShowPopupWarningChangeTab({ show: false, newIndex: 0 })}
           button={[
-            <Button2 name={'Đồng ý'} onClick={() =>  onSuccessChangeTab()} />,
-            <Button2 name={'không'} onClick={() => 
-              setShowPopupWarningChangeTab({show: false, newIndex: index})
+            <Button2 name={'Đồng ý'} onClick={() => onSuccessChangeTab()} />,
+            <Button2 name={'không'} onClick={() =>
+              setShowPopupWarningChangeTab({ show: false, newIndex: index })
             } />
           ]}
           width={500}
