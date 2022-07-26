@@ -63,8 +63,9 @@ function AdminPage(props) {
 
 
   useEffect(() => {
+    debugger
     let role = localStorage.getItem('roleType')
-    if(role != '')
+    if(role != '' && role != null)
     {
       let account = JSON.parse(role);
       dispatch(changeAccount({

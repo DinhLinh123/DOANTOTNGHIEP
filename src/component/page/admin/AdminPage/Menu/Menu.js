@@ -20,6 +20,7 @@ function Menu(props) {
   const [index, setIndex] = useState(1);
   const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({show: false, newIndex: 0});
   const [foodName, setFoodName] = useState("");
+  const [listFood, setListFood] = useState([{food: "rau"}]);
 
 
   const COLUMN_TABLE_INDEX_MENU = {
@@ -166,6 +167,16 @@ function Menu(props) {
   
   useEffect(()=>{console.log(index)},[index])
 
+  function ChangeNameFood(val, index) {
+    let _listFood = [...listFood]
+    _listFood[index].food = val;
+    setListFood(_listFood)
+  }
+
+  function deleteNameFood(item, index) {
+    
+  }
+
   return (
     <AdminPage title={"Quản lý menu"} index={MENU_TAB_ADMIN.MENU}>
       <div className="menu-manager">
@@ -223,17 +234,38 @@ function Menu(props) {
               <div className="menu-manager__popup-content">
                 {
                   index == 1 &&
-                  <div className="menu-manager_popup_content-name">
+                  <>
+                    <div className="menu-manager_popup_content-name">
+                      <Input
+                        label={"Tên gói buffet"}
+                        defaultValue={foodName}
+                        onChange={(val) => { setFoodName(val) }}
+                        autoFocus
+                      />
+                    </div>
+                    <div className="menu-manager_popup_content-food">
+                    <div className="menu-manager_popup_content-food-add"><Button2 onClick={()=>addNameFood()}/></div>
+                      {listFood?.map((item, index)=>{
+                        return(
+                          <>
+                            <div className="menu-manager_popup_content-food-input"><Input defaultValue={item.food} onChange={(val)=>ChangeNameFood(val, index)}/></div>
+                            <div className="menu-manager_popup_content-food-button"><Button2 onClick={()=>deleteNameFood(item, index)}/></div>
+                          </>
+                        )
+                      })}
+                    </div>
+                  </>
+                }
+                {
+                  index == 2 && 
+                  <div>
                     <Input
-                      label={"Tên món ăn"}
+                      label={"Tên món"}
                       defaultValue={foodName}
                       onChange={(val) => { setFoodName(val) }}
                       autoFocus
                     />
                   </div>
-                }
-                {
-                  index == 2 && <div>mons tieeng</div>
                 }
                 {
                   index == 3 && <div>ddo uoongs</div>
