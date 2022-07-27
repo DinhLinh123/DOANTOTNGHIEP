@@ -27,6 +27,7 @@ function Menu(props) {
   const [foodImage, setFoodImage] = useState("");
   const [foodStatus, setFoodStatus] = useState(1);
   const [foodNote, setFoodNote] = useState("");
+  const [foodDetail, setFoodDetail] = useState({});
 
   const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({
     show: false,
@@ -34,89 +35,140 @@ function Menu(props) {
   });
   const [listFood, setListFood] = useState([{ food: "" }]);
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+  const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, index: -1 });
 
   const [images, setImages] = useState([]);
 
   const COLUMN_TABLE_INDEX_MENU = {
     NAME: "name",
-    AGE: "age",
-    ADDRESS: "address",
+    UNIT: "unit",
+    PRICE: "price",
+    IMAGE: "image",
+    STATUS: "status",
+    CATEGORY: "category",
+    DESCRIBE: "describe"
   };
 
   const columns = [
     {
-      title: "Name",
+      title: "Tên",
       dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
       sorter: true,
-      width: "300px",
+      width: "200px",
     },
     {
-      title: "Age",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
+      title: "Đơn vị tính",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
       defaultSortOrder: SORT_TYPE.DESC,
-      sorter: true,
+      //sorter: true,
+      width: "200px",
+    },
+    {
+      title: "Thể loại",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.CATEGORY,
+      width: "200px",
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.PRICE,
+      width: "200px",
+      sorter: true
+    },
+    {
+      title: "Ảnh",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.IMAGE,
       width: "300px",
     },
     {
-      title: "Address",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
+      title: "Mô tả",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.DESCRIBE,
       width: "300px",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
+      width: "200px",
     },
   ];
 
   const data = [
     {
-      key: "1",
+      id: "1",
       name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
+      unit: 32,
+      price: 100000,
+      describe: "New York No. 1 Lake Park",
+      categorys: 2,
+      statuss: 1,
     },
     {
-      key: "2",
+      id: "2",
       name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
+      unit: 42,
+      price: 100000,
+      describe: "London No. 1 Lake Park",
+      categorys: 3,
+      statuss: 0
     },
     {
-      key: "3",
+      id: "3",
       name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
+      unit: 32,
+      price: 100000,
+      describe: "Sidney No. 1 Lake Park",
+      categorys: 1,
+      statuss: 1,
+      listFoods: '[{"food":"ddd"},{"food":"df"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"}]'
     },
     {
-      key: "4",
+      id: "4",
       name: "Jim Red",
-      age: 32,
-      address: "London No. 2 Lake Park",
-    },{
-      key: "2",
+      unit: 32,
+      price: 100000,
+      describe: "London No. 2 Lake Park",
+      categorys: 4,
+      statuss: 1
+    }, {
+      id: "5",
       name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
+      unit: 42,
+      price: 100000,
+      describe: "London No. 1 Lake Park",
+      categorys: 2,
+      statuss: 0
     },
     {
-      key: "3",
+      id: "6",
       name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
+      unit: 32,
+      price: 100000,
+      describe: "Sidney No. 1 Lake Park",
+      categorys: 4,
+      statuss: 1
     },
     {
-      key: "4",
+      id: "7",
       name: "Jim Red",
-      age: 32,
-      address: "London No. 2 Lake Park",
-    },{
-      key: "2",
+      unit: 32,
+      price: 100000,
+      describe: "London No. 2 Lake Park",
+      categorys: 1,
+      statuss: 0
+    }, {
+      id: "8",
       name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
+      unit: 42,
+      price: 100000,
+      describe: "London No. 1 Lake Park",
+      categorys: 3,
+      statuss: 0
     },
   ];
 
   const OPTION_MORE_TABLE = [
     {
-      title: "Thêm",
-      onSelect: () => alert("thêm"),
+      title: "Chi tiết",
+      onSelect: (val) => { setFoodDetail(val.detail); setIsShowPopupDetail({ show: true, index: val.categorys }) },
     },
     {
       title: "Sửa",
@@ -135,20 +187,46 @@ function Menu(props) {
   function columnName(item) {
     return <div>{item?.name}</div>;
   }
-  function columnAge(item) {
-    return <div>{item?.age}</div>;
+  function columnUnit(item) {
+    return <div>{item?.unit}</div>;
   }
-  function columnAddress(item) {
-    return <div>{item?.address}</div>;
+  function columnCategory(item) {
+    switch (item.categorys) {
+      case 1:
+        return <div>Buffet</div>;
+      case 2:
+        return <div>Món riêng</div>;
+      case 3:
+        return <div>Đồ uống</div>;
+      case 4:
+        return <div>Khác</div>;
+    }
+  }
+  function columnDescribe(item) {
+    return <div>{item?.describe}</div>;
+  }
+
+  function columnStatus(item) {
+
+    switch (item.statuss) {
+      case 0:
+        return <div>Hết hàng</div>;
+      case 1:
+        return <div>Còn hàng</div>;
+    }
   }
 
   function convertDataTable(dataTable) {
     let listData;
     listData = dataTable.map((item, idx) => {
       return {
+        ...item,
+        detail: item,
         [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-        [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
-        [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+        [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
+        [COLUMN_TABLE_INDEX_MENU.CATEGORY]: columnCategory(item),
+        [COLUMN_TABLE_INDEX_MENU.DESCRIBE]: columnDescribe(item),
+        [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: idx,
         ...item
       };
@@ -222,6 +300,8 @@ function Menu(props) {
     setListFood(_listFood);
   }
 
+  useEffect(() => { console.log(listFood) }, [listFood])
+
   function addNameFood() {
     let _listFood = [...listFood];
     _listFood.push({ food: "" });
@@ -238,10 +318,7 @@ function Menu(props) {
               <div className="menu-manager__popup-content-buffet-food-item-input">
                 <Input
                   defaultValue={item.food}
-                  onChange={(val) => 
-                   {
-                    val.stoppropagation(); ChangeNameFood(val, index)
-                   }}
+                  onChange={(val) => ChangeNameFood(val, index)}
                   placeholder={"Tên món trong gói buffet..."}
                 />
               </div>
@@ -261,6 +338,40 @@ function Menu(props) {
       </>
     );
   };
+
+  function renderListFood(list) {
+    if(list?.length > 0){
+      let _list = JSON.parse(list)
+
+      return (
+        <div className="menu-manager__popup-detail-content-buffet-list-value-food">
+          {_list.map((item) => {
+            return (
+              <div className="menu-manager__popup-detail-content-buffet-ltst-value-food-item">
+                {item.food}
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+  }
+
+  function handleEditMenu() {
+    setIndex(isShowPopupDetail.index)
+    setIsShowPopupAddnew(true)
+    setFoodName(foodDetail.name)
+    setFoodUnit(foodDetail.unit)
+    setFoodPrice(foodDetail.price)
+    setListFood(JSON.parse(foodDetail.listFoods || ''))
+    setFoodDescribe(foodDetail.describe)
+    setFoodNote(foodDetail.name)
+    setImages([])
+    setFoodStatus(foodDetail.statuss)
+    setIsShowPopupDetail({ show: false, index: -1 })
+  }
+
+
 
   return (
     <AdminPage title={"Quản lý menu"} index={MENU_TAB_ADMIN.MENU}>
@@ -321,8 +432,8 @@ function Menu(props) {
                       style={item.index === index ? {
                         color: "#00b894",
                         borderBottom: '2px solid #00b894'
-                      }:
-                    {}}
+                      } :
+                        {}}
                       onClick={(val) => {
                         onChangeTab(item);
                       }}
@@ -362,9 +473,9 @@ function Menu(props) {
                         deleteNameFood={(index) => deleteNameFood(index)}
                       />
                     </div>
-                    <div className="menu-manager__popup-content-buffet-image"> 
+                    <div className="menu-manager__popup-content-buffet-image">
                       <div className="menu-manager__popup-content-buffet-image-title">Ảnh</div>
-                    <ImageUpload maxImage={1} images={images} setImages={(val)=>{setImages(val)}}/>
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
                     </div>
                     <Input
                       label={"Đơn vị tính"}
@@ -393,11 +504,11 @@ function Menu(props) {
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
                       <Radio value={1}>Còn</Radio>
-                      <Radio value={2}>Hết</Radio>
+                      <Radio value={0}>Hết</Radio>
                     </Radio.Group>
                   </div>
-               
-                  
+
+
                 )}
 
                 {index == 2 && (
@@ -430,7 +541,7 @@ function Menu(props) {
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
                     <div>
-                      <ImageUpload maxImage={1} images={images} setImages={(val)=>{setImages(val)}}/>
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
                     </div>
                     <Input
                       label={"Ghi chú"}
@@ -441,7 +552,7 @@ function Menu(props) {
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
                       <Radio value={1}>Còn</Radio>
-                      <Radio value={2}>Hết</Radio>
+                      <Radio value={0}>Hết</Radio>
                     </Radio.Group>
                   </div>
                 )}
@@ -472,7 +583,9 @@ function Menu(props) {
                       autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                    <img alt="example" style={{ width: '100%' }} />
+                    <div>
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
+                    </div>
                     <Input
                       label={"Ghi chú"}
                       defaultValue={foodNote}
@@ -482,7 +595,7 @@ function Menu(props) {
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
                       <Radio value={1}>Còn</Radio>
-                      <Radio value={2}>Hết</Radio>
+                      <Radio value={0}>Hết</Radio>
                     </Radio.Group>
                   </div>
                 }
@@ -513,7 +626,9 @@ function Menu(props) {
                       autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                    <img alt="example" style={{ width: '100%' }} />
+                    <div>
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
+                    </div>
                     <Input
                       label={"Ghi chú"}
                       defaultValue={foodNote}
@@ -523,7 +638,7 @@ function Menu(props) {
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
                       <Radio value={1}>Còn</Radio>
-                      <Radio value={2}>Hết</Radio>
+                      <Radio value={0}>Hết</Radio>
                     </Radio.Group>
                   </div>
                 }
@@ -551,6 +666,101 @@ function Menu(props) {
             <div>
               Bạn có chắc chắn muốn chuyển tab và không lưu thông tin vừa nhập
               không?
+            </div>
+          }
+        />
+        <Popup
+          title={"Chi tiết menu"}
+          show={isShowPopupDetail.show}
+          onClickClose={() => setIsShowPopupDetail({ show: false, index: -1 })}
+          button={[
+            <Button2
+              name={"Đóng"}
+              onClick={() => setIsShowPopupDetail({ show: false, index: -1 })}
+            />,
+            <Button2
+              name={"Sửa"}
+              onClick={() => {
+                handleEditMenu()
+              }}
+              background="#fa983a"
+            />,
+          ]}
+          width={600}
+          className={"menu-popup-detail"}
+          body={
+            <div className="menu-manager__popup-detail">
+              <div className="menu-manager__popup-detail-content">
+                {isShowPopupDetail.index == 1 && (
+                  <div className="menu-manager__popup-detail-content-buffet">
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Tên món: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.name}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-list">
+                      <span className="menu-manager__popup-detail-content-buffet-list-label">Danh sách món: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-list-value">{renderListFood(foodDetail.listFoods)}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Đơn vị tính: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.unit}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnCategory(foodDetail)}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.price}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.images}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.describe}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Trạng thái: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnStatus(foodDetail)}</span>
+                    </div>
+                  </div>
+                )}
+
+                {(isShowPopupDetail.index == 2 || isShowPopupDetail.index == 3 || isShowPopupDetail.index == 4) && (
+                  <div className="menu-manager__popup-detail-content-buffet">
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Tên món: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.name}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Đơn vị tính: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.unit}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnCategory(foodDetail)}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.price}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.images}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.describe}</span>
+                    </div>
+                    <div className="menu-manager__popup-detail-content-buffet-item">
+                      <span className="menu-manager__popup-detail-content-buffet-item-label">Trạng thái: </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnStatus(foodDetail)}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           }
         />

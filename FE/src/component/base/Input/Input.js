@@ -19,7 +19,8 @@ InputField.propTypes = {
   setDangerNote: PropTypes.func,
   onPressEnter: PropTypes.func,
   showCount: PropTypes.bool,
-  width: PropTypes.number
+  width: PropTypes.number,
+  key: PropTypes.string
 };
 
 InputField.defaultValue = {
@@ -27,10 +28,11 @@ InputField.defaultValue = {
   autoFocus: false,
   isTextAria: true,
   messageNote: "email",
-  setDangerNote: () => {},
-  onPressEnter: () => {},
+  setDangerNote: () => { },
+  onPressEnter: () => { },
   showCount: false,
-  width: 250
+  width: 250,
+  key: ''
 };
 
 function InputField(props) {
@@ -49,7 +51,8 @@ function InputField(props) {
     setDangerNote,
     showCount,
     width,
-    onPressEnter
+    onPressEnter,
+    key
   } = props;
   let regex = new RegExp(pattern);
   const [isDanger, setIsDanger] = useState(false);
@@ -82,7 +85,7 @@ function InputField(props) {
   }
 
   return (
-    <div className={`container-input`} style={width?{width: width}:{}}>
+    <div className={`container-input`} style={width ? { width: width } : {}}>
       {label && (
         <div className="container-input__label">
           {label}
@@ -108,6 +111,7 @@ function InputField(props) {
         />
       ) : (
         <Input
+          key={key}
           type={type}
           placeholder={placeholder}
           defaultValue={defaultValue}
