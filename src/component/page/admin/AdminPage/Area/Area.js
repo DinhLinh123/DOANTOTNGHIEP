@@ -1,68 +1,156 @@
-import React, { useState, useEffect } from "react";
-// import Draggable from "react-draggable";
-import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
-import AdminPage from "../AdminPage";
-import { Draggable } from "drag-react";
+import React, { useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import baseApi from "../../../../../api/baseApi";
-import $ from "jquery";
-import "./area.scss";
-import { useDispatch } from "react-redux";
-import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import { MENU_TAB_ADMIN, SORT_TYPE } from "../../../../base/common/commonConstant";
+import InputField from "../../../../base/Input/Input";
+import TableBase from "../../../../base/Table/Table";
+import AdminPage from "../AdminPage";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import "./area.scss"
 
 function Area(props) {
 
-let dispatch = useDispatch();
+    const [sortType, setSortType] = useState();
+    const COLUMN_TABLE_INDEX_MENU = {
+        NAME: "name",
+        AGE: "age",
+        ADDRESS: "address",
+    };
 
-
-    const [list, setList] = useState([
+    const columns = [
         {
-          title: "hahaaa",
-          top: 68.72,
-          left: 87.5,
+            title: "Name",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
+            sorter: true,
+            width: "300px",
         },
-        { title: "hihiiii", top: 49.57, left: 41.15 },
-        { title: "hohoooo", top: 38.12, left: 41.67 },
-      ])
+        {
+            title: "Age",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
+            defaultSortOrder: SORT_TYPE.DESC,
+            sorter: true,
+            width: "300px",
+        },
+        {
+            title: "Address",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
+            width: "300px",
+        },
+    ];
 
-    function updatePosition(item, value) {
-        // debugger
-        let height = $(window).height();
-        let width = $(window).width();
-        let abc = list
-        let objIndex = abc.findIndex((obj => obj.title == item.title));
+    const data = [
+        {
+            key: "1",
+            name: "John Brown",
+            age: 32,
+            address: "New York No. 1 Lake Park",
+        },
+        {
+            key: "2",
+            name: "Jim Green",
+            age: 42,
+            address: "London No. 1 Lake Park",
+        },
+        {
+            key: "3",
+            name: "Joe Black",
+            age: 32,
+            address: "Sidney No. 1 Lake Park",
+        },
+        {
+            key: "4",
+            name: "Jim Red",
+            age: 32,
+            address: "London No. 2 Lake Park",
+        },
+        {
+            key: "2",
+            name: "Jim Green",
+            age: 42,
+            address: "London No. 1 Lake Park",
+        },
+    ];
 
-        abc[objIndex].top = parseFloat(((value?.top/height)*100).toFixed(2))
-        abc[objIndex].left = parseFloat(((value?.left/width)*100).toFixed(2)) 
+    const OPTION_MORE_TABLE = [
+        {
+            title: "Thêm",
+            onSelect: () => alert("thêm"),
+        },
+        {
+            title: "Sửa",
+            onSelect: () => {
+                alert("Sửa");
+            },
+        },
+        {
+            title: "Xóa",
+            onSelect: () => {
+                alert("Xóa");
+            },
+        },
+    ];
 
-        setList(abc)
+    function columnName(item) {
+        return <div>{item?.name}</div>;
+    }
+    function columnAge(item) {
+        return <div>{item?.age}</div>;
+    }
+    function columnAddress(item) {
+        return <div>{item?.address}</div>;
     }
 
-    function lur() {
-        dispatch(changeLoadingApp(true))
-        setTimeout(() => {
-            dispatch(changeLoadingApp(false))
-        }, 500);
+    function convertDataTable(dataTable) {
+        let listData;
+        listData = dataTable.map((item, idx) => {
+            return {
+                [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+                [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
+                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                key: idx,
+            };
+        });
+        return [...listData];
     }
 
+    function handleClickAddnew(type) {
+        // setIsShowPopupAddnew(true);
+    }
 
     return (
         <AdminPage
             title={"Quản lý khu vực"}
             index={MENU_TAB_ADMIN.AREA}
         >
-            <div className="area-manager">
-                {list.map((item) => {
-                    return (
-                        <Draggable onDragEnd={(val, val2) => { updatePosition(item, val) }} key={1} style={{ top: `${item.top}%`, left: `${item.left}%` }} className={item?.title}>
-                            <div style={{ border: '1px solid #000', borderRadius: '8px', width: '100px' }} className="table-item" onClick={()=> alert(item?.title)}>{item?.title}</div>
-                        </Draggable>
-                    )
-                })}
-
-
-
-                <Button2 name={"lưu"} onClick={() => { lur() }} />
+           <div className="area-manager">
+                <div className="area-manager__filter">
+                    <div className="area-manager__filter-search">
+                        <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
+                    </div>
+                    <div className="area-manager__filter-create-new">
+                        <Button2
+                            name={"Thêm mới chi tiêu"}
+                            leftIcon={<PlusOutlined />}
+                            onClick={() => handleClickAddnew()}
+                        />
+                    </div>
+                </div>
+                <div className="area-manager__content">
+                    <TableBase
+                        // onChangePagination={(page, pageSize)=>{}}
+                        columns={columns}
+                        total={90}
+                        data={convertDataTable(data)}
+                        loading={false}
+                        hasMoreOption
+                        option={OPTION_MORE_TABLE}
+                        setObjectSort={(field, order) => {
+                            setSortType({
+                                field: field,
+                                order: order,
+                            });
+                        }}
+                    />
+                </div>
             </div>
 
         </AdminPage>

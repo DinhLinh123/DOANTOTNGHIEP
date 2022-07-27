@@ -1,51 +1,87 @@
 .menu-manager {
-  &__filter {
-    display: flex;
-    margin: 24px 0;
+    height: 100%;
+    &__filter {
+        display: flex;
+        margin-bottom: 24px;
 
-    &-create-new {
-      margin-left: auto;
+        &-create-new {
+            margin-left: auto;
+        }
     }
-  }
 
-  
+    &__content{
+        height: calc(100% - 60px);
+    }
 }
 
 .menu-popup-create {
     .ant-modal-content {
-      .ant-modal-body {
-        .menu-manager__popup{
-          
-          &-header{
-            height: 30px;
-            display: flex;
-        }
+        .ant-modal-body {
+            .menu-manager__popup {
 
-            &-content{
-                &-buffet{
-                    &-food{
-                        &-add{
-                            margin: 16px 0;
-                        }
+                &-header {
+                    height: 48px;
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 16px;
 
-                        &-item{
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            margin-bottom: 16px;
-
-                            &-input{
-                                width: calc(100% - 28px);
-                            }
-
-                            &-button{
-                                width: 15px;
-                            }
+                    &-menu {
+                        width: fit-content;
+                        margin-right: 24px;
+                        cursor: pointer;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        
+                        &:hover{
+                            color: #1abc9c;
                         }
                     }
                 }
+
+                &-content {
+                    &-buffet {
+                        &-food {
+                            &-add {
+                                margin: 16px 0;
+                            }
+
+                            &-item {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                margin-bottom: 16px;
+
+                                &-input {
+                                    width: calc(100% - 28px);
+                                }
+
+                                &-button {
+                                    width: 15px;
+                                }
+                            }
+                        }
+                        &-image{
+                            &-title{
+                                font-weight: bold;
+                                padding-bottom: 10px;
+                                font-size: 16px;
+                            }
+                            
+                        }
+                    }
+
+                    &_privateDish{
+                        &_status{
+                            font-weight: bold;
+                            padding-bottom: 10px;
+                            font-size: 16px;
+                        }
+                    }
+
+                    
+                }
             }
         }
-      }
     }
-  }
+}

@@ -32,7 +32,6 @@ function Menu(props) {
     show: false,
     newIndex: 0,
   });
-  const [buffetName, setBuffetName] = useState("");
   const [listFood, setListFood] = useState([{ food: "" }]);
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
 
@@ -89,25 +88,28 @@ function Menu(props) {
       name: "Jim Red",
       age: 32,
       address: "London No. 2 Lake Park",
-    },
-  ];
-
-  let listMenu = [
-    {
-      title: "Buffet",
-      index: 1,
+    },{
+      key: "2",
+      name: "Jim Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
     },
     {
-      title: "Món riêng",
-      index: 2,
+      key: "3",
+      name: "Joe Black",
+      age: 32,
+      address: "Sidney No. 1 Lake Park",
     },
     {
-      title: "Đồ uống",
-      index: 3,
-    },
-    {
-      title: "Khác",
-      index: 4,
+      key: "4",
+      name: "Jim Red",
+      age: 32,
+      address: "London No. 2 Lake Park",
+    },{
+      key: "2",
+      name: "Jim Green",
+      age: 42,
+      address: "London No. 1 Lake Park",
     },
   ];
 
@@ -153,12 +155,31 @@ function Menu(props) {
     return [...listData];
   }
 
+  let listMenu = [
+    {
+      title: "Buffet",
+      index: 1,
+    },
+    {
+      title: "Món riêng",
+      index: 2,
+    },
+    {
+      title: "Đồ uống",
+      index: 3,
+    },
+    {
+      title: "Khác",
+      index: 4,
+    },
+  ];
+
   function handleClickAddnew(type) {
     setIsShowPopupAddnew(true);
   }
 
   function onChangeTab(item) {
-    if (foodName?.length > 0 || foodUnit?.length > 0 || foodPrice?.length > 0 || foodDescribe?.length > 0 || foodNote?.length > 0) {
+    if (foodName?.length > 0 || foodUnit?.length > 0 || foodPrice?.length > 0 || foodDescribe?.length > 0 || foodNote?.length > 0 || images?.length > 0) {
 
       setShowPopupWarningChangeTab({ show: true, newIndex: item.index })
     }
@@ -168,6 +189,7 @@ function Menu(props) {
       setFoodPrice("")
       setFoodDescribe("")
       setFoodNote("")
+      setImages([])
       setIndex(item.index)
     }
   }
@@ -178,6 +200,7 @@ function Menu(props) {
     setFoodPrice("")
     setFoodDescribe("")
     setFoodNote("")
+    setImages([])
     setShowPopupWarningChangeTab({ show: false, newIndex: 0 });
     setIndex(showPopupWarningChangeTab.newIndex)
   }
@@ -214,8 +237,10 @@ function Menu(props) {
               <div className="menu-manager__popup-content-buffet-food-item-input">
                 <Input
                   defaultValue={item.food}
-                  onChange={(val) => ChangeNameFood(val, index)}
-                  autoFocus
+                  onChange={(val) => 
+                   {
+                    val.stoppropagation(); ChangeNameFood(val, index)
+                   }}
                   placeholder={"Tên món trong gói buffet..."}
                 />
               </div>
@@ -292,10 +317,11 @@ function Menu(props) {
                   return (
                     <div
                       className="menu-manager__popup-header-menu"
-                      style={{
-                        width: `calc(100% / ${listMenu?.length})`,
-                        borderLeft: key != 0 ? "1px solid #fff" : "",
-                      }}
+                      style={item.index === index ? {
+                        color: "#00b894",
+                        borderBottom: '2px solid #00b894'
+                      }:
+                    {}}
                       onClick={(val) => {
                         onChangeTab(item);
                       }}
@@ -311,11 +337,11 @@ function Menu(props) {
                     <div className="menu-manager__popup-content-buffet-name">
                       <Input
                         label={"Tên gói buffet"}
-                        defaultValue={buffetName}
+                        defaultValue={foodName}
                         onChange={(val) => {
-                          setBuffetName(val);
+                          val.stoppropagation()
+                          setFoodName(val);
                         }}
-                        autoFocus
                         placeholder={"Tên gói Buffet..."}
                       />
                     </div>
@@ -335,19 +361,51 @@ function Menu(props) {
                         deleteNameFood={(index) => deleteNameFood(index)}
                       />
                     </div>
-                    <div>
+                    <div className="menu-manager__popup-content-buffet-image"> 
+                      <div className="menu-manager__popup-content-buffet-image-title">Ảnh</div>
                     <ImageUpload maxImage={1} images={images} setImages={(val)=>{setImages(val)}}/>
                     </div>
+                    <Input
+                      label={"Đơn vị tính"}
+                      defaultValue={foodUnit}
+                      onChange={(val) => { setFoodUnit(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Giá tiền"}
+                      defaultValue={foodPrice}
+                      onChange={(val) => { setFoodPrice(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Mô tả"}
+                      defaultValue={foodDescribe}
+                      onChange={(val) => { setFoodDescribe(val) }}
+                      autoFocus
+                    />
+                    <Input
+                      label={"Ghi chú"}
+                      defaultValue={foodNote}
+                      onChange={(val) => { setFoodNote(val) }}
+                      autoFocus
+                    />
+                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
+                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
+                      <Radio value={1}>Còn</Radio>
+                      <Radio value={2}>Hết</Radio>
+                    </Radio.Group>
                   </div>
+               
+                  
                 )}
 
                 {index == 2 && (
                   <div>
                     <Input
                       label={"Tên món"}
-                      defaultValue={buffetName}
+                      defaultValue={foodName}
                       onChange={(val) => {
-                        setBuffetName(val);
+                        setFoodName(val);
                       }}
                       autoFocus
                     />
@@ -370,7 +428,9 @@ function Menu(props) {
                       autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                    <img alt="example" style={{ width: '100%' }} />
+                    <div>
+                      <ImageUpload maxImage={1} images={images} setImages={(val)=>{setImages(val)}}/>
+                    </div>
                     <Input
                       label={"Ghi chú"}
                       defaultValue={foodNote}
@@ -383,7 +443,7 @@ function Menu(props) {
                       <Radio value={2}>Hết</Radio>
                     </Radio.Group>
                   </div>
-  )}
+                )}
                 {
                   index == 3 && <div>
                     <Input

@@ -61,7 +61,7 @@ function App() {
           <Route path={"/admin/staff"}> <Staff /></Route>
           
           {/* order */}
-          <Route path={"/admin/table"}> <TableOrder /></Route>
+          <Route path={"/admin/tablea"}> <TableOrder /></Route>
           <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
 
           {/* client */}

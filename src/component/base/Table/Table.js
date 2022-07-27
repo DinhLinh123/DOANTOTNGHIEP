@@ -154,9 +154,9 @@ function TableBase(props) {
         <Table
           columns={getColumn()}
           dataSource={data}
-          rowSelection={{ ...rowSelection }}
+          // rowSelection={{ ...rowSelection }}
           pagination={false}
-          scroll={{ x: "calc(700px + 50%)", y: 240 }}
+          scroll={{ x: "calc(700px + 50%)", y: '100%' }}
           onChange={onChange}
           loading={loading}
           onRow={(record, rowIndex) => {
@@ -173,7 +173,7 @@ function TableBase(props) {
       <div className="table-container__paging">
         <Pagination
           total={total}
-          showTotal={(total, range) => `${range[0]}-${range[1]} của ${total}za`}
+          showTotal={(total, range) => `${range[0]}-${range[1]} của ${total}`}
           defaultPageSize={20}
           defaultCurrent={1}
           onChange={(page, pageSize) => {

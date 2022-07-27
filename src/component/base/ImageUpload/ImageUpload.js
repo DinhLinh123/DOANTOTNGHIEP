@@ -72,6 +72,7 @@ function ImageUpload(props) {
                           color: "#ecf0f1",
                           zIndex: "1",
                           fontSize: "18px",
+                          fontWeight: "bold"
                         }}
                       />
                     </Tooltip>
@@ -84,6 +85,7 @@ function ImageUpload(props) {
                           color: "#ecf0f1",
                           zIndex: "1",
                           fontSize: "18px",
+                          fontWeight: "bold"
                         }}
                       />
                     </Tooltip>

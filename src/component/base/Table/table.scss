@@ -1,16 +1,33 @@
 .table-container {
+  height: 100%;
+
   &__table {
+    height: calc(100% - 48px);
+
     .ant-table-wrapper {
+      height: 100%;
+  
       .ant-spin-nested-loading {
+        height: 100%;
+    
         .ant-spin-container {
+          height: 100%;
+      
           .ant-table {
+            height: 100%;
+        
             .ant-table-container {
+              height: 100%;
+          
               .ant-table-body {
+                height: calc(100% - 54px);
+
                 table {
+              
                   .ant-table-tbody {
                     .ant-table-row {
                       cursor: pointer;
-                      
+
                       .ant-table-cell {
                         .table-more-option {
                           &__button {
