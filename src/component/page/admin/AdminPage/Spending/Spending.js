@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import AdminPage from "../AdminPage";
 
@@ -10,7 +10,7 @@ function Spending(props) {
             title={"Quản lý chi tiêu"}
             index={MENU_TAB_ADMIN.SPENDING}
         >
-            trang ql chi tiêu
+            quản lý chi tiêu
         </AdminPage>
 
     )

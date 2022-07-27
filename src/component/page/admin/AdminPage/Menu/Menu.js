@@ -14,6 +14,7 @@ import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
 
 import { Tooltip, Upload, Radio } from "antd";
+import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
@@ -35,10 +36,7 @@ function Menu(props) {
   const [listFood, setListFood] = useState([{ food: "" }]);
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
 
-  const [fileList, setFileList] = useState([]);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+  const [images, setImages] = useState([]);
 
   const COLUMN_TABLE_INDEX_MENU = {
     NAME: "name",
@@ -160,7 +158,6 @@ function Menu(props) {
   }
 
   function onChangeTab(item) {
-    debugger
     if (foodName?.length > 0 || foodUnit?.length > 0 || foodPrice?.length > 0 || foodDescribe?.length > 0 || foodNote?.length > 0) {
 
       setShowPopupWarningChangeTab({ show: true, newIndex: item.index })
@@ -238,16 +235,6 @@ function Menu(props) {
       </>
     );
   };
-
-  const handleChange= ({ fileList: newFileList }) =>
-    setFileList(newFileList);
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
 
   return (
     <AdminPage title={"Quản lý menu"} index={MENU_TAB_ADMIN.MENU}>
@@ -349,16 +336,7 @@ function Menu(props) {
                       />
                     </div>
                     <div>
-                      <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
-                        fileList={fileList}
-                        // onPreview={handlePreview}
-                        onChange={handleChange}
-                        multiple={false}
-                      >
-                        {fileList.length  < 1  && uploadButton}
-                      </Upload>
+                    <ImageUpload maxImage={1} images={images} setImages={(val)=>{setImages(val)}}/>
                     </div>
                   </div>
                 )}
