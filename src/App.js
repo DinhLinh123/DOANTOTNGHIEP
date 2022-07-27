@@ -27,13 +27,18 @@ import Feedback from './component/page/client/ClientPage/Feedback/Feedback';
 import Offer from './component/page/client/ClientPage/Offer/Offer';
 import Contact from './component/page/client/ClientPage/Contact/Contact';
 import Order from './component/page/admin/AdminPage/Order/Order';
+import { Spin } from 'antd';
+import { useSelector } from 'react-redux';
+import TableOrder from './component/page/admin/AdminPage/TableOrder/TableOrder';
 
 let historyApp;
 function App() {
 
   // historyApp = useHistory();
+  let loadingMainApp = useSelector(state=> state.loading.loadingMainApp)
 
   return (
+    <Spin tip="Loading..." spinning={loadingMainApp}>
     <div className="App">
       <BrowserRouter>
         <Switch>
@@ -54,6 +59,9 @@ function App() {
           <Route path={"/admin/kitchen"}><Kitchen /></Route>
           <Route path={"/admin/bar"}><Bar /></Route>
           <Route path={"/admin/staff"}> <Staff /></Route>
+          
+          {/* order */}
+          <Route path={"/admin/table"}> <TableOrder /></Route>
           <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
 
           {/* client */}
@@ -69,6 +77,8 @@ function App() {
         </Switch>
       </BrowserRouter>
     </div>
+  </Spin>
+    
   );
 }
 

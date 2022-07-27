@@ -7,10 +7,12 @@ import Button2 from "../../../../base/Button/Button";
 import baseApi from "../../../../../api/baseApi";
 import $ from "jquery";
 import "./area.scss";
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 
 function Area(props) {
 
-
+let dispatch = useDispatch();
 
 
     const [list, setList] = useState([
@@ -37,7 +39,10 @@ function Area(props) {
     }
 
     function lur() {
-        console.log(list)
+        dispatch(changeLoadingApp(true))
+        setTimeout(() => {
+            dispatch(changeLoadingApp(false))
+        }, 500);
     }
 
 

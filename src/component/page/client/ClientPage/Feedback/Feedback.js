@@ -106,6 +106,9 @@ function Feedback(props) {
                 label={"Số điện thoại"}
                 required
                 placeholder="Số điện thoại của bạn..."
+                setDangerNote={(val) => {
+                  setDisabledButton(val);
+                }}
               />
             </div>
             <div className="feedback-container__book-right-item">

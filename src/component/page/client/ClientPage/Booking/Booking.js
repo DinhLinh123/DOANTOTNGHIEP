@@ -35,7 +35,7 @@ function Booking(props) {
     if(adults>0){
       alert("khoer")
     }else{
-      commonFunction.messages(TYPE_MESSAGE.ERROR,"Số người lớn không được bằng không. Vui lòng nhập lại!" )
+      commonFunction.messages(TYPE_MESSAGE.ERROR,"Số người lớn không được bằng 0. Vui lòng nhập lại!" )
     }
   }
 

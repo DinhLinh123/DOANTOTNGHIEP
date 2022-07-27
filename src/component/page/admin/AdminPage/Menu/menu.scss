@@ -1,29 +1,51 @@
+.menu-manager {
+  &__filter {
+    display: flex;
+    margin: 24px 0;
 
-.menu-manager{
-    &__filter{
-        display: flex;
-        margin: 24px 0;
-
-        &-create-new{
-            margin-left: auto;
-        }
+    &-create-new {
+      margin-left: auto;
     }
-    &__popup{
+  }
 
-        &-header{
+  
+}
+
+.menu-popup-create {
+    .ant-modal-content {
+      .ant-modal-body {
+        .menu-manager__popup{
+          
+          &-header{
             height: 30px;
             display: flex;
         }
-        &-content{
-            &_privateDish{
-                &_status{
-                    font-weight: bold;
-                    padding-bottom: 10px;
-                    font-size: 16px;
+
+            &-content{
+                &-buffet{
+                    &-food{
+                        &-add{
+                            margin: 16px 0;
+                        }
+
+                        &-item{
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            margin-bottom: 16px;
+
+                            &-input{
+                                width: calc(100% - 28px);
+                            }
+
+                            &-button{
+                                width: 15px;
+                            }
+                        }
+                    }
                 }
             }
         }
+      }
     }
-    
-}
-
+  }

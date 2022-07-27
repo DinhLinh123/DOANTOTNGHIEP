@@ -63,7 +63,6 @@ function AdminPage(props) {
 
 
   useEffect(() => {
-    debugger
     let role = localStorage.getItem('roleType')
     if(role != '' && role != null)
     {
