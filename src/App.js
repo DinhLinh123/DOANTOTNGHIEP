@@ -18,6 +18,7 @@ import Book from './component/page/admin/AdminPage/Book/Book';
 import Turnover from './component/page/admin/AdminPage/Turnover/Turnover';
 import Spending from './component/page/admin/AdminPage/Spending/Spending';
 import Area from './component/page/admin/AdminPage/Area/Area';
+import AreaDetail from './component/page/admin/AdminPage/Area/AreaDetail/AreaDetail';
 import Menu from './component/page/admin/AdminPage/Menu/Menu';
 import Bar from './component/page/admin/AdminPage/Bar/Bar';
 import Staff from './component/page/admin/AdminPage/Staff/Staff';
@@ -49,19 +50,20 @@ function App() {
 
           {/* admin */}
           <Route exact path="/admin">
-             <Redirect to="/admin/menu" /> 
+             <Redirect to="/admin/menus" /> 
           </Route>
-          <Route path={"/admin/menu"} ><Menu /></Route>
-          <Route path={"/admin/area"} ><Area /></Route>
-          <Route path={"/admin/spending"} ><Spending /></Route>
-          <Route path={"/admin/turnover"}> <Turnover /></Route>
-          <Route path={"/admin/book"}><Book /></Route>
-          <Route path={"/admin/kitchen"}><Kitchen /></Route>
-          <Route path={"/admin/bar"}><Bar /></Route>
-          <Route path={"/admin/staff"}> <Staff /></Route>
+          <Route path={"/admin/menus"} ><Menu /></Route>
+          <Route path={"/admin/areas"} ><Area /></Route>
+          <Route path={"/admin/area/detail/:areaID"} ><AreaDetail /></Route>
+          <Route path={"/admin/spendings"} ><Spending /></Route>
+          <Route path={"/admin/turnovers"}> <Turnover /></Route>
+          <Route path={"/admin/books"}><Book /></Route>
+          <Route path={"/admin/kitchens"}><Kitchen /></Route>
+          <Route path={"/admin/bars"}><Bar /></Route>
+          <Route path={"/admin/staffs"}> <Staff /></Route>
           
           {/* order */}
-          <Route path={"/admin/tablea"}> <TableOrder /></Route>
+          <Route path={"/admin/tables"}> <TableOrder /></Route>
           <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
 
           {/* client */}

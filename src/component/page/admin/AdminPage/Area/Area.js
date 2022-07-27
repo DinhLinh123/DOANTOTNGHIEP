@@ -149,6 +149,9 @@ function Area(props) {
                                 order: order,
                             });
                         }}
+                        onClickRow={(record, rowIndex, event)=>{
+                            debugger
+                        }}
                     />
                 </div>
             </div>

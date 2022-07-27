@@ -11,14 +11,14 @@ const MENU_TAB_CLIENT = {
 };
 
 const MENU_TAB_ADMIN = {
-  MENU: "menu",
-  AREA: "area",
-  BAR: "bar",
-  BOOK: "book",
-  KITCHEN: "kitchen",
-  SPENDING: "spending",
-  STAFF: "staff",
-  TURNOVER: "turnover",
+  MENU: "menus",
+  AREA: "areas",
+  BAR: "bars",
+  BOOK: "books",
+  KITCHEN: "kitchens",
+  SPENDING: "spendings",
+  STAFF: "staffs",
+  TURNOVER: "turnovers",
 };
 
 const TYPE_MENU = {

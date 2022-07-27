@@ -150,6 +150,7 @@ function Menu(props) {
         [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
         [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
         key: idx,
+        ...item
       };
     });
     return [...listData];

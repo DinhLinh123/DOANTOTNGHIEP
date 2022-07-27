@@ -172,7 +172,7 @@ function AdminPage(props) {
         <div className="admin-page-container__nav-logo">
           {typeMenu === TYPE_MENU.BIG && (
             <div className="admin-page-container__nav-logo-text">
-              House of Hongdae BBQ
+              HoH BBQ
             </div>
           )}
           <div

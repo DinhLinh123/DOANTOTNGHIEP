@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 // import Draggable from "react-draggable";
-import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
-import AdminPage from "../AdminPage";
+import { MENU_TAB_ADMIN } from "../../../../../base/common/commonConstant";
+import AdminPage from "../../AdminPage";
 import { Draggable } from "drag-react";
-import Button2 from "../../../../base/Button/Button";
-import baseApi from "../../../../../api/baseApi";
+import Button2 from "../../../../../base/Button/Button";
+import baseApi from "../../../../../../api/baseApi";
 import $ from "jquery";
 import "./areaDetail.scss";
 import { useDispatch } from "react-redux";
-import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import { changeLoadingApp } from "../../../../../../reudux/action/loadingAction";
 
 function AreaDetail(props) {
 
