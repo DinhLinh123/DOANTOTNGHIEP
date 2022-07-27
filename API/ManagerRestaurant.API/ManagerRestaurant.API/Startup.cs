@@ -34,7 +34,7 @@ namespace ManagerRestaurant.API
             });
             services.AddDbContext<DataContext>(options =>
                 //options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
-                options.UseSqlServer(_configuration["DevHomeConnection"]));
+                options.UseSqlServer(_configuration["DBInterConnection"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

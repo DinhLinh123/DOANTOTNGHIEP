@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
 using Newtonsoft.Json;
+using ManagerRestaurant.API.Infratructure.Datatables;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -88,7 +89,7 @@ namespace ManagerRestaurant.API.Controllers
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpGet("/filter")]
-        public async Responsive GetFilterDoAn([FromQuery] string _filter)
+        public async Task<Responsive> GetFilterDoAn([FromQuery] string _filter)
         {
             try
             {
@@ -127,7 +128,9 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     mes = "get success";
                 }
-                return new Responsive(200, mes, data); ;
+
+                var res = new Responsive(200, mes, data);
+                return res;
             }
             catch (Exception err)
             {
@@ -165,15 +168,5 @@ namespace ManagerRestaurant.API.Controllers
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
         public Guid MaTheLoai { get; set; }
-    }
-    class Responsive
-    {
-        public Responsive(int code, string mess, object data)
-        {
-            this.Code = code; this.Mess = mess; this.Data = data;
-        }
-        public int Code { get; set; }
-        public string Mess { get; set; }
-        public object Data { get; set; }
     }
 }
