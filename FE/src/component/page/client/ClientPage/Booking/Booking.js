@@ -27,15 +27,16 @@ function Booking(props) {
   const [customerName, setCustomerName] = useState("");
   const [customerNamePhone, setCustomerPhone] = useState("");
   const [dateBooking, setDateBooking] = useState(moment().unix()
-   * 1000);
+    * 1000);
+  const [timeBooking, setTimeBooking] = useState()
   const [disabledButton, setDisabledButton] = useState(true);
-  
+
 
   function onSubmit() {
-    if(adults>0){
+    if (adults > 0) {
       alert("khoer")
-    }else{
-      commonFunction.messages(TYPE_MESSAGE.ERROR,"Số người lớn không được bằng 0. Vui lòng nhập lại!" )
+    } else {
+      commonFunction.messages(TYPE_MESSAGE.ERROR, "Số người lớn không được bằng 0. Vui lòng nhập lại!")
     }
   }
 
@@ -128,11 +129,18 @@ function Booking(props) {
                 />
               </div>
               <div className="booking-container__book-right-date-item">
-                <TimePicker placeholder="dd/MM/yyyy" label={"Giờ"} />
+                <TimePicker
+                  placeholder="dd/MM/yyyy"
+                  label={"Giờ"}
+                  defaultValue={timeBooking}
+                  onChange={(val) => {
+                    setTimeBooking(val);
+                  }}
+                />
               </div>
             </div>
             <div className="booking-container__book-right-button">
-              <Button  name="Đặt bàn" background="#F3E385" color="#000" disabled={disabledButton} onClick={()=>onSubmit()} />
+              <Button name="Đặt bàn" background="#F3E385" color="#000" disabled={disabledButton} onClick={() => onSubmit()} />
             </div>
           </div>
         </div>

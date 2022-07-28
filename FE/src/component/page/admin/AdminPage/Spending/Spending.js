@@ -6,14 +6,24 @@ import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./spending.scss"
+import Popup from "../../../../base/Popup/Popup";
+import Input from "../../../../base/Input/Input";
+import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 
 function Spending(props) {
 
     const [sortType, setSortType] = useState();
+    const [itemName, setItemName] = useState("");
+    const [itemAmount, setItemAmount] = useState("");
+    const [itemUnitprice, setItemUnitprice] = useState("");
+    const [itemImage, setItemImage] = useState("");
+    const [itemNote, setItemNote] = useState("");
+    const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
-        AGE: "age",
-        ADDRESS: "address",
+        AMOUNT: "amount",
+        UNITPRICE: "unitprice",
+        UNITPRICE: "unitprice",
     };
 
     const columns = [
@@ -316,6 +326,9 @@ function Spending(props) {
         },
     ];
 
+    function handleClickAddnew(type) {
+        setIsShowPopupAddnew(true);
+    }
     const OPTION_MORE_TABLE = [
         {
             title: "Thêm",
@@ -359,9 +372,9 @@ function Spending(props) {
     }
 
     function handleClickAddnew(type) {
-        // setIsShowPopupAddnew(true);
+        setIsShowPopupAddnew(true);
     }
-    
+
     return (
 
         <AdminPage
@@ -398,6 +411,58 @@ function Spending(props) {
                         }}
                     />
                 </div>
+                <Popup
+                    title={"Thêm mới Chi tiêu"}
+                    show={isShowPopupAddnew}
+                    onClickClose={() => setIsShowPopupAddnew(false)}
+                    button={[
+                        <Button2
+                            name={"Đóng"}
+                            onClick={() => setIsShowPopupAddnew(false)}
+                        />,
+                        <Button2
+                            name={"Lưu"}
+                            onClick={() => setIsShowPopupAddnew(false)}
+                            background="#fa983a"
+                        />,
+                    ]}
+                    width={600}
+                    className={"menu-popup-create"}
+                    body={
+                        <div className="menu-manager__popup">
+                            <Input
+                                label={"Tên mặt hàng"}
+                                defaultValue={itemName}
+                                onChange={(val) => {
+                                    setItemName(val);
+                                }}
+                                autoFocus
+                            />
+                            <Input
+                                label={"Số lượng"}
+                                defaultValue={itemAmount}
+                                onChange={(val) => { setItemAmount(val) }}
+                                autoFocus
+                            />
+                            <Input
+                                label={"Đơn giá"}
+                                defaultValue={itemUnitprice}
+                                onChange={(val) => { setItemUnitprice(val) }}
+                                autoFocus
+                            />
+                            <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
+                            <div>
+                                <ImageUpload maxImage={1} images={itemImage} setImages={(val) => { setItemImage(val) }} />
+                            </div>
+                            <Input
+                                label={"Ghi chú"}
+                                defaultValue={itemNote}
+                                onChange={(val) => { setItemNote(val) }}
+                                autoFocus
+                            />
+                        </div>
+                    }
+                />
             </div>
         </AdminPage>
 

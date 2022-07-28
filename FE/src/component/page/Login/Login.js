@@ -61,7 +61,7 @@ function Login() {
         roleType: account.roleType
       }))
 
-      window.open("/admin/menu", '_self')
+      window.open("/admin/menus", '_self')
     }
 
   function onBlurInputPass() {
