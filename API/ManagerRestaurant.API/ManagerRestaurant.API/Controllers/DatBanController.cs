@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -76,12 +78,57 @@ namespace ManagerRestaurant.API.Controllers
         // POST: api/DatBan
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DatBan>> PostDatBan(DatBan datBan)
+        public async Task<Responsive> PostDatBan(DatBanCreateModel item)
         {
-            _context.DatBan.Add(datBan);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var idKH = Guid.Empty;
+                var data = (from s in _context.KhachHang where s.SoDienThoai == item.SoDienThoai select s).FirstOrDefault();
+                if (data == null)
+                {
+                    //Update khách hàng
+                    var khachhang = new KhachHang();
+                    khachhang.Id = Guid.NewGuid();
+                    khachhang.Name = item.TenKhachHang;
+                    khachhang.SoDienThoai = item.SoDienThoai;
+                    khachhang.CreatedByUserId = Guid.Empty;
+                    khachhang.CreatedByUserName = "";
+                    khachhang.CreatedOnDate = DateTime.Now;
+                    //create new khach hang
+                    _context.KhachHang.Add(khachhang);
+                }
+                else
+                {
+                    idKH = data.Id;
+                }
+                //Tạo mới trường dữ liệu
 
-            return CreatedAtAction("GetDatBan", new { id = datBan.Id }, datBan);
+                DatBan datBan = new DatBan();
+                datBan.Id = Guid.NewGuid();
+                datBan.IdBan = Guid.Empty;
+                datBan.MaKhachHang = idKH;
+                datBan.TenKhachHang = item.TenKhachHang;
+                datBan.GioDen = item.GioDen;
+                datBan.ThoiGian = item.ThoiGian;
+                datBan.SoNguoiLon = item.SoNguoiLon;
+                datBan.SoTreEm = item.SoTreEm;
+                datBan.GhiChu = item.GhiChu;
+                datBan.TrangThai = "Chờ Xếp";
+                datBan.CreatedByUserId = idKH;
+                datBan.CreatedByUserName = item.TenKhachHang;
+                datBan.CreatedOnDate = DateTime.Now;
+                datBan.LastModifiedByUserId = Guid.Empty;
+                datBan.LastModifiedByUserName = "";
+                _context.DatBan.Add(datBan);
+                
+                var status = await _context.SaveChangesAsync();
+                return new Responsive(200,"Create success", datBan);
+
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message,null);
+            }
         }
 
         // DELETE: api/DatBan/5
@@ -104,5 +151,63 @@ namespace ManagerRestaurant.API.Controllers
         {
             return _context.DatBan.Any(e => e.Id == id);
         }
+
+        // POST: api/DoAn
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpGet("filter")]
+        public async Task<Responsive> GetFilterDoAn([FromQuery] string _filter)
+        {
+            try
+            {
+
+                DatBanFilter filter = JsonConvert.DeserializeObject<DatBanFilter>(_filter);
+                var query = from s in _context.DatBan select s;
+                if (filter.Id != Guid.Empty)
+                {
+                    query = query.Where((x) => x.Id == filter.Id);
+                }
+                if (filter.TextSearch.Length > 0)
+                {
+                    query = query.Where((x) => x.TenKhachHang.Contains(filter.TextSearch));
+                }
+                //if (filter.MaTheLoai != Guid.Empty)
+                //{
+                //    query = query.Where((x) => x.MaTheLoai == filter.MaTheLoai);
+                //}
+                if (filter.PageNumber > 0)
+                {
+                    query = query.Take(filter.PageNumber);
+                }
+                if (filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize);
+                }
+
+                var data = await query.ToListAsync();
+
+                var mes = "";
+                if (data.Count == 0)
+                {
+                    mes = "Not data";
+                }
+                else
+                {
+                    mes = "get success";
+                }
+
+                var res = new Responsive(200, mes, data);
+                return res;
+            }
+            catch (Exception err)
+            {
+                var res = new Responsive(500, err.Message, err.ToString());
+                return res;
+            }
+        }
+    }
+
+    class DatBanFilter : BaseFilter
+    {
+
     }
 }

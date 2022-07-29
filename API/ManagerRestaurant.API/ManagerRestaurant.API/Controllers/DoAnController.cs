@@ -161,12 +161,8 @@ namespace ManagerRestaurant.API.Controllers
         }
     }
 
-    class DoAnFilter
+    class DoAnFilter:BaseFilter
     {
-        public Guid Id { get; set; }
-        public string TextSearch { get; set; }
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
         public Guid MaTheLoai { get; set; }
     }
 }
