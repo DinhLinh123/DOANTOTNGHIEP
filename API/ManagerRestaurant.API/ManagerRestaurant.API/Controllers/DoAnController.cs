@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
 using Newtonsoft.Json;
-using ManagerRestaurant.API.Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
 
 namespace ManagerRestaurant.API.Controllers
 {

@@ -20,7 +20,7 @@ namespace ManagerRestaurant.API.Models
         public string LastModifiedByUserName { get; set; }
     }
     public class UserCreateModel
-    {public Guid Id { get; set; }
+    { public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
@@ -36,7 +36,7 @@ namespace ManagerRestaurant.API.Models
         public string LastModifiedByUserName { get; set; }
     }
     public class UserUpdateModel
-    {public Guid Id { get; set; }
+    { public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
@@ -50,5 +50,10 @@ namespace ManagerRestaurant.API.Models
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
+    }
+
+    public class UserLoginModel{
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }
