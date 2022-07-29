@@ -31,6 +31,7 @@ import Order from './component/page/admin/AdminPage/Order/Order';
 import { Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import TableOrder from './component/page/admin/AdminPage/TableOrder/TableOrder';
+import SpendingDetail from './component/page/admin/AdminPage/SpendingDetail/SpendingDetail';
 
 let historyApp;
 function App() {
@@ -61,6 +62,7 @@ function App() {
           <Route path={"/admin/kitchens"}><Kitchen /></Route>
           <Route path={"/admin/bars"}><Bar /></Route>
           <Route path={"/admin/staffs"}> <Staff /></Route>
+          <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
           
           {/* order */}
           <Route path={"/admin/tables"}> <TableOrder /></Route>

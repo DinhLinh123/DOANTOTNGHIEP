@@ -19,19 +19,21 @@ TableBase.propTypes = {
   setCheckAll: PropTypes.func,
   setListObjectSelected: PropTypes.func,
   onClickRow: PropTypes.func,
-  onDoubleClickRow : PropTypes.func,
+  onDoubleClickRow: PropTypes.func,
+  isPaging: PropTypes.bool,
+  onContextMenu:PropTypes.func
 };
 
 TableBase.defaultProps = {
-  total: 0,
   loading: false,
-  onChangePagination: () => {},
-  setObjectSort: () => {},
+  onChangePagination: () => { },
+  setObjectSort: () => { },
   columns: [],
   data: [],
   option: [],
-  setCheckAll: () => {},
-  setListObjectSelected: () => {},
+  setCheckAll: () => { },
+  setListObjectSelected: () => { },
+  isPaging: true
 };
 
 function TableBase(props) {
@@ -47,7 +49,9 @@ function TableBase(props) {
     setCheckAll,
     setListObjectSelected,
     onClickRow,
-    onDoubleClickRow
+    isPaging,
+    onDoubleClickRow,
+    onContextMenu
   } = props;
 
   const [indexShowMenu, setIndexShowMenu] = useState(-1);
@@ -62,8 +66,8 @@ function TableBase(props) {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-        debugger
-      
+      debugger
+
     },
     onSelect: (record, selected, selectedRows) => {
       debugger
@@ -137,8 +141,8 @@ function TableBase(props) {
           col.defaultSortOrder === SORT_TYPE.DESC
             ? "descend"
             : col.defaultSortOrder === SORT_TYPE.ASC
-            ? "ascend"
-            : "",
+              ? "ascend"
+              : "",
       };
     });
 
@@ -161,16 +165,16 @@ function TableBase(props) {
           loading={loading}
           onRow={(record, rowIndex) => {
             return {
-              onClick: event => {onClickRow(record, rowIndex, event)}, // click row
-              onDoubleClick: event => {onDoubleClickRow(record, rowIndex, event)}, // double click row
-              onContextMenu: event => {}, // right button click row
-              onMouseEnter: event => {}, // mouse enter row
-              onMouseLeave: event => {}, // mouse leave row
+              onClick: event => { onClickRow(record, rowIndex, event) }, // click row
+              onDoubleClick: event => { onDoubleClickRow(record, rowIndex, event) }, // double click row
+              onContextMenu: event => {onContextMenu(record, rowIndex, event) }, // right button click row
+              onMouseEnter: event => { }, // mouse enter row
+              onMouseLeave: event => { }, // mouse leave row
             };
           }}
         />
       </div>
-      <div className="table-container__paging">
+      {isPaging && <div className="table-container__paging">
         <Pagination
           total={total}
           showTotal={(total, range) => `${range[0]}-${range[1]} của ${total}`}
@@ -181,6 +185,8 @@ function TableBase(props) {
           }}
         />
       </div>
+      }
+
     </div>
   );
 }

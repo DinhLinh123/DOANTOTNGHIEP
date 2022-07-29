@@ -9,321 +9,110 @@ import "./spending.scss"
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import DatePicker from "../../../../base/DatePicker/DatePicker";
+import { Tooltip } from "antd";
+import { changeAccount } from "../../../../../reudux/action/accountAction";
 
 function Spending(props) {
 
     const [sortType, setSortType] = useState();
-    const [itemName, setItemName] = useState("");
-    const [itemAmount, setItemAmount] = useState("");
-    const [itemUnitprice, setItemUnitprice] = useState("");
+    const [itemBill, setItemBill] = useState("");
+    const [itemBillDate, setItemBillDate] = useState("");
+    const [listItems, setListItems] = useState([{ name: "", unit: "", amount: "", unitprice: "" }]);
     const [itemImage, setItemImage] = useState("");
     const [itemNote, setItemNote] = useState("");
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const COLUMN_TABLE_INDEX_MENU = {
-        NAME: "name",
+        BILL: "namebill",
         AMOUNT: "amount",
-        UNITPRICE: "unitprice",
-        UNITPRICE: "unitprice",
+        BILLDate: "billdate",
+        TOTALMONEY: "totalmoney",
+        DATAENTRYDATE: "dataentrydate",
+        DATAENTRYPERSON: "dataentryperson",
+        STATUS: "status",
     };
 
     const columns = [
         {
-            title: "Name",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: true,
-            width: "300px",
+            title: "Tên hóa đơn",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.BILL,
+            width: "200px",
         },
         {
-            title: "Age",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
-            defaultSortOrder: SORT_TYPE.DESC,
-            sorter: true,
-            width: "300px",
+            title: "SL mặt hàng",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.AMOUNT,
+            width: "100px",
         },
         {
-            title: "Address",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: "300px",
+            title: "Ngày hóa đơn",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.BILLDate,
+            sorter: true,
+            width: "200px",
+        },
+        {
+            title: "Tổng tiền",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.TOTALMONEY,
+            width: "150px",
+        },
+        {
+            title: "Ngày nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE,
+            sorter: true,
+            width: "200px",
+        },
+        {
+            title: "Người nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON,
+            width: "200px",
+        },
+        {
+            title: "Trạng thái",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
+            width: "200px",
         },
     ];
 
     const data = [
         {
             key: "1",
-            name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
+            namebill: "HD2807",
+            amount: 5,
+            billdate: "28/07/2022",
+            totalmoney: "250,000",
+            dataentrydate: "28/07/2022",
+            dataentryperson: "Linhdtt",
+            status: "Nhập mới",
         },
         {
             key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
+            namebill: "HD2807",
+            amount: 5,
+            billdate: "28/07/2022",
+            totalmoney: "250,000",
+            dataentrydate: "28/07/2022",
+            dataentryperson: "Linhdtt",
+            status: "Nhập mới",
         },
         {
             key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
+            namebill: "HD2807",
+            amount: 5,
+            billdate: "28/07/2022",
+            totalmoney: "250,000",
+            dataentrydate: "28/07/2022",
+            dataentryperson: "Linhdtt",
+            status: "Nhập mới",
         },
         {
             key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
+            namebill: "HD2807",
+            amount: 5,
+            billdate: "28/07/2022",
+            totalmoney: "250,000",
+            dataentrydate: "28/07/2022",
+            dataentryperson: "Linhdtt",
+            status: "Nhập mới",
+        }, 
     ];
 
     function handleClickAddnew(type) {
@@ -331,11 +120,13 @@ function Spending(props) {
     }
     const OPTION_MORE_TABLE = [
         {
-            title: "Thêm",
-            onSelect: () => alert("thêm"),
+            title: "Chi tiết",
+            onSelect: (item) => {
+                window.open(`/admin/spending/detail/${item.key}`, "_self")
+            },
         },
         {
-            title: "Sửa",
+            title: "Gửi phê duyệt",
             onSelect: () => {
                 alert("Sửa");
             },
@@ -348,23 +139,39 @@ function Spending(props) {
         },
     ];
 
-    function columnName(item) {
-        return <div>{item?.name}</div>;
+    function columnBill(item) {
+        return <div>{item?.namebill}</div>;
     }
-    function columnAge(item) {
-        return <div>{item?.age}</div>;
+    function columnAmount(item) {
+        return <div>{item?.amount}</div>;
     }
-    function columnAddress(item) {
-        return <div>{item?.address}</div>;
+    function columnBillDate(item) {
+        return <div>{item?.billdate}</div>;
+    }
+    function columnTotalmoney(item) {
+        return <div>{item?.totalmoney}</div>;
+    }
+    function columnDataentrydate(item) {
+        return <div>{item?.dataentrydate}</div>;
+    }
+    function columnDataentryperson(item) {
+        return <div>{item?.dataentryperson}</div>;
+    }
+    function columnStatus(item) {
+        return <div>{item?.status}</div>;
     }
 
     function convertDataTable(dataTable) {
         let listData;
         listData = dataTable.map((item, idx) => {
             return {
-                [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
-                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                [COLUMN_TABLE_INDEX_MENU.BILL]: columnBill(item),
+                [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
+                [COLUMN_TABLE_INDEX_MENU.BILLDate]: columnBillDate(item),
+                [COLUMN_TABLE_INDEX_MENU.TOTALMONEY]: columnTotalmoney(item),
+                [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
+                [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
+                [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
                 key: idx,
             };
         });
@@ -374,6 +181,108 @@ function Spending(props) {
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
     }
+    //thêm nhiều mặt hàng
+
+
+
+    function ChangeNameItems(val, index) {
+        let _listItems = [...listItems];
+        _listItems[index].name = val;
+        setListItems(_listItems);
+    }
+
+    function ChangeUnitItems(val, index) {
+        let _listItems = [...listItems];
+        _listItems[index].unit = val;
+        setListItems(_listItems);
+    }
+
+    function ChangeAmountItems(val, index) {
+        let _listItems = [...listItems];
+        _listItems[index].amount = val;
+        setListItems(_listItems);
+    }
+
+    function ChangeUnitpriceItems(val, index) {
+        let _listItems = [...listItems];
+        _listItems[index].unitprice = val;
+        setListItems(_listItems);
+    }
+
+    function deleteItems(index) {
+        let _listItems = [...listItems];
+        _listItems.splice(index, 1);
+        setListItems(_listItems);
+    }
+
+    function addIteams() {
+        let _listItems = [...listItems];
+        _listItems.push({ name: "", unit: "", amount: "", unitprice: "" });
+        setListItems(_listItems);
+    }
+
+    const Card = (props) => {
+        const { listItems, ChangeNameItems,ChangeUnitItems, ChangeAmountItems, ChangeUnitpriceItems, deleteItems } = props;
+        return (
+            <>
+                {listItems?.map((item, index) => {
+                    return (
+                        <div className="spending-manager__popup-items">
+                            <div className="spending-manager__popup-items-name">
+                                <Input
+                                    label={"Tên mặt hàng"}
+                                    defaultValue={item.name}
+                                    onChange={(val) => {
+                                        ChangeNameItems(val, index);
+                                    }}
+                                />
+                            </div>
+                            <div className="spending-manager__popup-items-unit">
+                                <Input
+                                    label={"Đơn vị tính"}
+                                    defaultValue={item.unit}
+                                    onChange={(val) => {
+                                        ChangeUnitItems(val, index);
+                                    }}
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="spending-manager__popup-items-amount">
+                                <Input
+                                    label={"Số lượng"}
+                                    defaultValue={item.amount}
+                                    onChange={(val) => {
+                                        ChangeAmountItems(val, index);
+                                    }}
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="spending-manager__popup-items-unitPrice">
+                                <Input
+                                    label={"Đơn giá"}
+                                    defaultValue={item.unitprice}
+                                    onChange={(val) => {
+                                        ChangeUnitpriceItems(val, index);
+                                    }}
+                                    autoFocus
+                                />
+                            </div>
+                            {index > 0 && (
+                                <div className="spending-manager__popup-items-delete">
+                                    <Tooltip title={"Xóa món"}>
+                                        <DeleteOutlined
+                                            onClick={() => deleteItems(index)}
+                                            style={{ color: "red" }}
+                                        />
+                                    </Tooltip>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </>
+        );
+    };
 
     return (
 
@@ -409,6 +318,8 @@ function Spending(props) {
                                 order: order,
                             });
                         }}
+                        onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
+                        onContextMenu={(record, rowIndex, event)=>{debugger}}
                     />
                 </div>
                 <Popup
@@ -426,30 +337,91 @@ function Spending(props) {
                             background="#fa983a"
                         />,
                     ]}
-                    width={600}
-                    className={"menu-popup-create"}
+                    width={1000}
+                    //className={"menu-popup-create"}
                     body={
-                        <div className="menu-manager__popup">
-                            <Input
-                                label={"Tên mặt hàng"}
-                                defaultValue={itemName}
+                        <div className="spending-manager__popup">
+                            <div className="spending-manager__popup-bill">
+                                <Input
+                                    label={"Tên hóa đơn"}
+                                    defaultValue={itemBill}
+                                    onChange={(val) => {
+                                        setItemBill(val);
+                                    }}
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="spending-manager__popup-bill">
+                            <DatePicker
+                                defaultValue={itemBillDate}
                                 onChange={(val) => {
-                                    setItemName(val);
+                                    setItemBillDate(val);
                                 }}
-                                autoFocus
+                                placeholder="dd/MM/yyyy"
+                                label={"Ngày hóa đơn"}
                             />
-                            <Input
-                                label={"Số lượng"}
-                                defaultValue={itemAmount}
-                                onChange={(val) => { setItemAmount(val) }}
-                                autoFocus
+                            </div>
+                            <div className="spending-manager__popup-buttonAdd">
+                                <Button2
+                                    name={"Thêm mặt hàng"}
+                                    background={"#ff9f43"}
+                                    onClick={() => addIteams()}
+                                />
+                            </div>
+                            <Card
+                                listItems={listItems}
+                                ChangeNameItems={(val, item) =>
+                                    ChangeNameItems(val, item)
+                                }
+                                ChangeUnitItems={(val, item) =>
+                                    ChangeUnitItems(val, item)
+                                }
+                                ChangeAmountItems={(val, item) =>
+                                    ChangeAmountItems(val, item)
+                                }
+                                ChangeUnitpriceItems={(val, item) =>
+                                    ChangeUnitpriceItems(val, item)
+                                }
+                                deleteItems={(index) => deleteItems(index)}
                             />
-                            <Input
-                                label={"Đơn giá"}
-                                defaultValue={itemUnitprice}
-                                onChange={(val) => { setItemUnitprice(val) }}
-                                autoFocus
-                            />
+                            {/* <div className="spending-manager__popup-items">
+                                <div className="spending-manager__popup-items-name">
+                                    <Input
+                                        label={"Tên mặt hàng"}
+                                        defaultValue={itemName}
+                                        onChange={(val) => {
+                                            setItemName(val);
+                                        }}
+                                        autoFocus
+                                    />
+                                </div>
+                                <div className="spending-manager__popup-items-unit">
+                                    <Input
+                                        label={"Đơn vị tính"}
+                                        defaultValue={itemUnit}
+                                        onChange={(val) => {
+                                            setItemUnit(val);
+                                        }}
+                                        autoFocus
+                                    />
+                                </div>
+                                <div className="spending-manager__popup-items-amount">
+                                    <Input
+                                        label={"Số lượng"}
+                                        defaultValue={itemAmount}
+                                        onChange={(val) => { setItemAmount(val) }}
+                                        autoFocus
+                                    />
+                                </div>
+                                <div className="spending-manager__popup-items-unitPrice">
+                                    <Input
+                                        label={"Đơn giá"}
+                                        defaultValue={itemUnitprice}
+                                        onChange={(val) => { setItemUnitprice(val) }}
+                                        autoFocus
+                                    />
+                                </div>
+                            </div> */}
                             <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
                             <div>
                                 <ImageUpload maxImage={1} images={itemImage} setImages={(val) => { setItemImage(val) }} />

@@ -10,7 +10,42 @@
         }
     }
 
-    &__content{
+    &__popup {
+        &-bill {
+            margin-bottom: 16px;
+        }
+
+        &-items {
+            display: flex;
+            width: 100%;
+
+            &-name {
+                margin-right: 15px;
+                width: 30%;
+            }
+
+            &-unit {
+                margin-right: 15px;
+                width: 20%;
+            }
+
+            &-amount {
+                margin-right: 15px;
+                width: 20%;
+            }
+
+            &-unitPrice {
+                width: 20%;
+            }
+
+            &-delete {
+                padding-top: 40px;
+                margin-left: 10px;
+            }
+        }
+    }
+
+    &__content {
         height: calc(100% - 60px);
     }
 }

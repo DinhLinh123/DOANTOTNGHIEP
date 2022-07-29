@@ -17,6 +17,7 @@ const MENU_TAB_ADMIN = {
   BOOK: "books",
   KITCHEN: "kitchens",
   SPENDING: "spendings",
+  SPENDINGDETAIL: "spendingDetails",
   STAFF: "staffs",
   TURNOVER: "turnovers",
 };

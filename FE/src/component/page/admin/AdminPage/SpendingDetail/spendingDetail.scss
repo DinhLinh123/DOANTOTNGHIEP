@@ -1,0 +1,24 @@
+.spendingDetail-manager {
+    &__item {
+        text-align: left;
+        margin-bottom: 20px;
+        display: flex;
+        &-lable {
+            width: 200px;
+        }
+
+        &-content {
+            font-weight: bold;
+        }
+    }
+    &__table{
+        text-align: left;
+        margin-bottom: 10px;
+        &-title{
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+    }
+}

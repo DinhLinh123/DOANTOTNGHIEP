@@ -23,61 +23,100 @@ function Book(props) {
     const [bookTime, setBookTime] = useState();
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
-        AGE: "age",
-        ADDRESS: "address",
+        PHONE: "phone",
+        ADULTS: "adults",
+        CHILD: "child",
+        DATE: "date",
+        TIME: "time",
+        PEOPLE: "people",
     };
 
     const columns = [
         {
-            title: "Name",
+            title: "Tên khách hàng",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: true,
-            width: "300px",
+            width: "250px",
         },
         {
-            title: "Age",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
-            defaultSortOrder: SORT_TYPE.DESC,
-            sorter: true,
-            width: "300px",
+            title: "Số điện thoại",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.PHONE,
+            width: "200px",
         },
         {
-            title: "Address",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: "300px",
+            title: "SL người lớn",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.ADULTS,
+            width: "100px",
+        },
+        {
+            title: "SL trẻ em",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.CHILD,
+            width: "100px",
+        },
+        {
+            title: "Ngày checkin",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+            sorter: true,
+            width: "200px",
+        },
+        {
+            title: "Giờ checkin",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.TIME,
+            sorter: true,
+            width: "100px",
+        },
+        {
+            title: "Người nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
+            width: "150px",
         },
     ];
 
     const data = [
         {
             key: "1",
-            name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
+            name: "chị Linh",
+            phone: "0358100337",
+            adults: 5,
+            child: 1,
+            date: "28/07/2022",
+            time: "20:00",
+            people: "LinhDTT",
         },
         {
             key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
+            name: "chị Linh",
+            phone: "0358100337",
+            adults: 5,
+            child: 1,
+            date: "28/07/2022",
+            time: "20:00",
+            people: "LinhDTT",
         },
         {
             key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
+            name: "chị Linh",
+            phone: "0358100337",
+            adults: 5,
+            child: 1,
+            date: "28/07/2022",
+            time: "20:00",
+            people: "Website",
         },
         {
             key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
+            name: "chị Linh",
+            phone: "0358100337",
+            adults: 5,
+            child: 1,
+            date: "28/07/2022",
+            time: "20:00",
+            people: "LinhDTT",
         }
     ];
 
     const OPTION_MORE_TABLE = [
         {
-            title: "Thêm",
+            title: "Xếp bàn",
             onSelect: () => alert("thêm"),
         },
         {
@@ -97,11 +136,23 @@ function Book(props) {
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
-    function columnAge(item) {
-        return <div>{item?.age}</div>;
+    function columnPhone(item) {
+        return <div>{item?.phone}</div>;
     }
-    function columnAddress(item) {
-        return <div>{item?.address}</div>;
+    function columnAdults(item) {
+        return <div>{item?.adults}</div>;
+    }
+    function columnChild(item) {
+        return <div>{item?.child}</div>;
+    }
+    function columnDate(item) {
+        return <div>{item?.date}</div>;
+    }
+    function columnTime(item) {
+        return <div>{item?.time}</div>;
+    }
+    function columnPeople(item) {
+        return <div>{item?.people}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -109,8 +160,12 @@ function Book(props) {
         listData = dataTable.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
-                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
+                [COLUMN_TABLE_INDEX_MENU.ADULTS]: columnAdults(item),
+                [COLUMN_TABLE_INDEX_MENU.CHILD]: columnChild(item),
+                [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
+                [COLUMN_TABLE_INDEX_MENU.TIME]: columnTime(item),
+                [COLUMN_TABLE_INDEX_MENU.PEOPLE]: columnPeople(item),
                 key: idx,
             };
         });
@@ -234,9 +289,9 @@ function Book(props) {
                                 defaultValue={moment().unix()
                                     * 1000}
                                 min={moment().unix() * 1000 - ONE_DAY}
-                                // onChange={(val) => {
-                                //     setStaffDate(val);
-                                // }}
+                                onChange={(val) => {
+                                    setBookDate(val);
+                                }}
                                 placeholder="dd/MM/yyyy"
                                 label={"Ngày đặt bàn"}
                                 width={"100%"}
