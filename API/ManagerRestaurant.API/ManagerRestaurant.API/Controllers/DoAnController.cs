@@ -59,7 +59,7 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
                 var doAn = _context.DoAn.Find(id);
-                if (doAn!= null)
+                if (doAn != null)
                 {
                     doAn.Name = item.Name;
                     doAn.MaTheLoai = item.MaTheLoai;
@@ -96,31 +96,38 @@ namespace ManagerRestaurant.API.Controllers
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DoAn>> PostDoAn(DoAnCreateModel item)
+        public async Task<Responsive> PostDoAn(DoAnCreateModel item)
         {
-            //conver
-            var doAn = new DoAn();
-            doAn.Id = Guid.NewGuid();
-            doAn.Name = item.Name;
-            doAn.MaTheLoai = item.MaTheLoai;
-            doAn.LinkAnh = item.LinkAnh;
-            doAn.Loai = item.Loai;
-            doAn.GhiChu = item.GhiChu;
-            doAn.DanhSachMonAn = item.DanhSachMonAn;
-            doAn.DonViTinh = item.DonViTinh;
-            doAn.TrangThai = item.TrangThai;
-            doAn.CreatedByUserId = item.CreatedByUserId;
-            doAn.CreatedByUserName = item.CreatedByUserName;
-            doAn.CreatedOnDate = item.CreatedOnDate;
-            _context.DoAn.Add(doAn);
-            await _context.SaveChangesAsync();
+            try
+            {
+                //conver
+                var doAn = new DoAn();
+                doAn.Id = Guid.NewGuid();
+                doAn.Name = item.Name;
+                doAn.MaTheLoai = item.MaTheLoai;
+                doAn.LinkAnh = item.LinkAnh;
+                doAn.Loai = item.Loai;
+                doAn.GhiChu = item.GhiChu;
+                doAn.DanhSachMonAn = item.DanhSachMonAn;
+                doAn.DonViTinh = item.DonViTinh;
+                doAn.TrangThai = item.TrangThai;
+                doAn.CreatedByUserId = item.CreatedByUserId;
+                doAn.CreatedByUserName = item.CreatedByUserName;
+                doAn.CreatedOnDate = item.CreatedOnDate;
+                _context.DoAn.Add(doAn);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDoAn", new { id = doAn.Id }, doAn);
+                return new Responsive(200, "Thêm mới thành công", doAn);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
         }
 
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpGet("/filter")]
+        [HttpGet("filter")]
         public async Task<Responsive> GetFilterDoAn([FromQuery] string _filter)
         {
             try

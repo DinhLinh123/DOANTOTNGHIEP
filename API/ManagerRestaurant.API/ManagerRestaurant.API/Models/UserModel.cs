@@ -38,8 +38,9 @@ namespace ManagerRestaurant.API.Models
         public bool IsDelete { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public Guid? LastModifiedByUserId { get; set; }
-        public string LastModifiedByUserName { get; set; }
+        public Guid? CreatedByUserId { get; set; }
+        public string CreatedByUserName { get; set; }
+        public DateTime? CreatedOnDate { get; set; }
     }
     public class UserUpdateModel
     {

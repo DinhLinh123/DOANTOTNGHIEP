@@ -145,7 +145,7 @@ namespace ManagerRestaurant.API.Controllers
 
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpGet("/filter")]
+        [HttpGet("filter")]
         public async Task<Responsive> GetFilterDoAn([FromQuery] string _filter)
         {
             try

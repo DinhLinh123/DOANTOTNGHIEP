@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -45,43 +47,91 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
+        public async Task<Responsive> PutUser(Guid id, UserUpdateModel item)
         {
-            if (id != user.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(user).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
+                var user = _context.User.Find(id);
+                if (user != null)
                 {
-                    return NotFound();
+                    user.MaNV = item.MaNV;
+                    user.FullName = item.FullName;
+                    user.Phai = item.Phai;
+                    user.ChucVu = item.ChucVu;
+                    user.NgaySinh = item.NgaySinh;
+                    user.SoDienThoai = item.SoDienThoai;
+                    user.DiaChi = item.DiaChi;
+                    user.ChiChu = item.ChiChu;
+                    user.Quyen = item.Quyen;
+                    user.IsDelete = item.IsDelete;
+                    user.UserName = item.UserName;
+                    user.Password = item.Password;
+                    user.LastModifiedByUserId = item.LastModifiedByUserId;
+                    user.LastModifiedByUserName = item.LastModifiedByUserName;
+
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<Responsive> PostUser(UserCreateModel item)
         {
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            try
+            {
+                var user = new User();
+                user.Id = Guid.NewGuid();
+                user.MaNV = item.MaNV;
+                user.FullName = item.FullName;
+                user.Phai = item.Phai;
+                user.ChucVu = item.ChucVu;
+                user.NgaySinh = item.NgaySinh;
+                user.SoDienThoai = item.SoDienThoai;
+                user.DiaChi = item.DiaChi;
+                user.ChiChu = item.ChiChu;
+                user.Quyen = item.Quyen;
+                user.IsDelete = item.IsDelete;
+                user.UserName = item.UserName;
+                user.Password = item.Password;
+                user.CreatedByUserId = item.CreatedByUserId;
+                user.CreatedByUserName = item.CreatedByUserName;
+                user.CreatedOnDate = item.CreatedOnDate;
+
+                _context.User.Add(user);
+                await _context.SaveChangesAsync();
+
+                return new Responsive(200, "Thêm mới thành công", user);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
+
         }
 
         // DELETE: api/User/5
@@ -99,10 +149,58 @@ namespace ManagerRestaurant.API.Controllers
 
             return NoContent();
         }
-
-        private bool UserExists(Guid id)
+        // POST: api/DoAn
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpGet("filter")]
+        public async Task<Responsive> GetFilterDoAn([FromQuery] string _filter)
         {
-            return _context.User.Any(e => e.Id == id);
+            try
+            {
+
+                var filter = JsonConvert.DeserializeObject<UserFilter>(_filter);
+                var query = from s in _context.DoAn select s;
+                if (filter.Id != Guid.Empty)
+                {
+                    query = query.Where((x) => x.Id == filter.Id);
+                }
+                if (filter.TextSearch.Length > 0)
+                {
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+                }
+                 
+                if (filter.PageNumber > 0)
+                {
+                    query = query.Take(filter.PageNumber);
+                }
+                if (filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize);
+                }
+
+                var data = await query.ToListAsync();
+
+                var mes = "";
+                if (data.Count == 0)
+                {
+                    mes = "Not data";
+                }
+                else
+                {
+                    mes = "Get success";
+                }
+
+                var res = new Responsive(200, mes, data);
+                return res;
+            }
+            catch (Exception err)
+            {
+                var res = new Responsive(500, err.Message, err.ToString());
+                return res;
+            }
+        }
+        class UserFilter : BaseFilter
+        {
+            
         }
     }
 }
