@@ -232,7 +232,7 @@ function Spending(props) {
                                 <Input
                                     label={"Tên mặt hàng"}
                                     defaultValue={item.name}
-                                    onChange={(val) => {
+                                    onBlurInput={(val) => {
                                         ChangeNameItems(val, index);
                                     }}
                                 />
@@ -241,30 +241,27 @@ function Spending(props) {
                                 <Input
                                     label={"Đơn vị tính"}
                                     defaultValue={item.unit}
-                                    onChange={(val) => {
+                                    onBlurInput={(val) => {
                                         ChangeUnitItems(val, index);
                                     }}
-                                    autoFocus
                                 />
                             </div>
                             <div className="spending-manager__popup-items-amount">
                                 <Input
                                     label={"Số lượng"}
                                     defaultValue={item.amount}
-                                    onChange={(val) => {
+                                    onBlurInput={(val) => {
                                         ChangeAmountItems(val, index);
                                     }}
-                                    autoFocus
                                 />
                             </div>
                             <div className="spending-manager__popup-items-unitPrice">
                                 <Input
                                     label={"Đơn giá"}
                                     defaultValue={item.unitprice}
-                                    onChange={(val) => {
+                                    onBlurInput={(val) => {
                                         ChangeUnitpriceItems(val, index);
                                     }}
-                                    autoFocus
                                 />
                             </div>
                             {index > 0 && (

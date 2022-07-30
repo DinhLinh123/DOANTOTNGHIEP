@@ -72,8 +72,10 @@ function Area(props) {
 
     const OPTION_MORE_TABLE = [
         {
-            title: "Thêm",
-            onSelect: () => alert("thêm"),
+            title: "Chi tiết",
+            onSelect: (item) => {
+                window.open(`/admin/area/detail/${item.key}`, "_self")
+            },
         },
         {
             title: "Sửa",

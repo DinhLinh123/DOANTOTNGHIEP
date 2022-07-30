@@ -1,4 +1,31 @@
-.area-manager{
+.area-detail{
     height: 100%;
     width: 100%;
+
+    &__header{
+        display: flex;
+        align-items: center;
+        height: 50px;
+
+        &-name{
+            display: flex;
+            align-items: center;
+
+            &-value{
+                margin-left: 24px;
+                font-weight: bold;
+            }
+        }
+
+        &-add{
+            margin-left: auto;
+        }
+    }
+
+    &__content{
+        background-color: #fff;
+        width: 1000px;
+        height: 600px;
+        margin: 24px auto 0 auto;
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "./input.scss";
 import { Input } from "antd";
@@ -20,7 +20,8 @@ InputField.propTypes = {
   onPressEnter: PropTypes.func,
   showCount: PropTypes.bool,
   width: PropTypes.number,
-  key: PropTypes.string
+  key: PropTypes.string,
+  onBlurInput: PropTypes.func
 };
 
 InputField.defaultValue = {
@@ -30,6 +31,7 @@ InputField.defaultValue = {
   messageNote: "email",
   setDangerNote: () => { },
   onPressEnter: () => { },
+  onBlurInput: () => { },
   showCount: false,
   width: 250,
   key: ''
@@ -52,14 +54,26 @@ function InputField(props) {
     showCount,
     width,
     onPressEnter,
-    key
+    key,
+    onBlurInput
   } = props;
   let regex = new RegExp(pattern);
+  const inputRef = useRef(null)
   const [isDanger, setIsDanger] = useState(false);
   const [message, setMessage] = useState("");
+  const [isFocus, setIsFocus] = useState(false);
+
+  useEffect(()=>{
+    if(isFocus){
+      inputRef.current.focus && inputRef.current.focus()
+    }
+  },[isFocus])
+  
 
   function onBlur(event) {
     let value = event.target.value;
+    
+    onBlurInput(value)
     if (required && (value?.length == 0 || value == undefined)) {
       setIsDanger(true);
       setMessage("Trường này không được bỏ trống");
@@ -118,13 +132,18 @@ function InputField(props) {
           value={value}
           required={required}
           onChange={(val) => {
+            setIsFocus(true)
             onChangeInput(val?.target?.value);
           }}
+          ref={inputRef}
           autoFocus={autoFocus}
           status={isDanger && "error"}
           showCount={showCount}
           pattern={regex}
-          onBlur={(val) => onBlur(val)}
+          onBlur={(val) => {
+            setIsFocus(false)
+            onBlur(val)
+          }}
           onPressEnter={onPressEnter}
         />
       )}

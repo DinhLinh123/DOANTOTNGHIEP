@@ -286,7 +286,7 @@ function Menu(props) {
 
 
 
-  useEffect(() => { console.log(index) }, [index])
+  useEffect(() => { console.log(listFood) }, [listFood])
 
   function ChangeNameFood(val, index) {
     let _listFood = [...listFood];
@@ -316,9 +316,9 @@ function Menu(props) {
           return (
             <div className="menu-manager__popup-content-buffet-food-item">
               <div className="menu-manager__popup-content-buffet-food-item-input">
-                <Input
+                <Input  
                   defaultValue={item.food}
-                  onChange={(val) => ChangeNameFood(val, index)}
+                  onBlurInput={(val) => ChangeNameFood(val, index)}
                   placeholder={"Tên món trong gói buffet..."}
                 />
               </div>
