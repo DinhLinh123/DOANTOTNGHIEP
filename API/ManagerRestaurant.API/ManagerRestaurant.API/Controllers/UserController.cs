@@ -30,6 +30,24 @@ namespace ManagerRestaurant.API.Controllers
             return await _context.User.ToListAsync();
         }
 
+        // GET: api/User
+        [HttpGet("active")]
+        public async Task<Responsive> GetUserActive()
+        {
+            try
+            {
+                var res = new Responsive();
+                var query = _context.User.Where(x=> x.IsDelete == false);
+                res.Mess = "Get success";
+                res.Data = await query.ToListAsync();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
+        }
+
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)

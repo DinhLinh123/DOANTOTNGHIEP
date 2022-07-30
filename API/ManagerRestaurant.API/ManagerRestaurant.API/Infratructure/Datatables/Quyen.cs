@@ -5,6 +5,7 @@ namespace ManagerRestaurant.API.Infratructure.Datatables
     public class Quyen
     {
         public Guid Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }

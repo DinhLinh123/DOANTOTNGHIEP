@@ -68,6 +68,9 @@ namespace ManagerRestaurant.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Anh")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("CreatedByUserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -86,14 +89,17 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LinkSp")
+                    b.Property<string>("MatHang")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SoLuong")
-                        .HasColumnType("int");
+                    b.Property<string>("NameKeToanDuyet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameQuanLyDuyet")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ThoiGianKeToanDuyet")
                         .HasColumnType("datetime2");
@@ -130,10 +136,10 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("GhiChu")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("GioDen")
+                    b.Property<DateTime?>("GioDen")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("IdBan")
+                    b.Property<Guid?>("IdBan")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("LastModifiedByUserId")
@@ -142,7 +148,7 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("MaKhachHang")
+                    b.Property<Guid?>("MaKhachHang")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SoNguoiLon")
@@ -154,7 +160,10 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("TenKhachHang")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ThoiGian")
+                    b.Property<DateTime>("ThoiGian")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrangThai")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -177,6 +186,9 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DanhSachMonAn")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DonViTinh")
                         .HasColumnType("nvarchar(max)");
 
@@ -195,21 +207,16 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("Loai")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("MaTheLoai")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SanPhamTrongPhieuId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("SoLuongHienCo")
-                        .HasColumnType("real");
-
-                    b.Property<string>("TheLoai")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("TrangThai")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SanPhamTrongPhieuId");
 
                     b.ToTable("DoAn");
                 });
@@ -254,6 +261,38 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasIndex("PhieuOderId");
 
                     b.ToTable("KhachHang");
+                });
+
+            modelBuilder.Entity("Infratructure.Datatables.KhuVuc", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HtmlObject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastModifiedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KhuVuc");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.Oder", b =>
@@ -320,20 +359,10 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SanPhamTrongDonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("SanPhamTrongPhieuId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<float>("TongTien")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SanPhamTrongDonId");
-
-                    b.HasIndex("SanPhamTrongPhieuId");
 
                     b.ToTable("PhieuNhapVatTu");
                 });
@@ -385,49 +414,17 @@ namespace ManagerRestaurant.API.Migrations
                     b.ToTable("PhieuOder");
                 });
 
-            modelBuilder.Entity("Infratructure.Datatables.SanPhamTrongPhieu", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedByUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOnDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("IdDoAn")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdPhieu")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("LastModifiedByUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LastModifiedByUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SoLuong")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SanPhamTrongPhieu");
-                });
-
             modelBuilder.Entity("Infratructure.Datatables.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ChiChu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChucVu")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CreatedByUserId")
                         .HasColumnType("uniqueidentifier");
@@ -444,11 +441,17 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaNV")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2");
@@ -493,6 +496,9 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -513,11 +519,14 @@ namespace ManagerRestaurant.API.Migrations
                     b.ToTable("YKienDongGop");
                 });
 
-            modelBuilder.Entity("Infratructure.SanPhamTrongDon", b =>
+            modelBuilder.Entity("ManagerRestaurant.API.Infratructure.Datatables.Quyen", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CreatedByUserId")
                         .HasColumnType("uniqueidentifier");
@@ -527,12 +536,6 @@ namespace ManagerRestaurant.API.Migrations
 
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<float>("DonGia")
-                        .HasColumnType("real");
-
-                    b.Property<Guid>("IdPhieu")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
@@ -545,7 +548,42 @@ namespace ManagerRestaurant.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SanPhamTrongDon");
+                    b.ToTable("Quyen");
+                });
+
+            modelBuilder.Entity("ManagerRestaurant.API.Infratructure.Datatables.UuDai", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Anh")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastModifiedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UuDai");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.Ban", b =>
@@ -553,13 +591,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.DatBan", null)
                         .WithMany("Ban")
                         .HasForeignKey("DatBanId");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.DoAn", b =>
-                {
-                    b.HasOne("Infratructure.Datatables.SanPhamTrongPhieu", null)
-                        .WithMany("DoAns")
-                        .HasForeignKey("SanPhamTrongPhieuId");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.KhachHang", b =>
@@ -578,17 +609,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.Oder", null)
                         .WithMany("Oders")
                         .HasForeignKey("OderId");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.PhieuNhapVatTu", b =>
-                {
-                    b.HasOne("Infratructure.SanPhamTrongDon", null)
-                        .WithMany("PhieuNhapVatTus")
-                        .HasForeignKey("SanPhamTrongDonId");
-
-                    b.HasOne("Infratructure.Datatables.SanPhamTrongPhieu", null)
-                        .WithMany("PhieuNhapVatTus")
-                        .HasForeignKey("SanPhamTrongPhieuId");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.User", b =>
@@ -615,18 +635,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Navigation("KhachHangs");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.SanPhamTrongPhieu", b =>
-                {
-                    b.Navigation("DoAns");
-
-                    b.Navigation("PhieuNhapVatTus");
-                });
-
-            modelBuilder.Entity("Infratructure.SanPhamTrongDon", b =>
-                {
-                    b.Navigation("PhieuNhapVatTus");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,48 +6,48 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
-using Infratructure.Datatables;
-using Newtonsoft.Json;
+using ManagerRestaurant.API.Infratructure.Datatables;
 using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoAnController : ControllerBase
+    public class QuyenController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public DoAnController(DataContext context)
+        public QuyenController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: api/DoAn
+        // GET: api/Quyen
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DoAn>>> GetDoAn()
+        public async Task<ActionResult<IEnumerable<Quyen>>> GetQuyen()
         {
-            return await _context.DoAn.ToListAsync();
+            return await _context.Quyen.ToListAsync();
         }
 
-        // GET: api/DoAn/5
+        // GET: api/Quyen/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DoAn>> GetDoAn(Guid id)
+        public async Task<ActionResult<Quyen>> GetQuyen(Guid id)
         {
-            var doAn = await _context.DoAn.FindAsync(id);
+            var quyen = await _context.Quyen.FindAsync(id);
 
-            if (doAn == null)
+            if (quyen == null)
             {
                 return NotFound();
             }
 
-            return doAn;
+            return quyen;
         }
 
-        // PUT: api/DoAn/5
+        // PUT: api/Quyen/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<Responsive> PutDoAn(Guid id, DoAnUpdateModel item)
+        public async Task<Responsive> PutQuyen(Guid id, QuyenUpdateModel item)
         {
             var res = new Responsive();
             if (id != item.Id)
@@ -58,21 +58,13 @@ namespace ManagerRestaurant.API.Controllers
             }
             try
             {
-                var doAn = _context.DoAn.Find(id);
-                if (doAn != null)
+                var quyen = _context.Quyen.Find(id);
+                if (quyen != null)
                 {
-                    doAn.Name = item.Name;
-                    doAn.MaTheLoai = item.MaTheLoai;
-                    doAn.LinkAnh = item.LinkAnh;
-                    doAn.Loai = item.Loai;
-                    doAn.GhiChu = item.GhiChu;
-                    doAn.DanhSachMonAn = item.DanhSachMonAn;
-                    doAn.DonViTinh = item.DonViTinh;
-                    doAn.TrangThai = item.TrangThai;
-                    doAn.CreatedByUserId = item.CreatedByUserId;
-                    doAn.CreatedByUserName = item.CreatedByUserName;
-                    doAn.CreatedOnDate = item.CreatedOnDate;
-
+                    quyen.Code = item.Code;
+                    quyen.Name = item.Name;
+                    quyen.LastModifiedByUserId = item.LastModifiedByUserId;
+                    quyen.LastModifiedByUserName = item.LastModifiedByUserName;
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
@@ -93,31 +85,26 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
-        // POST: api/DoAn
+        // POST: api/Quyen
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<Responsive> PostDoAn(DoAnCreateModel item)
+        public async Task<Responsive> PostQuyen(QuyenCreateModel item)
         {
+
             try
             {
                 //conver
-                var doAn = new DoAn();
-                doAn.Id = Guid.NewGuid();
-                doAn.Name = item.Name;
-                doAn.MaTheLoai = item.MaTheLoai;
-                doAn.LinkAnh = item.LinkAnh;
-                doAn.Loai = item.Loai;
-                doAn.GhiChu = item.GhiChu;
-                doAn.DanhSachMonAn = item.DanhSachMonAn;
-                doAn.DonViTinh = item.DonViTinh;
-                doAn.TrangThai = item.TrangThai;
-                doAn.CreatedByUserId = item.CreatedByUserId;
-                doAn.CreatedByUserName = item.CreatedByUserName;
-                doAn.CreatedOnDate = item.CreatedOnDate;
-                _context.DoAn.Add(doAn);
+                var quyen = new Quyen();
+                quyen.Code = item.Code;
+                quyen.Name = item.Name;
+                quyen.CreatedByUserId = item.CreatedByUserId;
+                quyen.CreatedByUserName = item.CreatedByUserName;
+                quyen.CreatedOnDate = item.CreatedOnDate;
+
+                _context.Quyen.Add(quyen);
                 await _context.SaveChangesAsync();
 
-                return new Responsive(200, "Thêm mới thành công", doAn);
+                return new Responsive(200, "Thêm mới thành công", quyen);
             }
             catch (Exception ex)
             {
@@ -125,6 +112,21 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
+        // DELETE: api/Quyen/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteQuyen(Guid id)
+        {
+            var quyen = await _context.Quyen.FindAsync(id);
+            if (quyen == null)
+            {
+                return NotFound();
+            }
+
+            _context.Quyen.Remove(quyen);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpGet("filter")]
@@ -143,10 +145,7 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
-                if (filter.MaTheLoai != Guid.Empty)
-                {
-                    query = query.Where((x) => x.MaTheLoai == filter.MaTheLoai);
-                }
+               
                 if (filter.PageNumber > 0)
                 {
                     query = query.Take(filter.PageNumber);
@@ -177,27 +176,8 @@ namespace ManagerRestaurant.API.Controllers
                 return res;
             }
         }
-
-        // DELETE: api/DoAn/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoAn(Guid id)
-        {
-            var doAn = await _context.DoAn.FindAsync(id);
-            if (doAn == null)
-            {
-                return NotFound();
-            }
-
-            _context.DoAn.Remove(doAn);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+        class QuyenFilter : BaseFilter
+        { 
         }
-         
-    }
-
-    class DoAnFilter : BaseFilter
-    {
-        public Guid MaTheLoai { get; set; }
     }
 }
