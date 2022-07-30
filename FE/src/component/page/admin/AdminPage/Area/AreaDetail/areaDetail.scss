@@ -1,31 +1,40 @@
-.area-detail{
+.area-detail {
     height: 100%;
     width: 100%;
 
-    &__header{
+    &__header {
         display: flex;
         align-items: center;
         height: 50px;
 
-        &-name{
+        &-name {
             display: flex;
             align-items: center;
 
-            &-value{
+            &-value {
                 margin-left: 24px;
                 font-weight: bold;
             }
         }
 
-        &-add{
+        &-add {
             margin-left: auto;
         }
     }
 
-    &__content{
+    &__content {
         background-color: #fff;
         width: 1000px;
         height: 600px;
         margin: 24px auto 0 auto;
+        position: relative;
+
+        &-drag {
+            width: 1000px;
+            height: 600px;
+            margin: 0px auto 0 auto;
+            position: absolute;
+            top: 0;
+        }
     }
 }

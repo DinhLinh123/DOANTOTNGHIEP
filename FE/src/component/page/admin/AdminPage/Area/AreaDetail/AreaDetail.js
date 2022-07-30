@@ -27,7 +27,6 @@ function AreaDetail(props) {
 
     function updatePosition(item, value, value2) {
         debugger
-        // debugger
         let height = $(window).height();
         let width = $(window).width();
         let abc = list
@@ -66,13 +65,14 @@ function AreaDetail(props) {
                         <Button2 name={"Thêm mới bàn ăn"}/>
                     </div>
                 </div>
-                <div className="area-detail__content" >
+                <div className="area-detail__content" style={{ height: '600px', width: '1000px', position: 'relative' }}>
+                <div className="area-detail__content-drag" style={{ height: '600px', width: '1000px', position: 'absolute', top: '0' }}>
                     {list.map((item) => {
                         return (
-                            <Draggable defaultPosition={{ x: item.top, y: item.left }} bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} key={1} className={item?.title}>
+                            <Draggable  bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} key={1} className={item?.title}>
                                 <div
                                     style={{ border: '1px solid #000', borderRadius: '8px', width: '100px' }}
-                                    className="area-detail__content-table"
+                                    className="area-detail__content-drag-item"
                                 // onClick={() => alert(item?.title)}
                                 >
                                     {item?.title}
@@ -80,6 +80,7 @@ function AreaDetail(props) {
                             </Draggable>
                         )
                     })}
+                </div>
                 </div>
             </div>
 
