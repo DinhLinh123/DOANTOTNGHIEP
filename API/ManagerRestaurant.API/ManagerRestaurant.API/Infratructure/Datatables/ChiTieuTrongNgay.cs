@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Infratructure.Datatables
 {
     public class ChiTieuTrongNgay
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public int SoLuong { get; set; }
-        public string LinkSp { get; set; }
+        public string MatHang { get; set; }
+        public string Anh { get; set; }
         public float TongSoTien { get; set; }
         public string TrangThaiHienTai { get; set; }
-        public string GhiChu { get; set; }
+        public string GhiChu { get; set; }       
         public DateTime ThoiGianKeToanDuyet { get; set; }
+        public string NameKeToanDuyet { get; set; }
         public DateTime ThoiGianQuanLyDuyet { get; set; }
+        public string NameQuanLyDuyet { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

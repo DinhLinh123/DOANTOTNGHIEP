@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Infratructure.Datatables
+namespace ManagerRestaurant.API.Infratructure.Datatables
 {
-    public class YKienDongGop
+    public class ChucVu
     {
         public Guid Id { get; set; }
-        public string TenKH { get; set; }
-        public string SoDienThoai { get; set; }
-        public string Email { get; set; }
-        public string NoiDung { get; set; }
+        public string Name { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

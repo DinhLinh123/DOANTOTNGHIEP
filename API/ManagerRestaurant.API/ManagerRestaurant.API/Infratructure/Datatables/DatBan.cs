@@ -18,7 +18,7 @@ namespace Infratructure.Datatables
         public string GhiChu { get; set; }
         public string TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
-        public string? CreatedByUserName { get; set; }
+        public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }

@@ -47,39 +47,71 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/DoAn/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoAn(Guid id, DoAn doAn)
+        public async Task<Responsive> PutDoAn(Guid id, DoAnUpdateModel item)
         {
-            if (id != doAn.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(doAn).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DoAnExists(id))
+                var doAn = _context.DoAn.Find(id);
+                if (doAn!= null)
                 {
-                    return NotFound();
+                    doAn.Name = item.Name;
+                    doAn.MaTheLoai = item.MaTheLoai;
+                    doAn.LinkAnh = item.LinkAnh;
+                    doAn.Loai = item.Loai;
+                    doAn.GhiChu = item.GhiChu;
+                    doAn.DanhSachMonAn = item.DanhSachMonAn;
+                    doAn.DonViTinh = item.DonViTinh;
+                    doAn.TrangThai = item.TrangThai;
+                    doAn.CreatedByUserId = item.CreatedByUserId;
+                    doAn.CreatedByUserName = item.CreatedByUserName;
+                    doAn.CreatedOnDate = item.CreatedOnDate;
+
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DoAn>> PostDoAn(DoAn doAn)
+        public async Task<ActionResult<DoAn>> PostDoAn(DoAnCreateModel item)
         {
+            //conver
+            var doAn = new DoAn();
+            doAn.Id = Guid.NewGuid();
+            doAn.Name = item.Name;
+            doAn.MaTheLoai = item.MaTheLoai;
+            doAn.LinkAnh = item.LinkAnh;
+            doAn.Loai = item.Loai;
+            doAn.GhiChu = item.GhiChu;
+            doAn.DanhSachMonAn = item.DanhSachMonAn;
+            doAn.DonViTinh = item.DonViTinh;
+            doAn.TrangThai = item.TrangThai;
+            doAn.CreatedByUserId = item.CreatedByUserId;
+            doAn.CreatedByUserName = item.CreatedByUserName;
+            doAn.CreatedOnDate = item.CreatedOnDate;
             _context.DoAn.Add(doAn);
             await _context.SaveChangesAsync();
 
@@ -94,7 +126,7 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
 
-                DoAnFilter filter = JsonConvert.DeserializeObject<DoAnFilter>(_filter);
+                var filter = JsonConvert.DeserializeObject<DoAnFilter>(_filter);
                 var query = from s in _context.DoAn select s;
                 if (filter.Id != Guid.Empty)
                 {
@@ -118,15 +150,15 @@ namespace ManagerRestaurant.API.Controllers
                 }
 
                 var data = await query.ToListAsync();
-                
+
                 var mes = "";
-                if (data.Count ==0)
+                if (data.Count == 0)
                 {
                     mes = "Not data";
                 }
                 else
                 {
-                    mes = "get success";
+                    mes = "Get success";
                 }
 
                 var res = new Responsive(200, mes, data);
@@ -161,7 +193,7 @@ namespace ManagerRestaurant.API.Controllers
         }
     }
 
-    class DoAnFilter:BaseFilter
+    class DoAnFilter : BaseFilter
     {
         public Guid MaTheLoai { get; set; }
     }

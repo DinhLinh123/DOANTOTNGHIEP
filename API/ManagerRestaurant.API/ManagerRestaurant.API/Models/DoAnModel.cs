@@ -9,9 +9,12 @@ namespace ManagerRestaurant.API.Models
         public string TheLoai { get; set; }
         public string LinkAnh { get; set; }
         public string Loai { get; set; }
+        public Guid MaTheLoai { get; set; }
+
         public string GhiChu { get; set; }
+        public string DanhSachMonAn { get; set; }
         public string DonViTinh { get; set; }
-        public float SoLuongHienCo { get; set; }
+        public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }
@@ -24,15 +27,16 @@ namespace ManagerRestaurant.API.Models
         public string Name { get; set; }
         public string TheLoai { get; set; }
         public string LinkAnh { get; set; }
+        public Guid MaTheLoai { get; set; }
+
         public string Loai { get; set; }
         public string GhiChu { get; set; }
+        public string DanhSachMonAn { get; set; }
         public string DonViTinh { get; set; }
-        public float SoLuongHienCo { get; set; }
+        public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
-        public DateTime? CreatedOnDate { get; set; }
-        public Guid? LastModifiedByUserId { get; set; }
-        public string LastModifiedByUserName { get; set; }
+        public DateTime? CreatedOnDate { get; set; } 
     }
     public class DoAnUpdateModel
     {
@@ -43,7 +47,10 @@ namespace ManagerRestaurant.API.Models
         public string Loai { get; set; }
         public string GhiChu { get; set; }
         public string DonViTinh { get; set; }
-        public float SoLuongHienCo { get; set; }
+        public string DanhSachMonAn { get; set; }
+        public Guid MaTheLoai { get; set; }
+         
+        public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }
