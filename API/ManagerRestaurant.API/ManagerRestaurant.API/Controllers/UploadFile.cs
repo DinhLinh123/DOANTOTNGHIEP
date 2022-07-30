@@ -15,7 +15,7 @@ namespace ManagerRestaurant.API.Controllers
     [ApiController]
     public class UploadFile : ControllerBase
     { 
-        [HttpPost("Uploadfile")]
+        [HttpPost()]
         public async Task<Responsive> OnPostUploadAsync(List<IFormFile> files)
         {
             long size = files.Sum(f => f.Length);
@@ -38,7 +38,7 @@ namespace ManagerRestaurant.API.Controllers
                     {
                         await formFile.CopyToAsync(stream);
                     }
-                    pathfiles.Add(pathfile);
+                    pathfiles.Add("\\hinhanh"+pathfile);
                 }
             }
 
