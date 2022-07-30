@@ -65,8 +65,8 @@ function AreaDetail(props) {
                         <Button2 name={"Thêm mới bàn ăn"}/>
                     </div>
                 </div>
-                <div className="area-detail__content" style={{ height: '600px', width: '1000px', position: 'relative' }}>
-                <div className="area-detail__content-drag" style={{ height: '600px', width: '1000px', position: 'absolute', top: '0' }}>
+                <div className="area-detail__content" >
+                <div className="area-detail__content-drag" >
                     {list.map((item) => {
                         return (
                             <Draggable  bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} key={1} className={item?.title}>

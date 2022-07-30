@@ -1,4 +1,4 @@
-.Kitchen-manager {
+.kitchensDay-manager {
     height: 100%;
 
     &__filter {
@@ -14,10 +14,6 @@
         &-bill {
             margin-bottom: 16px;
         }
-        &-imagelable{
-            font-weight: bold;
-            font-size: 16px;
-        }
 
         &-items {
             display: flex;
@@ -25,21 +21,17 @@
 
             &-name {
                 margin-right: 15px;
-                width: 30%;
+                width: 40%;
             }
 
             &-unit {
                 margin-right: 15px;
-                width: 20%;
+                width: 25%;
             }
 
             &-amount {
                 margin-right: 15px;
-                width: 20%;
-            }
-
-            &-unitPrice {
-                width: 20%;
+                width: 25%;
             }
 
             &-delete {

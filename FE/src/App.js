@@ -32,6 +32,9 @@ import { Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import TableOrder from './component/page/admin/AdminPage/TableOrder/TableOrder';
 import SpendingDetail from './component/page/admin/AdminPage/SpendingDetail/SpendingDetail';
+import KitchenDetail from './component/page/admin/AdminPage/KitchenDetail/KitchenDetail';
+import KitchensDay from './component/page/admin/AdminPage/KitchensDay/KitchensDay';
+import KitchensDayDetail from './component/page/admin/AdminPage/KitchensDayDetail/KitchensDayDetail';
 
 let historyApp;
 function App() {
@@ -60,9 +63,13 @@ function App() {
           <Route path={"/admin/turnovers"}> <Turnover /></Route>
           <Route path={"/admin/books"}><Book /></Route>
           <Route path={"/admin/kitchens"}><Kitchen /></Route>
+          <Route path={"/admin/kitchen/detail/:kitchenID"}><KitchenDetail /></Route>
+          <Route path={"/admin/KitchensDays"}><KitchensDay /></Route>
+          <Route path={"/admin/KitchensDay/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
           <Route path={"/admin/bars"}><Bar /></Route>
           <Route path={"/admin/staffs"}> <Staff /></Route>
           <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
+          <Route path={"/admin/kitchenday"}> <Staff /></Route>
           
           {/* order */}
           <Route path={"/admin/tables"}> <TableOrder /></Route>

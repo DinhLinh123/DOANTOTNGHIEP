@@ -286,7 +286,7 @@ function Menu(props) {
 
 
 
-  useEffect(() => { console.log(listFood) }, [listFood])
+  useEffect(() => { console.log(foodName) }, [foodName])
 
   function ChangeNameFood(val, index) {
     let _listFood = [...listFood];
@@ -412,7 +412,10 @@ function Menu(props) {
           button={[
             <Button2
               name={"Đóng"}
-              onClick={() => setIsShowPopupAddnew(false)}
+              onClick={() => {
+                setFoodName("")
+                setIsShowPopupAddnew(false)
+              } }
             />,
             <Button2
               name={"Lưu"}
@@ -451,7 +454,6 @@ function Menu(props) {
                         label={"Tên gói buffet"}
                         defaultValue={foodName}
                         onChange={(val) => {
-                          val.stoppropagation()
                           setFoodName(val);
                         }}
                         placeholder={"Tên gói Buffet..."}

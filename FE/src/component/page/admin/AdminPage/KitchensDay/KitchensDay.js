@@ -1,58 +1,41 @@
-import React, { useState } from "react";
+import React, { useState }  from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, SORT_TYPE } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
-import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import "./spending.scss"
+import TableBase from "../../../../base/Table/Table";
+import "./kitchensDay.scss"
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
-import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
-import { changeAccount } from "../../../../../reudux/action/accountAction";
+import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 
-function Spending(props) {
+function KitchensDay (props) {
 
     const [sortType, setSortType] = useState();
-    const [itemBill, setItemBill] = useState("");
-    const [itemBillDate, setItemBillDate] = useState("");
-    const [listItems, setListItems] = useState([{ name: "", unit: "", amount: "", unitprice: "" }]);
-    const [itemImage, setItemImage] = useState("");
-    const [itemNote, setItemNote] = useState("");
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+    const [itemUseDate, setItemUseDate] = useState("");
+    const [listItems, setListItems] = useState([{ name: "", unit: "", amount: "", unitprice: "" }]);
+    const [itemNote, setItemNote] = useState("");
+
     const COLUMN_TABLE_INDEX_MENU = {
-        BILL: "namebill",
+        USENAME: "usename",
         AMOUNT: "amount",
-        BILLDate: "billdate",
-        TOTALMONEY: "totalmoney",
         DATAENTRYDATE: "dataentrydate",
         DATAENTRYPERSON: "dataentryperson",
-        STATUS: "status",
     };
-
     const columns = [
         {
-            title: "Tên hóa đơn",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.BILL,
+            title: "Ngày sử dụng",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.USENAME,
             width: "200px",
         },
         {
             title: "SL mặt hàng",
             dataIndex: COLUMN_TABLE_INDEX_MENU.AMOUNT,
-            width: "100px",
-        },
-        {
-            title: "Ngày hóa đơn",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.BILLDate,
-            sorter: true,
             width: "200px",
-        },
-        {
-            title: "Tổng tiền",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.TOTALMONEY,
-            width: "150px",
         },
         {
             title: "Ngày nhập",
@@ -65,64 +48,71 @@ function Spending(props) {
             dataIndex: COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON,
             width: "200px",
         },
-        {
-            title: "Trạng thái",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
-            width: "200px",
-        },
     ];
+
+    function columnUseName(item) {
+        return <div>{item?.usename}</div>;
+    }
+    function columnAmount(item) {
+        return <div>{item?.amount}</div>;
+    }
+    function columnDataentrydate(item) {
+        return <div>{item?.dataentrydate}</div>;
+    }
+    function columnDataentryperson(item) {
+        return <div>{item?.dataentryperson}</div>;
+    }
+
+    function convertDataTable(dataTable) {
+        let listData;
+        listData = dataTable.map((item, idx) => {
+            return {
+                [COLUMN_TABLE_INDEX_MENU.USENAME]: columnUseName(item),
+                [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
+                [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
+                [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
+                key: idx,
+            };
+        });
+        return [...listData];
+    }
 
     const data = [
         {
             key: "1",
-            namebill: "HD2807",
+            usename: "28/07/2022",
             amount: 5,
-            billdate: "28/07/2022",
-            totalmoney: "250,000",
             dataentrydate: "28/07/2022",
             dataentryperson: "Linhdtt",
-            status: "Nhập mới",
         },
         {
             key: "2",
-            namebill: "HD2807",
+            usename: "28/07/2022",
             amount: 5,
-            billdate: "28/07/2022",
-            totalmoney: "250,000",
             dataentrydate: "28/07/2022",
             dataentryperson: "Linhdtt",
-            status: "Nhập mới",
         },
         {
             key: "3",
-            namebill: "HD2807",
+            usename: "28/07/2022",
             amount: 5,
-            billdate: "28/07/2022",
-            totalmoney: "250,000",
             dataentrydate: "28/07/2022",
             dataentryperson: "Linhdtt",
-            status: "Nhập mới",
         },
         {
             key: "4",
-            namebill: "HD2807",
+            usename: "28/07/2022",
             amount: 5,
-            billdate: "28/07/2022",
-            totalmoney: "250,000",
             dataentrydate: "28/07/2022",
             dataentryperson: "Linhdtt",
-            status: "Nhập mới",
         }, 
     ];
 
-    function handleClickAddnew(type) {
-        setIsShowPopupAddnew(true);
-    }
     const OPTION_MORE_TABLE = [
         {
             title: "Chi tiết",
             onSelect: (item) => {
-                window.open(`/admin/spending/detail/${item.key}`, "_self")
+                window.open(`/admin/KitchensDay/detail/${item.key}`, "_self")
             },
         },
         {
@@ -138,49 +128,10 @@ function Spending(props) {
             },
         },
     ];
-
-    function columnBill(item) {
-        return <div>{item?.namebill}</div>;
-    }
-    function columnAmount(item) {
-        return <div>{item?.amount}</div>;
-    }
-    function columnBillDate(item) {
-        return <div>{item?.billdate}</div>;
-    }
-    function columnTotalmoney(item) {
-        return <div>{item?.totalmoney}</div>;
-    }
-    function columnDataentrydate(item) {
-        return <div>{item?.dataentrydate}</div>;
-    }
-    function columnDataentryperson(item) {
-        return <div>{item?.dataentryperson}</div>;
-    }
-    function columnStatus(item) {
-        return <div>{item?.status}</div>;
-    }
-
-    function convertDataTable(dataTable) {
-        let listData;
-        listData = dataTable.map((item, idx) => {
-            return {
-                [COLUMN_TABLE_INDEX_MENU.BILL]: columnBill(item),
-                [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
-                [COLUMN_TABLE_INDEX_MENU.BILLDate]: columnBillDate(item),
-                [COLUMN_TABLE_INDEX_MENU.TOTALMONEY]: columnTotalmoney(item),
-                [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
-                [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
-                [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
-                key: idx,
-            };
-        });
-        return [...listData];
-    }
-
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
     }
+
     //thêm nhiều mặt hàng
 
 
@@ -227,8 +178,8 @@ function Spending(props) {
             <>
                 {listItems?.map((item, index) => {
                     return (
-                        <div className="spending-manager__popup-items">
-                            <div className="spending-manager__popup-items-name">
+                        <div className="kitchensDay-manager__popup-items">
+                            <div className="kitchensDay-manager__popup-items-name">
                                 <Input
                                     label={"Tên mặt hàng"}
                                     defaultValue={item.name}
@@ -237,7 +188,7 @@ function Spending(props) {
                                     }}
                                 />
                             </div>
-                            <div className="spending-manager__popup-items-unit">
+                            <div className="kitchensDay-manager__popup-items-unit">
                                 <Input
                                     label={"Đơn vị tính"}
                                     defaultValue={item.unit}
@@ -246,7 +197,7 @@ function Spending(props) {
                                     }}
                                 />
                             </div>
-                            <div className="spending-manager__popup-items-amount">
+                            <div className="kitchensDay-manager__popup-items-amount">
                                 <Input
                                     label={"Số lượng"}
                                     defaultValue={item.amount}
@@ -255,17 +206,8 @@ function Spending(props) {
                                     }}
                                 />
                             </div>
-                            <div className="spending-manager__popup-items-unitPrice">
-                                <Input
-                                    label={"Đơn giá"}
-                                    defaultValue={item.unitprice}
-                                    onBlurInput={(val) => {
-                                        ChangeUnitpriceItems(val, index);
-                                    }}
-                                />
-                            </div>
                             {index > 0 && (
-                                <div className="spending-manager__popup-items-delete">
+                                <div className="kitchensDay-manager__popup-items-delete">
                                     <Tooltip title={"Xóa món"}>
                                         <DeleteOutlined
                                             onClick={() => deleteItems(index)}
@@ -282,25 +224,24 @@ function Spending(props) {
     };
 
     return (
-
-        <AdminPage
-            title={"Quản lý chi tiêu"}
-            index={MENU_TAB_ADMIN.SPENDING}
+        <AdminPage 
+            title={"Quản lý yêu cầu nguyên liệu/Thực phẩm"}
+            index={MENU_TAB_ADMIN.KITCHEN}
         >
-            <div className="spending-manager">
-                <div className="spending-manager__filter">
-                    <div className="spending-manager__filter-search">
+            <div className="kitchensDay-manager">
+                <div className="kitchensDay-manager__filter">
+                    <div className="kitchensDay-manager__filter-search">
                         <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
                     </div>
-                    <div className="spending-manager__filter-create-new">
+                    <div className="kitchensDay-manager__filter-create-new">
                         <Button2
-                            name={"Thêm mới chi tiêu"}
+                            name={"Thêm mới"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
                         />
                     </div>
                 </div>
-                <div className="spending-manager__content">
+                <div className="kitchensDay-manager__content">
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
@@ -315,12 +256,12 @@ function Spending(props) {
                                 order: order,
                             });
                         }}
-                        onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
+                        //onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
                         onContextMenu={(record, rowIndex, event)=>{debugger}}
                     />
                 </div>
                 <Popup
-                    title={"Thêm mới Chi tiêu"}
+                    title={"Thêm mới nguyên liệu/thực phẩm"}
                     show={isShowPopupAddnew}
                     onClickClose={() => setIsShowPopupAddnew(false)}
                     button={[
@@ -337,30 +278,20 @@ function Spending(props) {
                     width={1000}
                     //className={"menu-popup-create"}
                     body={
-                        <div className="spending-manager__popup">
-                            <div className="spending-manager__popup-bill">
-                                <Input
-                                    label={"Tên hóa đơn"}
-                                    defaultValue={itemBill}
-                                    onChange={(val) => {
-                                        setItemBill(val);
-                                    }}
-                                    autoFocus
-                                />
-                            </div>
-                            <div className="spending-manager__popup-bill">
+                        <div className="kitchensDay-manager__popup">
+                            <div className="kitchensDay-manager__popup-bill">
                             <DatePicker
-                                defaultValue={itemBillDate}
+                                defaultValue={itemUseDate}
                                 onChange={(val) => {
-                                    setItemBillDate(val);
+                                    setItemUseDate(val);
                                 }}
                                 placeholder="dd/MM/yyyy"
-                                label={"Ngày hóa đơn"}
+                                label={"Ngày sử dụng"}
                             />
                             </div>
-                            <div className="spending-manager__popup-buttonAdd">
+                            <div className="kitchensDay-manager__popup-buttonAdd">
                                 <Button2
-                                    name={"Thêm mặt hàng"}
+                                    name={"Thêm nguyên liệu/Thực phẩm"}
                                     background={"#ff9f43"}
                                     onClick={() => addIteams()}
                                 />
@@ -381,10 +312,6 @@ function Spending(props) {
                                 }
                                 deleteItems={(index) => deleteItems(index)}
                             />
-                            <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                            <div>
-                                <ImageUpload maxImage={1} images={itemImage} setImages={(val) => { setItemImage(val) }} />
-                            </div>
                             <Input
                                 label={"Ghi chú"}
                                 defaultValue={itemNote}
@@ -400,4 +327,4 @@ function Spending(props) {
     )
 
 }
-export default Spending
+export default KitchensDay

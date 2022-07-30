@@ -130,7 +130,7 @@ function TableBase(props) {
       title: "",
       key: "operation",
       fixed: "right",
-      width: 70,
+      width: "70px",
       render: (_, col) => renderMoreOption(col),
     };
 
@@ -146,6 +146,7 @@ function TableBase(props) {
       };
     });
 
+    debugger
     if (hasMoreOption) {
       columnsList.push(columnOption);
     }
