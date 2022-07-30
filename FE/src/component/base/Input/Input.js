@@ -72,8 +72,7 @@ function InputField(props) {
 
   function onBlur(event) {
     let value = event.target.value;
-    
-    onBlurInput(value)
+    debugger
     if (required && (value?.length == 0 || value == undefined)) {
       setIsDanger(true);
       setMessage("Trường này không được bỏ trống");
@@ -143,6 +142,7 @@ function InputField(props) {
           onBlur={(val) => {
             setIsFocus(false)
             onBlur(val)
+            onBlurInput(val.target.value)
           }}
           onPressEnter={onPressEnter}
         />

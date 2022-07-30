@@ -71,7 +71,7 @@ const baseApi = {
     },
 
     delete: async function (onSuccess, onFailure, beforeExcute, endPoint, queryParam, body, config) {
-        if (beforeExcute) beforeExcute()
+        if (beforeExcute ) beforeExcute()
         try {
             let response = await axiosClient.delete(
                 endPoint + generateQueryParam(queryParam),

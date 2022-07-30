@@ -5,7 +5,7 @@
     &__header {
         display: flex;
         align-items: center;
-        height: 50px;
+        height: 36px;
 
         &-name {
             display: flex;
@@ -17,8 +17,13 @@
             }
         }
 
-        &-add {
+        &-button {
             margin-left: auto;
+            display: flex;
+
+            &-save{
+                margin-right: 16px;
+            }
         }
     }
 
@@ -35,6 +40,23 @@
             margin: 0px auto 0 auto;
             position: absolute;
             top: 0;
+            padding: 8px;
+
+            &-item{
+                width: 100px;
+                height: 100px;
+                border: 1px solid #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
         }
+    }
+}
+
+.add-table{
+    &__item{
+        margin-bottom: 16px;
     }
 }
