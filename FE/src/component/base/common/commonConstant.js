@@ -14,6 +14,7 @@ const MENU_TAB_ADMIN = {
   MENU: "menus",
   AREA: "areas",
   BAR: "bars",
+  BAR_INSERT: "bar-insert",
   BOOK: "books",
   KITCHEN: "kitchens",
   KITCHEN_DAY: "kitchens-days",

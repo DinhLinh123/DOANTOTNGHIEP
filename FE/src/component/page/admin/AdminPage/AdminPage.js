@@ -26,7 +26,8 @@ import {
   ShoppingOutlined,
   CheckCircleOutlined,
   PlusOutlined,
-  ReconciliationOutlined
+  ReconciliationOutlined,
+  CoffeeOutlined,
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -39,7 +40,11 @@ import Staff from "./Staff/Staff";
 import Turnover from "./Turnover/Turnover";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMenuType, changeMenuTypeSubKitchen } from "../../../../reudux/action/menuAction";
+import {
+  changeMenuType,
+  changeMenuTypeSubBar,
+  changeMenuTypeSubKitchen,
+} from "../../../../reudux/action/menuAction";
 import commonFunction from "../../../base/common/commonFunction";
 import { changeAccount } from "../../../../reudux/action/accountAction";
 import { useLocation } from "react-router-dom";
@@ -56,21 +61,36 @@ function AdminPage(props) {
   const [displayLogout, setDisplayLogout] = useState(false);
   const [displayMoreKitchen, setDisplayMoreKitchen] = useState(false);
   const [displayMoreBar, setDisplayMoreBar] = useState(false);
-  const roleType = useSelector((state) => state.account.accountInfo)
+  const roleType = useSelector((state) => state.account.accountInfo);
   const typeMenu = useSelector((state) => state?.menu?.menuType);
-  const typeSubMenuKitchen = useSelector((state) => state?.menu?.menuTypeSubKitchen);
+  const typeSubMenuKitchen = useSelector(
+    (state) => state?.menu?.menuTypeSubKitchen
+  );
+  const typeSubMenuBar = useSelector((state) => state?.menu?.menuTypeSubBar);
   let location = useLocation();
 
   useEffect(() => {
-    if (location?.pathname.includes(MENU_TAB_ADMIN.KITCHEN) || location?.pathname.includes(MENU_TAB_ADMIN.KITCHEN_DAY)) {
-      dispatch(changeMenuTypeSubKitchen(true))
+    if (
+      location?.pathname.includes(MENU_TAB_ADMIN.KITCHEN) ||
+      location?.pathname.includes(MENU_TAB_ADMIN.KITCHEN_DAY)
+    ) {
+      dispatch(changeMenuTypeSubKitchen(true));
+      dispatch(changeMenuTypeSubBar(false));
     } else {
-      dispatch(changeMenuTypeSubKitchen(false))
+      if (
+        location?.pathname.includes(MENU_TAB_ADMIN.BAR) ||
+        location?.pathname.includes(MENU_TAB_ADMIN.BAR_INSERT)
+      ) {
+        dispatch(changeMenuTypeSubBar(true));
+        dispatch(changeMenuTypeSubKitchen(false));
+      } else {
+        dispatch(changeMenuTypeSubKitchen(false));
+        dispatch(changeMenuTypeSubBar(false));
+      }
     }
+  }, [location]);
 
-  }, [location])
-
-  console.log(location.pathname)
+  console.log(location.pathname);
 
   const dispatch = useDispatch();
 
@@ -80,21 +100,21 @@ function AdminPage(props) {
   };
   commonFunction.useOutsideAlerter(wrapperRef, onClickClose);
 
-
   useEffect(() => {
-    let role = localStorage.getItem('roleType')
-    if (role != '' && role != null) {
+    let role = localStorage.getItem("roleType");
+    if (role != "" && role != null) {
       let account = JSON.parse(role);
-      dispatch(changeAccount({
-        userName: account.userName,
-        userAvata: account.userAvatar,
-        roleType: account.roleType
-      }))
+      dispatch(
+        changeAccount({
+          userName: account.userName,
+          userAvata: account.userAvatar,
+          roleType: account.roleType,
+        })
+      );
     } else {
-      window.open("/login", '_self')
+      window.open("/login", "_self");
     }
-
-  }, [])
+  }, []);
 
   let listMenu = [
     {
@@ -116,6 +136,11 @@ function AdminPage(props) {
       link: MENU_TAB_ADMIN.KITCHEN,
       icon: <ShopOutlined />,
       title: "Bếp",
+    },
+    {
+      link: MENU_TAB_ADMIN.BAR,
+      icon: <CoffeeOutlined />,
+      title: "Bar",
     },
     {
       link: MENU_TAB_ADMIN.STAFF,
@@ -144,40 +169,73 @@ function AdminPage(props) {
       return (
         // <Link to={`/admin/${item?.link}`}>
         <>
-          {typeMenu !== TYPE_MENU.SMALL ?
+          {typeMenu !== TYPE_MENU.SMALL ? (
             <>
-              <div
-                className={`admin-page-container__nav-list-item ${index == item?.link  ? "selected-item" : ""
+              {item?.link === MENU_TAB_ADMIN.KITCHEN ? (
+                <div
+                  className={`admin-page-container__nav-list-item ${
+                    index == item?.link ||
+                    (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                      item?.link === MENU_TAB_ADMIN.KITCHEN)
+                      ? "selected-item"
+                      : ""
                   }`}
-
-                onClick={() => {
-                  if (item?.link != MENU_TAB_ADMIN.KITCHEN) {
-                    window.open(`/admin/${item?.link}`, "_self")
-                  }
-                  else {
-                    if (item?.link === MENU_TAB_ADMIN.KITCHEN) {
-                      dispatch(changeMenuTypeSubKitchen(true))
+                  onClick={() => {
+                    if (item?.link != MENU_TAB_ADMIN.KITCHEN) {
+                      window.open(`/admin/${item?.link}`, "_self");
+                    } else {
+                      if (item?.link === MENU_TAB_ADMIN.KITCHEN) {
+                        dispatch(changeMenuTypeSubKitchen(true));
+                      }
+                      if (item?.link === MENU_TAB_ADMIN.BAR) {
+                        setDisplayMoreBar(true);
+                      }
                     }
-                    if (item?.link === MENU_TAB_ADMIN.BAR) {
-                      setDisplayMoreBar(true)
-                    }
-                  }
-                }}
-              >
-                <div className="admin-page-container__nav-list-item-icon">
-                  {item?.icon}
-                </div>
-                {typeMenu === TYPE_MENU.BIG && (
-                  <div className="admin-page-container__nav-list-item-text">
-                    {item?.title}
+                  }}
+                >
+                  <div className="admin-page-container__nav-list-item-icon">
+                    {item?.icon}
                   </div>
-                )}
-              </div>
-              {typeSubMenuKitchen && item?.link === MENU_TAB_ADMIN.KITCHEN &&
+                  {typeMenu === TYPE_MENU.BIG && (
+                    <div className="admin-page-container__nav-list-item-text">
+                      {item?.title}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to={`/admin/${item?.link}`}>
+                  <div
+                    className={`admin-page-container__nav-list-item ${
+                      index == item?.link ||
+                      (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                        item?.link === MENU_TAB_ADMIN.KITCHEN) ||
+                      (index == MENU_TAB_ADMIN.BAR_INSERT &&
+                        item?.link === MENU_TAB_ADMIN.BAR)
+                        ? "selected-item"
+                        : ""
+                    }`}
+                  >
+                    <div className="admin-page-container__nav-list-item-icon">
+                      {item?.icon}
+                    </div>
+                    {typeMenu === TYPE_MENU.BIG && (
+                      <div className="admin-page-container__nav-list-item-text">
+                        {item?.title}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              )}
+
+              {typeSubMenuKitchen && item?.link === MENU_TAB_ADMIN.KITCHEN && (
                 <>
                   <Link to={`/admin/kitchens`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN ? "selected-list-sub-kitchen" : ""}`}
+                      className={`admin-page-container__nav-list-sub-kitchen ${
+                        index == MENU_TAB_ADMIN.KITCHEN
+                          ? "selected-list-sub-kitchen"
+                          : ""
+                      }`}
 
                       // onClick={() => { window.open(`/admin/kitchens`, "_self") }}
                     >
@@ -192,36 +250,87 @@ function AdminPage(props) {
                     </div>
                   </Link>
                   <Link to={`/admin/kitchens-days`}>
-                  <div
-                    className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN_DAY ? "selected-list-sub-kitchen" : ""}`}
+                    <div
+                      className={`admin-page-container__nav-list-sub-kitchen ${
+                        index == MENU_TAB_ADMIN.KITCHEN_DAY
+                          ? "selected-list-sub-kitchen"
+                          : ""
+                      }`}
 
-                    // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
-                  >
-                    <div className="admin-page-container__nav-list-sub-kitchen-icon">
-                      <PlusOutlined />
-                    </div>
-                    {typeMenu === TYPE_MENU.BIG && (
-                      <div className="admin-page-container__nav-list-sub-kitchen-text">
-                        Thêm nguyên liệu mới
+                      // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
+                    >
+                      <div className="admin-page-container__nav-list-sub-kitchen-icon">
+                        <PlusOutlined />
                       </div>
-                    )}
-                  </div>
+                      {typeMenu === TYPE_MENU.BIG && (
+                        <div className="admin-page-container__nav-list-sub-kitchen-text">
+                          Thêm nguyên liệu mới
+                        </div>
+                      )}
+                    </div>
                   </Link>
                 </>
-              }
+              )}
+              {typeSubMenuBar && item?.link === MENU_TAB_ADMIN.BAR && (
+                <>
+                  <Link to={`/admin/bars`}>
+                    <div
+                      className={`admin-page-container__nav-list-sub-bar ${
+                        index == MENU_TAB_ADMIN.BAR
+                          ? "selected-list-sub-bar"
+                          : ""
+                      }`}
+
+                      // onClick={() => { window.open(`/admin/bars`, "_self") }}
+                    >
+                      <div className="admin-page-container__nav-list-sub-bar-icon">
+                        <ReconciliationOutlined />
+                      </div>
+                      {typeMenu === TYPE_MENU.BIG && (
+                        <div className="admin-page-container__nav-list-sub-bar-text">
+                          Quản lý nguyên liệu
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                  <Link to={`/admin/bar-insert`}>
+                    <div
+                      className={`admin-page-container__nav-list-sub-bar ${
+                        index == MENU_TAB_ADMIN.BAR_INSERT
+                          ? "selected-list-sub-bar"
+                          : ""
+                      }`}
+
+                      // onClick={() => { window.open(`/admin/barsDays`, "_self") }}
+                    >
+                      <div className="admin-page-container__nav-list-sub-bar-icon">
+                        <PlusOutlined />
+                      </div>
+                      {typeMenu === TYPE_MENU.BIG && (
+                        <div className="admin-page-container__nav-list-sub-bar-text">
+                          Thêm nguyên liệu mới
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </>
+              )}
             </>
-            :
-            <Tooltip title={item?.title} placement="right">
-              <div
-                className={`admin-page-container__nav-list-item ${index == item?.link ? "selected-item" : ""
+          ) : (
+            <Link to={`/admin/${item?.link}`}>
+              <Tooltip title={item?.title} placement="right">
+                <div
+                  className={`admin-page-container__nav-list-item ${
+                    index == item?.link ? "selected-item" : ""
                   }`}
-                onClick={() => { window.open(`/admin/${item?.link}`, "_self") }}
-              >
-                <div className="admin-page-container__nav-list-item-icon">
-                  {item?.icon}
+                >
+                  <div className="admin-page-container__nav-list-item-icon">
+                    {item?.icon}
+                  </div>
                 </div>
-              </div>
-            </Tooltip>}
+              </Tooltip>
+            </Link>
+          )}
         </>
         // </Link>
       );
@@ -230,26 +339,24 @@ function AdminPage(props) {
   }
 
   function onclickLogout() {
-    localStorage.setItem('roleType', '')
+    localStorage.setItem("roleType", "");
   }
-
 
   return (
     <div className="admin-page-container">
       <div
-        className={`admin-page-container__nav ${typeMenu === TYPE_MENU.BIG
-          ? "admin-page-container__big-nav"
-          : "admin-page-container__small-nav"
-          }`}
-      // style={{
-      //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
-      // }}
+        className={`admin-page-container__nav ${
+          typeMenu === TYPE_MENU.BIG
+            ? "admin-page-container__big-nav"
+            : "admin-page-container__small-nav"
+        }`}
+        // style={{
+        //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
+        // }}
       >
         <div className="admin-page-container__nav-logo">
           {typeMenu === TYPE_MENU.BIG && (
-            <div className="admin-page-container__nav-logo-text">
-              HoH BBQ
-            </div>
+            <div className="admin-page-container__nav-logo-text">HoH BBQ</div>
           )}
           <div
             className="admin-page-container__nav-logo-icon"
@@ -273,10 +380,11 @@ function AdminPage(props) {
         <div className="admin-page-container__nav-list">{renderMenuPage()}</div>
       </div>
       <div
-        className={`admin-page-container__page ${typeMenu === TYPE_MENU.BIG
-          ? "admin-page-container__big-page"
-          : "admin-page-container__small-page"
-          }`}
+        className={`admin-page-container__page ${
+          typeMenu === TYPE_MENU.BIG
+            ? "admin-page-container__big-page"
+            : "admin-page-container__small-page"
+        }`}
       >
         <div className="admin-page-container__page-header">
           <div className="admin-page-container__page-header-title-page">
@@ -292,7 +400,9 @@ function AdminPage(props) {
               }}
             >
               <img src={logoRes} onMouseLeave />
-              <div className="admin-page-container__page-header-account-button-name">{roleType.userName}</div>
+              <div className="admin-page-container__page-header-account-button-name">
+                {roleType.userName}
+              </div>
               {!displayLogout ? (
                 <CaretDownOutlined style={{ transition: "2s" }} />
               ) : (
@@ -300,10 +410,18 @@ function AdminPage(props) {
               )}
             </div>
             {displayLogout && (
-              <div className="admin-page-container__page-header-account-logout" ref={wrapperRef}>
-                <div className="admin-page-container__page-header-account-logout-item" onClick={() => { onclickLogout() }}>
+              <div
+                className="admin-page-container__page-header-account-logout"
+                ref={wrapperRef}
+              >
+                <div
+                  className="admin-page-container__page-header-account-logout-item"
+                  onClick={() => {
+                    onclickLogout();
+                  }}
+                >
                   <Link to={`/login`}>
-                    <div className="admin-page-container__page-header-account-logout-item-text" >
+                    <div className="admin-page-container__page-header-account-logout-item-text">
                       Đăng xuất
                     </div>
                     <div className="admin-page-container__page-header-account-logout-item-icon">

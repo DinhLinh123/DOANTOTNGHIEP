@@ -181,7 +181,7 @@ function BarList(props) {
     return (
         <AdminPage
             title={"Danh sách mặt hàng sắp hết"}
-            index={MENU_TAB_ADMIN.BOOK}
+            index={MENU_TAB_ADMIN.BAR}
         >
             <div className="book-manager">
                 <div className="book-manager__filter">

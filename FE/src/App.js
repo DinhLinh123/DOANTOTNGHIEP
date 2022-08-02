@@ -79,8 +79,8 @@ function App() {
             <Route path={"/admin/kitchen/detail/:kitchenID"}><KitchenDetail /></Route>
             <Route path={"/admin/kitchens-days"}><KitchensDay /></Route>
             <Route path={"/admin/kitchens-day/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
-            <Route path={"/admin/barInsert"}><BarInsert /></Route>
-            <Route path={"/admin/barList"}><BarList /></Route>
+            <Route path={"/admin/bar-insert"}><BarInsert /></Route>
+            <Route path={"/admin/bars"}><BarList /></Route>
             <Route path={"/admin/staffs"}> <Staff /></Route>
             <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
             <Route path={"/admin/kitchenday"}> <Staff /></Route>

@@ -241,7 +241,7 @@ function BarInsert(props) {
     return (
         <AdminPage
             title={"Quản lý quầy Bar"}
-            index={MENU_TAB_ADMIN.STAFF}
+            index={MENU_TAB_ADMIN.BAR_INSERT}
         >
             <div className="staff-manager">
                 <div className="staff-manager__filter">

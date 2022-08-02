@@ -169,7 +169,6 @@ function Spending(props) {
                 <div className="pay-manager__area-name">{item?.name}</div>
                 <div className="pay-manager__area-table">
                   {listTable?.map((_item) => {
-                    debugger;
                     if (_item?.idKhuVuc === item?.id) {
                       return (
                         <div className="pay-manager__area-table-name"
