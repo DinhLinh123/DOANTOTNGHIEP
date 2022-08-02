@@ -24,6 +24,7 @@ import {
   CaretUpOutlined,
   LogoutOutlined,
   ShoppingOutlined,
+  CheckCircleOutlined
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -113,6 +114,11 @@ function AdminPage(props) {
       link: MENU_TAB_ADMIN.AREA,
       icon: <AppstoreOutlined />,
       title: "Khu vực",
+    },
+    {
+      link: MENU_TAB_ADMIN.PAY,
+      icon: <CheckCircleOutlined />,
+      title: "Thanh toán",
     },
   ];
 

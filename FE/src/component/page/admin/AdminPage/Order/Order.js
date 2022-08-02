@@ -13,15 +13,29 @@ import commonFunction from "../../../../base/common/commonFunction";
 import Button2 from "../../../../base/Button/Button";
 import { Tooltip } from "antd";
 import noDataimg from "../../../../../image/no-data2.png"
+import { useParams } from "react-router-dom";
+import baseApi from "../../../../../api/baseApi";
+import { API_TABLE } from "../../../../base/common/endpoint";
 function Order(props) {
 
   const [index, setIndex] = useState(1)
   const [orderSelected, setoOrderSelected] = useState([])
+  const [tableName, setTableName] = useState('')
   const [displayLine2ChooseOrder, setDisplayLine2ChooseOrder] = useState({
     show: false,
     index: ""
   })
   const renderChoose = useRef([])
+  let { tableID } = useParams();
+
+  useEffect(()=>{
+    baseApi.get(
+      (res)=>{setTableName(res?.name)},
+      ()=>{},
+      null,
+      API_TABLE.GET_BY_ID + tableID
+      )
+  },[tableID])
 
   let logo = [
     {
@@ -200,7 +214,7 @@ function Order(props) {
           </div>
           <div className="order-page-container__food-list__top__search">
             <div className="order-page-container__food-list__top__search__textbox">
-              <InputField placeholder={"Nhập tên món ăn..."} autoFocus />
+              <InputField placeholder={"Nhập tên món ăn..."} />
             </div >
             <div className="order-page-container__food-list__top__search__icon">
               <SearchOutlined style={{ fontSize: '24px', color: '#fff', cursor: 'pointer' }} />
@@ -245,7 +259,7 @@ function Order(props) {
             Món đã chọn{`(${orderSelected?.length})`}
           </div>
           <div className="order-page-container__selected-dish-top-table">
-            Bàn: 15
+            Bàn: {tableName}
           </div>
         </div>
         <div className="order-page-container__selected-dish-content" ref={renderChoose}>

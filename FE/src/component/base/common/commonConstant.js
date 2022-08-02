@@ -20,6 +20,7 @@ const MENU_TAB_ADMIN = {
   SPENDINGDETAIL: "spendingDetails",
   STAFF: "staffs",
   TURNOVER: "turnovers",
+  PAY: "pays"
 };
 
 const TYPE_MENU = {

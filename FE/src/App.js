@@ -34,62 +34,74 @@ import TableOrder from './component/page/admin/AdminPage/TableOrder/TableOrder';
 import SpendingDetail from './component/page/admin/AdminPage/SpendingDetail/SpendingDetail';
 import KitchenDetail from './component/page/admin/AdminPage/KitchenDetail/KitchenDetail';
 import KitchensDay from './component/page/admin/AdminPage/KitchensDay/KitchensDay';
+import Pay from './component/page/admin/AdminPage/Pay/Pay';
 import KitchensDayDetail from './component/page/admin/AdminPage/KitchensDayDetail/KitchensDayDetail';
 
 let historyApp;
 function App() {
+  if (String.prototype.format) {
+
+    String.prototype.format = function () {
+      var formatted = this;
+      for (var arg in arguments) {
+        formatted = formatted.replace("{" + arg + "}", arguments[arg]);
+      }
+      return formatted;
+    };
+  }
 
   // historyApp = useHistory();
-  let loadingMainApp = useSelector(state=> state.loading.loadingMainApp)
+  let loadingMainApp = useSelector(state => state.loading.loadingMainApp)
 
   return (
     <Spin tip="Loading..." spinning={loadingMainApp}>
-    <div className="App">
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/">
-             <Redirect to="/client/home" /> 
-          </Route>
-          <Route path={"/login"}><Login /></Route>
+      <div className="App">
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/client/home" />
+            </Route>
+            <Route path={"/login"}><Login /></Route>
 
-          {/* admin */}
-          <Route exact path="/admin">
-             <Redirect to="/admin/menus" /> 
-          </Route>
-          <Route path={"/admin/menus"} ><Menu /></Route>
-          <Route path={"/admin/areas"} ><Area /></Route>
-          <Route path={"/admin/area/detail/:areaID"} ><AreaDetail /></Route>
-          <Route path={"/admin/spendings"} ><Spending /></Route>
-          <Route path={"/admin/turnovers"}> <Turnover /></Route>
-          <Route path={"/admin/books"}><Book /></Route>
-          <Route path={"/admin/kitchens"}><Kitchen /></Route>
-          <Route path={"/admin/kitchen/detail/:kitchenID"}><KitchenDetail /></Route>
-          <Route path={"/admin/KitchensDays"}><KitchensDay /></Route>
-          <Route path={"/admin/KitchensDay/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
-          <Route path={"/admin/bars"}><Bar /></Route>
-          <Route path={"/admin/staffs"}> <Staff /></Route>
-          <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
-          <Route path={"/admin/kitchenday"}> <Staff /></Route>
-          
-          {/* order */}
-          <Route path={"/admin/tables"}> <TableOrder /></Route>
-          <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
+            {/* admin */}
+            <Route exact path="/admin">
+              <Redirect to="/admin/menus" />
+            </Route>
+            <Route path={"/admin/menus"} ><Menu /></Route>
+            <Route path={"/admin/areas"} ><Area /></Route>
+            <Route path={"/admin/area/detail/:areaID"} ><AreaDetail /></Route>
+            <Route path={"/admin/spendings"} ><Spending /></Route>
+            <Route path={"/admin/turnovers"}> <Turnover /></Route>
+            <Route path={"/admin/books"}><Book /></Route>
+            <Route path={"/admin/kitchens"}><Kitchen /></Route>
+            <Route path={"/admin/kitchen/detail/:kitchenID"}><KitchenDetail /></Route>
+            <Route path={"/admin/KitchensDays"}><KitchensDay /></Route>
+            <Route path={"/admin/KitchensDay/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
+            <Route path={"/admin/bars"}><Bar /></Route>
+            <Route path={"/admin/staffs"}> <Staff /></Route>
+            <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
+            <Route path={"/admin/kitchenday"}> <Staff /></Route>
+            <Route path={"/admin/pays"}> <Pay /></Route>
 
-          {/* client */}
-          <Route exact path="/client">
-             <Redirect to="/client/home" /> 
-          </Route>
-          {/* <Route path={"/client"}> <ClientPage /></Route> */}
-          <Route path={"/client/home"}><Home /></Route>
-          <Route path={"/client/booking"}><Booking /></Route>
-          <Route path={"/client/feedback"}><Feedback /></Route>
-          <Route path={"/client/offer"}><Offer /></Route>
-          <Route path={"/client/contact"}><Contact /></Route>
-        </Switch>
-      </BrowserRouter>
-    </div>
-  </Spin>
-    
+            {/* order */}
+            <Route path={"/admin/tables"}> <TableOrder /></Route>
+            <Route path={"/admin/table/:tableID/order"}> <Order /></Route>
+
+            {/* client */}
+            <Route exact path="/client">
+              <Redirect to="/client/home" />
+            </Route>
+            {/* <Route path={"/client"}> <ClientPage /></Route> */}
+            <Route path={"/client/home"}><Home /></Route>
+            <Route path={"/client/booking"}><Booking /></Route>
+            <Route path={"/client/feedback"}><Feedback /></Route>
+            <Route path={"/client/offer"}><Offer /></Route>
+            <Route path={"/client/contact"}><Contact /></Route>
+          </Switch>
+        </BrowserRouter>
+      </div>
+    </Spin>
+
   );
 }
 

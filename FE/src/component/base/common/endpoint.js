@@ -1,8 +1,15 @@
 const PART = "http://sqldemo-001-site1.htempurl.com/api"
-const TABLE = {
-    GET_ALL: PART + "/Ban"
+const API_TABLE = {
+    GET_ALL: PART + "/Ban",
+    GET_BY_ID: PART + "/Ban/"
+};
+
+const API_AREA = {
+    GET_ALL: PART + "/KhuVuc",
+    GET_BY_ID: PART + "/KhuVuc/"
 };
 
 export {
-    TABLE,
+    API_TABLE,
+    API_AREA
 };

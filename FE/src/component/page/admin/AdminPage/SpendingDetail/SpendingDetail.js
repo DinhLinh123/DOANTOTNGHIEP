@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import commonFunction from "../../../../base/common/commonFunction";
+import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import "./spendingDetail.scss"
@@ -51,19 +52,19 @@ function SpendingDetail(props) {
         },
     ];
 
-    const data = 
-        {
-            key: "1",
-            billName: "HD01",
-            billDate: "27/08/2022",
-            image: "",
-            listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
-            note: "ghi chú",
-            status: "Đã duyệt",
-            person: "Linhdtt",
-            date: "27/08/2022",
+    const data =
+    {
+        key: "1",
+        billName: "HD01",
+        billDate: "27/08/2022",
+        image: "",
+        listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
+        note: "ghi chú",
+        status: "Đã duyệt",
+        person: "Linhdtt",
+        date: "27/08/2022",
 
-        };
+    };
 
     function columnSerial(idx) {
         return <div>{idx}</div>;
@@ -81,7 +82,7 @@ function SpendingDetail(props) {
         return <div>{commonFunction.numberWithCommas(item?.unitprice)}</div>;
     }
     function columnIntomoney(item) {
-        return <div>{commonFunction.numberWithCommas(item?.amount * item?.unitprice) }</div>;
+        return <div>{commonFunction.numberWithCommas(item?.amount * item?.unitprice)}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -101,11 +102,11 @@ function SpendingDetail(props) {
     }
 
     function renderTotalMoney(data) {
-       let total = 0
+        let total = 0
 
-       data?.map((item)=>{
-        total += item?.amount * item?.unitprice
-       })
+        data?.map((item) => {
+            total += item?.amount * item?.unitprice
+        })
         return total;
     }
 
@@ -165,7 +166,27 @@ function SpendingDetail(props) {
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ngày nhập</span>
                     <span className="spendingDetail-manager__item-content">{data.date}</span>
-                </div>    
+                </div>
+                <div className="spendingDetail-manager__approve">
+                    <div className="spendingDetail-manager__approve-title">Quản lý phê duyệt</div>
+                    <div className="spendingDetail-manager__approve-content">
+                        <div className="spendingDetail-manager__approve-content-text">
+                            <InputField label={"Nội dung phê duyệt"} />
+                        </div>
+                        <div className="spendingDetail-manager__approve-content-text">
+
+                        </div>
+                        <div className="spendingDetail-manager__approve-content-date">
+                            <div className="spendingDetail-manager__approve-content-date-label">
+                                Ngày phê duyệt: 
+                            </div>
+                            <div className="spendingDetail-manager__approve-content-date-value">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </AdminPage>
     )

@@ -12,7 +12,7 @@ import { changeLoadingApp } from "../../../../../../reudux/action/loadingAction"
 import Popup from "../../../../../base/Popup/Popup";
 import InputField from "../../../../../base/Input/Input";
 import RadioCheck from "../../../../../base/Radio/Radio";
-import { TABLE } from "../../../../../base/common/endpoint";
+import { API_TABLE } from "../../../../../base/common/endpoint";
 
 function AreaDetail(props) {
 
@@ -48,7 +48,7 @@ function AreaDetail(props) {
             },
             (err)=>{debugger},
             null,
-            TABLE.GET_ALL,
+            API_TABLE.GET_ALL,
             {},
             {}
         )

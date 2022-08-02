@@ -246,6 +246,7 @@
                                     align-items: center;
                                     justify-content: center;
                                     color: #1e90ff;
+                                    min-width: unset;
                                 }
                             }
                         }
@@ -268,6 +269,7 @@
                                 align-items: center;
                                 justify-content: center;
                                 color: red !important;
+                                min-width: unset;
                             }
                         }
                     }

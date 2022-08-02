@@ -11,6 +11,7 @@ import Popup from "../../../../base/Popup/Popup";
 import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
+import Dropdown from "../../../../base/Dropdown/Dropdown";
 
 function Staff(props) {
     const [sortType, setSortType] = useState();
@@ -132,16 +133,16 @@ function Staff(props) {
     ];
     const dataPosition = [
         {
-            key: "1",
-            name: "Phục vụ bàn"
+            value: "1",
+            label: "Phục vụ bàn"
         },
         {
-            key: "1",
-            name: "Bếp"
+            value: "2",
+            label: "Bếp"
         },
         {
-            key: "1",
-            name: "Thu ngân"
+            value: "3",
+            label: "Thu ngân"
         },
     ]
 
@@ -259,27 +260,7 @@ function Staff(props) {
                         />
                     </div>
                     <div className="staff-manager__filter-position">
-                        <div className="staff-manager__filter-position-lable">Chức vụ</div>
-                        <div className="staff-manager__filter-position-select">
-                            <Select
-                                showSearch
-                                placeholder="Chọn chức vụ"
-                                optionFilterProp="children"
-                                onChange={onChange}
-                                onSearch={onSearch}
-                                height={36}
-                                width={"100%"}
-                            // filterOption={(input, option) =>
-                            //     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                            // }
-                            >
-                                {dataPosition?.map((item, index) => {
-                                    return (
-                                        <Option value={index}>{item.name}</Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
+                            <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"}/>
                     </div>
                 </div>
                 <div className="staff-manager__button">
