@@ -152,7 +152,6 @@ function Area(props) {
                             });
                         }}
                         onClickRow={(record, rowIndex, event)=>{
-                            debugger
                         }}
                     />
                 </div>

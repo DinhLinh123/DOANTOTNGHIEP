@@ -226,7 +226,7 @@ function KitchensDay (props) {
     return (
         <AdminPage 
             title={"Quản lý yêu cầu nguyên liệu/Thực phẩm"}
-            index={MENU_TAB_ADMIN.KITCHEN}
+            index={MENU_TAB_ADMIN.KITCHEN_DAY}
         >
             <div className="kitchensDay-manager">
                 <div className="kitchensDay-manager__filter">
@@ -257,7 +257,7 @@ function KitchensDay (props) {
                             });
                         }}
                         //onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
-                        onContextMenu={(record, rowIndex, event)=>{debugger}}
+                        onContextMenu={(record, rowIndex, event)=>{}}
                     />
                 </div>
                 <Popup

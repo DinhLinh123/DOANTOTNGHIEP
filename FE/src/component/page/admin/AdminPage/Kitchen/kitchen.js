@@ -310,7 +310,7 @@ function Kitchen (props) {
                             });
                         }}
                         //onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
-                        onContextMenu={(record, rowIndex, event)=>{debugger}}
+                        onContextMenu={(record, rowIndex, event)=>{}}
                     />
                 </div>
                 <Popup

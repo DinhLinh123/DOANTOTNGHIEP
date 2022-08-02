@@ -72,7 +72,6 @@ function InputField(props) {
 
   function onBlur(event) {
     let value = event.target.value;
-    debugger
     if (required && (value?.length == 0 || value == undefined)) {
       setIsDanger(true);
       setMessage("Trường này không được bỏ trống");

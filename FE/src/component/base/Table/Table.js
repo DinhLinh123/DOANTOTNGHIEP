@@ -66,11 +66,9 @@ function TableBase(props) {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      debugger
 
     },
     onSelect: (record, selected, selectedRows) => {
-      debugger
       setListObjectSelected(selectedRows);
     },
     onSelectAll: (selected, selectedRows, changeRows) => {
@@ -145,8 +143,6 @@ function TableBase(props) {
               : "",
       };
     });
-
-    debugger
     if (hasMoreOption) {
       columnsList.push(columnOption);
     }

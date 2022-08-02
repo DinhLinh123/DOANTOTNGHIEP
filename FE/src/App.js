@@ -36,6 +36,8 @@ import KitchenDetail from './component/page/admin/AdminPage/KitchenDetail/Kitche
 import KitchensDay from './component/page/admin/AdminPage/KitchensDay/KitchensDay';
 import Pay from './component/page/admin/AdminPage/Pay/Pay';
 import KitchensDayDetail from './component/page/admin/AdminPage/KitchensDayDetail/KitchensDayDetail';
+import BarInsert from './component/page/admin/AdminPage/BarInsert/BarInsert';
+import BarList from './component/page/admin/AdminPage/BarList/BarList';
 
 let historyApp;
 function App() {
@@ -75,9 +77,10 @@ function App() {
             <Route path={"/admin/books"}><Book /></Route>
             <Route path={"/admin/kitchens"}><Kitchen /></Route>
             <Route path={"/admin/kitchen/detail/:kitchenID"}><KitchenDetail /></Route>
-            <Route path={"/admin/KitchensDays"}><KitchensDay /></Route>
-            <Route path={"/admin/KitchensDay/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
-            <Route path={"/admin/bars"}><Bar /></Route>
+            <Route path={"/admin/kitchens-days"}><KitchensDay /></Route>
+            <Route path={"/admin/kitchens-day/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
+            <Route path={"/admin/barInsert"}><BarInsert /></Route>
+            <Route path={"/admin/barList"}><BarList /></Route>
             <Route path={"/admin/staffs"}> <Staff /></Route>
             <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
             <Route path={"/admin/kitchenday"}> <Staff /></Route>

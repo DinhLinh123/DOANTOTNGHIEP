@@ -46,7 +46,7 @@ function AreaDetail(props) {
             (res)=>{
                 // setList(res)
             },
-            (err)=>{debugger},
+            (err)=>{},
             null,
             API_TABLE.GET_ALL,
             {},
