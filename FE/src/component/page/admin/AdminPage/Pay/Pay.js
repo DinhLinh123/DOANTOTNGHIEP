@@ -22,6 +22,41 @@ function Spending(props) {
     const [itemImage, setItemImage] = useState("");
     const [itemNote, setItemNote] = useState("");
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+
+    let dataArea =[
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "name": "string",
+          "htmlObject": "string",
+          "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "createdByUserName": "string",
+          "createdOnDate": "2022-07-31T10:59:45.471Z",
+          "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "lastModifiedByUserName": "string"
+        },
+        {
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            "name": "string",
+            "htmlObject": "string",
+            "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "createdByUserName": "string",
+            "createdOnDate": "2022-07-31T10:59:45.471Z",
+            "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "lastModifiedByUserName": "string"
+          },
+          
+        {
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+            "name": "string",
+            "htmlObject": "string",
+            "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "createdByUserName": "string",
+            "createdOnDate": "2022-07-31T10:59:45.471Z",
+            "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "lastModifiedByUserName": "string"
+          },
+      ]
+
     return (
 
         <AdminPage
@@ -29,7 +64,14 @@ function Spending(props) {
             index={MENU_TAB_ADMIN.PAY}
         >
             <div className="pay-manager">
-                
+                <div className="pay-manager__area">
+                    <div className="pay-manager__area">
+                    
+                    </div>
+                </div>
+                <div className="pay-manager__bill">
+
+                </div>
             </div>
         </AdminPage>
 
