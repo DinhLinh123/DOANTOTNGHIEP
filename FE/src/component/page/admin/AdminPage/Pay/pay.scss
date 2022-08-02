@@ -1,51 +1,38 @@
-.spending-manager {
-    height: 100%;
+.pay-manager {
+  height: 100%;
 
-    &__filter {
+  &__area {
+    width: 300px;
+    background-color: white;
+    padding: 8px;
+
+    &-name {
+      font-weight: bold;
+      text-align: left;
+      margin-bottom: 8px;
+      margin-top: 5px;
+    }
+    &-table {
+      display: grid;
+      grid-template-columns: auto auto auto auto;
+      grid-gap: 8px;
+      border-bottom-style: groove;
+      padding-bottom: 10px;
+
+      &-name {
+        border-style: outset;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 65px;
+        height: 35px;
         display: flex;
-        margin-bottom: 24px;
-
-        &-create-new {
-            margin-left: auto;
-        }
+        align-items: center;
+        justify-content: center;
+      }
     }
+  }
 
-    &__popup {
-        &-bill {
-            margin-bottom: 16px;
-        }
-
-        &-items {
-            display: flex;
-            width: 100%;
-
-            &-name {
-                margin-right: 15px;
-                width: 30%;
-            }
-
-            &-unit {
-                margin-right: 15px;
-                width: 20%;
-            }
-
-            &-amount {
-                margin-right: 15px;
-                width: 20%;
-            }
-
-            &-unitPrice {
-                width: 20%;
-            }
-
-            &-delete {
-                padding-top: 40px;
-                margin-left: 10px;
-            }
-        }
-    }
-
-    &__content {
-        height: calc(100% - 60px);
-    }
+  &__bill {
+    width: calc(100% - 300px);
+  }
 }
