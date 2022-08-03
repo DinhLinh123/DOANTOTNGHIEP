@@ -171,24 +171,23 @@ function AdminPage(props) {
         <>
           {typeMenu !== TYPE_MENU.SMALL ? (
             <>
-              {item?.link === MENU_TAB_ADMIN.KITCHEN ? (
+              {item?.link === MENU_TAB_ADMIN.KITCHEN || item?.link === MENU_TAB_ADMIN.BAR ? (
                 <div
-                  className={`admin-page-container__nav-list-item ${
-                    index == item?.link ||
-                    (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
-                      item?.link === MENU_TAB_ADMIN.KITCHEN)
+                  className={`admin-page-container__nav-list-item ${index == item?.link ||
+                      (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                        item?.link === MENU_TAB_ADMIN.KITCHEN)
                       ? "selected-item"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => {
-                    if (item?.link != MENU_TAB_ADMIN.KITCHEN) {
+                    if (item?.link != MENU_TAB_ADMIN.KITCHEN && item?.link != MENU_TAB_ADMIN.BAR) {
                       window.open(`/admin/${item?.link}`, "_self");
                     } else {
                       if (item?.link === MENU_TAB_ADMIN.KITCHEN) {
                         dispatch(changeMenuTypeSubKitchen(true));
                       }
                       if (item?.link === MENU_TAB_ADMIN.BAR) {
-                        setDisplayMoreBar(true);
+                        dispatch(changeMenuTypeSubBar(true));
                       }
                     }
                   }}
@@ -205,15 +204,14 @@ function AdminPage(props) {
               ) : (
                 <Link to={`/admin/${item?.link}`}>
                   <div
-                    className={`admin-page-container__nav-list-item ${
-                      index == item?.link ||
-                      (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
-                        item?.link === MENU_TAB_ADMIN.KITCHEN) ||
-                      (index == MENU_TAB_ADMIN.BAR_INSERT &&
-                        item?.link === MENU_TAB_ADMIN.BAR)
+                    className={`admin-page-container__nav-list-item ${index == item?.link ||
+                        (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                          item?.link === MENU_TAB_ADMIN.KITCHEN) ||
+                        (index == MENU_TAB_ADMIN.BAR_INSERT &&
+                          item?.link === MENU_TAB_ADMIN.BAR)
                         ? "selected-item"
                         : ""
-                    }`}
+                      }`}
                   >
                     <div className="admin-page-container__nav-list-item-icon">
                       {item?.icon}
@@ -231,13 +229,12 @@ function AdminPage(props) {
                 <>
                   <Link to={`/admin/kitchens`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-kitchen ${
-                        index == MENU_TAB_ADMIN.KITCHEN
+                      className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN
                           ? "selected-list-sub-kitchen"
                           : ""
-                      }`}
+                        }`}
 
-                      // onClick={() => { window.open(`/admin/kitchens`, "_self") }}
+                    // onClick={() => { window.open(`/admin/kitchens`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-kitchen-icon">
                         <ReconciliationOutlined />
@@ -251,13 +248,12 @@ function AdminPage(props) {
                   </Link>
                   <Link to={`/admin/kitchens-days`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-kitchen ${
-                        index == MENU_TAB_ADMIN.KITCHEN_DAY
+                      className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN_DAY
                           ? "selected-list-sub-kitchen"
                           : ""
-                      }`}
+                        }`}
 
-                      // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
+                    // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-kitchen-icon">
                         <PlusOutlined />
@@ -275,13 +271,12 @@ function AdminPage(props) {
                 <>
                   <Link to={`/admin/bars`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-bar ${
-                        index == MENU_TAB_ADMIN.BAR
+                      className={`admin-page-container__nav-list-sub-bar ${index == MENU_TAB_ADMIN.BAR
                           ? "selected-list-sub-bar"
                           : ""
-                      }`}
+                        }`}
 
-                      // onClick={() => { window.open(`/admin/bars`, "_self") }}
+                    // onClick={() => { window.open(`/admin/bars`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-bar-icon">
                         <ReconciliationOutlined />
@@ -295,13 +290,12 @@ function AdminPage(props) {
                   </Link>
                   <Link to={`/admin/bar-insert`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-bar ${
-                        index == MENU_TAB_ADMIN.BAR_INSERT
+                      className={`admin-page-container__nav-list-sub-bar ${index == MENU_TAB_ADMIN.BAR_INSERT
                           ? "selected-list-sub-bar"
                           : ""
-                      }`}
+                        }`}
 
-                      // onClick={() => { window.open(`/admin/barsDays`, "_self") }}
+                    // onClick={() => { window.open(`/admin/barsDays`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-bar-icon">
                         <PlusOutlined />
@@ -320,9 +314,8 @@ function AdminPage(props) {
             <Link to={`/admin/${item?.link}`}>
               <Tooltip title={item?.title} placement="right">
                 <div
-                  className={`admin-page-container__nav-list-item ${
-                    index == item?.link ? "selected-item" : ""
-                  }`}
+                  className={`admin-page-container__nav-list-item ${index == item?.link ? "selected-item" : ""
+                    }`}
                 >
                   <div className="admin-page-container__nav-list-item-icon">
                     {item?.icon}
@@ -345,14 +338,13 @@ function AdminPage(props) {
   return (
     <div className="admin-page-container">
       <div
-        className={`admin-page-container__nav ${
-          typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__nav ${typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-nav"
             : "admin-page-container__small-nav"
-        }`}
-        // style={{
-        //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
-        // }}
+          }`}
+      // style={{
+      //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
+      // }}
       >
         <div className="admin-page-container__nav-logo">
           {typeMenu === TYPE_MENU.BIG && (
@@ -380,11 +372,10 @@ function AdminPage(props) {
         <div className="admin-page-container__nav-list">{renderMenuPage()}</div>
       </div>
       <div
-        className={`admin-page-container__page ${
-          typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__page ${typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-page"
             : "admin-page-container__small-page"
-        }`}
+          }`}
       >
         <div className="admin-page-container__page-header">
           <div className="admin-page-container__page-header-title-page">
