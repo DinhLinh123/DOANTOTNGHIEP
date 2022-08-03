@@ -7,7 +7,7 @@ import {
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, TagsOutlined } from "@ant-design/icons";
 import "./pay.scss";
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
@@ -302,6 +302,13 @@ function Spending(props) {
                                 <div className="pay-manager__bill-dish-footer-total-money">
                                     {commonFunction.numberWithCommas(renderTotalCount())}(đ)
                                 </div>
+                            </div>
+                            <div className="pay-manager__bill-dish-footer-offer">
+                                <div className="pay-manager__bill-dish-footer-offer">
+                                    <TagsOutlined />
+                                    Mã giảm giá
+                                </div>
+                                <Button2 name={"Chọn mã giảm giá"} />
                             </div>
                             <div className="pay-manager__bill-dish-footer-confirm">
                                 <Button2 name={"Xác nhận"} />
