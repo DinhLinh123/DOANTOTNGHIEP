@@ -3,6 +3,7 @@ import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
   SORT_TYPE,
+  TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
@@ -12,9 +13,13 @@ import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./menu.scss";
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
-
+import baseApi from "../../../../../api/baseApi"
 import { Tooltip, Upload, Radio } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import { API_MENU } from "../../../../base/common/endpoint";
+import commonFunction from "../../../../base/common/commonFunction";
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
@@ -38,6 +43,8 @@ function Menu(props) {
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, index: -1 });
 
   const [images, setImages] = useState([]);
+
+  const dispatch = useDispatch();
 
   const COLUMN_TABLE_INDEX_MENU = {
     NAME: "name",
@@ -316,7 +323,7 @@ function Menu(props) {
           return (
             <div className="menu-manager__popup-content-buffet-food-item">
               <div className="menu-manager__popup-content-buffet-food-item-input">
-                <Input  
+                <Input
                   defaultValue={item.food}
                   onBlurInput={(val) => ChangeNameFood(val, index)}
                   placeholder={"Tên món trong gói buffet..."}
@@ -340,7 +347,7 @@ function Menu(props) {
   };
 
   function renderListFood(list) {
-    if(list?.length > 0){
+    if (list?.length > 0) {
       let _list = JSON.parse(list)
 
       return (
@@ -371,6 +378,39 @@ function Menu(props) {
     setIsShowPopupDetail({ show: false, index: -1 })
   }
 
+  function callAddNewFood() {
+    dispatch(changeLoadingApp(true))
+    let body = {
+      name: foodName,
+      theLoai: index,
+      linkAnh: foodImage,
+      maTheLoai: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      loai: "string",
+      ghiChu: foodNote,
+      danhSachMonAn: "string",
+      donViTinh: foodUnit,
+      trangThai: foodStatus != 0,
+      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      createdByUserName: "string",
+      createdOnDate: "2022-08-04T14:31:40.035Z"
+    }
+
+    baseApi.post(
+      (res) => {
+        dispatch(changeLoadingApp(false))
+        setIsShowPopupAddnew(false)
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm món thành công")
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm món thất bại")
+      },
+      null,
+      API_MENU.CREATE_NEW,
+      null,
+      body
+    )
+  }
 
 
   return (
@@ -415,11 +455,11 @@ function Menu(props) {
               onClick={() => {
                 setFoodName("")
                 setIsShowPopupAddnew(false)
-              } }
+              }}
             />,
             <Button2
               name={"Lưu"}
-              onClick={() => setIsShowPopupAddnew(false)}
+              onClick={() => callAddNewFood()}
               background="#fa983a"
             />,
           ]}
@@ -509,8 +549,6 @@ function Menu(props) {
                       <Radio value={0}>Hết</Radio>
                     </Radio.Group>
                   </div>
-
-
                 )}
 
                 {index == 2 && (

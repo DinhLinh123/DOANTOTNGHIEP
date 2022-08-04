@@ -485,13 +485,13 @@ function Spending(props) {
         title={"Danh sách voucher"}
         show={showPopupOffer}
         onClickClose={() => {
-          setShowPopupOffer(true);
+          setShowPopupOffer(false);
         }}
         button={[
           <Button2
             name={"Đóng"}
             onClick={() => {
-              setShowPopupOffer(true);
+              setShowPopupOffer(false);
             }}
           />,
         ]}
