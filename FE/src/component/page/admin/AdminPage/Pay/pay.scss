@@ -1,244 +1,341 @@
 .pay-manager {
-    height: 100%;
-    display: flex;
+  height: 100%;
+  display: flex;
 
-    &__area {
-        width: 300px;
-        background-color: white;
-        padding: 8px;
+  &__area {
+    width: 300px;
+    background-color: white;
+    padding: 8px;
 
-        &-name {
-            font-weight: bold;
-            text-align: left;
-            margin-bottom: 8px;
-            margin-top: 5px;
+    &-name {
+      font-weight: bold;
+      text-align: left;
+      margin-bottom: 8px;
+      margin-top: 5px;
+    }
+
+    &-table {
+      display: grid;
+      grid-template-columns: auto auto auto auto;
+      grid-gap: 8px;
+      border-bottom-style: groove;
+      padding-bottom: 10px;
+
+      &-name {
+        border-style: outset;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 65px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__bill {
+    width: calc(100% - 300px);
+
+    &-dish {
+      width: 400px;
+      margin-left: auto;
+      background-color: #fff;
+
+      &-top {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        color: #01a3a4;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0 16px;
+
+        &-title {
+          width: 50%;
+          text-align: left;
         }
 
         &-table {
-            display: grid;
-            grid-template-columns: auto auto auto auto;
-            grid-gap: 8px;
-            border-bottom-style: groove;
-            padding-bottom: 10px;
-
-            &-name {
-                border-style: outset;
-                border-radius: 5px;
-                cursor: pointer;
-                width: 65px;
-                height: 35px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+          width: 50%;
+          text-align: right;
         }
-    }
+      }
 
-    &__bill {
-        width: calc(100% - 300px);
+      &-content {
+        height: calc(100vh - 323px);
+        overflow-y: auto;
+        border-top: 1px solid #a4b0be;
+        padding: 8px 16px;
 
-        &-dish {
-            width: 400px;
-            margin-left: auto;
-            background-color: #fff;
+        &-header {
+          // height: 36px;
+          display: flex;
+          align-items: center;
+          color: #01a3a4;
 
-            &-top {
-                height: 80px;
-                display: flex;
-                align-items: center;
-                color: #01a3a4;
-                font-size: 18px;
-                font-weight: bold;
-                padding: 0 16px;
+          &-name {
+            width: 375px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: left;
+          }
 
-                &-title {
-                    width: 50%;
-                    text-align: left;
-                }
+          &-count {
+            width: 100px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
 
-                &-table {
-                    width: 50%;
-                    text-align: right;
-                }
+          &-money {
+            text-align: right;
+            width: 125px;
+            font-weight: bold;
+          }
+        }
+
+        &-choose {
+          min-height: 50px;
+          border-bottom: 1px solid #ced6e0;
+
+          &-line1 {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            padding: 0 16px;
+
+            .food-name {
+              width: 400px;
+              font-size: 18px;
+              text-align: left;
             }
 
-            &-content {
-                height: calc(100vh - 336px);
-                overflow-y: auto;
-                border-top: 1px solid #a4b0be;
-                padding: 16px;
+            .line1-food-count {
+              width: 50px;
+              font-size: 18px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
 
-                &-header {
-                    height: 50px;
+            .food-money {
+              text-align: right;
+              width: 150px;
+              font-weight: bold;
+              font-size: 18px;
+            }
+          }
+
+          &-line2 {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            padding: 0 16px;
+            transition: height 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
+              opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+
+            .food-count {
+              display: flex;
+              align-items: center;
+              width: 90px;
+              justify-content: space-between;
+              margin-left: auto;
+
+              &-number {
+                margin: 0 10px;
+              }
+
+              &-button {
+                .button-common {
+                  width: 26px;
+
+                  button {
                     display: flex;
-                    align-items: center;
-                    color: #01a3a4;
-
-                    &-name {
-                        width: 375px;
-                        font-size: 16px;
-                        font-weight: bold;
-                        text-align: left;
-                    }
-
-                    &-count {
-                        width: 100px;
-                        font-weight: bold;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-
-                    &-money {
-                        text-align: right;
-                        width: 125px;
-                        font-weight: bold;
-                    }
-                }
-
-                &-choose {
-                    min-height: 50px;
-                    border-bottom: 1px solid #ced6e0;
-
-                    &-line1 {
-                        height: 48px;
-                        display: flex;
-                        align-items: center;
-                        border-top-left-radius: 4px;
-                        border-top-right-radius: 4px;
-                        padding: 0 16px;
-
-                        .food-name {
-                            width: 400px;
-                            font-size: 18px;
-                            text-align: left;
-                        }
-
-                        .line1-food-count {
-                            width: 50px;
-                            font-size: 18px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
-
-                        .food-money {
-                            text-align: right;
-                            width: 150px;
-                            font-weight: bold;
-                            font-size: 18px;
-                        }
-
-                    }
-
-                    &-line2 {
-                        height: 48px;
-                        display: flex;
-                        align-items: center;
-                        border-bottom-left-radius: 4px;
-                        border-bottom-right-radius: 4px;
-                        padding: 0 16px;
-                        transition: height .2s cubic-bezier(.645, .045, .355, 1), opacity .2s cubic-bezier(.645, .045, .355, 1) !important;
-
-                        .food-count {
-                            display: flex;
-                            align-items: center;
-                            width: 90px;
-                            justify-content: space-between;
-                            margin-left: auto;
-
-                            &-number {
-                                margin: 0 10px;
-                            }
-
-                            &-button {
-                                .button-common {
-                                    width: 26px;
-
-                                    button {
-                                        display: flex;
-                                        height: 24px;
-                                        width: 24px;
-                                        border-radius: 50%;
-                                        border: 1px solid #1e90ff;
-                                        align-items: center;
-                                        justify-content: center;
-                                        color: #1e90ff;
-                                        min-width: unset;
-                                    }
-                                }
-                            }
-                        }
-
-
-                        .food-close {
-                            width: 50px;
-                            margin-left: 68px;
-                            display: flex;
-                            justify-content: center;
-
-                            .button-common {
-                                button {
-                                    border: 1px solid red;
-                                    width: 24px;
-                                    height: 24px;
-                                    border-radius: 50%;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    color: red !important;
-                                    min-width: unset;
-                                }
-                            }
-                        }
-                    }
-
-
-                }
-
-                &-no-data {
-                    height: calc(100% - 50px);
-                    display: flex;
+                    height: 24px;
+                    width: 24px;
+                    border-radius: 50%;
+                    border: 1px solid #1e90ff;
                     align-items: center;
                     justify-content: center;
+                    color: #1e90ff;
+                    min-width: unset;
+                  }
                 }
+              }
             }
 
-            &-footer {
-                height: 150px;
-                border-top: 1px solid #a4b0be;
-                padding: 16px;
+            .food-close {
+              width: 50px;
+              margin-left: 68px;
+              display: flex;
+              justify-content: center;
 
-                &-total {
-                    display: flex;
-                    align-items: center;
-                    color: #01a3a4;
-                    font-size: 18px;
-                    font-weight: bold;
-                    height: 50px;
-                    margin-bottom: 24px;
-
-                    &-title {
-                        width: 50%;
-                        text-align: left;
-                    }
-
-                    &-money {
-                        width: 50%;
-                        text-align: right;
-                    }
+              .button-common {
+                button {
+                  border: 1px solid red;
+                  width: 24px;
+                  height: 24px;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: red !important;
+                  min-width: unset;
                 }
-
-                &-confirm {
-                    .button-common {
-                        button {
-                            width: 70%;
-                            border-radius: 50px;
-                        }
-                    }
-                }
+              }
             }
-
+          }
         }
+
+        &-no-data {
+          height: calc(100% - 50px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      &-footer {
+        height: 170px;
+        border-top: 1px solid #a4b0be;
+        padding: 8px 16px;
+
+        &-total {
+          display: flex;
+          align-items: center;
+          color: #01a3a4;
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: 8px;
+
+          &-title {
+            width: 50%;
+            text-align: left;
+          }
+
+          &-money {
+            width: 50%;
+            text-align: right;
+          }
+        }
+
+        &-offer {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+
+          &-title {
+            display: flex;
+            align-items: center;
+            color: #01a3a4;
+
+            &-icon {
+              margin-right: 4px;
+            }
+          }
+
+          &-choose {
+            margin-left: auto;
+            color: #00cec9;
+            cursor: pointer;
+            text-decoration: underline;
+          }
+        }
+
+        &-money-offer {
+          display: flex;
+          align-items: center;
+          color: #01a3a4;
+          margin-bottom: 8px;
+
+          &-title {
+            display: flex;
+            align-items: center;
+          }
+
+          &-choose {
+            margin-left: auto;
+            cursor: pointer;
+            text-decoration: underline;
+          }
+        }
+
+        &-money {
+          display: flex;
+          align-items: center;
+          color: #e74c3c;
+          margin-bottom: 8px;
+          font-weight: bold;
+
+          &-title {
+            display: flex;
+            align-items: center;
+          }
+
+          &-choose {
+            margin-left: auto;
+            cursor: pointer;
+            text-decoration: underline;
+          }
+        }
+
+        &-confirm {
+          .button-common {
+            button {
+              width: 70%;
+              border-radius: 50px;
+              height: 32px;
+              margin-left: auto;
+            }
+          }
+        }
+      }
     }
+  }
+}
+
+.pay-offer-container__list {
+  margin: 50px 0;
+  padding: 0 50px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 24px;
+
+  &-item {
+    width: 100%;
+    height: fit-content;
+    border-radius: 24px;
+    padding: 6px;
+    box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%),
+      0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%),
+      0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
+    cursor: pointer;
+
+    &-img {
+      img {
+        width: 100%;
+        border-radius: 24px;
+      }
+    }
+
+    &-title {
+      margin: 8px 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    &-detail {
+      text-align: right;
+
+      &:hover {
+        color: #01a3a4;
+      }
+    }
+  }
 }
