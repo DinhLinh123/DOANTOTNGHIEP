@@ -241,7 +241,7 @@ function AdminPage(props) {
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-kitchen-text">
-                          Quản lý nguyên liệu
+                          Quản lý hóa đơn bếp
                         </div>
                       )}
                     </div>
@@ -260,7 +260,7 @@ function AdminPage(props) {
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-kitchen-text">
-                          Thêm nguyên liệu mới
+                          Yêu cầu nguyên liệu
                         </div>
                       )}
                     </div>
@@ -283,7 +283,7 @@ function AdminPage(props) {
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-bar-text">
-                          Quản lý nguyên liệu
+                          Hàng sắp hết 
                         </div>
                       )}
                     </div>
@@ -302,7 +302,7 @@ function AdminPage(props) {
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-bar-text">
-                          Thêm nguyên liệu mới
+                          Quản lý mặt hàng
                         </div>
                       )}
                     </div>
