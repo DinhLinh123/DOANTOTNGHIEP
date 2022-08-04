@@ -37,6 +37,12 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<Guid?>("DatBanId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("IdKhuVuc")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("KhuVucId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("KieuDang")
                         .HasColumnType("nvarchar(max)");
 
@@ -44,6 +50,9 @@ namespace ManagerRestaurant.API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Left")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LoaiBan")
@@ -55,9 +64,17 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<int>("SoNguoiToiDa")
                         .HasColumnType("int");
 
+                    b.Property<string>("TenKhuVuc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Top")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DatBanId");
+
+                    b.HasIndex("KhuVucId");
 
                     b.ToTable("Ban");
                 });
@@ -591,6 +608,10 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.DatBan", null)
                         .WithMany("Ban")
                         .HasForeignKey("DatBanId");
+
+                    b.HasOne("Infratructure.Datatables.KhuVuc", null)
+                        .WithMany("Bans")
+                        .HasForeignKey("KhuVucId");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.KhachHang", b =>
@@ -623,6 +644,11 @@ namespace ManagerRestaurant.API.Migrations
                     b.Navigation("Ban");
 
                     b.Navigation("KhachHang");
+                });
+
+            modelBuilder.Entity("Infratructure.Datatables.KhuVuc", b =>
+                {
+                    b.Navigation("Bans");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.Oder", b =>

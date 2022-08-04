@@ -22,23 +22,11 @@ namespace ManagerRestaurant.API.Controllers
         {
             _context = context;
         }
-        //// GET: api/<LoginController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<LoginController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+        
 
         // POST api/<LoginController>
         [HttpPost("/Login")]
-        public async Task<Responsive> Post(UserLoginModel userLogin )
+        public Responsive Post(UserLoginModel userLogin )
         {
             try
             {
@@ -66,7 +54,7 @@ namespace ManagerRestaurant.API.Controllers
 
         // POST api/<LoginController>
         [HttpPost("/Logout")]
-        public async Task<Responsive> PostLogout(UserLoginModel userLogin)
+        public Responsive PostLogout(UserLoginModel userLogin)
         {
             try
             {
@@ -96,7 +84,7 @@ namespace ManagerRestaurant.API.Controllers
 
         // POST api/<LoginController>
         [HttpGet("/GetSatusLogin")]
-        public async Task<Responsive> PostGetSatusLogin(string username)
+        public Responsive PostGetSatusLogin(string username)
         {
             try
             {
@@ -132,18 +120,6 @@ namespace ManagerRestaurant.API.Controllers
             {
                 return new Responsive(500, ex.InnerException.Message, null);
             }
-        }
-
-        //// PUT api/<LoginController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<LoginController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        } 
     }
 }

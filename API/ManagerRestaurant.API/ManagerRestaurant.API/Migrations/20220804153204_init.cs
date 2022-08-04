@@ -232,13 +232,18 @@ namespace ManagerRestaurant.API.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SoNguoiToiDa = table.Column<int>(type: "int", nullable: false),
                     LoaiBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Top = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Left = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     KieuDang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdKhuVuc = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenKhuVuc = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModifiedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DatBanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DatBanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    KhuVucId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -247,6 +252,12 @@ namespace ManagerRestaurant.API.Migrations
                         name: "FK_Ban_DatBan_DatBanId",
                         column: x => x.DatBanId,
                         principalTable: "DatBan",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ban_KhuVuc_KhuVucId",
+                        column: x => x.KhuVucId,
+                        principalTable: "KhuVuc",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -324,6 +335,11 @@ namespace ManagerRestaurant.API.Migrations
                 column: "DatBanId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ban_KhuVucId",
+                table: "Ban",
+                column: "KhuVucId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_KhachHang_DatBanId",
                 table: "KhachHang",
                 column: "DatBanId");
@@ -359,9 +375,6 @@ namespace ManagerRestaurant.API.Migrations
                 name: "KhachHang");
 
             migrationBuilder.DropTable(
-                name: "KhuVuc");
-
-            migrationBuilder.DropTable(
                 name: "Oder");
 
             migrationBuilder.DropTable(
@@ -378,6 +391,9 @@ namespace ManagerRestaurant.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "YKienDongGop");
+
+            migrationBuilder.DropTable(
+                name: "KhuVuc");
 
             migrationBuilder.DropTable(
                 name: "DatBan");
