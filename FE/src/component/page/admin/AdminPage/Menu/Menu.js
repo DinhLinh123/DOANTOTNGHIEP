@@ -29,7 +29,7 @@ function Menu(props) {
   const [foodUnit, setFoodUnit] = useState("");
   const [foodPrice, setFoodPrice] = useState("");
   const [foodDescribe, setFoodDescribe] = useState("");
-  const [foodImage, setFoodImage] = useState("");
+  const [foodImage, setFoodImage] = useState("dfsd");
   const [foodStatus, setFoodStatus] = useState(1);
   const [foodNote, setFoodNote] = useState("");
   const [foodDetail, setFoodDetail] = useState({});
@@ -381,18 +381,18 @@ function Menu(props) {
   function callAddNewFood() {
     dispatch(changeLoadingApp(true))
     let body = {
-      name: foodName,
-      theLoai: index,
-      linkAnh: foodImage,
-      maTheLoai: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      loai: "string",
-      ghiChu: foodNote,
-      danhSachMonAn: "string",
-      donViTinh: foodUnit,
-      trangThai: foodStatus != 0,
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-08-04T14:31:40.035Z"
+      "name": foodName,
+      "theLoai": index.toString(),
+      "linkAnh": foodImage,
+      "maTheLoai": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "loai": "string",
+      "ghiChu": foodNote,
+      "danhSachMonAn": "string",
+      "donViTinh": foodUnit,
+      "trangThai": foodStatus != 0,
+      "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "createdByUserName": "string",
+      "createdOnDate": "2022-08-04T14:31:40.035Z"
     }
 
     baseApi.post(
@@ -408,7 +408,20 @@ function Menu(props) {
       null,
       API_MENU.CREATE_NEW,
       null,
-      body
+      {
+        "name": foodName,
+        "theLoai": index.toString(),
+        "linkAnh": foodImage,
+        "maTheLoai": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "loai": "string",
+        "ghiChu": foodNote,
+        "danhSachMonAn": "string",
+        "donViTinh": foodUnit,
+        "trangThai": foodStatus != 0,
+        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "createdByUserName": "string",
+        "createdOnDate": "2022-08-04T14:31:40.035Z"
+      }
     )
   }
 
