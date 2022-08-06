@@ -302,7 +302,7 @@ function AdminPage(props) {
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-bar-text">
-                          Quản lý mặt hàng
+                          Quản lý kho
                         </div>
                       )}
                     </div>

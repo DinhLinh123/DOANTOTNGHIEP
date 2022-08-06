@@ -17,8 +17,8 @@ function BarInsert(props) {
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [staffCode, setStaffCode] = useState("");
-    const [staffName, setStaffName] = useState("");
+    const [itemsCode, setItemsCode] = useState("");
+    const [itemsName, setItemsName] = useState("");i
     const [staffSex, setStaffSex] = useState(1);
     const [staffDate, setStaffDate] = useState(moment().unix()
     * 1000);
@@ -224,8 +224,8 @@ function BarInsert(props) {
     function onChangeTab() {
         setIsShowPopupAddnew(false)
         setStaffAddress("")
-        setStaffCode("")
-        setStaffName("")
+        setItemsCode("")
+        setItemsName("")
         setStaffDate("")
         setStaffPhone("")
         setStaffNote("")
@@ -237,7 +237,7 @@ function BarInsert(props) {
         setIsShowPopupAddPosition(false)
     }
 
-    useEffect(()=>{console.log(staffName)},[staffName])
+    useEffect(()=>{console.log(itemsName)},[itemsName])
     return (
         <AdminPage
             title={"Quản lý quầy Bar"}
@@ -271,16 +271,16 @@ function BarInsert(props) {
                         //onClick={() => handleClickAddPosition()}
                         />
                     </div>
-                    <div className="staff-manager__button-position">
+                    {/* <div className="staff-manager__button-position">
                         <Button2
                             name={"Thêm mới Chức vụ"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddPosition()}
                         />
-                    </div>
+                    </div> */}
                     <div className="staff-manager__button-create-new">
                         <Button2
-                            name={"Thêm mới nhân viên"}
+                            name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
                         />
@@ -304,7 +304,7 @@ function BarInsert(props) {
                     />
                 </div>
                 <Popup
-                    title={"Thêm mới nhân viên"}
+                    title={"Thêm mới mặt hàng"}
                     show={isShowPopupAddnew}
                     onClickClose={() => onChangeTab()}
                     button={[
@@ -322,25 +322,6 @@ function BarInsert(props) {
                     //className={"staff-manager-create"}
                     body={
                         <div className="staff-manager__popup">
-                            <Input
-                                label={"Mã nhân viên"}
-                                defaultValue={staffCode}
-                                onChange={(val) => {
-                                    setStaffCode(val);
-                                }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Tên nhân viên"}
-                                defaultValue={staffName}
-                                onChange={(val) => { setStaffName(val) }}
-                                autoFocus
-                            />
-                            <div className="staff-manager__popup-sex-lable">Giới tính</div>
-                            <Radio.Group onChange={(val) => { setStaffSex(val.target.value) }} value={staffSex}>
-                                <Radio value={1}>Nam</Radio>
-                                <Radio value={0}>Nữ</Radio>
-                            </Radio.Group>
                             <DatePicker
                                 defaultValue={staffDate}
                                 onChange={(val) => {
@@ -349,6 +330,26 @@ function BarInsert(props) {
                                 placeholder="dd/MM/yyyy"
                                 label={"Ngày sinh"}
                             />
+                            <Input
+                                label={"Mã mặt hàng"}
+                                defaultValue={itemsCode}
+                                onChange={(val) => {
+                                    setItemsCode(val);
+                                }}
+                                autoFocus
+                            />
+                            <Input
+                                label={"Tên mặt hàng"}
+                                defaultValue={itemsName}
+                                onChange={(val) => { setItemsName(val) }}
+                                autoFocus
+                            />
+                            <div className="staff-manager__popup-sex-lable">Giới tính</div>
+                            <Radio.Group onChange={(val) => { setStaffSex(val.target.value) }} value={staffSex}>
+                                <Radio value={1}>Nam</Radio>
+                                <Radio value={0}>Nữ</Radio>
+                            </Radio.Group>
+                            
                             <div className="staff-manager__popup-position-lable">Chức vụ</div>
                             <div className="staff-manager__popup-position-select">
                                 <Select
@@ -386,42 +387,6 @@ function BarInsert(props) {
                                 label={"Ghi chú"}
                                 defaultValue={staffNote}
                                 onChange={(val) => { setStaffNote(val) }}
-                                autoFocus
-                            />
-                        </div>
-                    }
-                />
-                <Popup
-                    title={"Thêm mới chức vụ"}
-                    show={isShowPopupAddPosition}
-                    onClickClose={() => onChangeAddPosition()}
-                    button={[
-                        <Button2
-                            name={"Đóng"}
-                            onClick={() => onChangeAddPosition()}
-                        />,
-                        <Button2
-                            name={"Lưu"}
-                            onClick={() => onChangeAddPosition()}
-                            background="#fa983a"
-                        />,
-                    ]}
-                    width={600}
-                    className={"menu-popup-create"}
-                    body={
-                        <div>
-                            <Input
-                                label={"Mã chức vụ"}
-                                defaultValue={PositionCode}
-                                onChange={(val) => {
-                                    setPositionCode(val);
-                                }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Tên chức vụ"}
-                                defaultValue={PositionName}
-                                onChange={(val) => { setPositionName(val) }}
                                 autoFocus
                             />
                         </div>
