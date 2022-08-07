@@ -10,10 +10,11 @@ namespace ManagerRestaurant.API.Models
         public string LinkAnh { get; set; }
         public string Loai { get; set; }
         public Guid MaTheLoai { get; set; }
-
+        public string TenTheLoai { get; set; }
         public string GhiChu { get; set; }
         public string DanhSachMonAn { get; set; }
         public string DonViTinh { get; set; }
+        public float DonGia { get; set; }
         public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
@@ -28,11 +29,11 @@ namespace ManagerRestaurant.API.Models
         public string TheLoai { get; set; }
         public string LinkAnh { get; set; }
         public Guid MaTheLoai { get; set; }
-
         public string Loai { get; set; }
         public string GhiChu { get; set; }
         public string DanhSachMonAn { get; set; }
         public string DonViTinh { get; set; }
+        public float DonGia { get; set; }
         public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
@@ -47,6 +48,7 @@ namespace ManagerRestaurant.API.Models
         public string Loai { get; set; }
         public string GhiChu { get; set; }
         public string DonViTinh { get; set; }
+        public float DonGia { get; set; }
         public string DanhSachMonAn { get; set; }
         public Guid MaTheLoai { get; set; }
          

@@ -102,18 +102,21 @@ namespace ManagerRestaurant.API.Controllers
             {
                 //conver
                 var doAn = new DoAn();
-                doAn.Id = Guid.NewGuid();
+                doAn.Id = Guid.NewGuid();  
                 doAn.Name = item.Name;
                 doAn.MaTheLoai = item.MaTheLoai;
                 doAn.LinkAnh = item.LinkAnh;
+                doAn.MaTheLoai = item.MaTheLoai;
                 doAn.Loai = item.Loai;
                 doAn.GhiChu = item.GhiChu;
                 doAn.DanhSachMonAn = item.DanhSachMonAn;
                 doAn.DonViTinh = item.DonViTinh;
+                doAn.DonGia = item.DonGia;
                 doAn.TrangThai = item.TrangThai;
                 doAn.CreatedByUserId = item.CreatedByUserId;
                 doAn.CreatedByUserName = item.CreatedByUserName;
                 doAn.CreatedOnDate = item.CreatedOnDate;
+
                 _context.DoAn.Add(doAn);
                 await _context.SaveChangesAsync();
 
@@ -193,7 +196,7 @@ namespace ManagerRestaurant.API.Controllers
 
             return NoContent();
         }
-         
+
     }
 
     class DoAnFilter : BaseFilter

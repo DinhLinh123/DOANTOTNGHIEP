@@ -14,6 +14,7 @@ namespace Infratructure.Datatables
         public string Loai { get; set; }
         public string GhiChu { get; set; }
         public string DanhSachMonAn { get; set; }
+        public float DonGia { get; set; }
         public string DonViTinh { get; set; }
         public bool TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
