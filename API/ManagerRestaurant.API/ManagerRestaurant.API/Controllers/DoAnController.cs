@@ -63,15 +63,12 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     doAn.Name = item.Name;
                     doAn.MaTheLoai = item.MaTheLoai;
+                    doAn.TheLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(item.MaTheLoai);
                     doAn.LinkAnh = item.LinkAnh;
-                    doAn.Loai = item.Loai;
                     doAn.GhiChu = item.GhiChu;
                     doAn.DanhSachMonAn = item.DanhSachMonAn;
                     doAn.DonViTinh = item.DonViTinh;
-                    doAn.TrangThai = item.TrangThai;
-                    doAn.CreatedByUserId = item.CreatedByUserId;
-                    doAn.CreatedByUserName = item.CreatedByUserName;
-                    doAn.CreatedOnDate = item.CreatedOnDate;
+                    doAn.TrangThai = item.TrangThai; 
 
                     await _context.SaveChangesAsync();
                     res.Code = 200;
@@ -102,20 +99,21 @@ namespace ManagerRestaurant.API.Controllers
             {
                 //conver
                 var doAn = new DoAn();
-                doAn.Id = Guid.NewGuid();  
+                doAn.Id = Guid.NewGuid();
                 doAn.Name = item.Name;
                 doAn.MaTheLoai = item.MaTheLoai;
+                doAn.TheLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(item.MaTheLoai);
                 doAn.LinkAnh = item.LinkAnh;
-                doAn.MaTheLoai = item.MaTheLoai;
-                doAn.Loai = item.Loai;
                 doAn.GhiChu = item.GhiChu;
                 doAn.DanhSachMonAn = item.DanhSachMonAn;
-                doAn.DonViTinh = item.DonViTinh;
                 doAn.DonGia = item.DonGia;
+                doAn.DonViTinh = item.DonViTinh;
                 doAn.TrangThai = item.TrangThai;
                 doAn.CreatedByUserId = item.CreatedByUserId;
                 doAn.CreatedByUserName = item.CreatedByUserName;
-                doAn.CreatedOnDate = item.CreatedOnDate;
+                doAn.CreatedOnDate = DateTime.Now;
+                doAn.LastModifiedByUserId = Guid.Empty;
+                doAn.LastModifiedByUserName = string.Empty;
 
                 _context.DoAn.Add(doAn);
                 await _context.SaveChangesAsync();
@@ -144,7 +142,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.TheLoaiMonAn.Name.Contains(filter.TextSearch));
                 }
                 if (filter.MaTheLoai != Guid.Empty)
                 {

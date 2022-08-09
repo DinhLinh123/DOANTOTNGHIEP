@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ManagerRestaurant.API.Infratructure.Datatables
 {
@@ -12,5 +13,6 @@ namespace ManagerRestaurant.API.Infratructure.Datatables
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
+        public ICollection<MonAn> MonAns { get; set; }
     }
 }

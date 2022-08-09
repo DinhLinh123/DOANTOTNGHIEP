@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ManagerRestaurant.API.Infratructure.Datatables;
+using System; 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; 
 
 namespace Infratructure.Datatables
 {
     public class DoAn
     {
+        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
+        [ForeignKey("TheLoaiMonAn")]
         public Guid MaTheLoai { get; set; }
-        public string LinkAnh { get; set; }
-        public string Loai { get; set; }
+        public TheLoaiMonAn TheLoaiMonAn { get; set; }
+        public string LinkAnh { get; set; } 
         public string GhiChu { get; set; }
         public string DanhSachMonAn { get; set; }
         public float DonGia { get; set; }
