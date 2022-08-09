@@ -63,7 +63,7 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     doAn.Name = item.Name;
                     doAn.MaTheLoai = item.MaTheLoai;
-                    doAn.TheLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(item.MaTheLoai);
+                    doAn.TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(item.MaTheLoai);
                     doAn.LinkAnh = item.LinkAnh;
                     doAn.GhiChu = item.GhiChu;
                     doAn.DanhSachMonAn = item.DanhSachMonAn;
@@ -102,7 +102,7 @@ namespace ManagerRestaurant.API.Controllers
                 doAn.Id = Guid.NewGuid();
                 doAn.Name = item.Name;
                 doAn.MaTheLoai = item.MaTheLoai;
-                doAn.TheLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(item.MaTheLoai);
+                doAn.TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(item.MaTheLoai);
                 doAn.LinkAnh = item.LinkAnh;
                 doAn.GhiChu = item.GhiChu;
                 doAn.DanhSachMonAn = item.DanhSachMonAn;
@@ -142,7 +142,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.TheLoaiMonAn.Name.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.TheLoaiDoAn.Name.Contains(filter.TextSearch));
                 }
                 if (filter.MaTheLoai != Guid.Empty)
                 {

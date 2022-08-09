@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
-using ManagerRestaurant.API.Infratructure.Datatables;
+using Infratructure.Datatables;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -21,38 +21,38 @@ namespace ManagerRestaurant.API.Controllers
             _context = context;
         }
 
-        // GET: api/TheLoaiMonAn
+        // GET: api/TheLoaiDoAn
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TheLoaiMonAn>>> GetTheLoaiMonAn()
+        public async Task<ActionResult<IEnumerable<TheLoaiDoAn>>> GetTheLoaiMonAn()
         {
-            return await _context.TheLoaiMonAn.ToListAsync();
+            return await _context.TheLoaiDoAn.ToListAsync();
         }
 
-        // GET: api/TheLoaiMonAn/5
+        // GET: api/TheLoaiDoAn/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TheLoaiMonAn>> GetTheLoaiMonAn(Guid id)
+        public async Task<ActionResult<TheLoaiDoAn>> GetTheLoaiMonAn(Guid id)
         {
-            var theLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(id);
+            var TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(id);
 
-            if (theLoaiMonAn == null)
+            if (TheLoaiDoAn == null)
             {
                 return NotFound();
             }
 
-            return theLoaiMonAn;
+            return TheLoaiDoAn;
         }
 
-        // PUT: api/TheLoaiMonAn/5
+        // PUT: api/TheLoaiDoAn/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTheLoaiMonAn(Guid id, TheLoaiMonAn theLoaiMonAn)
+        public async Task<IActionResult> PutTheLoaiMonAn(Guid id, TheLoaiDoAn TheLoaiDoAn)
         {
-            if (id != theLoaiMonAn.Id)
+            if (id != TheLoaiDoAn.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(theLoaiMonAn).State = EntityState.Modified;
+            _context.Entry(TheLoaiDoAn).State = EntityState.Modified;
 
             try
             {
@@ -73,28 +73,28 @@ namespace ManagerRestaurant.API.Controllers
             return NoContent();
         }
 
-        // POST: api/TheLoaiMonAn
+        // POST: api/TheLoaiDoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TheLoaiMonAn>> PostTheLoaiMonAn(TheLoaiMonAn theLoaiMonAn)
+        public async Task<ActionResult<TheLoaiDoAn>> PostTheLoaiMonAn(TheLoaiDoAn TheLoaiDoAn)
         {
-            _context.TheLoaiMonAn.Add(theLoaiMonAn);
+            _context.TheLoaiDoAn.Add(TheLoaiDoAn);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTheLoaiMonAn", new { id = theLoaiMonAn.Id }, theLoaiMonAn);
+            return CreatedAtAction("GetTheLoaiMonAn", new { id = TheLoaiDoAn.Id }, TheLoaiDoAn);
         }
 
-        // DELETE: api/TheLoaiMonAn/5
+        // DELETE: api/TheLoaiDoAn/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTheLoaiMonAn(Guid id)
         {
-            var theLoaiMonAn = await _context.TheLoaiMonAn.FindAsync(id);
-            if (theLoaiMonAn == null)
+            var TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(id);
+            if (TheLoaiDoAn == null)
             {
                 return NotFound();
             }
 
-            _context.TheLoaiMonAn.Remove(theLoaiMonAn);
+            _context.TheLoaiDoAn.Remove(TheLoaiDoAn);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +102,7 @@ namespace ManagerRestaurant.API.Controllers
 
         private bool TheLoaiMonAnExists(Guid id)
         {
-            return _context.TheLoaiMonAn.Any(e => e.Id == id);
+            return _context.TheLoaiDoAn.Any(e => e.Id == id);
         }
     }
 }

@@ -59,30 +59,6 @@ namespace ManagerRestaurant.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoAn",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MaTheLoai = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LinkAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Loai = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DanhSachMonAn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DonViTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TrangThai = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModifiedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DoAn", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "KhuVuc",
                 columns: table => new
                 {
@@ -186,6 +162,24 @@ namespace ManagerRestaurant.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TheLoaiDoAn",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isMany = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TheLoaiDoAn", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UuDai",
                 columns: table => new
                 {
@@ -193,6 +187,8 @@ namespace ManagerRestaurant.API.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Anh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GiaTri = table.Column<float>(type: "real", nullable: false),
+                    TheLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -329,6 +325,36 @@ namespace ManagerRestaurant.API.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DoAn",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaTheLoai = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LinkAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DanhSachMonAn = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonGia = table.Column<float>(type: "real", nullable: false),
+                    DonViTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TrangThai = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoAn", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoAn_TheLoaiDoAn_MaTheLoai",
+                        column: x => x.MaTheLoai,
+                        principalTable: "TheLoaiDoAn",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Ban_DatBanId",
                 table: "Ban",
@@ -338,6 +364,11 @@ namespace ManagerRestaurant.API.Migrations
                 name: "IX_Ban_KhuVucId",
                 table: "Ban",
                 column: "KhuVucId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoAn_MaTheLoai",
+                table: "DoAn",
+                column: "MaTheLoai");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KhachHang_DatBanId",
@@ -394,6 +425,9 @@ namespace ManagerRestaurant.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "KhuVuc");
+
+            migrationBuilder.DropTable(
+                name: "TheLoaiDoAn");
 
             migrationBuilder.DropTable(
                 name: "DatBan");

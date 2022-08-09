@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ManagerRestaurant.API.Infratructure.Datatables
+namespace Infratructure.Datatables
 {
-    public class TheLoaiMonAn
+    public class TheLoaiDoAn
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -12,7 +12,6 @@ namespace ManagerRestaurant.API.Infratructure.Datatables
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
-        public string LastModifiedByUserName { get; set; }
-        public ICollection<MonAn> MonAns { get; set; }
+        public string LastModifiedByUserName { get; set; } 
     }
 }

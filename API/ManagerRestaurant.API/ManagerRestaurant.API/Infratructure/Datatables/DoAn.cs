@@ -10,9 +10,9 @@ namespace Infratructure.Datatables
         [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        [ForeignKey("TheLoaiMonAn")]
+        [ForeignKey("TheLoaiDoAn")]
         public Guid MaTheLoai { get; set; }
-        public TheLoaiMonAn TheLoaiMonAn { get; set; }
+        public TheLoaiDoAn TheLoaiDoAn { get; set; }
         public string LinkAnh { get; set; } 
         public string GhiChu { get; set; }
         public string DanhSachMonAn { get; set; }

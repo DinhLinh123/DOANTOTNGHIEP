@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerRestaurant.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220804153204_init")]
+    [Migration("20220809031830_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,6 +208,9 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("DanhSachMonAn")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("DonGia")
+                        .HasColumnType("real");
+
                     b.Property<string>("DonViTinh")
                         .HasColumnType("nvarchar(max)");
 
@@ -223,9 +226,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LinkAnh")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Loai")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("MaTheLoai")
                         .HasColumnType("uniqueidentifier");
 
@@ -236,6 +236,8 @@ namespace ManagerRestaurant.API.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MaTheLoai");
 
                     b.ToTable("DoAn");
                 });
@@ -433,6 +435,38 @@ namespace ManagerRestaurant.API.Migrations
                     b.ToTable("PhieuOder");
                 });
 
+            modelBuilder.Entity("Infratructure.Datatables.TheLoaiDoAn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LastModifiedByUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isMany")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TheLoaiDoAn");
+                });
+
             modelBuilder.Entity("Infratructure.Datatables.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -588,6 +622,9 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<float>("GiaTri")
+                        .HasColumnType("real");
+
                     b.Property<Guid?>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -598,6 +635,9 @@ namespace ManagerRestaurant.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TheLoai")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -614,6 +654,17 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.KhuVuc", null)
                         .WithMany("Bans")
                         .HasForeignKey("KhuVucId");
+                });
+
+            modelBuilder.Entity("Infratructure.Datatables.DoAn", b =>
+                {
+                    b.HasOne("Infratructure.Datatables.TheLoaiDoAn", "TheLoaiDoAn")
+                        .WithMany("DoAns")
+                        .HasForeignKey("MaTheLoai")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TheLoaiDoAn");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.KhachHang", b =>
@@ -663,6 +714,11 @@ namespace ManagerRestaurant.API.Migrations
                     b.Navigation("KhachHangs");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Infratructure.Datatables.TheLoaiDoAn", b =>
+                {
+                    b.Navigation("DoAns");
                 });
 #pragma warning restore 612, 618
         }
