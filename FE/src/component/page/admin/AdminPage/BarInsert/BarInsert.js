@@ -17,15 +17,17 @@ function BarInsert(props) {
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [itemsCode, setItemsCode] = useState("");
-    const [itemsName, setItemsName] = useState("");i
+    const [drinksCode, setDrinksCode] = useState(""); 
+    const [drinksGroup, setDrinksGroup] = useState("");
+    const [drinksName, setDrinksName] = useState("");
     const [staffSex, setStaffSex] = useState(1);
     const [staffDate, setStaffDate] = useState(moment().unix()
     * 1000);
     const [staffPosition, setStaffPosition] = useState(1);
-    const [staffPhone, setStaffPhone] = useState("");
-    const [staffAddress, setStaffAddress] = useState("");
-    const [staffNote, setStaffNote] = useState("");
+    const [amountDrinks, setAmountDrinks] = useState("");
+    const [unitDrinks, setUnitDrinks] = useState(""); 
+    const [unitPriceDrinks, setUnitPriceDrinks] = useState(""); 
+    
 
     // Thêm mới chức vụ
     const [PositionCode, setPositionCode] = useState("");
@@ -145,6 +147,20 @@ function BarInsert(props) {
             label: "Thu ngân"
         },
     ]
+    const dataDrinks = [
+        {
+            value: "1",
+            label: "Rượu"
+        },
+        {
+            value: "2",
+            label: "bia"
+        },
+        {
+            value: "3",
+            label: "Nước ngọt"
+        },
+    ]
 
     const OPTION_MORE_TABLE = [
         {
@@ -223,12 +239,12 @@ function BarInsert(props) {
     }
     function onChangeTab() {
         setIsShowPopupAddnew(false)
-        setStaffAddress("")
-        setItemsCode("")
-        setItemsName("")
+        // setStaffAddress("")
+        // setStaffCode("")
+        // setStaffName("")
         setStaffDate("")
-        setStaffPhone("")
-        setStaffNote("")
+        setAmountDrinks("")
+        setUnitPriceDrinks("")
         setStaffSex(1)
         setStaffPosition(1)
 
@@ -237,56 +253,56 @@ function BarInsert(props) {
         setIsShowPopupAddPosition(false)
     }
 
-    useEffect(()=>{console.log(itemsName)},[itemsName])
+    // useEffect(()=>{console.log(staffName)},[staffName])
     return (
         <AdminPage
             title={"Quản lý quầy Bar"}
             index={MENU_TAB_ADMIN.BAR_INSERT}
         >
-            <div className="staff-manager">
-                <div className="staff-manager__filter">
-                    <div className="staff-manager__filter-code">
+            <div className="barInsert-manager">
+                <div className="barInsert-manager__filter">
+                    <div className="barInsert-manager__filter-code">
                         <InputField
                             label={"Mã nhân viên"}
                             placeholder={"Mã nhân viên"}
                         //width={"20%"} 
                         />
                     </div>
-                    <div className="staff-manager__filter-name">
+                    <div className="barInsert-manager__filter-name">
                         <InputField
                             label={"Tên nhân viên"}
                             placeholder={"Tên nhân viên"}
                         //width={"20%"} 
                         />
                     </div>
-                    <div className="staff-manager__filter-position">
+                    <div className="barInsert-manager__filter-position">
                             <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"}/>
                     </div>
                 </div>
-                <div className="staff-manager__button">
-                    <div className="staff-manager__button-search">
+                <div className="barInsert-manager__button">
+                    <div className="barInsert-manager__button-search">
                         <Button2
                             name={"Tìm kiếm"}
                             leftIcon={<SearchOutlined />}
                         //onClick={() => handleClickAddPosition()}
                         />
                     </div>
-                    {/* <div className="staff-manager__button-position">
+                    <div className="staff-manager__button-position">
                         <Button2
                             name={"Thêm mới Chức vụ"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddPosition()}
                         />
-                    </div> */}
-                    <div className="staff-manager__button-create-new">
+                    </div>
+                    <div className="barInsert-manager__button-create-new">
                         <Button2
-                            name={"Thêm mới mặt hàng"}
+                            name={"Thêm mới đồ uống"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
                         />
                     </div>
                 </div>
-                <div className="staff-manager__content">
+                <div className="barInsert-manager__content">
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
@@ -304,7 +320,7 @@ function BarInsert(props) {
                     />
                 </div>
                 <Popup
-                    title={"Thêm mới mặt hàng"}
+                    title={"Thêm mới đồ uống"}
                     show={isShowPopupAddnew}
                     onClickClose={() => onChangeTab()}
                     button={[
@@ -319,74 +335,87 @@ function BarInsert(props) {
                         />,
                     ]}
                     width={600}
-                    //className={"staff-manager-create"}
+                    //className={"barInsert-manager-create"}
                     body={
-                        <div className="staff-manager__popup">
-                            <DatePicker
-                                defaultValue={staffDate}
-                                onChange={(val) => {
-                                    setStaffDate(val);
-                                }}
-                                placeholder="dd/MM/yyyy"
-                                label={"Ngày sinh"}
-                            />
+                        <div className="barInsert-manager__popup">
                             <Input
-                                label={"Mã mặt hàng"}
-                                defaultValue={itemsCode}
+                                label={"Mã đồ uống"}
+                                defaultValue={drinksCode}
                                 onChange={(val) => {
-                                    setItemsCode(val);
+                                    setDrinksCode(val);
                                 }}
                                 autoFocus
                             />
+                            <Dropdown 
+                                listOption={dataDrinks} 
+                                placeholder={"Nhập hoặc chọn tên đồ uống"} 
+                                title={"Tên đồ uống"} 
+                                defaultValue={drinksName}
+                                onChange={(val) => { setDrinksName(val) }}
+                                />
+                            <Dropdown 
+                                listOption={dataDrinks} 
+                                placeholder={"Chọn nhóm đồ uống"} 
+                                title={"Nhóm đồ uống"} 
+                                defaultValue={drinksGroup}
+                                onChange={(val) => { setDrinksGroup(val) }}
+                                />
                             <Input
-                                label={"Tên mặt hàng"}
-                                defaultValue={itemsName}
-                                onChange={(val) => { setItemsName(val) }}
+                                label={"Số lượng"}
+                                defaultValue={amountDrinks}
+                                onChange={(val) => { setAmountDrinks(val) }}
                                 autoFocus
                             />
-                            <div className="staff-manager__popup-sex-lable">Giới tính</div>
-                            <Radio.Group onChange={(val) => { setStaffSex(val.target.value) }} value={staffSex}>
-                                <Radio value={1}>Nam</Radio>
-                                <Radio value={0}>Nữ</Radio>
-                            </Radio.Group>
-                            
-                            <div className="staff-manager__popup-position-lable">Chức vụ</div>
-                            <div className="staff-manager__popup-position-select">
-                                <Select
-                                    showSearch
-                                    placeholder="Chọn chức vụ"
-                                    optionFilterProp="children"
-                                    onChange={onChange}
-                                    onSearch={onSearch}
-                                    height={36}
-                                    width={546}
-                                // filterOption={(input, option) =>
-                                //     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                                // }
-                                >
-                                    {dataPosition?.map((item, index) => {
-                                        return (
-                                            <Option value={index}>{item.name}</Option>
-                                        );
-                                    })}
-                                </Select>
+                            <Input
+                                label={"Đơn vị tính"}
+                                defaultValue={unitDrinks}
+                                onChange={(val) => { setUnitDrinks(val) }}
+                                autoFocus
+                            />
+                            <Input
+                                label={"Đơn giá"}
+                                defaultValue={unitPriceDrinks}
+                                onChange={(val) => { setUnitPriceDrinks(val) }}
+                                autoFocus
+                            />
+                            <div className="barInsert-manager__popup-intoMoney">
+                                <div className="barInsert-manager__popup-intoMoney-lable">Thành tiền</div>
+                                <div>100000</div>
                             </div>
+                        </div>
+                    }
+                />
+                <Popup
+                    title={"Thêm mới chức vụ"}
+                    show={isShowPopupAddPosition}
+                    onClickClose={() => onChangeAddPosition()}
+                    button={[
+                        <Button2
+                            name={"Đóng"}
+                            onClick={() => onChangeAddPosition()}
+                        />,
+                        <Button2
+                            name={"Lưu"}
+                            onClick={() => onChangeAddPosition()}
+                            background="#fa983a"
+                        />,
+                    ]}
+                    width={600}
+                    className={"menu-popup-create"}
+                    body={
+                        <div>
                             <Input
-                                label={"Số điện thoại"}
-                                defaultValue={staffPhone}
-                                onChange={(val) => { setStaffPhone(val) }}
+                                label={"Mã chức vụ"}
+                                defaultValue={PositionCode}
+                                onChange={(val) => {
+                                    setPositionCode(val);
+                                }}
                                 autoFocus
                             />
                             <Input
-                                label={"Địa chỉ"}
-                                defaultValue={staffAddress}
-                                onChange={(val) => { setStaffAddress(val) }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Ghi chú"}
-                                defaultValue={staffNote}
-                                onChange={(val) => { setStaffNote(val) }}
+                                label={"Tên chức vụ"}
+                                defaultValue={PositionName}
+                                onChange={(val) => { setPositionName(val) }}
                                 autoFocus
                             />
                         </div>
