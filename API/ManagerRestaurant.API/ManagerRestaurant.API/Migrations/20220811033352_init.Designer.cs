@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerRestaurant.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220809031830_init")]
+    [Migration("20220811033352_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -659,7 +659,7 @@ namespace ManagerRestaurant.API.Migrations
             modelBuilder.Entity("Infratructure.Datatables.DoAn", b =>
                 {
                     b.HasOne("Infratructure.Datatables.TheLoaiDoAn", "TheLoaiDoAn")
-                        .WithMany("DoAns")
+                        .WithMany()
                         .HasForeignKey("MaTheLoai")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -714,11 +714,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Navigation("KhachHangs");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.TheLoaiDoAn", b =>
-                {
-                    b.Navigation("DoAns");
                 });
 #pragma warning restore 612, 618
         }
