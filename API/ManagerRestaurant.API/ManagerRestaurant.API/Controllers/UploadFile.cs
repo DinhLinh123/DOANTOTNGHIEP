@@ -25,7 +25,7 @@ namespace ManagerRestaurant.API.Controllers
             {
                 if (formFile.Length > 0)
                 {
-                    var path =  System.IO.Directory.GetCurrentDirectory() + "\\hinhanh\\";
+                    var path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "\\hinhanh\\";
                     if (!Directory.Exists(path))
                     {
                         //create if not exist
