@@ -68,9 +68,10 @@ namespace ManagerRestaurant.API.Controllers
                     ban.KieuDang = item.KieuDang;
                     ban.IdKhuVuc = item.IdKhuVuc;
                     ban.TenKhuVuc = item.TenKhuVuc;
+                    ban.TrangThai = item.TrangThai;
                     ban.LastModifiedByUserId = item.LastModifiedByUserId;
                     ban.LastModifiedByUserName = item.LastModifiedByUserName;
-
+                    ban.TenKhuVuc = item.TenKhuVuc;
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
@@ -103,6 +104,7 @@ namespace ManagerRestaurant.API.Controllers
                 ban.Name = item.Name;
                 ban.SoNguoiToiDa = item.SoNguoiToiDa;
                 ban.LoaiBan = item.LoaiBan;
+                ban.TrangThai = item.TrangThai;
                 ban.Top = item.Top;
                 ban.Left = item.Left;
                 ban.KieuDang = item.KieuDang;
@@ -132,23 +134,24 @@ namespace ManagerRestaurant.API.Controllers
             {
 
                 var filter = JsonConvert.DeserializeObject<BanFilter>(_filter);
-                var query = from s in _context.DoAn select s;
+                var query = from s in _context.Ban select s;
                 if (filter.Id != Guid.Empty)
                 {
                     query = query.Where((x) => x.Id == filter.Id);
                 }
-                if (filter.TextSearch.Length > 0)
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch)||x.TrangThai.Contains(filter.TextSearch));
                 }
-                if (filter.PageNumber > 0)
+                if (filter.IdKhuVuc != Guid.Empty)
                 {
-                    query = query.Take(filter.PageNumber);
+                    query = query.Where((x) => x.IdKhuVuc.Equals(filter.IdKhuVuc));
                 }
-                if (filter.PageSize > 0)
+                if (filter.PageNumber > 0&& filter.PageSize > 0)
                 {
-                    query = query.Skip(filter.PageSize);
+                    query = query.Skip(filter.PageSize* (filter.PageNumber - 1)).Take(filter.PageSize);
                 }
+
 
                 var data = await query.ToListAsync();
 
@@ -197,5 +200,7 @@ namespace ManagerRestaurant.API.Controllers
     class BanFilter : BaseFilter
     {
         public Guid MaTheLoai { get; set; }
+        public Guid IdKhuVuc { get; set; }
+        public string TrangThai { get; set; }
     }
 }

@@ -142,7 +142,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.TheLoaiDoAn.Name.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
                 if (filter.MaTheLoai != Guid.Empty)
                 {
@@ -199,6 +199,6 @@ namespace ManagerRestaurant.API.Controllers
 
     class DoAnFilter : BaseFilter
     {
-        public Guid MaTheLoai { get; set; }
+        public Guid MaTheLoai { get; set; } = Guid.Empty;
     }
 }

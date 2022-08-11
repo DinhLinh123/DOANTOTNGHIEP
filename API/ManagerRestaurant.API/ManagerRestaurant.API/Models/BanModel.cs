@@ -10,6 +10,7 @@ namespace ManagerRestaurant.API.Models
         public string LoaiBan { get; set; }
         public string Top { get; set; }
         public string Left { get; set; }
+        public string TrangThai { get; set; }
         public string KieuDang { get; set; }
         public Guid IdKhuVuc { get; set; }
         public string TenKhuVuc { get; set; }
@@ -26,6 +27,7 @@ namespace ManagerRestaurant.API.Models
         public string LoaiBan { get; set; }
         public string Top { get; set; }
         public string Left { get; set; }
+        public string TrangThai { get; set; }
         public string KieuDang { get; set; }
         public Guid IdKhuVuc { get; set; }
         public string TenKhuVuc { get; set; }
@@ -41,17 +43,12 @@ namespace ManagerRestaurant.API.Models
         public string LoaiBan { get; set; }
         public string Top { get; set; }
         public string Left { get; set; }
+        public string TrangThai { get; set; }
         public string KieuDang { get; set; }
         public Guid IdKhuVuc { get; set; }
         public string TenKhuVuc { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-    }
-    public class QueryFilter
-    {
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
-        public string TextSearch { get; set; }
-    }
+    } 
 
 }

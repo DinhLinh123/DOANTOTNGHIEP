@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerRestaurant.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220811033352_init")]
+    [Migration("20220811181114_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<Guid>("IdKhuVuc")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("KhuVucId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("KieuDang")
                         .HasColumnType("nvarchar(max)");
 
@@ -72,11 +69,12 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("Top")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TrangThai")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DatBanId");
-
-                    b.HasIndex("KhuVucId");
 
                     b.ToTable("Ban");
                 });
@@ -269,17 +267,12 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PhieuOderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SoDienThoai")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DatBanId");
-
-                    b.HasIndex("PhieuOderId");
 
                     b.ToTable("KhachHang");
                 });
@@ -331,7 +324,13 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("IdBan")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("IdMonAn")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdPhieuOder")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("LastModifiedByUserId")
@@ -340,18 +339,10 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SoBan")
-                        .HasColumnType("int");
-
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OderId");
 
                     b.ToTable("Oder");
                 });
@@ -421,11 +412,20 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("SoHopDong")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("SoTienGiam")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("ThoiGianThanhToan")
+                        .HasColumnType("datetime2");
+
                     b.Property<float>("ThucThu")
                         .HasColumnType("real");
 
                     b.Property<float>("TongTien")
                         .HasColumnType("real");
+
+                    b.Property<int>("TrangThai")
+                        .HasColumnType("int");
 
                     b.Property<string>("Vocher")
                         .HasColumnType("nvarchar(max)");
@@ -515,9 +515,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("Phai")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PhieuOderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Quyen")
                         .HasColumnType("nvarchar(max)");
 
@@ -528,8 +525,6 @@ namespace ManagerRestaurant.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhieuOderId");
 
                     b.ToTable("User");
                 });
@@ -650,10 +645,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.DatBan", null)
                         .WithMany("Ban")
                         .HasForeignKey("DatBanId");
-
-                    b.HasOne("Infratructure.Datatables.KhuVuc", null)
-                        .WithMany("Bans")
-                        .HasForeignKey("KhuVucId");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.DoAn", b =>
@@ -672,24 +663,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.HasOne("Infratructure.Datatables.DatBan", null)
                         .WithMany("KhachHang")
                         .HasForeignKey("DatBanId");
-
-                    b.HasOne("Infratructure.Datatables.PhieuOder", null)
-                        .WithMany("KhachHangs")
-                        .HasForeignKey("PhieuOderId");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.Oder", b =>
-                {
-                    b.HasOne("Infratructure.Datatables.Oder", null)
-                        .WithMany("Oders")
-                        .HasForeignKey("OderId");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.User", b =>
-                {
-                    b.HasOne("Infratructure.Datatables.PhieuOder", null)
-                        .WithMany("Users")
-                        .HasForeignKey("PhieuOderId");
                 });
 
             modelBuilder.Entity("Infratructure.Datatables.DatBan", b =>
@@ -697,23 +670,6 @@ namespace ManagerRestaurant.API.Migrations
                     b.Navigation("Ban");
 
                     b.Navigation("KhachHang");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.KhuVuc", b =>
-                {
-                    b.Navigation("Bans");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.Oder", b =>
-                {
-                    b.Navigation("Oders");
-                });
-
-            modelBuilder.Entity("Infratructure.Datatables.PhieuOder", b =>
-                {
-                    b.Navigation("KhachHangs");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
