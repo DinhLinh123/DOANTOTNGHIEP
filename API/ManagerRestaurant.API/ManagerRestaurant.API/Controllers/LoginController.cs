@@ -22,28 +22,37 @@ namespace ManagerRestaurant.API.Controllers
         {
             _context = context;
         }
-        
+
 
         // POST api/<LoginController>
         [HttpPost("/Login")]
-        public Responsive Post(UserLoginModel userLogin )
+        public Responsive Post(UserLoginModel userLogin)
         {
             try
             {
                 var mes = "";
                 var query = from s in _context.User where (s.UserName.Equals(userLogin.UserName) && (s.Password.Equals(userLogin.Password))) select s;
+                var d = from s in _context.User select s;
                 var data = query.FirstOrDefault();
                 if (data != null)
                 {
                     mes = "Login Success";
                     //save status login
                     HttpContext.Session.SetString(userLogin.UserName, userLogin.Password);
+
+
+                    //var jwt = _jwtService.Generate(data.UserName + "|" + data.Password);
+
+                    //Response.Cookies.Append("jwt", jwt, new CookieOptions
+                    //{
+                    //    HttpOnly = true
+                    //});
                 }
                 else
                 {
                     mes = "Login fail";
                 }
-                 
+
                 return new Responsive(200, mes, data); ;
             }
             catch (Exception ex)
@@ -59,9 +68,9 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
                 var res = new Responsive();
-                var query =  from s in _context.User where (s.UserName.Equals(userLogin.UserName)) select s;
+                var query = from s in _context.User where (s.UserName.Equals(userLogin.UserName)) select s;
                 var data = query.FirstOrDefault();
-                if (data != null && HttpContext.Session.GetString(userLogin.UserName)!= null)
+                if (data != null && HttpContext.Session.GetString(userLogin.UserName) != null)
                 {
                     res.Mess = "Logout Success";
                     res.Code = 200;
@@ -82,7 +91,7 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
-        // POST api/<LoginController>
+
         [HttpGet("/GetSatusLogin")]
         public Responsive PostGetSatusLogin(string username)
         {
@@ -120,6 +129,6 @@ namespace ManagerRestaurant.API.Controllers
             {
                 return new Responsive(500, ex.InnerException.Message, null);
             }
-        } 
+        }
     }
 }

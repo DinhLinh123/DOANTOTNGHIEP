@@ -1,4 +1,5 @@
 using Infratructure;
+using ManagerRestaurant.API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,8 +37,7 @@ namespace ManagerRestaurant.API
                 //options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
                 options.UseSqlServer(_configuration["DBInterConnection"]));
 
-            services.AddDistributedMemoryCache();
-
+            services.AddDistributedMemoryCache(); 
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
@@ -49,6 +49,8 @@ namespace ManagerRestaurant.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
@@ -63,6 +65,7 @@ namespace ManagerRestaurant.API
             app.UseAuthorization();
 
             app.UseSession();
+            //app.UseMiddleware<CheckMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
