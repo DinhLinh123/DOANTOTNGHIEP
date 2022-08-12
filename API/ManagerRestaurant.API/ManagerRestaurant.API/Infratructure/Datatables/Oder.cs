@@ -11,8 +11,10 @@ namespace Infratructure.Datatables
         public Guid Id { get; set; }
         [ForeignKey("PhieuOder")]
         public Guid IdPhieuOder { get; set; }
-        [ForeignKey("MonAn")]
-        public Guid IdMonAn { get; set; }
+        public PhieuOder PhieuOder { get; set; }
+        [ForeignKey("DoAn")]
+        public Guid IdDoAn { get; set; }
+        public DoAn DoAn { get; set; }
         public int SoLuong { get; set; }
         public Guid IdBan { get; set; }
         public Guid? CreatedByUserId { get; set; }

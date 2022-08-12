@@ -21,6 +21,7 @@ namespace Infratructure.Datatables
         [ForeignKey("KhuVuc")]
         public Guid IdKhuVuc { get; set; }
         public string TenKhuVuc { get; set; }
+        public KhuVuc KhuVuc { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

@@ -13,5 +13,6 @@ namespace Infratructure.Datatables
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
+        public ICollection<Ban> Bans { get; set; }
     }
 }

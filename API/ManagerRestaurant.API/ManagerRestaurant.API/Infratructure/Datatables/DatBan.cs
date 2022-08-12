@@ -22,7 +22,5 @@ namespace Infratructure.Datatables
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-        public virtual ICollection<Ban> Ban { get; set; }
-        public virtual ICollection<KhachHang> KhachHang { get; set; }
     }
    }

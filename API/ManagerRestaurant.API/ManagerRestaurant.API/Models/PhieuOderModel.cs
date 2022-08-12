@@ -7,7 +7,6 @@ namespace ManagerRestaurant.API.Models
     {
         public Guid Id { get; set; }
         public BanModel Ban { get; set; }
-        public string SoHopDong { get; set; }
         public UserModel ThuNgan { get; set; }
         public KhachHangModel KhachHang { get; set; }
         public List<DoAnModel> DoAns { get; set; }
@@ -28,7 +27,7 @@ namespace ManagerRestaurant.API.Models
     {
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
-        public string SoHopDong { get; set; }
+        
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
         public float TongTien { get; set; }
@@ -46,7 +45,7 @@ namespace ManagerRestaurant.API.Models
     {
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
-        public string SoHopDong { get; set; }
+        
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
         public float TongTien { get; set; }

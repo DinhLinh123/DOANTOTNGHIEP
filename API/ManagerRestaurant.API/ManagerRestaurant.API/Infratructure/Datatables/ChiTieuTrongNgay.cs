@@ -12,8 +12,10 @@ namespace Infratructure.Datatables
         public string GhiChu { get; set; }       
         public DateTime ThoiGianKeToanDuyet { get; set; }
         public string NameKeToanDuyet { get; set; }
+        public Guid IdKeToanDuyet { get; set; } 
         public DateTime ThoiGianQuanLyDuyet { get; set; }
         public string NameQuanLyDuyet { get; set; }
+        public Guid IdQuanLyDuyet { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

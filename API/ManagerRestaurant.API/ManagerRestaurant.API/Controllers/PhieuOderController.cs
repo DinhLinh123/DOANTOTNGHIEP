@@ -43,8 +43,7 @@ namespace ManagerRestaurant.API.Controllers
         {
             var phieuOder = new PhieuOderModel();
 
-            phieuOder.Id = item.Id;
-            phieuOder.SoHopDong = item.SoHopDong;
+            phieuOder.Id = item.Id; 
             phieuOder.TongTien = item.TongTien;
             phieuOder.ThucThu = item.ThucThu;
             phieuOder.Vocher = item.Vocher;
@@ -115,7 +114,7 @@ namespace ManagerRestaurant.API.Controllers
             var doans = new List<DoAnModel>();
             foreach (var element in odertemp)
             {
-                var ele = _context.DoAn.Find(element.IdMonAn);
+                var ele = _context.DoAn.Find(element.IdDoAn);
                 doans.Add(new DoAnModel
                 {
                     Id = ele.Id,
@@ -174,8 +173,7 @@ namespace ManagerRestaurant.API.Controllers
                 var phieuOder = _context.PhieuOder.Find(id);
                 if (phieuOder != null)
                 {
-                    phieuOder.IdBan = item.IdBan;
-                    phieuOder.SoHopDong = item.SoHopDong;
+                    phieuOder.IdBan = item.IdBan; 
                     phieuOder.IdThuNgan = item.IdThuNgan;
                     phieuOder.IdKhachHang = item.IdKhachHang;
                     phieuOder.Vocher = item.Vocher;
@@ -217,8 +215,7 @@ namespace ManagerRestaurant.API.Controllers
                 //conver
                 var phieuOder = new PhieuOder();
                 phieuOder.Id = Guid.NewGuid();
-                phieuOder.IdBan = item.IdBan;
-                phieuOder.SoHopDong = item.SoHopDong;
+                phieuOder.IdBan = item.IdBan; 
                 phieuOder.IdThuNgan = item.IdThuNgan;
                 phieuOder.IdKhachHang = item.IdKhachHang;
                 phieuOder.Vocher = item.Vocher;

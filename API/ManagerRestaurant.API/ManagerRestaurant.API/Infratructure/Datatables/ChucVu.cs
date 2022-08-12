@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ManagerRestaurant.API.Infratructure.Datatables
+namespace Infratructure.Datatables
 {
     public class ChucVu
     {

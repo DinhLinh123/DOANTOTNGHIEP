@@ -10,7 +10,7 @@ namespace Infratructure.Datatables
     {
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
-        public string SoHopDong { get; set; }
+        public Ban Ban { get; set; } 
         [ForeignKey("User")]
         public Guid IdThuNgan { get; set; }
         [ForeignKey("KhachHang")]
@@ -26,5 +26,9 @@ namespace Infratructure.Datatables
         public DateTime? CreatedOnDate { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
+        public ICollection<Oder> Oders { get; set; }
+        public ICollection<KhachHang> KhachHangs { get; set; }
+        public ICollection<User> Users { get; set; }
+
     }
 }
