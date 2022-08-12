@@ -65,6 +65,8 @@
 
     &-list {
       padding: 16px 16px;
+      height: calc(100% - 56px);
+      overflow: auto;
 
       &-item {
         height: 48px;
@@ -143,6 +145,32 @@
         }
       }
 
+      &-sub-category{
+        margin-left: 24px;
+        height: 48px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        color: #454545;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0 16px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+
+        &:hover {
+          background-color: #6ec4c5;
+          color: #fff;
+        }
+        // &:active{
+        //     background-color: yellow;
+        // }
+
+        &-icon {
+          margin-right: 8px;
+        }
+      }
+
       .selected-item {
         color: #fff;
         background-color: #01a3a4;
@@ -152,6 +180,12 @@
         color: #fff;
         background-color: #01a3a4;
       }
+
+      .selected-list-sub-category{
+        color: #fff;
+        background-color: #01a3a4;
+      }
+
 
       .selected-list-sub-bar{
         color: #fff;
@@ -265,5 +299,26 @@
       overflow-y: hidden;
       height: calc(100% - 58px - 16px);
     }
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ced6e0;
   }
 }

@@ -3,12 +3,14 @@ import {
   CHANGE_TYPE_MENU,
   CHANGE_TYPE_MENU_SUB_KITCHEN,
   CHANGE_TYPE_MENU_SUB_BAR,
+  CHANGE_TYPE_MENU_SUB_CATEGOTY,
 } from "../constant/actionType";
 
 const initialState = {
   menuType: TYPE_MENU.BIG,
   menuTypeSubKitchen: false,
   menuTypeSubBar: false,
+  menuTypeSubCategory: false,
 };
 
 export default function menuReducer(state = initialState, action) {
@@ -29,6 +31,11 @@ export default function menuReducer(state = initialState, action) {
       return {
         ...state,
         menuTypeSubBar: action.payload,
+      };
+      case CHANGE_TYPE_MENU_SUB_CATEGOTY:
+      return {
+        ...state,
+        menuTypeSubCategory: action.payload,
       };
 
     default:

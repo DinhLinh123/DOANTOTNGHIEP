@@ -38,6 +38,10 @@ import Pay from './component/page/admin/AdminPage/Pay/Pay';
 import KitchensDayDetail from './component/page/admin/AdminPage/KitchensDayDetail/KitchensDayDetail';
 import BarInsert from './component/page/admin/AdminPage/BarInsert/BarInsert';
 import BarList from './component/page/admin/AdminPage/BarList/BarList';
+import CategoryDrinks from './component/page/admin/AdminPage/CategoryDrinks/CategoryDrinks';
+import CategoryMenu from './component/page/admin/AdminPage/CategoryMenu/CategoryMenu';
+import CategoryPosition from './component/page/admin/AdminPage/CategoryPosition/CategoryPosition';
+import ManagerFeedback from './component/page/admin/AdminPage/Feedback/Feedback';
 
 let historyApp;
 function App() {
@@ -81,10 +85,14 @@ function App() {
             <Route path={"/admin/kitchens-day/detail/:kitchenDayID"}><KitchensDayDetail /></Route>
             <Route path={"/admin/bar-insert"}><BarInsert /></Route>
             <Route path={"/admin/bars"}><BarList /></Route>
+            <Route path={"/admin/category_drink"}><CategoryDrinks/></Route>
+            <Route path={"/admin/category_menu"}><CategoryMenu/></Route>
+            <Route path={"/admin/category_position"}><CategoryPosition/></Route>
             <Route path={"/admin/staffs"}> <Staff /></Route>
             <Route path={"/admin/spending/detail/:spendingID"}> <SpendingDetail /></Route>
             <Route path={"/admin/kitchenday"}> <Staff /></Route>
             <Route path={"/admin/pays"}> <Pay /></Route>
+            <Route path={"/admin/feedback"}> <ManagerFeedback /></Route>
 
             {/* order */}
             <Route path={"/admin/tables"}> <TableOrder /></Route>

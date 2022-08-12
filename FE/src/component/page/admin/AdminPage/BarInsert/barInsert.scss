@@ -6,16 +6,17 @@
         margin-bottom: 24px;
         width: 100%;
         &-code{
-            width: 30%;
+            width: 23%;
             margin-right: 20px;     
         }
         &-name{
-            width: 30%;
+            width: 23%;
             margin-right: 20px;     
         }
         &-position{
+            margin-right: 20px;
+            width: 23%;
             text-align: left;
-            width: 30%;
             &-lable{
                 margin-bottom: 8px;
                 font-size: 16px;
@@ -25,6 +26,10 @@
                 width: 100%;
                 background-color: antiquewhite;
             }
+        }
+        &-date{
+            text-align: left;
+            width: 23%;
         }
     
     }

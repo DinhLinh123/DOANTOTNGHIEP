@@ -17,6 +17,7 @@ function Book(props) {
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [bookName, setBookName] = useState("");
     const [bookPhone, setBookPhone] = useState("");
+    const [bookNote, setBookNote] = useState("");
     const [bookAdults, setBookAdults] = useState();
     const [bookChild, setBookChild] = useState();
     const [bookDate, setBookDate] = useState();
@@ -27,6 +28,7 @@ function Book(props) {
         ADULTS: "adults",
         CHILD: "child",
         DATE: "date",
+        NOTE: "note",
         TIME: "time",
         PEOPLE: "people",
     };
@@ -65,6 +67,12 @@ function Book(props) {
             width: "100px",
         },
         {
+            title: "Ghi chú",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+            sorter: true,
+            width: "200px",
+        },
+        {
             title: "Người nhập",
             dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
             width: "150px",
@@ -80,6 +88,7 @@ function Book(props) {
             child: 1,
             date: "28/07/2022",
             time: "20:00",
+            note: "buffet",
             people: "LinhDTT",
         },
         {
@@ -90,6 +99,7 @@ function Book(props) {
             child: 1,
             date: "28/07/2022",
             time: "20:00",
+            note: "buffet",
             people: "LinhDTT",
         },
         {
@@ -100,6 +110,7 @@ function Book(props) {
             child: 1,
             date: "28/07/2022",
             time: "20:00",
+            note: "buffet",
             people: "Website",
         },
         {
@@ -110,6 +121,7 @@ function Book(props) {
             child: 1,
             date: "28/07/2022",
             time: "20:00",
+            note: "buffet",
             people: "LinhDTT",
         }
     ];
@@ -151,6 +163,9 @@ function Book(props) {
     function columnTime(item) {
         return <div>{item?.time}</div>;
     }
+    function columnNote(item) {
+        return <div>{item?.note}</div>;
+    }
     function columnPeople(item) {
         return <div>{item?.people}</div>;
     }
@@ -165,6 +180,7 @@ function Book(props) {
                 [COLUMN_TABLE_INDEX_MENU.CHILD]: columnChild(item),
                 [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
                 [COLUMN_TABLE_INDEX_MENU.TIME]: columnTime(item),
+                [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
                 [COLUMN_TABLE_INDEX_MENU.PEOPLE]: columnPeople(item),
                 key: idx,
             };
@@ -208,7 +224,7 @@ function Book(props) {
                             //     setStaffDate(val);
                             // }}
                             placeholder="dd/MM/yyyy"
-                            label={"Ngày đặt bàn"}
+                            label={"Ngày checkin"}
                             width={"100%"}
                         />
                     </div>
@@ -303,6 +319,12 @@ function Book(props) {
                                 onChange={(val) => {
                                     setBookTime(val);
                                 }}
+                            />
+                            <Input
+                                label={"Ghi chú"}
+                                defaultValue={bookNote}
+                                onChange={(val) => { setBookNote(val) }}
+                                autoFocus
                             />
                         </div>
                     }

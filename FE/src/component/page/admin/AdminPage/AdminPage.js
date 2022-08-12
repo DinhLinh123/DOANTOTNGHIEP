@@ -19,6 +19,7 @@ import {
   ShopOutlined,
   UserOutlined,
   CalendarOutlined,
+  LikeOutlined,
   AppstoreOutlined,
   CaretDownOutlined,
   CaretUpOutlined,
@@ -28,6 +29,7 @@ import {
   PlusOutlined,
   ReconciliationOutlined,
   CoffeeOutlined,
+  GroupOutlined,
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -43,6 +45,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   changeMenuType,
   changeMenuTypeSubBar,
+  changeMenuTypeSubCayegory,
   changeMenuTypeSubKitchen,
 } from "../../../../reudux/action/menuAction";
 import commonFunction from "../../../base/common/commonFunction";
@@ -67,6 +70,9 @@ function AdminPage(props) {
     (state) => state?.menu?.menuTypeSubKitchen
   );
   const typeSubMenuBar = useSelector((state) => state?.menu?.menuTypeSubBar);
+  const typeSubMenuCategoty = useSelector(
+    (state) => state?.menu?.menuTypeSubCategory
+  );
   let location = useLocation();
 
   useEffect(() => {
@@ -76,6 +82,7 @@ function AdminPage(props) {
     ) {
       dispatch(changeMenuTypeSubKitchen(true));
       dispatch(changeMenuTypeSubBar(false));
+      dispatch(changeMenuTypeSubCayegory(false));
     } else {
       if (
         location?.pathname.includes(MENU_TAB_ADMIN.BAR) ||
@@ -83,9 +90,21 @@ function AdminPage(props) {
       ) {
         dispatch(changeMenuTypeSubBar(true));
         dispatch(changeMenuTypeSubKitchen(false));
+        dispatch(changeMenuTypeSubCayegory(false));
       } else {
-        dispatch(changeMenuTypeSubKitchen(false));
-        dispatch(changeMenuTypeSubBar(false));
+        if (
+          location?.pathname.includes(MENU_TAB_ADMIN.CATEGOGY_MENU) ||
+          location?.pathname.includes(MENU_TAB_ADMIN.CATEGOGY_DRINKS) ||
+          location?.pathname.includes(MENU_TAB_ADMIN.CATEGOGY_POSITION)
+        ) {
+          dispatch(changeMenuTypeSubCayegory(true));
+          dispatch(changeMenuTypeSubKitchen(false));
+          dispatch(changeMenuTypeSubBar(false));
+        } else {
+          dispatch(changeMenuTypeSubKitchen(false));
+          dispatch(changeMenuTypeSubBar(false));
+          dispatch(changeMenuTypeSubCayegory(false));
+        }
       }
     }
   }, [location]);
@@ -151,9 +170,20 @@ function AdminPage(props) {
       title: "Đặt bàn",
     },
     {
+      link: MENU_TAB_ADMIN.FEEDBACK,
+      icon: <LikeOutlined />,
+      title: "Feedback"
+      ,
+    },
+    {
       link: MENU_TAB_ADMIN.AREA,
       icon: <AppstoreOutlined />,
       title: "Khu vực",
+    },
+    {
+      link: MENU_TAB_ADMIN.CATEGOGY_MENU,
+      icon: <GroupOutlined />,
+      title: "Danh mục",
     },
     {
       link: MENU_TAB_ADMIN.PAY,
@@ -164,21 +194,35 @@ function AdminPage(props) {
 
   function renderMenuPage() {
     let list = listMenu?.map((item) => {
+      debugger;
       return (
         // <Link to={`/admin/${item?.link}`}>
         <>
           {typeMenu !== TYPE_MENU.SMALL ? (
             <>
-              {item?.link === MENU_TAB_ADMIN.KITCHEN || item?.link === MENU_TAB_ADMIN.BAR ? (
+              {item?.link === MENU_TAB_ADMIN.KITCHEN ||
+              item?.link === MENU_TAB_ADMIN.BAR ||
+              item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU ? (
                 <div
-                  className={`admin-page-container__nav-list-item ${index == item?.link ||
-                      (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
-                        item?.link === MENU_TAB_ADMIN.KITCHEN)
+                  className={`admin-page-container__nav-list-item ${
+                    index == item?.link ||
+                    (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                      item?.link === MENU_TAB_ADMIN.KITCHEN) ||
+                    (index == MENU_TAB_ADMIN.CATEGOGY_DRINKS &&
+                      item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU) ||
+                    (index == MENU_TAB_ADMIN.CATEGOGY_MENU &&
+                      item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU) ||
+                    (index == MENU_TAB_ADMIN.CATEGOGY_POSITION &&
+                      item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU)
                       ? "selected-item"
                       : ""
-                    }`}
+                  }`}
                   onClick={() => {
-                    if (item?.link != MENU_TAB_ADMIN.KITCHEN && item?.link != MENU_TAB_ADMIN.BAR) {
+                    if (
+                      item?.link != MENU_TAB_ADMIN.KITCHEN &&
+                      item?.link != MENU_TAB_ADMIN.BAR &&
+                      item?.link != MENU_TAB_ADMIN.CATEGOGY_MENU
+                    ) {
                       window.open(`/admin/${item?.link}`, "_self");
                     } else {
                       if (item?.link === MENU_TAB_ADMIN.KITCHEN) {
@@ -186,6 +230,9 @@ function AdminPage(props) {
                       }
                       if (item?.link === MENU_TAB_ADMIN.BAR) {
                         dispatch(changeMenuTypeSubBar(true));
+                      }
+                      if (item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU) {
+                        dispatch(changeMenuTypeSubCayegory(true));
                       }
                     }
                   }}
@@ -202,14 +249,17 @@ function AdminPage(props) {
               ) : (
                 <Link to={`/admin/${item?.link}`}>
                   <div
-                    className={`admin-page-container__nav-list-item ${index == item?.link ||
-                        (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
-                          item?.link === MENU_TAB_ADMIN.KITCHEN) ||
-                        (index == MENU_TAB_ADMIN.BAR_INSERT &&
-                          item?.link === MENU_TAB_ADMIN.BAR)
+                    className={`admin-page-container__nav-list-item ${
+                      index == item?.link ||
+                      (index == MENU_TAB_ADMIN.KITCHEN_DAY &&
+                        item?.link === MENU_TAB_ADMIN.KITCHEN) ||
+                      (index == MENU_TAB_ADMIN.BAR_INSERT &&
+                        item?.link === MENU_TAB_ADMIN.BAR) ||
+                      (index === MENU_TAB_ADMIN.CATEGOGY_DRINKS &&
+                        item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU)
                         ? "selected-item"
                         : ""
-                      }`}
+                    }`}
                   >
                     <div className="admin-page-container__nav-list-item-icon">
                       {item?.icon}
@@ -227,12 +277,13 @@ function AdminPage(props) {
                 <>
                   <Link to={`/admin/kitchens`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN
+                      className={`admin-page-container__nav-list-sub-kitchen ${
+                        index == MENU_TAB_ADMIN.KITCHEN
                           ? "selected-list-sub-kitchen"
                           : ""
-                        }`}
+                      }`}
 
-                    // onClick={() => { window.open(`/admin/kitchens`, "_self") }}
+                      // onClick={() => { window.open(`/admin/kitchens`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-kitchen-icon">
                         <ReconciliationOutlined />
@@ -246,12 +297,13 @@ function AdminPage(props) {
                   </Link>
                   <Link to={`/admin/kitchens-days`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-kitchen ${index == MENU_TAB_ADMIN.KITCHEN_DAY
+                      className={`admin-page-container__nav-list-sub-kitchen ${
+                        index == MENU_TAB_ADMIN.KITCHEN_DAY
                           ? "selected-list-sub-kitchen"
                           : ""
-                        }`}
+                      }`}
 
-                    // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
+                      // onClick={() => { window.open(`/admin/kitchensDays`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-kitchen-icon">
                         <PlusOutlined />
@@ -269,51 +321,120 @@ function AdminPage(props) {
                 <>
                   <Link to={`/admin/bars`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-bar ${index == MENU_TAB_ADMIN.BAR
+                      className={`admin-page-container__nav-list-sub-bar ${
+                        index == MENU_TAB_ADMIN.BAR
                           ? "selected-list-sub-bar"
                           : ""
-                        }`}
+                      }`}
 
-                    // onClick={() => { window.open(`/admin/bars`, "_self") }}
+                      // onClick={() => { window.open(`/admin/bars`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-bar-icon">
                         <ReconciliationOutlined />
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-bar-text">
-                          Hàng sắp hết 
+                          Quản lý mặt hàng
                         </div>
                       )}
                     </div>
                   </Link>
                   <Link to={`/admin/bar-insert`}>
                     <div
-                      className={`admin-page-container__nav-list-sub-bar ${index == MENU_TAB_ADMIN.BAR_INSERT
+                      className={`admin-page-container__nav-list-sub-bar ${
+                        index == MENU_TAB_ADMIN.BAR_INSERT
                           ? "selected-list-sub-bar"
                           : ""
-                        }`}
+                      }`}
 
-                    // onClick={() => { window.open(`/admin/barsDays`, "_self") }}
+                      // onClick={() => { window.open(`/admin/barsDays`, "_self") }}
                     >
                       <div className="admin-page-container__nav-list-sub-bar-icon">
                         <PlusOutlined />
                       </div>
                       {typeMenu === TYPE_MENU.BIG && (
                         <div className="admin-page-container__nav-list-sub-bar-text">
-                          Quản lý kho
+                          Quản lý nhập liệu
                         </div>
                       )}
                     </div>
                   </Link>
                 </>
               )}
+
+              {typeSubMenuCategoty &&
+                item?.link === MENU_TAB_ADMIN.CATEGOGY_MENU && (
+                  <>
+                    <Link to={`/admin/category_menu`}>
+                      <div
+                        className={`admin-page-container__nav-list-sub-category ${
+                          index == MENU_TAB_ADMIN.CATEGOGY_MENU
+                            ? "selected-list-sub-category"
+                            : ""
+                        }`}
+
+                        // onClick={() => { window.open(`/admin/categorys`, "_self") }}
+                      >
+                        <div className="admin-page-container__nav-list-sub-category-icon">
+                          <ReconciliationOutlined />
+                        </div>
+                        {typeMenu === TYPE_MENU.BIG && (
+                          <div className="admin-page-container__nav-list-sub-category-text">
+                            Danh mục menu
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    <Link to={`/admin/category_drink`}>
+                      <div
+                        className={`admin-page-container__nav-list-sub-category ${
+                          index == MENU_TAB_ADMIN.CATEGOGY_DRINKS
+                            ? "selected-list-sub-category"
+                            : ""
+                        }`}
+
+                        // onClick={() => { window.open(`/admin/categorysDays`, "_self") }}
+                      >
+                        <div className="admin-page-container__nav-list-sub-category-icon">
+                          <PlusOutlined />
+                        </div>
+                        {typeMenu === TYPE_MENU.BIG && (
+                          <div className="admin-page-container__nav-list-sub-category-text">
+                            Danh mục quầy bar
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    <Link to={`/admin/category_position`}>
+                      <div
+                        className={`admin-page-container__nav-list-sub-category ${
+                          index == MENU_TAB_ADMIN.CATEGOGY_POSITION
+                            ? "selected-list-sub-category"
+                            : ""
+                        }`}
+
+                        // onClick={() => { window.open(`/admin/categorysDays`, "_self") }}
+                      >
+                        <div className="admin-page-container__nav-list-sub-category-icon">
+                          <PlusOutlined />
+                        </div>
+                        {typeMenu === TYPE_MENU.BIG && (
+                          <div className="admin-page-container__nav-list-sub-category-text">
+                            Danh mục chức vụ
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  </>
+                )}
             </>
           ) : (
             <Link to={`/admin/${item?.link}`}>
               <Tooltip title={item?.title} placement="right">
                 <div
-                  className={`admin-page-container__nav-list-item ${index == item?.link ? "selected-item" : ""
-                    }`}
+                  className={`admin-page-container__nav-list-item ${
+                    index == item?.link ? "selected-item" : ""
+                  }`}
                 >
                   <div className="admin-page-container__nav-list-item-icon">
                     {item?.icon}
@@ -336,13 +457,14 @@ function AdminPage(props) {
   return (
     <div className="admin-page-container">
       <div
-        className={`admin-page-container__nav ${typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__nav ${
+          typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-nav"
             : "admin-page-container__small-nav"
-          }`}
-      // style={{
-      //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
-      // }}
+        }`}
+        // style={{
+        //     width: typeMenu === TYPE_MENU.BIG ? '350px' : '80px'
+        // }}
       >
         <div className="admin-page-container__nav-logo">
           {typeMenu === TYPE_MENU.BIG && (
@@ -370,10 +492,11 @@ function AdminPage(props) {
         <div className="admin-page-container__nav-list">{renderMenuPage()}</div>
       </div>
       <div
-        className={`admin-page-container__page ${typeMenu === TYPE_MENU.BIG
+        className={`admin-page-container__page ${
+          typeMenu === TYPE_MENU.BIG
             ? "admin-page-container__big-page"
             : "admin-page-container__small-page"
-          }`}
+        }`}
       >
         <div className="admin-page-container__page-header">
           <div className="admin-page-container__page-header-title-page">

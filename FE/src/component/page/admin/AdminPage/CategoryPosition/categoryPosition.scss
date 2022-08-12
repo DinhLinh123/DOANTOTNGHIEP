@@ -1,0 +1,36 @@
+.categoryposition-manager {
+    height: 100%;
+
+    &__filter {
+        width: 100%;
+        display: flex;
+        margin-bottom: 24px;
+        &-name{
+            margin-right: 10px;
+            width: 30%;
+        }
+        &-phone{
+            margin-right: 10px;
+            width: 30%;
+        }
+        &-date{
+            width: 20%;
+            margin-right: 10px;
+        }
+        &-create-new {
+            padding-top: 33px;
+            margin-left: auto;
+        }
+        
+    }
+    &__button{
+        display: flex;
+        justify-content: right;
+        margin-bottom: 20px;
+        
+    }
+
+    &__content{
+        height: calc(100% - 60px);
+    }
+}

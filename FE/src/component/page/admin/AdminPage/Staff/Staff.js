@@ -271,13 +271,6 @@ function Staff(props) {
                         //onClick={() => handleClickAddPosition()}
                         />
                     </div>
-                    <div className="staff-manager__button-position">
-                        <Button2
-                            name={"Thêm mới Chức vụ"}
-                            leftIcon={<PlusOutlined />}
-                            onClick={() => handleClickAddPosition()}
-                        />
-                    </div>
                     <div className="staff-manager__button-create-new">
                         <Button2
                             name={"Thêm mới nhân viên"}
@@ -349,27 +342,13 @@ function Staff(props) {
                                 placeholder="dd/MM/yyyy"
                                 label={"Ngày sinh"}
                             />
-                            <div className="staff-manager__popup-position-lable">Chức vụ</div>
-                            <div className="staff-manager__popup-position-select">
-                                <Select
-                                    showSearch
-                                    placeholder="Chọn chức vụ"
-                                    optionFilterProp="children"
-                                    onChange={onChange}
-                                    onSearch={onSearch}
-                                    height={36}
-                                    width={546}
-                                // filterOption={(input, option) =>
-                                //     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                                // }
-                                >
-                                    {dataPosition?.map((item, index) => {
-                                        return (
-                                            <Option value={index}>{item.name}</Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
+                            <Dropdown 
+                                listOption={dataPosition}  
+                                placeholder={"Chọn chức vụ"} 
+                                title={"Chức vụ"}
+                                defaultValue={staffPosition}
+                                onChange={(val) => { setStaffPosition(val) }}
+                                />
                             <Input
                                 label={"Số điện thoại"}
                                 defaultValue={staffPhone}
@@ -391,42 +370,7 @@ function Staff(props) {
                         </div>
                     }
                 />
-                <Popup
-                    title={"Thêm mới chức vụ"}
-                    show={isShowPopupAddPosition}
-                    onClickClose={() => onChangeAddPosition()}
-                    button={[
-                        <Button2
-                            name={"Đóng"}
-                            onClick={() => onChangeAddPosition()}
-                        />,
-                        <Button2
-                            name={"Lưu"}
-                            onClick={() => onChangeAddPosition()}
-                            background="#fa983a"
-                        />,
-                    ]}
-                    width={600}
-                    className={"menu-popup-create"}
-                    body={
-                        <div>
-                            <Input
-                                label={"Mã chức vụ"}
-                                defaultValue={PositionCode}
-                                onChange={(val) => {
-                                    setPositionCode(val);
-                                }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Tên chức vụ"}
-                                defaultValue={PositionName}
-                                onChange={(val) => { setPositionName(val) }}
-                                autoFocus
-                            />
-                        </div>
-                    }
-                />
+                
             </div>
         </AdminPage>
 

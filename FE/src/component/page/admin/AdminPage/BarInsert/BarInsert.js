@@ -35,54 +35,67 @@ function BarInsert(props) {
     const COLUMN_TABLE_INDEX_MENU = {
         CODE: "code",
         NAME: "name",
-        SEX: "sex",
-        DATE: "date",
-        POSITION: "position",
-        PHONE: "phone",
-        ADDRESS: "address",
+        GROUP: "group",
+        AMOUNT: "amount",
+        UNIT: "unit",
+        UNITPRICE: "unitPrice",
+        INTOMONEY: "intoMoney",
         NOTE: "note",
+        PERSON: "person",
+        DATE: "date",
+
     };
 
     const columns = [
         {
-            title: "Mã nhân viên",
+            title: "Mã mặt hàng",
             dataIndex: COLUMN_TABLE_INDEX_MENU.CODE,
             width: "150px",
         },
         {
-            title: "Tên nhân viên",
+            title: "Tên mặt hàng",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
             sorter: true,
             width: "250px",
         },
         {
-            title: "Giới tính",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.SEX,
-            width: "100px",
-        },
-        {
-            title: "Ngày sinh",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+            title: "Nhóm mặt hàng",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.GROUP,
             width: "200px",
         },
         {
-            title: "Chức vụ",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.POSITION,
+            title: "Số lượng",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.AMOUNT,
             width: "200px",
         },
         {
-            title: "Số điện thoại",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.PHONE,
+            title: "Đơn vị tính",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
             width: "200px",
         },
         {
-            title: "Địa chỉ",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: "300px",
+            title: "Đơn giá",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.UNITPRICE,
+            width: "200px",
+        },
+        {
+            title: "Thành tiền",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.INTOMONEY,
+            width: "200px",
         },
         {
             title: "Ghi chú",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+            width: "250px",
+        },
+        {
+            title: "Người nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.PERSON,
+            width: "200px",
+        },
+        {
+            title: "Ngày nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
             width: "250px",
         },
     ];
@@ -90,63 +103,32 @@ function BarInsert(props) {
     const data = [
         {
             key: "1",
-            code: "B001",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
+            code: "ps",
+            name: "pepsi",
+            group: "nước ngọt",
+            amount: 60,
+            unit: "lon",
+            unitPrice: 8000,
+            intoMoney: 480000,
+            note: "đã thanh toán",
+            person: "Linhdtt",
+            date: "12/12/2022"
         },
         {
             key: "2",
-            code: "B002",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
+            code: "rd",
+            name: "Rượu dừa",
+            group: "Rượu",
+            amount: 60,
+            unit: "Quả",
+            unitPrice: 80000,
+            intoMoney: 4800000,
+            note: "đã thanh toán",
+            person: "Linhdtt",
+            date: "12/12/2022"
         },
-        {
-            key: "3",
-            code: "B003",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
-        {
-            key: "4",
-            code: "B004",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
+        
     ];
-    const dataPosition = [
-        {
-            value: "1",
-            label: "Phục vụ bàn"
-        },
-        {
-            value: "2",
-            label: "Bếp"
-        },
-        {
-            value: "3",
-            label: "Thu ngân"
-        },
-    ]
     const dataDrinks = [
         {
             value: "1",
@@ -194,23 +176,29 @@ function BarInsert(props) {
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
-    function columnSex(item) {
-        return <div>{item?.sex}</div>;
+    function columnGroup(item) {
+        return <div>{item?.group}</div>;
     }
-    function columnDate(item) {
-        return <div>{item?.date}</div>;
+    function columnAmount(item) {
+        return <div>{item?.amount}</div>;
     }
-    function columnPosition(item) {
-        return <div>{item?.position}</div>;
+    function columnUnit(item) {
+        return <div>{item?.unit}</div>;
     }
-    function columnPhone(item) {
-        return <div>{item?.phone}</div>;
+    function columnUnitPrice(item) {
+        return <div>{item?.unitPrice}</div>;
     }
-    function columnAddress(item) {
-        return <div>{item?.address}</div>;
+    function columnIntoMoney(item) {
+        return <div>{item?.intoMoney}</div>;
     }
     function columnNote(item) {
         return <div>{item?.note}</div>;
+    }
+    function columnPerson(item) {
+        return <div>{item?.person}</div>;
+    }
+    function columnDate(item) {
+        return <div>{item?.date}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -219,12 +207,14 @@ function BarInsert(props) {
             return {
                 [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.SEX]: columnSex(item),
-                [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
-                [COLUMN_TABLE_INDEX_MENU.POSITION]: columnPosition(item),
-                [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
-                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                [COLUMN_TABLE_INDEX_MENU.GROUP]: columnGroup(item),
+                [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
+                [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
+                [COLUMN_TABLE_INDEX_MENU.UNITPRICE]: columnUnitPrice(item),
+                [COLUMN_TABLE_INDEX_MENU.INTOMONEY]: columnIntoMoney(item),
                 [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
+                [COLUMN_TABLE_INDEX_MENU.PERSON]: columnPerson(item),
+                [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
                 key: idx,
             };
         });
@@ -256,27 +246,44 @@ function BarInsert(props) {
     // useEffect(()=>{console.log(staffName)},[staffName])
     return (
         <AdminPage
-            title={"Quản lý quầy Bar"}
+            title={"Quản lý nhập liệu"}
             index={MENU_TAB_ADMIN.BAR_INSERT}
         >
             <div className="barInsert-manager">
                 <div className="barInsert-manager__filter">
                     <div className="barInsert-manager__filter-code">
                         <InputField
-                            label={"Mã nhân viên"}
-                            placeholder={"Mã nhân viên"}
+                            label={"Mã mặt hàng"}
+                            placeholder={"Mã mặt hàng"}
                         //width={"20%"} 
                         />
                     </div>
                     <div className="barInsert-manager__filter-name">
                         <InputField
-                            label={"Tên nhân viên"}
-                            placeholder={"Tên nhân viên"}
+                            label={"Tên mặt hàng"}
+                            placeholder={"Tên mặt hàng"}
                         //width={"20%"} 
                         />
                     </div>
                     <div className="barInsert-manager__filter-position">
-                            <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"}/>
+                            <Dropdown 
+                                listOption={dataDrinks} 
+                                placeholder={"Chọn nhóm mặt hàng"} 
+                                title={"Nhóm mặt hàng"}
+                            />
+                    </div>
+                    <div className="barInsert-manager__filter-date">
+                    <DatePicker
+                            defaultValue={moment().unix()
+                                * 1000}
+                            //min={moment().unix() * 1000 - ONE_DAY}
+                            // onChange={(val) => {
+                            //     setStaffDate(val);
+                            // }}
+                            placeholder="dd/MM/yyyy"
+                            label={"Ngày nhập"}
+                            width={"100%"}
+                        />
                     </div>
                 </div>
                 <div className="barInsert-manager__button">
@@ -287,16 +294,9 @@ function BarInsert(props) {
                         //onClick={() => handleClickAddPosition()}
                         />
                     </div>
-                    <div className="staff-manager__button-position">
-                        <Button2
-                            name={"Thêm mới Chức vụ"}
-                            leftIcon={<PlusOutlined />}
-                            onClick={() => handleClickAddPosition()}
-                        />
-                    </div>
                     <div className="barInsert-manager__button-create-new">
                         <Button2
-                            name={"Thêm mới đồ uống"}
+                            name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
                         />
@@ -320,7 +320,7 @@ function BarInsert(props) {
                     />
                 </div>
                 <Popup
-                    title={"Thêm mới đồ uống"}
+                    title={"Thêm mới mặt hàng"}
                     show={isShowPopupAddnew}
                     onClickClose={() => onChangeTab()}
                     button={[
@@ -339,7 +339,7 @@ function BarInsert(props) {
                     body={
                         <div className="barInsert-manager__popup">
                             <Input
-                                label={"Mã đồ uống"}
+                                label={"Mã mặt hàng"}
                                 defaultValue={drinksCode}
                                 onChange={(val) => {
                                     setDrinksCode(val);
@@ -348,15 +348,15 @@ function BarInsert(props) {
                             />
                             <Dropdown 
                                 listOption={dataDrinks} 
-                                placeholder={"Nhập hoặc chọn tên đồ uống"} 
-                                title={"Tên đồ uống"} 
+                                placeholder={"Nhập hoặc chọn tên mặt hàng"} 
+                                title={"Tên mặt hàng"} 
                                 defaultValue={drinksName}
                                 onChange={(val) => { setDrinksName(val) }}
                                 />
                             <Dropdown 
                                 listOption={dataDrinks} 
-                                placeholder={"Chọn nhóm đồ uống"} 
-                                title={"Nhóm đồ uống"} 
+                                placeholder={"Chọn nhóm mặt hàng"} 
+                                title={"Nhóm mặt hàng"} 
                                 defaultValue={drinksGroup}
                                 onChange={(val) => { setDrinksGroup(val) }}
                                 />
@@ -385,42 +385,7 @@ function BarInsert(props) {
                         </div>
                     }
                 />
-                <Popup
-                    title={"Thêm mới chức vụ"}
-                    show={isShowPopupAddPosition}
-                    onClickClose={() => onChangeAddPosition()}
-                    button={[
-                        <Button2
-                            name={"Đóng"}
-                            onClick={() => onChangeAddPosition()}
-                        />,
-                        <Button2
-                            name={"Lưu"}
-                            onClick={() => onChangeAddPosition()}
-                            background="#fa983a"
-                        />,
-                    ]}
-                    width={600}
-                    className={"menu-popup-create"}
-                    body={
-                        <div>
-                            <Input
-                                label={"Mã chức vụ"}
-                                defaultValue={PositionCode}
-                                onChange={(val) => {
-                                    setPositionCode(val);
-                                }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Tên chức vụ"}
-                                defaultValue={PositionName}
-                                onChange={(val) => { setPositionName(val) }}
-                                autoFocus
-                            />
-                        </div>
-                    }
-                />
+                
             </div>
         </AdminPage>
 

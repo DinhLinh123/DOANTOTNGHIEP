@@ -24,6 +24,7 @@ function Booking(props) {
   //state
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [note, setNote] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerNamePhone, setCustomerPhone] = useState("");
   const [dateBooking, setDateBooking] = useState(moment().unix()
@@ -138,6 +139,21 @@ function Booking(props) {
                   }}
                 />
               </div>
+              
+            </div>
+            <div className="booking-container__book-right-item">
+              <Input
+                defaultValue={note}
+                onChange={(val) => {
+                  setNote(val);
+                }}
+                //type={"number"}
+                label={"Ghi chú"}
+                required
+                setDangerNote={(val) => {
+                  setNote(val);
+                }}
+              />
             </div>
             <div className="booking-container__book-right-button">
               <Button name="Đặt bàn" background="#F3E385" color="#000" disabled={disabledButton} onClick={() => onSubmit()} />

@@ -6,14 +6,14 @@ import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import Input from "../../../../base/Input/Input";
-import "./barList.scss"
+import "./feedback.scss"
 import Popup from "../../../../base/Popup/Popup";
 import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
 
-function BarList(props) {
+function ManagerFeedback(props) {
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
@@ -33,76 +33,60 @@ function BarList(props) {
     const [PositionCode, setPositionCode] = useState("");
     const [PositionName, setPositionName] = useState("");
     const COLUMN_TABLE_INDEX_MENU = {
-        CODE: "code",
         NAME: "name",
-        GROUP: "group",
-        AMOUNT: "amount",
-        UNIT: "unit",
-        NOTE: "note",
+        EMAIL: "email",
+        PHONE: "phone",
+        CONTENT: "content",
+        DATE: "date"
 
     };
 
     const columns = [
         {
-            title: "Mã mặt hàng",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.CODE,
-            width: "150px",
-        },
-        {
-            title: "Tên mặt hàng",
+            title: "Họ Tên",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: true,
-            width: "250px",
-        },
-        {
-            title: "Nhóm mặt hàng",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.GROUP,
             width: "200px",
         },
         {
-            title: "Số lượng",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.AMOUNT,
-            width: "200px",
-            sorter: true,
-        },
-        {
-            title: "Đơn vị tính",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
+            title: "Email",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.EMAIL,
             width: "200px",
         },
         {
-            title: "Ghi chú",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
-            width: "250px",
+            title: "Số điện thoại",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.PHONE,
+            width: "200px",
         },
+        {
+            title: "Nội dung",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.CONTENT,
+            width: "300px",
+        },
+        {
+            title: "Ngày nhập",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+            width: "100px",
+        },
+        
     ];
 
     const data = [
         {
             key: "1",
-            code: "ps",
-            name: "pepsi",
-            group: "nước ngọt",
-            amount: 60,
-            unit: "lon",
-            unitPrice: 8000,
-            intoMoney: 480000,
-            note: "đã thanh toán",
-            person: "Linhdtt",
-            date: "12/12/2022"
+            name: "Linh",
+            email: "linh123@gmail.com",
+            phone: "0358100337",
+            content: "Đồ ăn hơi mặn",
+            date: "12/12/2022",
+            
         },
         {
             key: "2",
-            code: "rd",
-            name: "Rượu dừa",
-            group: "Rượu",
-            amount: 60,
-            unit: "Quả",
-            unitPrice: 80000,
-            intoMoney: 4800000,
-            note: "đã thanh toán",
-            person: "Linhdtt",
-            date: "12/12/2022"
+            name: "Linh",
+            email: "linh123@gmail.com",
+            phone: "0358100337",
+            content: "Đồ ăn hơi mặn",
+            date: "12/12/2022",
         },
         
     ];
@@ -147,35 +131,32 @@ function BarList(props) {
     };
 
     
-    function columnCode(item) {
-        return <div>{item?.code}</div>;
-    }
+
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
-    function columnGroup(item) {
-        return <div>{item?.group}</div>;
+    function columnEmail(item) {
+        return <div>{item?.email}</div>;
     }
-    function columnAmount(item) {
-        return <div>{item?.amount}</div>;
+    function columnPhone(item) {
+        return <div>{item?.phone}</div>;
     }
-    function columnUnit(item) {
-        return <div>{item?.unit}</div>;
+    function columnContent(item) {
+        return <div>{item?.content}</div>;
     }
-    function columnNote(item) {
-        return <div>{item?.note}</div>;
+    function columnDate(item) {
+        return <div>{item?.date}</div>;
     }
 
     function convertDataTable(dataTable) {
         let listData;
         listData = dataTable.map((item, idx) => {
             return {
-                [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.GROUP]: columnGroup(item),
-                [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
-                [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
-                [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
+                [COLUMN_TABLE_INDEX_MENU.EMAIL]: columnEmail(item),
+                [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
+                [COLUMN_TABLE_INDEX_MENU.CONTENT]: columnContent(item),
+                [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
                 key: idx,
             };
         });
@@ -207,44 +188,36 @@ function BarList(props) {
     // useEffect(()=>{console.log(staffName)},[staffName])
     return (
         <AdminPage
-            title={"Quản lý mặt hàng"}
-            index={MENU_TAB_ADMIN.BAR}
+            title={"Quản lý góp ý từ khách hàng"}
+            index={MENU_TAB_ADMIN.FEEDBACK}
         >
-            <div className="barlist-manager">
-                <div className="barlist-manager__filter">
-                    <div className="barlist-manager__filter-code">
+            <div className="managerfeedback-manager">
+                <div className="managerfeedback-manager__filter">
+                    <div className="managerfeedback-manager__filter-code">
                         <InputField
-                            label={"Mã mặt hàng"}
-                            placeholder={"Mã mặt hàng"}
+                            label={"Họ tên"}
+                            placeholder={"Họ Tên"}
                         //width={"20%"} 
                         />
                     </div>
-                    <div className="barlist-manager__filter-name">
+                    <div className="managerfeedback-manager__filter-name">
                         <InputField
-                            label={"Tên mặt hàng"}
-                            placeholder={"Tên mặt hàng"}
+                            label={"Số điện thoại"}
+                            placeholder={"Số điện thoại"}
                         //width={"20%"} 
                         />
-                    </div>
-                    <div className="barlist-manager__filter-position">
-                            <Dropdown 
-                                listOption={dataDrinks} 
-                                placeholder={"Chọn nhóm mặt hàng"} 
-                                title={"Nhóm mặt hàng"}
-                            />
                     </div>
                     
-                </div>
-                <div className="barlist-manager__button">
-                    <div className="barlist-manager__button-search">
+                    <div className="managerfeedback-manager__filter-search">
                         <Button2
                             name={"Tìm kiếm"}
                             leftIcon={<SearchOutlined />}
                         //onClick={() => handleClickAddPosition()}
                         />
-                    </div>
+                    </div> 
                 </div>
-                <div className="barlist-manager__content">
+                
+                <div className="managerfeedback-manager__content">
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
@@ -268,4 +241,4 @@ function BarList(props) {
     )
 
 }
-export default BarList
+export default ManagerFeedback
