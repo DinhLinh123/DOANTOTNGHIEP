@@ -25,7 +25,7 @@ namespace ManagerRestaurant.API.Controllers
             {
                 if (formFile.Length > 0)
                 {
-                    var path = Directory.GetCurrentDirectory() + "\\hinhanh\\";
+                    var path = Directory.GetCurrentDirectory() + "\\wwwroot\\hinhanh\\";
                     if (!Directory.Exists(path))
                     {
                         //create if not exist
@@ -38,7 +38,7 @@ namespace ManagerRestaurant.API.Controllers
                     {
                         await formFile.CopyToAsync(stream);
                     }
-                    pathfiles.Add("\\hinhanh\\" +pathfile);
+                    pathfiles.Add(@"/hinhanh/" +pathfile);
                 }
             }
 
