@@ -16,14 +16,16 @@ import Input from "../../../../base/Input/Input";
 import baseApi from "../../../../../api/baseApi"
 import { Tooltip, Upload, Radio } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
-import { API_MENU } from "../../../../base/common/endpoint";
+import { API_MENU, API_TYPE_FOOD } from "../../../../base/common/endpoint";
 import commonFunction from "../../../../base/common/commonFunction";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import RadioCheck from "../../../../base/Radio/Radio";
+import ModalConfirm from "../../../../base/ModalConfirm/ModalConfirm";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
-  const [index, setIndex] = useState(1)
+  const [index, setIndex] = useState({ value: 0, item: '' })
   // thêm mới món riêng
   const [foodName, setFoodName] = useState("");
   const [foodUnit, setFoodUnit] = useState("");
@@ -33,6 +35,10 @@ function Menu(props) {
   const [foodStatus, setFoodStatus] = useState(1);
   const [foodNote, setFoodNote] = useState("");
   const [foodDetail, setFoodDetail] = useState({});
+  const [dataTable, setDataTable] = useState([]);
+  const [nameTypeFood, setNameTypeFood] = useState('');
+  const [isManyTypeFood, setIsManyTypeFood] = useState(0);
+  const [isShowPopupAddNewTypeFood, setIsShowPopupAddNewTypeFood] = useState(false);
 
   const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({
     show: false,
@@ -40,7 +46,10 @@ function Menu(props) {
   });
   const [listFood, setListFood] = useState([{ food: "" }]);
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
-  const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, index: -1 });
+  const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({show: false, item: ''});
+  const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
+  const [listMenu, setListMenu] = useState([]);
+
 
   const [images, setImages] = useState([]);
 
@@ -82,100 +91,19 @@ function Menu(props) {
       sorter: true
     },
     {
-      title: "Ảnh",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.IMAGE,
-      width: "300px",
-    },
-    {
-      title: "Mô tả",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.DESCRIBE,
-      width: "300px",
-    },
-    {
       title: "Trạng thái",
       dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
       width: "200px",
     },
   ];
 
-  const data = [
-    {
-      id: "1",
-      name: "John Brown",
-      unit: 32,
-      price: 100000,
-      describe: "New York No. 1 Lake Park",
-      categorys: 2,
-      statuss: 1,
-    },
-    {
-      id: "2",
-      name: "Jim Green",
-      unit: 42,
-      price: 100000,
-      describe: "London No. 1 Lake Park",
-      categorys: 3,
-      statuss: 0
-    },
-    {
-      id: "3",
-      name: "Joe Black",
-      unit: 32,
-      price: 100000,
-      describe: "Sidney No. 1 Lake Park",
-      categorys: 1,
-      statuss: 1,
-      listFoods: '[{"food":"ddd"},{"food":"df"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"},{"food":"2gdfghdfghdfghdfghdfghdfghdgfh"}]'
-    },
-    {
-      id: "4",
-      name: "Jim Red",
-      unit: 32,
-      price: 100000,
-      describe: "London No. 2 Lake Park",
-      categorys: 4,
-      statuss: 1
-    }, {
-      id: "5",
-      name: "Jim Green",
-      unit: 42,
-      price: 100000,
-      describe: "London No. 1 Lake Park",
-      categorys: 2,
-      statuss: 0
-    },
-    {
-      id: "6",
-      name: "Joe Black",
-      unit: 32,
-      price: 100000,
-      describe: "Sidney No. 1 Lake Park",
-      categorys: 4,
-      statuss: 1
-    },
-    {
-      id: "7",
-      name: "Jim Red",
-      unit: 32,
-      price: 100000,
-      describe: "London No. 2 Lake Park",
-      categorys: 1,
-      statuss: 0
-    }, {
-      id: "8",
-      name: "Jim Green",
-      unit: 42,
-      price: 100000,
-      describe: "London No. 1 Lake Park",
-      categorys: 3,
-      statuss: 0
-    },
-  ];
-
   const OPTION_MORE_TABLE = [
     {
       title: "Chi tiết",
-      onSelect: (val) => { setFoodDetail(val.detail); setIsShowPopupDetail({ show: true, index: val.categorys }) },
+      onSelect: (val) => { 
+        setFoodDetail(val.detail); 
+        callGetTypeFoodById(val.detail.maTheLoai)
+      },
     },
     {
       title: "Sửa",
@@ -185,40 +113,52 @@ function Menu(props) {
     },
     {
       title: "Xóa",
-      onSelect: () => {
-        alert("Xóa");
+      onSelect: (val) => {
+        setIsShowPopupComfirmDelete({show: true, item: val.detail})
       },
     },
   ];
+
+  function callGetTypeFoodById(id) {
+    baseApi.get(
+      (res) => {
+        setIsShowPopupDetail({ show: true, isMany: res.isMany }) 
+      },
+      () => {
+      },
+      null,
+      API_TYPE_FOOD.GET_BY_ID+ id,
+      null,
+      {}
+    )
+  }
+
+  useEffect(() => {
+    callGetAddFood()
+  }, [])
 
   function columnName(item) {
     return <div>{item?.name}</div>;
   }
   function columnUnit(item) {
-    return <div>{item?.unit}</div>;
+    return <div>{item?.donViTinh}</div>;
   }
   function columnCategory(item) {
-    switch (item.categorys) {
-      case 1:
-        return <div>Buffet</div>;
-      case 2:
-        return <div>Món riêng</div>;
-      case 3:
-        return <div>Đồ uống</div>;
-      case 4:
-        return <div>Khác</div>;
-    }
+    return <div>{item.theLoaiDoAn}</div>
   }
   function columnDescribe(item) {
     return <div>{item?.describe}</div>;
   }
+  function columnPrice(item) {
+    return <div>{commonFunction.numberWithCommas(item?.donGia)}</div>;
+  }
 
   function columnStatus(item) {
 
-    switch (item.statuss) {
-      case 0:
+    switch (item.trangThai) {
+      case false:
         return <div>Hết hàng</div>;
-      case 1:
+      case true:
         return <div>Còn hàng</div>;
     }
   }
@@ -227,47 +167,73 @@ function Menu(props) {
     let listData;
     listData = dataTable.map((item, idx) => {
       return {
-        ...item,
         detail: item,
         [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+        [COLUMN_TABLE_INDEX_MENU.PRICE]: columnPrice(item),
         [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
         [COLUMN_TABLE_INDEX_MENU.CATEGORY]: columnCategory(item),
         [COLUMN_TABLE_INDEX_MENU.DESCRIBE]: columnDescribe(item),
         [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: idx,
-        ...item
+        item
       };
     });
     return [...listData];
   }
 
-  let listMenu = [
-    {
-      title: "Buffet",
-      index: 1,
-    },
-    {
-      title: "Món riêng",
-      index: 2,
-    },
-    {
-      title: "Đồ uống",
-      index: 3,
-    },
-    {
-      title: "Khác",
-      index: 4,
-    },
-  ];
+  useEffect(() => { if (isShowPopupAddnew) { callGetTypeFood() } }, [isShowPopupAddnew])
+
+  function callGetTypeFood() {
+
+    baseApi.get(
+      (res) => {
+        setListMenu(res)
+        setIndex({ value: 0, item: res[0] })
+      },
+      () => {
+      },
+      null,
+      API_TYPE_FOOD.GET_ALL,
+      null,
+      {}
+    )
+  }
+
+  function callAddTypeFood() {
+    let body = {
+      "name": nameTypeFood,
+      "isMany": isManyTypeFood == 1,
+      "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "createdByUserName": "string",
+      "createdOnDate": "2022-08-11T04:57:29.357Z",
+      "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "lastModifiedByUserName": "string"
+    }
+    baseApi.post(
+      (res) => {
+        setListMenu(res)
+        callGetTypeFood()
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm thể loại món ăn thành công")
+      },
+      () => {
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm thể loại món ăn thất bại")
+
+      },
+      null,
+      API_TYPE_FOOD.GET_ALL,
+      null,
+      body
+    )
+  }
 
   function handleClickAddnew(type) {
     setIsShowPopupAddnew(true);
   }
 
-  function onChangeTab(item) {
+  function onChangeTab(item, index) {
     if (foodName?.length > 0 || foodUnit?.length > 0 || foodPrice?.length > 0 || foodDescribe?.length > 0 || foodNote?.length > 0 || images?.length > 0) {
 
-      setShowPopupWarningChangeTab({ show: true, newIndex: item.index })
+      setShowPopupWarningChangeTab({ show: true, newIndex: index })
     }
     else {
       setFoodName("")
@@ -276,7 +242,7 @@ function Menu(props) {
       setFoodDescribe("")
       setFoodNote("")
       setImages([])
-      setIndex(item.index)
+      setIndex({ value: index, item: item })
     }
   }
 
@@ -288,12 +254,8 @@ function Menu(props) {
     setFoodNote("")
     setImages([])
     setShowPopupWarningChangeTab({ show: false, newIndex: 0 });
-    setIndex(showPopupWarningChangeTab.newIndex)
+    setIndex({ value: showPopupWarningChangeTab.newIndex, item: '' })
   }
-
-
-
-  useEffect(() => { console.log(foodName) }, [foodName])
 
   function ChangeNameFood(val, index) {
     let _listFood = [...listFood];
@@ -307,7 +269,7 @@ function Menu(props) {
     setListFood(_listFood);
   }
 
-  useEffect(() => { console.log(listFood) }, [listFood])
+  useEffect(() => { console.log(isShowPopupDetail) }, [isShowPopupDetail])
 
   function addNameFood() {
     let _listFood = [...listFood];
@@ -365,7 +327,8 @@ function Menu(props) {
   }
 
   function handleEditMenu() {
-    setIndex(isShowPopupDetail.index)
+
+    setIndex({ value: isShowPopupDetail.index, item: '' })
     setIsShowPopupAddnew(true)
     setFoodName(foodDetail.name)
     setFoodUnit(foodDetail.unit)
@@ -375,30 +338,31 @@ function Menu(props) {
     setFoodNote(foodDetail.name)
     setImages([])
     setFoodStatus(foodDetail.statuss)
-    setIsShowPopupDetail({ show: false, index: -1 })
+    // setIsShowPopupDetail({ show: false, index: -1 })
   }
 
   function callAddNewFood() {
     dispatch(changeLoadingApp(true))
     let body = {
       "name": foodName,
-      "theLoai": index.toString(),
+      "theLoaiDoAn": index.item,
       "linkAnh": foodImage,
-      "maTheLoai": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "donGia": foodPrice,
+      "maTheLoai": index.item.id,
       "loai": "string",
       "ghiChu": foodNote,
-      "danhSachMonAn": "string",
+      "danhSachMonAn": JSON.stringify(listFood),
       "donViTinh": foodUnit,
       "trangThai": foodStatus != 0,
       "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "createdByUserName": "string",
       "createdOnDate": "2022-08-04T14:31:40.035Z"
     }
-
     baseApi.post(
       (res) => {
         dispatch(changeLoadingApp(false))
         setIsShowPopupAddnew(false)
+        callGetAddFood()
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm món thành công")
       },
       () => {
@@ -408,23 +372,48 @@ function Menu(props) {
       null,
       API_MENU.CREATE_NEW,
       null,
-      {
-        "name": foodName,
-        "theLoai": index.toString(),
-        "linkAnh": foodImage,
-        "maTheLoai": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "loai": "string",
-        "ghiChu": foodNote,
-        "danhSachMonAn": "string",
-        "donViTinh": foodUnit,
-        "trangThai": foodStatus != 0,
-        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "createdByUserName": "string",
-        "createdOnDate": "2022-08-04T14:31:40.035Z"
-      }
+      body
     )
   }
 
+  function callGetAddFood() {
+    dispatch(changeLoadingApp(true))
+
+    baseApi.get(
+      (res) => {
+        setDataTable(res)
+        dispatch(changeLoadingApp(false))
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+      },
+      null,
+      API_MENU.GET_ALL,
+      null,
+      {}
+    )
+  }
+
+  function callDeleteMenu() {
+    dispatch(changeLoadingApp(true))
+    baseApi.delete(
+      (res) => {
+        dispatch(changeLoadingApp(false))
+        setIsShowPopupComfirmDelete({show: false, item: ''})
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa món thành công")
+        callGetAddFood()
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+        setIsShowPopupComfirmDelete({show: false, item: ''})
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa món thất bại")
+      },
+      null,
+      API_MENU.GET_BY_ID+ isShowPopupComfirmDelete.item.id,
+      null,
+      {}
+    )
+  }
 
   return (
     <AdminPage title={"Quản lý menu"} index={MENU_TAB_ADMIN.MENU}>
@@ -446,7 +435,7 @@ function Menu(props) {
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
             total={90}
-            data={convertDataTable(data)}
+            data={convertDataTable(dataTable)}
             loading={false}
             hasMoreOption
             option={OPTION_MORE_TABLE}
@@ -485,22 +474,25 @@ function Menu(props) {
                   return (
                     <div
                       className="menu-manager__popup-header-menu"
-                      style={item.index === index ? {
+                      style={key === index.value ? {
                         color: "#00b894",
                         borderBottom: '2px solid #00b894'
                       } :
                         {}}
                       onClick={(val) => {
-                        onChangeTab(item);
+                        onChangeTab(item, key);
                       }}
                     >
-                      {item.title}
+                      {item.name}
                     </div>
                   );
                 })}
+                <div onClick={() => setIsShowPopupAddNewTypeFood(true)}>
+                  <PlusOutlined />
+                </div>
               </div>
               <div className="menu-manager__popup-content">
-                {index == 1 && (
+                {index.item?.isMany && (
                   <div className="menu-manager__popup-content-buffet">
                     <div className="menu-manager__popup-content-buffet-name">
                       <Input
@@ -564,7 +556,7 @@ function Menu(props) {
                   </div>
                 )}
 
-                {index == 2 && (
+                {!index.item?.isMany && (
                   <div>
                     <Input
                       label={"Tên món"}
@@ -609,92 +601,6 @@ function Menu(props) {
                     </Radio.Group>
                   </div>
                 )}
-                {
-                  index == 3 && <div>
-                    <Input
-                      label={"Tên đồ uống"}
-                      defaultValue={foodName}
-                      onChange={(val) => { setFoodName(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Đơn vị tính"}
-                      defaultValue={foodUnit}
-                      onChange={(val) => { setFoodUnit(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Giá tiền"}
-                      defaultValue={foodPrice}
-                      onChange={(val) => { setFoodPrice(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Mô tả"}
-                      defaultValue={foodDescribe}
-                      onChange={(val) => { setFoodDescribe(val) }}
-                      autoFocus
-                    />
-                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                    <div>
-                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
-                    </div>
-                    <Input
-                      label={"Ghi chú"}
-                      defaultValue={foodNote}
-                      onChange={(val) => { setFoodNote(val) }}
-                      autoFocus
-                    />
-                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
-                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
-                      <Radio value={1}>Còn</Radio>
-                      <Radio value={0}>Hết</Radio>
-                    </Radio.Group>
-                  </div>
-                }
-                {
-                  index == 4 && <div>
-                    <Input
-                      label={"Tên"}
-                      defaultValue={foodName}
-                      onChange={(val) => { setFoodName(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Đơn vị tính"}
-                      defaultValue={foodUnit}
-                      onChange={(val) => { setFoodUnit(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Giá tiền"}
-                      defaultValue={foodPrice}
-                      onChange={(val) => { setFoodPrice(val) }}
-                      autoFocus
-                    />
-                    <Input
-                      label={"Mô tả"}
-                      defaultValue={foodDescribe}
-                      onChange={(val) => { setFoodDescribe(val) }}
-                      autoFocus
-                    />
-                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
-                    <div>
-                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
-                    </div>
-                    <Input
-                      label={"Ghi chú"}
-                      defaultValue={foodNote}
-                      onChange={(val) => { setFoodNote(val) }}
-                      autoFocus
-                    />
-                    <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
-                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
-                      <Radio value={1}>Còn</Radio>
-                      <Radio value={0}>Hết</Radio>
-                    </Radio.Group>
-                  </div>
-                }
               </div>
             </div>
           }
@@ -725,11 +631,11 @@ function Menu(props) {
         <Popup
           title={"Chi tiết menu"}
           show={isShowPopupDetail.show}
-          onClickClose={() => setIsShowPopupDetail({ show: false, index: -1 })}
+          onClickClose={() => setIsShowPopupDetail({ show: false, isMany: false })}
           button={[
             <Button2
               name={"Đóng"}
-              onClick={() => setIsShowPopupDetail({ show: false, index: -1 })}
+              onClick={() => setIsShowPopupDetail({ show: false, isMany: false })}
             />,
             <Button2
               name={"Sửa"}
@@ -744,7 +650,7 @@ function Menu(props) {
           body={
             <div className="menu-manager__popup-detail">
               <div className="menu-manager__popup-detail-content">
-                {isShowPopupDetail.index == 1 && (
+                {isShowPopupDetail.isMany && (
                   <div className="menu-manager__popup-detail-content-buffet">
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Tên món: </span>
@@ -752,23 +658,23 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-list">
                       <span className="menu-manager__popup-detail-content-buffet-list-label">Danh sách món: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-list-value">{renderListFood(foodDetail.listFoods)}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-list-value">{renderListFood(foodDetail.danhSachMonAn)}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Đơn vị tính: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.unit}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.donViTinh}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnCategory(foodDetail)}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.theLoaiDoAn}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.price}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{commonFunction.numberWithCommas(parseInt(foodDetail.donGia))}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.images}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.linkAnh}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
@@ -781,7 +687,7 @@ function Menu(props) {
                   </div>
                 )}
 
-                {(isShowPopupDetail.index == 2 || isShowPopupDetail.index == 3 || isShowPopupDetail.index == 4) && (
+                {!isShowPopupDetail?.isMany && (
                   <div className="menu-manager__popup-detail-content-buffet">
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Tên món: </span>
@@ -789,19 +695,19 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Đơn vị tính: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.unit}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.donViTinh}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{columnCategory(foodDetail)}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.theLoaiDoAn}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.price}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{commonFunction.numberWithCommas(parseInt(foodDetail.donGia))}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.images}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.linkAnh}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
@@ -817,6 +723,72 @@ function Menu(props) {
             </div>
           }
         />
+        <Popup
+          title={"Thêm mới thể loại đồ ăn"}
+          show={isShowPopupAddNewTypeFood}
+          onClickClose={() => setIsShowPopupAddNewTypeFood(false)}
+          button={[
+            <Button2
+              name={"Đóng"}
+              onClick={() => {
+                setFoodName("")
+                setIsShowPopupAddNewTypeFood(false)
+              }}
+            />,
+            <Button2
+              name={"Lưu"}
+              onClick={() => callAddTypeFood()}
+              background="#fa983a"
+              disabled={nameTypeFood?.length <= 0}
+            />,
+          ]}
+          width={600}
+          className={"menu-popup-create-type-food"}
+          body={
+            <div className="menu-manager__popup">
+              <div className="menu-manager__popup-content">
+
+                <div className="menu-manager__popup-content-buffet">
+                  <div className="menu-manager__popup-content-buffet-name">
+                    <Input
+                      label={"Tên thể loại đồ ăn"}
+                      defaultValue={nameTypeFood}
+                      onChange={(val) => {
+                        setNameTypeFood(val);
+                      }}
+                      placeholder={"Tên thể loại đồ ăn..."}
+                      required
+                    />
+                  </div>
+                  <div className="menu-manager__popup-content-buffet-many">
+                    <RadioCheck
+                      title={"Kiểu"}
+                      valueDefault={isManyTypeFood}
+                      listOption={[
+                        {
+                          label: 'Một món',
+                          value: 0
+                        }, {
+                          label: 'Nhiều món',
+                          value: 1
+                        }
+                      ]}
+                      onChange={(val) => { setIsManyTypeFood(val) }}
+                    />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          }
+        />
+        <ModalConfirm
+                title={"món ăn"}
+                setShow={(val)=>setIsShowPopupComfirmDelete({show: val, item: ''})}
+                show={isShowPopupComfirmDelete.show}
+                onClickSuccess={()=>callDeleteMenu()}
+                contentName={isShowPopupComfirmDelete.item.name}
+            />
       </div>
     </AdminPage>
   );

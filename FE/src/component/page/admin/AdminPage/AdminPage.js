@@ -90,8 +90,6 @@ function AdminPage(props) {
     }
   }, [location]);
 
-  console.log(location.pathname);
-
   const dispatch = useDispatch();
 
   const wrapperRef = useRef(null);

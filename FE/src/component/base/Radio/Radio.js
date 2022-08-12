@@ -19,9 +19,9 @@ RadioCheck.defaultValue = {
     isVertical: false
 }
 
+
 function RadioCheck(props) {
     const { onChange, valueDefault, listOption, title, isVertical } = props;
-
     return (
         <div className={`container-radio`}>
             {title?.length > 0 &&

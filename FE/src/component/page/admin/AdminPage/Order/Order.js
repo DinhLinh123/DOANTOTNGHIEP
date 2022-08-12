@@ -15,7 +15,9 @@ import { Tooltip } from "antd";
 import noDataimg from "../../../../../image/no-data2.png"
 import { useParams } from "react-router-dom";
 import baseApi from "../../../../../api/baseApi";
-import { API_TABLE } from "../../../../base/common/endpoint";
+import { API_MENU, API_TABLE } from "../../../../base/common/endpoint";
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 function Order(props) {
 
   const [index, setIndex] = useState(1)
@@ -25,17 +27,23 @@ function Order(props) {
     show: false,
     index: ""
   })
+  const [listMenu, setListMenu] = useState([])
   const renderChoose = useRef([])
   let { tableID } = useParams();
+  const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     baseApi.get(
-      (res)=>{setTableName(res?.name)},
-      ()=>{},
+      (res) => { setTableName(res?.name) },
+      () => { },
       null,
       API_TABLE.GET_BY_ID + tableID
-      )
-  },[tableID])
+    )
+  }, [tableID])
+
+  useEffect(() => {
+    callGetAddFood()
+  }, [index])
 
   let logo = [
     {
@@ -139,7 +147,7 @@ function Order(props) {
   ]
 
   //Datafake danh mục món
-  let listMenu = [
+  let listCategory = [
     {
       title: 'Buffet',
       index: 1
@@ -160,6 +168,7 @@ function Order(props) {
 
 
   function handleChooseFood(item) {
+    debugger
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id)
     if (a == -1) {
@@ -193,9 +202,27 @@ function Order(props) {
   function renderTotalCount() {
     let total = 0;
     orderSelected?.map((item) => {
-      total += parseInt(item?.money) * parseInt(item?.count)
+      total += parseInt(item?.donGia) * parseInt(item?.count)
     })
     return total
+  }
+
+  function callGetAddFood() {
+    dispatch(changeLoadingApp(true))
+
+    baseApi.get(
+      (res) => {
+        setListMenu(res)
+        dispatch(changeLoadingApp(false))
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+      },
+      null,
+      API_MENU.GET_ALL,
+      null,
+      {}
+    )
   }
 
 
@@ -223,16 +250,16 @@ function Order(props) {
         </div>
         <div className="order-page-container__food-list__list">
           {
-            dataFake.map((item) => {
+            listMenu.map((item) => {
               return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
                 <div className="order-page-container__food-list__list-item-img">
                   <img src={item.img} />
                 </div>
                 <div className="order-page-container__food-list__list-item-title">
-                  {commonFunction.smartText(40, item.title)}
+                  {commonFunction.smartText(40, item.name)}
                 </div>
                 <div className="order-page-container__food-list__list-item-money">
-                  {item.money}đ
+                  {commonFunction.numberWithCommas(parseInt(item.donGia))}đ
                 </div>
               </div>)
             })
@@ -240,10 +267,10 @@ function Order(props) {
         </div>
         <div className="order-page-container__food-list__choose">
           {
-            listMenu.map((item, key) => {
+            listCategory.map((item, key) => {
               return (
                 <div className={`order-page-container__food-list__choose__children ${index == item.index ? 'order-selected' : ''}`}
-                  style={{ width: `calc(100% / ${listMenu?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
+                  style={{ width: `calc(100% / ${listCategory?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
                   onClick={() => { setIndex(item.index) }}
                 >
                   {item.title}
@@ -274,26 +301,26 @@ function Order(props) {
               Đơn giá
             </div>
           </div>
-          {orderSelected.length >0  ? orderSelected?.map((item) => {
+          {orderSelected?.length > 0 ? orderSelected?.map((item) => {
             return (
               <div className="order-page-container__selected-dish-content-choose">
                 <div className="order-page-container__selected-dish-content-choose-line1"
                   onMouseEnter={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
                   onMouseLeave={() => setDisplayLine2ChooseOrder({ show: false, index: "" })}
                   onClick={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
-                  style={{backgroundColor: displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id && '#dff9fb'}}
+                  style={{ backgroundColor: displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id && '#dff9fb' }}
                 >
-                  <div className="food-name">{commonFunction.smartText(35, item.title)}</div>
+                  <div className="food-name">{commonFunction.smartText(35, item.name)}</div>
                   <div className="line1-food-count">{item.count}</div>
                   <div className="food-money">
-                    {commonFunction.numberWithCommas(item.money)}(đ)
+                    {commonFunction.numberWithCommas(parseInt(item.donGia))}(đ)
                   </div>
                 </div>
                 {displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id &&
                   <div className="order-page-container__selected-dish-content-choose-line2"
                     onMouseEnter={() => setDisplayLine2ChooseOrder({ show: true, index: item.id })}
                     onMouseLeave={() => setDisplayLine2ChooseOrder({ show: false, index: "" })}
-                    style={{backgroundColor: displayLine2ChooseOrder.show&& displayLine2ChooseOrder.index == item.id && '#dff9fb'}}
+                    style={{ backgroundColor: displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id && '#dff9fb' }}
                   >
                     <div className="food-count">
                       <div className="food-count-button"><Tooltip title={"Giảm số lượng"} placement="bottom"><Button2 name={"-"} onClick={() => handleClickDownCount(item)} disabled={item?.count <= 1} /></Tooltip> </div>
@@ -305,9 +332,9 @@ function Order(props) {
                 }
               </div>
             )
-          }):<div className="order-page-container__selected-dish-content-no-data">
-              <img src={noDataimg} height={150} width={150}/>
-            </div>}
+          }) : <div className="order-page-container__selected-dish-content-no-data">
+            <img src={noDataimg} height={150} width={150} />
+          </div>}
         </div>
         <div className="order-page-container__selected-dish-footer">
           <div className="order-page-container__selected-dish-footer-total">

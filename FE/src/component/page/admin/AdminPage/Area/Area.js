@@ -1,80 +1,58 @@
 import React, { useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, SORT_TYPE } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, SORT_TYPE, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import "./area.scss"
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import baseApi from "../../../../../api/baseApi";
+import { API_AREA } from "../../../../base/common/endpoint";
+import { useEffect } from "react";
+import Popup from "../../../../base/Popup/Popup";
+import commonFunction from "../../../../base/common/commonFunction";
+import ModalConfirm from "../../../../base/ModalConfirm/ModalConfirm";
 
 function Area(props) {
-
+    const dispatch = useDispatch();
     const [sortType, setSortType] = useState();
+    const [dataTable, setDataTable] = useState([]);
+    const [areaName, setAreaName] = useState("");
+    const [isShowPopupAddNew, setIsShowPopupAddNew] = useState(false);
+    const [isShowPopupConfirmDelete, setIsShowPopupConfirmDelete] = useState({show: false, item:''});
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
         AGE: "age",
         ADDRESS: "address",
     };
-
     const columns = [
         {
-            title: "Name",
+            title: "Tên Khu vực",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
             sorter: true,
             width: "300px",
         },
-        {
-            title: "Age",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
-            defaultSortOrder: SORT_TYPE.DESC,
-            sorter: true,
-            width: "300px",
-        },
-        {
-            title: "Address",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: "300px",
-        },
-    ];
-
-    const data = [
-        {
-            key: "1",
-            name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
-        {
-            key: "3",
-            name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-        },
-        {
-            key: "4",
-            name: "Jim Red",
-            age: 32,
-            address: "London No. 2 Lake Park",
-        },
-        {
-            key: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-        },
+        // {
+        //     title: "Age",
+        //     dataIndex: COLUMN_TABLE_INDEX_MENU.AGE,
+        //     defaultSortOrder: SORT_TYPE.DESC,
+        //     sorter: true,
+        //     width: "300px",
+        // },
+        // {
+        //     title: "Address",
+        //     dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
+        //     width: "300px",
+        // },
     ];
 
     const OPTION_MORE_TABLE = [
         {
             title: "Chi tiết",
             onSelect: (item) => {
-                window.open(`/admin/area/detail/${item.key}`, "_self")
+                window.open(`/admin/area/detail/${item.item.id}`, "_self")
             },
         },
         {
@@ -85,12 +63,16 @@ function Area(props) {
         },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: (item) => {
+                debugger
+                setIsShowPopupConfirmDelete({show: true, item: item.item})
             },
         },
     ];
 
+    useEffect(() => {
+        callGetAllArea()
+    }, [])
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
@@ -106,33 +88,98 @@ function Area(props) {
         listData = dataTable.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
-                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+                // [COLUMN_TABLE_INDEX_MENU.AGE]: columnAge(item),
+                // [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
                 key: idx,
+                item
             };
         });
         return [...listData];
     }
 
-    function handleClickAddnew(type) {
-        // setIsShowPopupAddnew(true);
+    function callGetAllArea() {
+        dispatch(changeLoadingApp(true))
+
+        baseApi.get(
+            (res) => {
+                setDataTable(res)
+                dispatch(changeLoadingApp(false))
+            },
+            () => {
+                dispatch(changeLoadingApp(false))
+            },
+            null,
+            API_AREA.GET_ALL,
+            null,
+            {}
+        )
     }
+
+    function callAddArea() {
+        dispatch(changeLoadingApp(true))
+
+        let body ={
+            name: areaName
+        }
+
+        baseApi.post(
+            (res) => {
+                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm khu vực thành công")
+                dispatch(changeLoadingApp(false))
+                callGetAllArea()
+                setAreaName('')
+                setIsShowPopupAddNew(false)
+            },
+            () => {
+                commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm khu vực thất bại")
+                dispatch(changeLoadingApp(false))
+                setIsShowPopupAddNew(false)
+            },
+            null,
+            API_AREA.GET_ALL,
+            null,
+            body
+        )
+    }
+
+    function callDeleterea() {
+        dispatch(changeLoadingApp(true))
+
+        baseApi.delete(
+            (res) => {
+                setIsShowPopupConfirmDelete({show: false, item:''})
+                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa khu vực thành công")
+                dispatch(changeLoadingApp(false))
+                callGetAllArea()
+            },
+            () => {
+                setIsShowPopupConfirmDelete({show: false, item:''})
+                commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa khu vực thất bại")
+                dispatch(changeLoadingApp(false))
+            },
+            null,
+            API_AREA.DELETE_BY_ID + isShowPopupConfirmDelete?.item.id,
+            null,
+            {}
+        )
+    }
+
 
     return (
         <AdminPage
             title={"Quản lý khu vực"}
             index={MENU_TAB_ADMIN.AREA}
         >
-           <div className="area-manager">
+            <div className="area-manager">
                 <div className="area-manager__filter">
                     <div className="area-manager__filter-search">
                         <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
                     </div>
                     <div className="area-manager__filter-create-new">
                         <Button2
-                            name={"Thêm mới chi tiêu"}
+                            name={"Thêm mới Khu vực"}
                             leftIcon={<PlusOutlined />}
-                            onClick={() => handleClickAddnew()}
+                            onClick={() => setIsShowPopupAddNew(true)}
                         />
                     </div>
                 </div>
@@ -141,7 +188,7 @@ function Area(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataTable)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -151,12 +198,61 @@ function Area(props) {
                                 order: order,
                             });
                         }}
-                        onClickRow={(record, rowIndex, event)=>{
+                        onClickRow={(record, rowIndex, event) => {
                         }}
                     />
                 </div>
             </div>
+            <Popup
+                title={"Thêm mới khu vực"}
+                show={isShowPopupAddNew}
+                onClickClose={() => setIsShowPopupAddNew(false)}
+                button={[
+                    <Button2
+                        name={"Đóng"}
+                        onClick={() => {
+                            setAreaName("")
+                            setIsShowPopupAddNew(false)
+                        }}
+                    />,
+                    <Button2
+                        name={"Lưu"}
+                        onClick={() => callAddArea()}
+                        background="#fa983a"
+                        disabled={areaName?.length <= 0}
+                    />,
+                ]}
+                width={600}
+                className={"menu-popup-create"}
+                body={
+                    <div className="menu-manager__popup">
+                        <div className="menu-manager__popup-content">
+                            <div className="menu-manager__popup-content-buffet">
+                                <div className="menu-manager__popup-content-buffet-name">
+                                    <InputField
+                                        label={"Tên khu vực"}
+                                        defaultValue={areaName}
+                                        onChange={(val) => {
+                                            setAreaName(val);
+                                        }}
+                                        placeholder={"Tên khu vực..."}
+                                        required
+                                    />
+                                </div>
+                            </div>
 
+
+                        </div>
+                    </div>
+                }
+            />
+            <ModalConfirm
+                title={"khu vực"}
+                setShow={(val)=>setIsShowPopupConfirmDelete({show: val, item: ''})}
+                show={isShowPopupConfirmDelete.show}
+                onClickSuccess={()=>callDeleterea()}
+                contentName={isShowPopupConfirmDelete.item.name}
+            />
         </AdminPage>
 
     )

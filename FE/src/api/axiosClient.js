@@ -2,9 +2,8 @@ import axios from 'axios';
 import { historyApp } from '../App';
 
 let headers ={
-    'Content-Type': 'appliacation/json'
+    "Content-Type": "application/json; charset=utf8"
 }
-
 const axiosClient = axios.create({
     headers : {...headers},
 })

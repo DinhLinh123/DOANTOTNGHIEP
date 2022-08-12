@@ -21,7 +21,7 @@ import {
 import banner1 from "../../../../../image/banner1.jpg"
 import Draggable from "react-draggable";
 import baseApi from "../../../../../api/baseApi";
-import { API_AREA } from "../../../../base/common/endpoint";
+import { API_AREA, API_TABLE } from "../../../../base/common/endpoint";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 
@@ -32,85 +32,27 @@ TableOrder.defaultProps = {};
 function TableOrder(props) {
   const dispatch = useDispatch();
   const [index, setIndex] = useState(0);
-  const [list, setList] = useState([
-    {
-      id: '6879a96c-aff7-4a34-13bc-08da7223d6dd',
-      name: "Bàn 1",
-      soNguoiToiDa: 0,
-      loaiBan: "string",
-      kieuDang: 0,
-      top: 0,
-      left: 0,
-      status: 0,
-    },
-    {
-      id: '2',
-      name: "Bàn 2",
-      soNguoiToiDa: 0,
-      loaiBan: "string",
-      kieuDang: 1,
-      top: 0,
-      left: 0,
-      status: 1,
-    },
-    {
-      id: '3',
-      name: "Bàn 3",
-      soNguoiToiDa: 0,
-      loaiBan: "string",
-      kieuDang: 1,
-      top: 100,
-      left: 0,
-      status: 0,
-    },
-  ])
+  const [listArea, setlistArea] = useState([]);
+  const [list, setList] = useState([])
 
-  let listMenu = [
-    {
-      id: "1",
-      name: "Tầng 1",
-      title: "Menu",
-    },
-    {
-      id: "2",
-      name: "Tầng 2",
-      title: "Menu",
-    },
-    {
-      id: "3",
-      name: "Tầng 3",
-      title: "Menu",
-    },
-    {
-      id: "4",
-      name: "Tầng 4",
-      title: "Menu",
-    },
-    {
-      id: "5",
-      name: "Tầng 5",
-      title: "Menu",
-    },
-    {
-      id: "6",
-      name: "Tầng 6",
-      title: "Menu",
-    },
-    {
-      id: "7",
-      name: "Tầng 7",
-      title: "Menu",
-    },
+  useEffect(()=>{
+    callApiAllGetArea()
+  },[])
 
-  ];
+  
+  useEffect(()=>{
+    console.log(listArea)
+  },[listArea])
+
 
   function renderMenuPage() {
-    let list = listMenu?.map((item, key) => {
+    let list = listArea?.map((item, key) => {
       return (
         <div className={`area-order-container__nav-list-item ${index === key ? 'area-order-container__nav-list-active' : ''}`}
           onClick={() => {
-            callApiGetArea(item.id)
+            callApiGetAreaById(item.id)
             setIndex(key)
+            callApiGetTable()
           }}
         >
           {item?.name}
@@ -120,12 +62,11 @@ function TableOrder(props) {
     return list;
   }
 
-  function callApiGetArea(id) {
+  function callApiGetAreaById(id) {
     dispatch(changeLoadingApp(true))
     baseApi.get(
       (res) => {
         dispatch(changeLoadingApp(false))
-
       },
       () => {
         dispatch(changeLoadingApp(false))
@@ -136,6 +77,34 @@ function TableOrder(props) {
     )
   }
 
+  function callApiAllGetArea() {
+    dispatch(changeLoadingApp(true))
+    baseApi.get(
+      (res) => {
+        dispatch(changeLoadingApp(false))
+        setlistArea(res)
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+
+      },
+      null,
+      API_AREA.GET_ALL
+    )
+  }
+
+  function callApiGetTable() {
+    baseApi.get(
+      (res) => {
+          setList(res)
+      },
+      (err) => { },
+      null,
+      API_TABLE.GET_ALL,
+      {},
+      {}
+  )
+  }
   return (
     <div className="area-order-container">
       <div
@@ -195,12 +164,12 @@ function TableOrder(props) {
                       color: item.status == 0 ? '#000' : item.status == 1 ? '#fff' : '#fff'
                     }}
                     onClick={() => {
-                      if (item.status == 0) {
+                      // if (item.status == 0) {
                         window.open(`/admin/table/${item.id}/order`, "_self")
-                      }
-                      else {
-                        return;
-                      }
+                      // }
+                      // else {
+                      //   return;
+                      // }
                     }}
                   >
                     {item?.name}
