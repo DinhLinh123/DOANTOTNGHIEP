@@ -84,7 +84,7 @@ namespace ManagerRestaurant.API.Controllers
             {
                 var idKH = Guid.Empty;
                 var data = (from s in _context.KhachHang where s.SoDienThoai == item.SoDienThoai select s).FirstOrDefault();
-                if (data == null)
+                if (data != null)
                 {
                     //Update khách hàng
                     var khachhang = new KhachHang();
