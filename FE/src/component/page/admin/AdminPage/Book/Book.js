@@ -82,7 +82,7 @@ function Book(props) {
     const data = [
         {
             key: "1",
-            name: "chị Linh",
+            name: "chị Linh1",
             phone: "0358100337",
             adults: 5,
             child: 1,
