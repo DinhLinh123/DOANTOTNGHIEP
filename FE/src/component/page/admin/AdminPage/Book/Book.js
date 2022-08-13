@@ -11,9 +11,15 @@ import moment from "moment";
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
 import TimePicker from "../../../../base/TimePicker/TimePicker";
+import { useEffect } from "react";
+import { deleteBooking, getBooking, postBooking, updateBooking } from "../../../../../reudux/action/bookingActions";
+import { useDispatch, useSelector } from "react-redux";
 
 function Book(props) {
+    const [idBooking, setIdBooking]= useState()
     const [sortType, setSortType] = useState();
+    const [status, setStatus] = useState("ADD")
+    console.log("sortType", sortType);
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [bookName, setBookName] = useState("");
     const [bookPhone, setBookPhone] = useState("");
@@ -22,6 +28,7 @@ function Book(props) {
     const [bookChild, setBookChild] = useState();
     const [bookDate, setBookDate] = useState();
     const [bookTime, setBookTime] = useState();
+    console.log("bookName", bookName, bookPhone);
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
         PHONE: "phone",
@@ -133,46 +140,72 @@ function Book(props) {
         },
         {
             title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
+            onSelect: (item) => {
+                setIsShowPopupAddnew(true);
+                setIdBooking(item.name.props.children[1].props.children)
+                setBookName(item?.name?.props?.children[0])
+                setBookPhone(item?.phone?.props?.children)
+                setBookAdults(item?.adults?.props?.children)
+                setBookChild(item?.child?.props?.children)
+                setBookDate(item?.date?.props?.children)
+                setBookTime(item?.time?.props?.children)
+                setBookNote(item?.note?.props?.children)
+                console.log("dataaa", item);
+                setStatus("UPDATE")
             },
         },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: (item) => {
+               
+                const id = item.name.props.children[1].props.children
+                dispatch(deleteBooking(id));
             },
         },
     ];
 
+    const {dataBooking} = useSelector(state=> state.bookingReducer)
+    console.log("dataBooking", dataBooking);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getBooking())
+    },[dispatch])
+
     function columnName(item) {
-        return <div>{item?.name}</div>;
+        return <div>
+                    {item?.khachHang?.name || item?.tenKhachHang}
+                    <div className="hidden-id">
+                         {item.id}
+                    </div>
+                </div>;
     }
     function columnPhone(item) {
-        return <div>{item?.phone}</div>;
+        return <div>{item?.khachHang?.soDienThoai}</div>;
     }
     function columnAdults(item) {
-        return <div>{item?.adults}</div>;
+        return <div>{item?.soNguoiLon}</div>;
     }
     function columnChild(item) {
-        return <div>{item?.child}</div>;
+        return <div>{item?.soTreEm}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.date}</div>;
+        return <div>{moment(item?.thoiGian).format("DD-MM-YYYY")}</div>;
     }
     function columnTime(item) {
-        return <div>{item?.time}</div>;
+        return <div>{moment(item?.gioDen).format("hh:mm")}</div>;
     }
     function columnNote(item) {
-        return <div>{item?.note}</div>;
+        return <div>{item?.ghiChu}</div>;
     }
     function columnPeople(item) {
-        return <div>{item?.people}</div>;
+        return <div>{item?.createdByUserName}</div>;
     }
 
+   
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item, idx) => {
+        console.log("listData", dataTable);
+        listData = dataTable?.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
                 [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
@@ -190,10 +223,47 @@ function Book(props) {
 
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
+        setStatus("ADD")
     }
     function onChangeTab() {
+
         setIsShowPopupAddnew(false)
+        const date = new Date();
+        const body = {
+            tenKhachHang: bookName,
+            soDienThoai:bookPhone,
+            soNguoiLon: bookAdults,
+            soTreEm : bookChild,
+            thoiGian: date.toISOString(bookDate),
+            gioDen:  date.toISOString(bookTime),
+            ghiChu: bookNote
+          }
+          if(status === "ADD"){
+            dispatch(postBooking(body))
+            console.log("thêm mới");
+
+          }
+          else if(status === "UPDATE"){
+            const id = idBooking
+            console.log("update");
+            dispatch(updateBooking({
+                id,
+                body
+            }))
+          }
+         setBookName('')
+         setBookPhone('')
+         setBookAdults('')
+         setBookChild('')
+         setBookNote('')
     }
+
+    const closeTab = () => {
+        setIsShowPopupAddnew(false)
+
+    }
+   
+
     return (
         <AdminPage
             title={"Quản lý đặt bàn"}
@@ -242,7 +312,7 @@ function Book(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataBooking)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -257,11 +327,11 @@ function Book(props) {
                 <Popup
                     title={"Thêm mới đặt bàn"}
                     show={isShowPopupAddnew}
-                    onClickClose={() => onChangeTab()}
+                    onClickClose={() => closeTab()}
                     button={[
                         <Button2
                             name={"Đóng"}
-                            onClick={() => onChangeTab()}
+                            onClick={() => closeTab()}
                         />,
                         <Button2
                             name={"Lưu"}
@@ -275,7 +345,7 @@ function Book(props) {
                         <div className="book-manager__popup">
                             <Input
                                 label={"Tên khách hàng"}
-                                defaultValue={bookName}
+                                value={bookName}
                                 onChange={(val) => {
                                     setBookName(val);
                                 }}
@@ -283,13 +353,13 @@ function Book(props) {
                             />
                             <Input
                                 label={"Số điện thoại"}
-                                defaultValue={bookPhone}
+                                value={bookPhone}
                                 onChange={(val) => { setBookPhone(val) }}
                                 autoFocus
                             />
                             <Input
                                 label={"Số lượng người lớn"}
-                                defaultValue={bookAdults}
+                                value={bookAdults}
                                 onChange={(val) => {
                                     setBookAdults(val);
                                 }}
@@ -297,7 +367,7 @@ function Book(props) {
                             />
                             <Input
                                 label={"Số lượng trẻ em"}
-                                defaultValue={bookChild}
+                                value={bookChild}
                                 onChange={(val) => { setBookChild(val) }}
                                 autoFocus
                             />
@@ -322,7 +392,7 @@ function Book(props) {
                             />
                             <Input
                                 label={"Ghi chú"}
-                                defaultValue={bookNote}
+                                value={bookNote}
                                 onChange={(val) => { setBookNote(val) }}
                                 autoFocus
                             />
