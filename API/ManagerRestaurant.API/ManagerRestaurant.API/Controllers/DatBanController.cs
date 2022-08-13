@@ -92,32 +92,50 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/DatBan/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDatBan(Guid id, DatBan datBan)
+        public async Task<Responsive> PutDatBan(Guid id, DatBanUpdateModel item)
         {
-            if (id != datBan.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(datBan).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DatBanExists(id))
+                var datBan = _context.DatBan.Find(id);
+                if (datBan != null)
                 {
-                    return NotFound();
+                    datBan.Id = item.Id;
+                    datBan.IdBan = item.IdBan;
+                    datBan.MaKhachHang = item.MaKhachHang;
+                    datBan.TenKhachHang = item.TenKhachHang;
+                    datBan.GioDen = item.GioDen;
+                    datBan.ThoiGian = item.ThoiGian;
+                    datBan.SoNguoiLon = item.SoNguoiLon;
+                    datBan.SoTreEm = item.SoTreEm;
+                    datBan.GhiChu = item.GhiChu;
+                    datBan.TrangThai = item.TrangThai;
+                    datBan.LastModifiedByUserId = item.LastModifiedByUserId;
+                    datBan.LastModifiedByUserName = item.LastModifiedByUserName;
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/DatBan
