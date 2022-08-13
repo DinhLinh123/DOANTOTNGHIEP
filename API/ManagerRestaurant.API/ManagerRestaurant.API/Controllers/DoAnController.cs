@@ -70,16 +70,40 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/DoAn/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DoAn>> GetDoAn(Guid id)
+        public async Task<Responsive> GetDoAn(Guid id)
         {
-            var doAn = await _context.DoAn.FindAsync(id);
-
-            if (doAn == null)
+            var res = new Responsive();
+            var item = await _context.DoAn.FindAsync(id);
+            if (item == null)
             {
-                return NotFound();
-            }
 
-            return doAn;
+                res.Code = 204;
+                res.Mess = "not found";
+                return res;
+            }
+            else
+            {
+                res.Data = new DoAnModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    MaTheLoai = item.MaTheLoai,
+                    TenTheLoai = _context.TheLoaiDoAn.Find(item.MaTheLoai).Name,
+                    LinkAnh = item.LinkAnh,
+                    GhiChu = item.GhiChu,
+                    DanhSachMonAn = item.DanhSachMonAn,
+                    DonViTinh = item.DonViTinh,
+                    DonGia = item.DonGia,
+                    TrangThai = item.TrangThai,
+                    CreatedByUserId = item.CreatedByUserId,
+                    CreatedByUserName = item.CreatedByUserName,
+                    CreatedOnDate = item.CreatedOnDate,
+                    LastModifiedByUserId = item.LastModifiedByUserId,
+                    LastModifiedByUserName = item.LastModifiedByUserName,
+
+                };
+            }
+            return res;
         }
 
         // PUT: api/DoAn/5

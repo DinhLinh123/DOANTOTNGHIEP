@@ -25,9 +25,54 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/DatBan
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DatBan>>> GetDatBan()
+        public async Task<Responsive> GetDatBan()
         {
-            return await _context.DatBan.ToListAsync();
+            Responsive res = new Responsive();
+            try
+            {
+                List<DatBanModel> data = new List<DatBanModel>();
+                var d = await _context.DatBan.ToListAsync();
+                foreach (var item in d)
+                {
+                    data.Add(new DatBanModel
+                    {
+                        Id = item.Id,
+                        IdBan = item.IdBan.Value,
+                        KhachHang = await (from s in _context.KhachHang
+                                          where s.Id == item.MaKhachHang
+                                          select new KhachHangModel
+                                          {
+                                              Id = s.Id,
+                                              Name = s.Name,
+                                              SoDienThoai = s.SoDienThoai
+                                          }).FirstOrDefaultAsync(),
+                        GioDen = item.GioDen.Value,
+                        ThoiGian = item.ThoiGian,
+                        SoNguoiLon = item.SoNguoiLon,
+                        SoTreEm = item.SoTreEm,
+                        GhiChu = item.GhiChu,
+                        TrangThai = item.TrangThai,
+                        CreatedByUserId = item.CreatedByUserId,
+                        CreatedByUserName = item.CreatedByUserName,
+                        CreatedOnDate = item.CreatedOnDate,
+                        LastModifiedByUserId = item.LastModifiedByUserId,
+                        LastModifiedByUserName = item.LastModifiedByUserName,
+
+                    });
+                }
+                res.Mess = "Get sussces";
+                res.Data = data;
+                res.Code = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Mess = ex.InnerException.Message;
+                res.Data = null;
+                res.Code = 500;
+                return res;
+            }
+
         }
 
         // GET: api/DatBan/5
@@ -84,7 +129,7 @@ namespace ManagerRestaurant.API.Controllers
             {
                 var idKH = Guid.Empty;
                 var data = (from s in _context.KhachHang where s.SoDienThoai == item.SoDienThoai select s).FirstOrDefault();
-                if (data != null)
+                if (data == null)
                 {
                     //Update khách hàng
                     var khachhang = new KhachHang();
@@ -94,20 +139,18 @@ namespace ManagerRestaurant.API.Controllers
                     khachhang.CreatedByUserId = Guid.Empty;
                     khachhang.CreatedByUserName = "";
                     khachhang.CreatedOnDate = DateTime.Now;
+                    idKH = khachhang.Id;
                     //create new khach hang
                     _context.KhachHang.Add(khachhang);
-                }
-                else
-                {
-                    idKH = data.Id;
                 }
                 //Tạo mới trường dữ liệu
 
                 DatBan datBan = new DatBan();
                 datBan.Id = Guid.NewGuid();
                 datBan.IdBan = Guid.Empty;
-                datBan.MaKhachHang = idKH;
+                datBan.MaKhachHang = idKH != Guid.Empty ? idKH : item.MaKhachHang;
                 datBan.TenKhachHang = item.TenKhachHang;
+
                 datBan.GioDen = item.GioDen;
                 datBan.ThoiGian = item.ThoiGian;
                 datBan.SoNguoiLon = item.SoNguoiLon;
@@ -120,14 +163,14 @@ namespace ManagerRestaurant.API.Controllers
                 datBan.LastModifiedByUserId = Guid.Empty;
                 datBan.LastModifiedByUserName = "";
                 _context.DatBan.Add(datBan);
-                
+
                 var status = await _context.SaveChangesAsync();
-                return new Responsive(200,"Create success", datBan);
+                return new Responsive(200, "Create success", datBan);
 
             }
             catch (Exception ex)
             {
-                return new Responsive(500, ex.InnerException.Message,null);
+                return new Responsive(500, ex.InnerException.Message, null);
             }
         }
 
