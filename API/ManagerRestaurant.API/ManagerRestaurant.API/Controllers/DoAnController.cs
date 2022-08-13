@@ -25,9 +25,47 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/DoAn
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DoAn>>> GetDoAn()
+        public async Task<Responsive> GetDoAn()
         {
-            return await _context.DoAn.ToListAsync();
+            Responsive res = new Responsive();
+            try
+            {
+                List<DoAnModel> data = new List<DoAnModel>();
+                var d = await _context.DoAn.ToListAsync();
+                foreach (var item in d)
+                {
+                    data.Add(new DoAnModel
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        MaTheLoai = item.MaTheLoai,
+                        TenTheLoai = _context.TheLoaiDoAn.Find(item.MaTheLoai).Name,
+                        LinkAnh = item.LinkAnh,
+                        GhiChu = item.GhiChu,
+                        DanhSachMonAn = item.DanhSachMonAn,
+                        DonViTinh = item.DonViTinh,
+                        DonGia = item.DonGia,
+                        TrangThai = item.TrangThai,
+                        CreatedByUserId = item.CreatedByUserId,
+                        CreatedByUserName = item.CreatedByUserName,
+                        CreatedOnDate = item.CreatedOnDate,
+                        LastModifiedByUserId = item.LastModifiedByUserId,
+                        LastModifiedByUserName = item.LastModifiedByUserName,
+
+                    });
+                }
+                res.Mess = "Get sussces";
+                res.Data = data;
+                res.Code = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Mess = ex.InnerException.Message;
+                res.Data = null;
+                res.Code = 500;
+                return res;
+            }
         }
 
         // GET: api/DoAn/5
@@ -68,7 +106,7 @@ namespace ManagerRestaurant.API.Controllers
                     doAn.GhiChu = item.GhiChu;
                     doAn.DanhSachMonAn = item.DanhSachMonAn;
                     doAn.DonViTinh = item.DonViTinh;
-                    doAn.TrangThai = item.TrangThai; 
+                    doAn.TrangThai = item.TrangThai;
 
                     await _context.SaveChangesAsync();
                     res.Code = 200;
@@ -102,7 +140,7 @@ namespace ManagerRestaurant.API.Controllers
                 doAn.Id = Guid.NewGuid();
                 doAn.Name = item.Name;
                 doAn.MaTheLoai = item.MaTheLoai;
-                doAn.TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(item.MaTheLoai);
+                //doAn.TheLoaiDoAn = await _context.TheLoaiDoAn.FindAsync(item.MaTheLoai);
                 doAn.LinkAnh = item.LinkAnh;
                 doAn.GhiChu = item.GhiChu;
                 doAn.DanhSachMonAn = item.DanhSachMonAn;
@@ -112,8 +150,6 @@ namespace ManagerRestaurant.API.Controllers
                 doAn.CreatedByUserId = item.CreatedByUserId;
                 doAn.CreatedByUserName = item.CreatedByUserName;
                 doAn.CreatedOnDate = DateTime.Now;
-                doAn.LastModifiedByUserId = Guid.Empty;
-                doAn.LastModifiedByUserName = string.Empty;
 
                 _context.DoAn.Add(doAn);
                 await _context.SaveChangesAsync();

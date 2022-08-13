@@ -16,7 +16,7 @@ namespace Infratructure.Datatables
         public string LoaiBan { get; set; }
         public string Top { get; set; }
         public string Left { get; set; }
-        public string TrangThai { get; set; }
+        public int TrangThai { get; set; }
         public string KieuDang { get; set; }
         [ForeignKey("KhuVuc")]
         public Guid IdKhuVuc { get; set; }

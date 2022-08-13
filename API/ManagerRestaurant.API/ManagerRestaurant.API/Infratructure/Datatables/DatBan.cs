@@ -11,7 +11,7 @@ namespace Infratructure.Datatables
         public Guid? IdBan { get; set; }
         public Guid? MaKhachHang { get; set; }
         public string TenKhachHang { get; set; }
-        public DateTime? GioDen { get; set; }
+        public DateTime? GioDen { get; set; } = DateTime.MinValue;
         public DateTime ThoiGian { get; set; }
         public int SoNguoiLon { get; set; } = 0;
         public int SoTreEm { get; set; } = 0;

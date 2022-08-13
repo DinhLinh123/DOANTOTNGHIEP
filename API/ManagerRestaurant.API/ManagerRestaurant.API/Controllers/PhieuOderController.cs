@@ -26,24 +26,35 @@ namespace ManagerRestaurant.API.Controllers
         [HttpGet]
         public async Task<Responsive> GetPhieuOder()
         {
-            var data = await _context.PhieuOder.ToListAsync();
             var res = new Responsive();
-            res.Code = 204;
-            res.Mess = "Invalid data";
-            var Data = new List<PhieuOderModel>();
-            foreach (var item in data)
+            try
             {
-                Data.Add(CoverPhieuOder(item));
+                var data = await _context.PhieuOder.ToListAsync();
+                res.Code = 200;
+                res.Mess = "Get success";
+                var Data = new List<PhieuOderModel>();
+                foreach (var item in data)
+                {
+                    Data.Add(await CoverPhieuOder(item));
+                }
+
+                res.Data = Data;
+                return res;
             }
-            res.Data = Data;
-            return res;
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
+
         }
 
-        PhieuOderModel CoverPhieuOder(PhieuOder item)
+        async Task<PhieuOderModel> CoverPhieuOder(PhieuOder item)
         {
             var phieuOder = new PhieuOderModel();
 
-            phieuOder.Id = item.Id; 
+            phieuOder.Id = item.Id;
             phieuOder.TongTien = item.TongTien;
             phieuOder.ThucThu = item.ThucThu;
             phieuOder.Vocher = item.Vocher;
@@ -56,59 +67,38 @@ namespace ManagerRestaurant.API.Controllers
             phieuOder.LastModifiedByUserId = item.LastModifiedByUserId;
             phieuOder.LastModifiedByUserName = item.LastModifiedByUserName;
 
-            var bantempt = _context.Ban.Find(item.IdBan);
-            phieuOder.Ban = new BanModel
-            {
-                Id = bantempt.Id,
-                Name = bantempt.Name,
-                SoNguoiToiDa = bantempt.SoNguoiToiDa,
-                LoaiBan = bantempt.LoaiBan,
-                Top = bantempt.Top,
-                Left = bantempt.Left,
-                TrangThai = bantempt.TrangThai,
-                KieuDang = bantempt.KieuDang,
-                IdKhuVuc = bantempt.IdKhuVuc,
-                TenKhuVuc = bantempt.TenKhuVuc,
-                CreatedByUserId = bantempt.CreatedByUserId,
-                CreatedByUserName = bantempt.CreatedByUserName,
-                CreatedOnDate = bantempt.CreatedOnDate,
-                LastModifiedByUserId = bantempt.LastModifiedByUserId,
-                LastModifiedByUserName = bantempt.LastModifiedByUserName
-            };
+            phieuOder.Ban = await (from s in _context.Ban
+                                   where s.Id == item.IdBan
+                                   select new BanModel
+                                   {
+                                       Id = s.Id,
+                                       Name = s.Name
+                                   }
+
+                              ).FirstOrDefaultAsync();
             var thungantemp = _context.User.Find(item.IdThuNgan);
-            phieuOder.ThuNgan = new UserModel
-            {
-                Id = thungantemp.Id,
-                MaNV = thungantemp.MaNV,
-                FullName = thungantemp.FullName,
-                Phai = thungantemp.Phai,
-                ChucVu = thungantemp.ChucVu,
-                NgaySinh = thungantemp.NgaySinh,
-                SoDienThoai = thungantemp.SoDienThoai,
-                DiaChi = thungantemp.DiaChi,
-                ChiChu = thungantemp.ChiChu,
-                Quyen = "",
-                IsDelete = thungantemp.IsDelete,
-                UserName = thungantemp.UserName,
-                Password = "",
-                CreatedByUserId = thungantemp.CreatedByUserId,
-                CreatedByUserName = thungantemp.CreatedByUserName,
-                CreatedOnDate = thungantemp.CreatedOnDate,
-                LastModifiedByUserId = thungantemp.LastModifiedByUserId,
-                LastModifiedByUserName = thungantemp.LastModifiedByUserName
-            };
+            phieuOder.ThuNgan = await (from s in _context.User
+                                       where s.Id == item.IdThuNgan
+                                       select new UserModel
+                                       {
+                                           Id = s.Id,
+                                           MaNV = s.MaNV,
+                                           FullName = s.FullName,
+                                           UserName = s.UserName
+                                       }
+
+                              ).FirstOrDefaultAsync();
             var khachhangtemp = _context.KhachHang.Find(item.IdKhachHang);
-            phieuOder.KhachHang = new KhachHangModel
-            {
-                Id = khachhangtemp.Id,
-                Name = khachhangtemp.Name,
-                SoDienThoai = khachhangtemp.SoDienThoai,
-                CreatedByUserId = khachhangtemp.CreatedByUserId,
-                CreatedByUserName = khachhangtemp.CreatedByUserName,
-                CreatedOnDate = khachhangtemp.CreatedOnDate,
-                LastModifiedByUserId = khachhangtemp.LastModifiedByUserId,
-                LastModifiedByUserName = khachhangtemp.LastModifiedByUserName
-            };
+            phieuOder.KhachHang = await (from s in _context.KhachHang
+                                         where s.Id == item.IdKhachHang
+                                         select new KhachHangModel
+                                         {
+                                             Id = s.Id,
+                                             Name = s.Name,
+                                             SoDienThoai = s.SoDienThoai
+                                         }
+
+                              ).FirstOrDefaultAsync();
 
             var odertemp = _context.Oder.Where((x) => x.IdPhieuOder == item.Id).ToList();
             var doans = new List<DoAnModel>();
@@ -141,19 +131,28 @@ namespace ManagerRestaurant.API.Controllers
         public async Task<Responsive> GetPhieuOder(Guid id)
         {
             var res = new Responsive();
-            var phieuOder = await _context.PhieuOder.FindAsync(id);
-            if (phieuOder == null)
+            try
             {
-                
-                res.Code = 204;
-                res.Mess = "not found";
+                var phieuOder = await _context.PhieuOder.FindAsync(id);
+                if (phieuOder == null)
+                {
+
+                    res.Code = 204;
+                    res.Mess = "not found";
+                    return res;
+                }
+                else
+                {
+                    res.Data = CoverPhieuOder(phieuOder);
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
                 return res;
             }
-            else
-            {
-                res.Data = CoverPhieuOder(phieuOder);
-            }
-            return res;
         }
 
         // PUT: api/PhieuOder/5
@@ -173,7 +172,7 @@ namespace ManagerRestaurant.API.Controllers
                 var phieuOder = _context.PhieuOder.Find(id);
                 if (phieuOder != null)
                 {
-                    phieuOder.IdBan = item.IdBan; 
+                    phieuOder.IdBan = item.IdBan;
                     phieuOder.IdThuNgan = item.IdThuNgan;
                     phieuOder.IdKhachHang = item.IdKhachHang;
                     phieuOder.Vocher = item.Vocher;
@@ -215,7 +214,7 @@ namespace ManagerRestaurant.API.Controllers
                 //conver
                 var phieuOder = new PhieuOder();
                 phieuOder.Id = Guid.NewGuid();
-                phieuOder.IdBan = item.IdBan; 
+                phieuOder.IdBan = item.IdBan;
                 phieuOder.IdThuNgan = item.IdThuNgan;
                 phieuOder.IdKhachHang = item.IdKhachHang;
                 phieuOder.Vocher = item.Vocher;

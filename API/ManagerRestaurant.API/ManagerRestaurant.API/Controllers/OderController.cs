@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -23,65 +24,165 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/Oder
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Oder>>> GetOder()
+        public async Task<Responsive> GetOder()
         {
-            return await _context.Oder.ToListAsync();
+            var res = new Responsive();
+            try
+            {
+                var data = await _context.Oder.ToListAsync();
+                res.Code = 200;
+                res.Mess = "Get success";
+                var Data = new List<OderModel>();
+                foreach (var item in data)
+                {
+                    Data.Add(await ConventOder(item));
+                }
+                res.Data = Data;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
+            
         }
 
+        private async Task<OderModel> ConventOder(Oder item)
+        {
+            OderModel oder = new OderModel();
+            oder.Id = item.Id;
+            oder.PhieuOder = await (from s in _context.PhieuOder
+                                    where s.Id == item.IdPhieuOder
+                                    select new PhieuOderModel
+                                    {
+                                        Id = s.Id
+                                    }
+
+                              ).FirstOrDefaultAsync(); ;
+            oder.DoAn = await (from s in _context.DoAn
+                               where s.Id == item.IdDoAn
+                               select new DoAnModel
+                               {
+                                   Id = s.Id,
+                                   Name = s.Name
+                               }
+
+                              ).FirstOrDefaultAsync();
+            oder.SoLuong = item.SoLuong;
+            oder.Ban = await (from s in _context.Ban
+                              where s.Id == item.IdBan
+                              select new BanModel
+                              {
+                                  Id = s.Id,
+                                  Name = s.Name
+                              }
+
+                              ).FirstOrDefaultAsync();
+            oder.CreatedByUserId = item.CreatedByUserId;
+            oder.CreatedByUserName = item.CreatedByUserName;
+            oder.CreatedOnDate = item.CreatedOnDate;
+            oder.LastModifiedByUserId = item.LastModifiedByUserId;
+            oder.LastModifiedByUserName = item.LastModifiedByUserName;
+            return oder;
+        }
         // GET: api/Oder/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Oder>> GetOder(Guid id)
-        {
+        public async Task<Responsive> GetOder(Guid id)
+        { 
+            var res = new Responsive();
+            res.Code = 204;
+            
             var oder = await _context.Oder.FindAsync(id);
 
             if (oder == null)
             {
-                return NotFound();
+                res.Mess = "Not foud";
+                return res;
             }
-
-            return oder;
+            else
+            {
+                res.Mess = "Find Sucsses";
+                res.Data = await ConventOder(oder);
+                return res;
+            }
+             
         }
 
         // PUT: api/Oder/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOder(Guid id, Oder oder)
+        public async Task<Responsive> PutOder(Guid id, OderUpdateModel item)
         {
-            if (id != oder.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(oder).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OderExists(id))
+                var oder = _context.Oder.Find(id);
+                if (oder != null)
                 {
-                    return NotFound();
+                    oder.IdPhieuOder = item.IdPhieuOder;
+                    oder.PhieuOder = await _context.PhieuOder.FindAsync(item.IdPhieuOder);
+                    oder.IdDoAn = item.IdDoAn;
+                    oder.DoAn = await _context.DoAn.FindAsync(item.IdDoAn);
+                    oder.SoLuong = item.SoLuong;
+                    oder.IdBan = item.IdBan;
+                    oder.LastModifiedByUserId = item.LastModifiedByUserId;
+                    oder.LastModifiedByUserName = item.LastModifiedByUserName;
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/Oder
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Oder>> PostOder(Oder oder)
+        public async Task<Responsive> PostOder(OderCreateModel item)
         {
-            _context.Oder.Add(oder);
-            await _context.SaveChangesAsync();
+            try
+            {
+                //conver
+                var oder = new Oder();
+                oder.Id = item.Id;
+                oder.IdPhieuOder = item.IdPhieuOder;
+                oder.PhieuOder = await _context.PhieuOder.FindAsync(item.IdPhieuOder);
+                oder.IdDoAn = item.IdDoAn;
+                oder.DoAn = await _context.DoAn.FindAsync(item.IdDoAn);
+                oder.SoLuong = item.SoLuong;
+                oder.IdBan = item.IdBan;
+                oder.CreatedByUserId = item.CreatedByUserId;
+                oder.CreatedByUserName = item.CreatedByUserName;
+                oder.CreatedOnDate = item.CreatedOnDate;
+                _context.Oder.Add(oder);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOder", new { id = oder.Id }, oder);
+                return new Responsive(200, "Thêm mới thành công", oder);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
         }
 
         // DELETE: api/Oder/5
