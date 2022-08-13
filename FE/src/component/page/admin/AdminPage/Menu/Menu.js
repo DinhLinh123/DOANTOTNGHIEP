@@ -381,7 +381,7 @@ function Menu(props) {
 
     baseApi.get(
       (res) => {
-        setDataTable(res)
+        setDataTable(res.data || [])
         dispatch(changeLoadingApp(false))
       },
       () => {

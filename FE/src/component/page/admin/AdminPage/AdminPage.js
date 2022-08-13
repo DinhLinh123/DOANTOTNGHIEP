@@ -194,7 +194,6 @@ function AdminPage(props) {
 
   function renderMenuPage() {
     let list = listMenu?.map((item) => {
-      debugger;
       return (
         // <Link to={`/admin/${item?.link}`}>
         <>
