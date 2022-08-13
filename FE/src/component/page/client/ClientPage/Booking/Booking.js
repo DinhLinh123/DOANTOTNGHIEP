@@ -45,7 +45,7 @@ function Booking(props) {
         soTreEm : children,
         thoiGian: date.toISOString(dateBooking),
         gioDen:  date.toISOString(timeBooking),
-        ghiChu: note
+        ghiChu: ""
       }
       dispatch(postBooking(body))
       setCustomerName("")

@@ -4,6 +4,7 @@ const API_TABLE = {
     ALL_NEW: PART + "/Ban",
     GET_BY_ID: PART + "/Ban/",
     UPDATE_BY_ID: PART + "/Ban/",
+    GET_BY_FILTER: PART + "/Ban/filter?_filter=",
 };
 
 const API_AREA = {
