@@ -119,7 +119,7 @@ function AreaDetail(props) {
             body
         )
     }
-
+    console.log("list", list);
     return (
         <AdminPage
             title={"Chi tiết khu vực"}
@@ -149,7 +149,7 @@ function AreaDetail(props) {
                 </div>
                 <div className="area-detail__content" style={{ height: '600px', width: '1000px', position: 'relative' }}>
                     <div className="area-detail__content-drag" style={{ height: '600px', width: '1000px', position: 'absolute', top: '0' }}>
-                        {list.map((item) => {
+                        {list && list.length > 0 ? list?.map((item) => {
                             return (
                                 <Draggable defaultPosition={{ x: parseInt(item?.left), y: parseInt(item?.top) }} bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} key={1} className={item?.title}>
                                     <div
@@ -161,7 +161,8 @@ function AreaDetail(props) {
                                     </div>
                                 </Draggable>
                             )
-                        })}
+                        }) : null}
+                        
                     </div>
                 </div>
             </div>

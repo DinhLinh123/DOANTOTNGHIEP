@@ -12,6 +12,8 @@ import {
 import ClientPage from "../ClientPage";
 import commonFunction from "../../../../base/common/commonFunction";
 import Popup from "../../../../base/Popup/Popup";
+import { useDispatch } from "react-redux";
+import { postFeedback } from "../../../../../reudux/action/feedbackAction";
 Feedback.propTypes = {};
 
 Feedback.defaultProps = {};
@@ -28,12 +30,22 @@ function Feedback(props) {
   //     console.log(disabledButton)
   // }, [disabledButton])
 
+  const dispatch = useDispatch()
+
   function onSubmit() {
     setIsShowPopupThank(true)
+    const body = {
+      tenKH : customerName,
+      soDienThoai : customerPhone,
+      email : customerEmail,
+      noiDung: customercontent
+    }
+    dispatch(postFeedback(body))
     setCustomerName("")
     setCustomerEmail("")
     setCustomerPhone("")
     setCustomerContent("")
+    
   }
 
   return (

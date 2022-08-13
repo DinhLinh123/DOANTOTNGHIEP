@@ -225,7 +225,14 @@ function Order(props) {
     )
   }
 
-
+  const onSubmitOrderConfirm = () => {
+    console.log("vào đây", orderSelected);
+    const data = {idPhieuOder: "", phieuOder : {
+      idBan : "",
+      
+    }}
+  }
+  
   return (
     <div className="order-page-container">
       <div className="order-page-container__food-list">
@@ -249,11 +256,10 @@ function Order(props) {
           </div>
         </div>
         <div className="order-page-container__food-list__list">
-          {
-            listMenu.map((item) => {
+          {listMenu.data && listMenu.data.length > 0 ?  listMenu.data.map((item) => {
               return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
                 <div className="order-page-container__food-list__list-item-img">
-                  <img src={item.img} />
+                  <img src={item.img} alt = "" />
                 </div>
                 <div className="order-page-container__food-list__list-item-title">
                   {commonFunction.smartText(40, item.name)}
@@ -262,8 +268,8 @@ function Order(props) {
                   {commonFunction.numberWithCommas(parseInt(item.donGia))}đ
                 </div>
               </div>)
-            })
-          }
+            }) : null}
+      
         </div>
         <div className="order-page-container__food-list__choose">
           {
@@ -346,7 +352,7 @@ function Order(props) {
             </div>
           </div>
           <div className="order-page-container__selected-dish-footer-confirm">
-            <Button2 name={"Xác nhận"} />
+            <Button2 name={"Xác nhận"} onClick={() => onSubmitOrderConfirm()} />
           </div>
         </div>
       </div>

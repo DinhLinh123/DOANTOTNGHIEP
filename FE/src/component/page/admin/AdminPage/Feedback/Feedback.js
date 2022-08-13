@@ -12,6 +12,8 @@ import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { getFeedback } from "../../../../../reudux/action/feedbackAction";
 
 function ManagerFeedback(props) {
     const [sortType, setSortType] = useState();
@@ -120,6 +122,14 @@ function ManagerFeedback(props) {
         },
     ];
 
+    const {dataFeedback} = useSelector(state => state.feedbackReducer)
+    console.log("dataFeedback", dataFeedback);
+
+    const disptach = useDispatch()
+    useEffect(() => {
+        disptach(getFeedback())
+    },[disptach])
+
     // Select chức vụ
     const { Option } = Select;
     const onChange = (value) => {
@@ -133,16 +143,16 @@ function ManagerFeedback(props) {
     
 
     function columnName(item) {
-        return <div>{item?.name}</div>;
+        return <div>{item?.tenKH}</div>;
     }
     function columnEmail(item) {
         return <div>{item?.email}</div>;
     }
     function columnPhone(item) {
-        return <div>{item?.phone}</div>;
+        return <div>{item?.soDienThoai}</div>;
     }
     function columnContent(item) {
-        return <div>{item?.content}</div>;
+        return <div>{item?.noiDung}</div>;
     }
     function columnDate(item) {
         return <div>{item?.date}</div>;
@@ -150,7 +160,7 @@ function ManagerFeedback(props) {
 
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item, idx) => {
+        listData = dataTable?.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
                 [COLUMN_TABLE_INDEX_MENU.EMAIL]: columnEmail(item),
@@ -222,7 +232,7 @@ function ManagerFeedback(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataFeedback)}
                         loading={false}
                         //hasMoreOption
                         option={OPTION_MORE_TABLE}

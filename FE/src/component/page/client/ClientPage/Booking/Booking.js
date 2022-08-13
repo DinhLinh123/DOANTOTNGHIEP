@@ -16,6 +16,8 @@ import TimePicker from "../../../../base/TimePicker/TimePicker";
 import Button from "../../../../base/Button/Button";
 import ClientPage from "../ClientPage";
 import commonFunction from "../../../../base/common/commonFunction";
+import { useDispatch } from "react-redux";
+import { postBooking } from "../../../../../reudux/action/bookingActions";
 Booking.propTypes = {};
 
 Booking.defaultProps = {};
@@ -32,10 +34,24 @@ function Booking(props) {
   const [timeBooking, setTimeBooking] = useState()
   const [disabledButton, setDisabledButton] = useState(true);
 
-
+  const dispatch = useDispatch()
   function onSubmit() {
+    const date = new Date()
     if (adults > 0) {
-      alert("khoer")
+      const body = {
+        tenKhachHang: customerName,
+        soDienThoai:customerNamePhone,
+        soNguoiLon: adults,
+        soTreEm : children,
+        thoiGian: date.toISOString(dateBooking),
+        gioDen:  date.toISOString(timeBooking),
+        ghiChu: note
+      }
+      dispatch(postBooking(body))
+      setCustomerName("")
+      setCustomerName("")
+      setAdults("")
+      setChildren("")
     } else {
       commonFunction.messages(TYPE_MESSAGE.ERROR, "Số người lớn không được bằng 0. Vui lòng nhập lại!")
     }
@@ -56,13 +72,13 @@ function Booking(props) {
               thực tốt nhất tại House of Hongdae BBQ.
             </div>
             <div className="booking-container__book-left-img">
-              <img src={banner5} />
+              <img src={banner5} alt = ""/>
             </div>
           </div>
           <div className="booking-container__book-right">
             <div className="booking-container__book-right-item">
               <Input
-                defaultValue={customerName}
+                value={customerName}
                 onChange={(val) => {
                   setCustomerName(val);
                 }}
@@ -77,7 +93,7 @@ function Booking(props) {
             </div>
             <div className="booking-container__book-right-item">
               <Input
-                defaultValue={customerNamePhone}
+                value={customerNamePhone}
                 onChange={(val) => {
                   setCustomerPhone(val);
                 }}
