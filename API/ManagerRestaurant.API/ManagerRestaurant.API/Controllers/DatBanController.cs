@@ -77,16 +77,46 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/DatBan/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DatBan>> GetDatBan(Guid id)
+        public async Task<Responsive> GetDatBan(Guid id)
         {
-            var datBan = await _context.DatBan.FindAsync(id);
-
-            if (datBan == null)
+            var res = new Responsive();
+            var item = await _context.DatBan.FindAsync(id);
+            if (item == null)
             {
-                return NotFound();
-            }
 
-            return datBan;
+                res.Code = 204;
+                res.Mess = "not found";
+                return res;
+            }
+            else
+            {
+                res.Data = new DatBanModel
+                {
+                    Id = item.Id,
+                    IdBan = item.IdBan.Value,
+                    KhachHang = await (from s in _context.KhachHang
+                                       where s.Id == item.MaKhachHang
+                                       select new KhachHangModel
+                                       {
+                                           Id = s.Id,
+                                           Name = s.Name,
+                                           SoDienThoai = s.SoDienThoai
+                                       }).FirstOrDefaultAsync(),
+                    GioDen = item.GioDen.Value,
+                    ThoiGian = item.ThoiGian,
+                    SoNguoiLon = item.SoNguoiLon,
+                    SoTreEm = item.SoTreEm,
+                    GhiChu = item.GhiChu,
+                    TrangThai = item.TrangThai,
+                    CreatedByUserId = item.CreatedByUserId,
+                    CreatedByUserName = item.CreatedByUserName,
+                    CreatedOnDate = item.CreatedOnDate,
+                    LastModifiedByUserId = item.LastModifiedByUserId,
+                    LastModifiedByUserName = item.LastModifiedByUserName,
+
+                };
+            }
+            return res;
         }
 
         // PUT: api/DatBan/5
