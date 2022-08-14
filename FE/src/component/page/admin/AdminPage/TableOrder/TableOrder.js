@@ -52,7 +52,7 @@ function TableOrder(props) {
           onClick={() => {
             callApiGetAreaById(item.id)
             setIndex(key)
-            callApiGetTable()
+            callApiGetTable(item.id)
           }}
         >
           {item?.name}
@@ -93,17 +93,21 @@ function TableOrder(props) {
     )
   }
 
-  function callApiGetTable() {
-    baseApi.get(
+  function callApiGetTable(areaID) {
+    let param= {
+      "idKhuVuc":areaID
+  }
+  baseApi.get(
       (res) => {
-          setList(res)
+          setList(res.data)
       },
       (err) => { },
       null,
-      API_TABLE.GET_ALL,
+      API_TABLE.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
       {},
       {}
   )
+    
   }
   return (
     <div className="area-order-container">

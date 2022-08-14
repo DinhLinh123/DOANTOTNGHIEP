@@ -33,7 +33,6 @@ function AreaDetail(props) {
         baseApi.get(
             (res) => {
                 setAreaDetail(res)
-                setList(res?.bans || [])
                 setAreaName(res?.name)
             },
             () => { },
@@ -44,17 +43,23 @@ function AreaDetail(props) {
 
 
     useEffect(() => {
+        let param= {
+            "idKhuVuc":areaID
+        }
         baseApi.get(
             (res) => {
-                setList(res)
+                setList(res.data)
             },
             (err) => { },
             null,
-            API_TABLE.GET_ALL,
+            API_TABLE.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
             {},
             {}
         )
     }, [])
+    useEffect(() => {
+        console.log(list);
+    }, [list])
 
     function updatePosition(item, value, value2) {
         let abc = list
@@ -84,9 +89,11 @@ function AreaDetail(props) {
 
         baseApi.post(
             (res) => {
+                
                 dispatch(changeLoadingApp(false))
                 setShowPopupAddNew(false)
                 let _listTable = [...list]
+                
                 _listTable.push(res.data)
                 setList(_listTable)
                 commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm bàn thành công")
