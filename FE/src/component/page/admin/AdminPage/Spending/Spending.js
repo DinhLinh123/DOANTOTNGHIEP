@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import { MENU_TAB_ADMIN, SORT_TYPE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
@@ -12,6 +12,9 @@ import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import { changeAccount } from "../../../../../reudux/action/accountAction";
+import { useDispatch, useSelector } from "react-redux";
+import { getSpending } from "../../../../../reudux/action/spendingsAction";
+import moment from "moment";
 
 function Spending(props) {
 
@@ -140,30 +143,30 @@ function Spending(props) {
     ];
 
     function columnBill(item) {
-        return <div>{item?.namebill}</div>;
+        return <div>{item?.name}</div>;
     }
     function columnAmount(item) {
-        return <div>{item?.amount}</div>;
+        return <div>{item?.matHang}</div>;
     }
     function columnBillDate(item) {
-        return <div>{item?.billdate}</div>;
+        return <div>{moment(item?.thoiGianKeToanDuyet).format("DD-MM-YYYY hh:mm")}</div>;
     }
     function columnTotalmoney(item) {
-        return <div>{item?.totalmoney}</div>;
+        return <div>{item?.tongSoTien}</div>;
     }
     function columnDataentrydate(item) {
-        return <div>{item?.dataentrydate}</div>;
+        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
     function columnDataentryperson(item) {
-        return <div>{item?.dataentryperson}</div>;
+        return <div>{item?.createdByUserName}</div>;
     }
     function columnStatus(item) {
-        return <div>{item?.status}</div>;
+        return <div>{item?.trangThaiHienTai}</div>;
     }
 
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item, idx) => {
+        listData = dataTable?.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.BILL]: columnBill(item),
                 [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
@@ -281,6 +284,24 @@ function Spending(props) {
         );
     };
 
+    const onSubmitSave = () => {
+
+        const body = {
+            name: itemBill,
+            matHang: addIteams,
+
+
+        }
+    }
+
+    const {dataSpending} = useSelector(state => state.spendingsReducer)
+    console.log("dataSpending", dataSpending);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getSpending())
+    }, [dispatch])
+
     return (
 
         <AdminPage
@@ -305,7 +326,7 @@ function Spending(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataSpending)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -330,7 +351,7 @@ function Spending(props) {
                         />,
                         <Button2
                             name={"Lưu"}
-                            onClick={() => setIsShowPopupAddnew(false)}
+                            onClick={() => onSubmitSave()}
                             background="#fa983a"
                         />,
                     ]}

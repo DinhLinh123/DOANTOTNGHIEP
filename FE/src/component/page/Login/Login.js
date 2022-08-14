@@ -13,6 +13,8 @@ import {
 import posterLogin1 from "../../../image/posterLogin1.png";
 import { Input, message } from 'antd';
 import { PATTETN } from '../../base/common/commonConstant';
+import axios from 'axios';
+import { URL_API } from '../../../utils/urpapi';
 
 
 Login.PropType = {}
@@ -32,6 +34,7 @@ function Login() {
   const [isCreateNewAccount, setIsCreateNewAccount] = useState(false);
   const [emailNewAccount, setEmailNewAccount] = useState('')
   const [mesInputPassConfirm, setMesInputPassConfirm] = useState('')
+  const [error, setError] = useState("")
 
 
 
@@ -84,7 +87,7 @@ function Login() {
 
   }
 
-  function onClickSubmit() {
+ async function onClickSubmit() {
      let obj = {
         userName: userName,
         userAvatar: passWord,
@@ -99,7 +102,17 @@ function Login() {
         roleType: account.roleType
       }))
 
-      window.open("/admin/menus", '_self')
+      const body = {
+        userName: userName,
+        password: passWord
+      }
+      const res = await axios.post(`http://sqldemo-001-site1.htempurl.com/Login`, body)
+      console.log(res.data.data);
+      if(res.data.data){
+        window.open("/admin/menus", '_self')
+      }else{
+        setError("Sai tài khoản hoặc mật khẩu!")
+      }
 
   }
 
@@ -143,9 +156,10 @@ function Login() {
                     status={isDangerMoreInput && "error"}
                     onBlur={() => onBlurInputPass()}
                     onPressEnter={() => onClickSubmit()}
+                    
                   />
                   {isDangerMoreInput && <div className="data-login-system__container-right-login-input-mes">Trường này không được bỏ trống</div>}
-
+                  {error}
                 </div>
                 <div className="data-login-system__container-right-login-submit">
                   <Button name={"Đăng nhập"} background={"#1cc0a9"} onClick={() => { onClickSubmit() }} style={{ width: '100%' }} disabled={disabled} />

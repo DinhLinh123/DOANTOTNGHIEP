@@ -12,17 +12,24 @@ import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteStaff, getStaff, postStaff, updateStaff } from "../../../../../reudux/action/staffAction";
 
 function Staff(props) {
     const [sortType, setSortType] = useState();
+    const [statusAction, setStatusAction] = useState("ADD")
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+    const [idStaff, setIdStaff] = useState();
+    console.log("idStaff", idStaff);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [staffCode, setStaffCode] = useState("");
+    const [staffCode, setStaffCode] = useState(0);
+    console.log("staffCode", staffCode);
     const [staffName, setStaffName] = useState("");
-    const [staffSex, setStaffSex] = useState(1);
+    const [staffSex, setStaffSex] = useState("Nam");
     const [staffDate, setStaffDate] = useState(moment().unix()
     * 1000);
-    const [staffPosition, setStaffPosition] = useState(1);
+    const [staffPosition, setStaffPosition] = useState("Phục vụ bàn");
+    console.log("staffPosition", staffPosition);
     const [staffPhone, setStaffPhone] = useState("");
     const [staffAddress, setStaffAddress] = useState("");
     const [staffNote, setStaffNote] = useState("");
@@ -133,15 +140,15 @@ function Staff(props) {
     ];
     const dataPosition = [
         {
-            value: "1",
+            value: "Phục vụ bàn",
             label: "Phục vụ bàn"
         },
         {
-            value: "2",
+            value: "Bếp",
             label: "Bếp"
         },
         {
-            value: "3",
+            value: "Thu ngân",
             label: "Thu ngân"
         },
     ]
@@ -149,22 +156,44 @@ function Staff(props) {
     const OPTION_MORE_TABLE = [
         {
             title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
+            onSelect: (item) => {
+            // console.log("aaa", item?.fullName.props.children);
+            setIsShowPopupAddnew(true);
+            setStatusAction("UPDATE")
+            console.log({item});
+            setIdStaff(item?.code.props.children[1].props.children)
+            setStaffCode(item?.code.props.children[0])
+            setStaffName(item?.name.props.children)
+            setStaffSex(item?.sex.props.children)
+            setStaffDate(item?.date.props.children)
+            setStaffPosition(item?.position.props.children)
+            setStaffPhone(item?.phone.props.children)
+            setStaffAddress(item?.address.props.children)
+            setStaffNote(item?.note.props.children)
             },
         },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: async (item) => {
+
+                dispatch(deleteStaff(item?.code.props.children[1].props.children))
             },
         },
     ];
+
+    const {dataStaff, loading} = useSelector(state => state.staffReducer);
+    console.log("dataStaff", dataStaff);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getStaff())
+    },[dispatch, loading])
 
     // Select chức vụ
     const { Option } = Select;
     const onChange = (value) => {
         console.log(`selected ${value}`);
+        setStaffPosition(value)
     };
 
     const onSearch = (value) => {
@@ -173,33 +202,35 @@ function Staff(props) {
 
     
     function columnCode(item) {
-        return <div>{item?.code}</div>;
+        return <div>{item?.maNV}
+            <div className="hidden-id">{item.id}</div>
+        </div>;
     }
     function columnName(item) {
-        return <div>{item?.name}</div>;
+        return <div>{item?.fullName}</div>;
     }
     function columnSex(item) {
-        return <div>{item?.sex}</div>;
+        return <div>{item?.phai}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.date}</div>;
+        return <div>{moment(item?.ngaySinh).format("DD-MM-YYYY")}</div>;
     }
     function columnPosition(item) {
-        return <div>{item?.position}</div>;
+        return <div>{item?.chucVu}</div>;
     }
     function columnPhone(item) {
-        return <div>{item?.phone}</div>;
+        return <div>{item?.soDienThoai}</div>;
     }
     function columnAddress(item) {
-        return <div>{item?.address}</div>;
+        return <div>{item?.diaChi}</div>;
     }
     function columnNote(item) {
-        return <div>{item?.note}</div>;
+        return <div>{item?.chiChu}</div>;
     }
 
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item, idx) => {
+        listData = dataTable?.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
                 [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
@@ -217,11 +248,43 @@ function Staff(props) {
 
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
+        setStatusAction("ADD")
+       
     }
     function handleClickAddPosition(type) {
         setIsShowPopupAddPosition(true);
     }
     function onChangeTab() {
+        const date = new Date()
+        if (statusAction === "ADD") {
+            const body = {
+                maNV: 0,
+                fullName: staffName,
+                phai: staffSex,
+                ngaySinh: date.toISOString(staffDate),
+                chucVu: staffPosition,
+                soDienThoai: staffPhone,
+                diaChi: staffAddress,
+                chiChu: staffNote
+            }
+            dispatch(postStaff(body))
+        } else {
+            const body = {
+                id: idStaff,
+                maNV: staffCode,
+                fullName: staffName,
+                phai: staffSex,
+                ngaySinh: date.toISOString(staffDate),
+                chucVu: staffPosition,
+                soDienThoai: staffPhone,
+                diaChi: staffAddress,
+                chiChu: staffNote
+            }
+            console.log("VÀo đây");
+
+            dispatch(updateStaff({id: body.id, body}))
+        }
+       
         setIsShowPopupAddnew(false)
         setStaffAddress("")
         setStaffCode("")
@@ -260,7 +323,7 @@ function Staff(props) {
                         />
                     </div>
                     <div className="staff-manager__filter-position">
-                            <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"}/>
+                            <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"} setStaffPosition = {setStaffPosition}/>
                     </div>
                 </div>
                 <div className="staff-manager__button">
@@ -284,7 +347,7 @@ function Staff(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataStaff)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -299,11 +362,11 @@ function Staff(props) {
                 <Popup
                     title={"Thêm mới nhân viên"}
                     show={isShowPopupAddnew}
-                    onClickClose={() => onChangeTab()}
+                    onClickClose={() =>setIsShowPopupAddnew(false)}
                     button={[
                         <Button2
                             name={"Đóng"}
-                            onClick={() => onChangeTab()}
+                            onClick={() =>setIsShowPopupAddnew(false)}
                         />,
                         <Button2
                             name={"Lưu"}
@@ -317,7 +380,8 @@ function Staff(props) {
                         <div className="staff-manager__popup">
                             <Input
                                 label={"Mã nhân viên"}
-                                defaultValue={staffCode}
+                                type = "number"
+                                value={staffCode}
                                 onChange={(val) => {
                                     setStaffCode(val);
                                 }}
@@ -325,14 +389,14 @@ function Staff(props) {
                             />
                             <Input
                                 label={"Tên nhân viên"}
-                                defaultValue={staffName}
+                                value={staffName}
                                 onChange={(val) => { setStaffName(val) }}
                                 autoFocus
                             />
                             <div className="staff-manager__popup-sex-lable">Giới tính</div>
                             <Radio.Group onChange={(val) => { setStaffSex(val.target.value) }} value={staffSex}>
-                                <Radio value={1}>Nam</Radio>
-                                <Radio value={0}>Nữ</Radio>
+                                <Radio value={'Nam'}>Nam</Radio>
+                                <Radio value={'Nữ'}>Nữ</Radio>
                             </Radio.Group>
                             <DatePicker
                                 defaultValue={staffDate}
@@ -346,24 +410,25 @@ function Staff(props) {
                                 listOption={dataPosition}  
                                 placeholder={"Chọn chức vụ"} 
                                 title={"Chức vụ"}
-                                defaultValue={staffPosition}
+                                value={staffPosition}
+                                setStaffPosition = {setStaffPosition}
                                 onChange={(val) => { setStaffPosition(val) }}
                                 />
                             <Input
                                 label={"Số điện thoại"}
-                                defaultValue={staffPhone}
+                                value={staffPhone}
                                 onChange={(val) => { setStaffPhone(val) }}
                                 autoFocus
                             />
                             <Input
                                 label={"Địa chỉ"}
-                                defaultValue={staffAddress}
+                                value={staffAddress}
                                 onChange={(val) => { setStaffAddress(val) }}
                                 autoFocus
                             />
                             <Input
                                 label={"Ghi chú"}
-                                defaultValue={staffNote}
+                                value={staffNote}
                                 onChange={(val) => { setStaffNote(val) }}
                                 autoFocus
                             />

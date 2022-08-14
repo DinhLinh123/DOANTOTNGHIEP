@@ -8,7 +8,8 @@ const { Option } = Select;
 Dropdown.propTypes = {
     listOption: PropTypes.array,
     title: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    setStaffPosition: PropTypes.string
 }
 
 Dropdown.defaultProps = {
@@ -17,12 +18,13 @@ Dropdown.defaultProps = {
         value: 0
     }],
     title: "",
-    placeholder: ''
+    placeholder: '',
+    setStaffPosition: "Nhân viên"
 }
 
 function Dropdown(props) {
 
-    const {listOption, title, placeholder}= props
+    const {listOption, title, placeholder, setStaffPosition}= props
 
     return (
         <div className="dropdown-manager">
@@ -36,6 +38,7 @@ function Dropdown(props) {
                 filterSort={(optionA, optionB) =>
                     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                 }
+                onChange = {e => setStaffPosition(e)}
             >
                 {listOption?.map((item)=>{
                     return(<Option value={item.value}>{item.label}</Option>)

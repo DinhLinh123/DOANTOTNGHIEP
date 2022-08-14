@@ -4,13 +4,17 @@ import menuReducer from './menuReducer'
 import loadingReducer from './loadingReducer'
 import bookingReducer from './bookingReducer'
 import feedbackReducer from './feedbackReducer'
+import spendingsReducer from "./spendingsReducer"
+import staffReducer from "./staffReducer"
 
 const rootReducer = combineReducers({
     menu: menuReducer,
     account: accountReducer,
     loading: loadingReducer,
     bookingReducer,
-    feedbackReducer
+    feedbackReducer,
+    spendingsReducer,
+    staffReducer
 })
 
 export default rootReducer
