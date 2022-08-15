@@ -36,6 +36,7 @@ function Menu(props) {
   const [foodNote, setFoodNote] = useState("");
   const [foodDetail, setFoodDetail] = useState({});
   const [dataTable, setDataTable] = useState([]);
+  const [dataTotal, setDataTotal] = useState(0);
   const [nameTypeFood, setNameTypeFood] = useState('');
   const [isManyTypeFood, setIsManyTypeFood] = useState(0);
   const [isShowPopupAddNewTypeFood, setIsShowPopupAddNewTypeFood] = useState(false);
@@ -45,10 +46,11 @@ function Menu(props) {
     newIndex: 0,
   });
   const [listFood, setListFood] = useState([{ food: "" }]);
-  const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+  const [isShowPopupAddnew, setIsShowPopupAddnew] = useState({show: false, title:'', key: -1});
   const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({show: false, item: ''});
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
   const [listMenu, setListMenu] = useState([]);
+  const [textSearch, setTextSearch] = useState("");
 
 
   const [images, setImages] = useState([]);
@@ -137,6 +139,10 @@ function Menu(props) {
     callGetAddFood()
   }, [])
 
+  useEffect(() => {
+    callGetAddFood()
+  }, [textSearch])
+
   function columnName(item) {
     return <div>{item?.name}</div>;
   }
@@ -181,7 +187,7 @@ function Menu(props) {
     return [...listData];
   }
 
-  useEffect(() => { if (isShowPopupAddnew) { callGetTypeFood() } }, [isShowPopupAddnew])
+  useEffect(() => { if (isShowPopupAddnew.show) { callGetTypeFood() } }, [isShowPopupAddnew])
 
   function callGetTypeFood() {
 
@@ -227,7 +233,7 @@ function Menu(props) {
   }
 
   function handleClickAddnew(type) {
-    setIsShowPopupAddnew(true);
+    setIsShowPopupAddnew({show: true, title:'Thêm mới menu', key: 0});
   }
 
   function onChangeTab(item, index) {
@@ -329,7 +335,7 @@ function Menu(props) {
   function handleEditMenu() {
 
     setIndex({ value: isShowPopupDetail.index, item: '' })
-    setIsShowPopupAddnew(true)
+    setIsShowPopupAddnew({show: true, title:'Sửa menu', key: 1})
     setFoodName(foodDetail.name)
     setFoodUnit(foodDetail.unit)
     setFoodPrice(foodDetail.price)
@@ -361,12 +367,13 @@ function Menu(props) {
     baseApi.post(
       (res) => {
         dispatch(changeLoadingApp(false))
-        setIsShowPopupAddnew(false)
+        setIsShowPopupAddnew({show: false, title:'', key: -1})
         callGetAddFood()
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm món thành công")
       },
       () => {
         dispatch(changeLoadingApp(false))
+        setIsShowPopupAddnew({show: false, title:'', key: -1})
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm món thất bại")
       },
       null,
@@ -382,6 +389,7 @@ function Menu(props) {
     baseApi.get(
       (res) => {
         setDataTable(res.data || [])
+        setDataTotal(res?.data?.length)
         dispatch(changeLoadingApp(false))
       },
       () => {
@@ -392,6 +400,25 @@ function Menu(props) {
       null,
       {}
     )
+
+  //   dispatch(changeLoadingApp(true))
+  //   let param= {
+  //     "TextSearch": textSearch
+  // }
+  //   baseApi.get(
+  //     (res) => {
+  //       setDataTable(res.data || [])
+  //       setDataTotal(res?.data?.length)
+  //       dispatch(changeLoadingApp(false))
+  //     },
+  //     () => {
+  //       dispatch(changeLoadingApp(false))
+  //     },
+  //     null,
+  //     API_MENU.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
+  //     null,
+  //     {}
+  //   )
   }
 
   function callDeleteMenu() {
@@ -413,6 +440,8 @@ function Menu(props) {
       null,
       {}
     )
+
+    
   }
 
   return (
@@ -420,7 +449,11 @@ function Menu(props) {
       <div className="menu-manager">
         <div className="menu-manager__filter">
           <div className="menu-manager__filter-search">
-            <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
+            <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val)=>{
+              setTimeout(() => {
+                setTextSearch(val)
+              }, 200);
+            }}/>
           </div>
           <div className="menu-manager__filter-create-new">
             <Button2
@@ -434,7 +467,7 @@ function Menu(props) {
           <TableBase
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
-            total={90}
+            total={dataTotal}
             data={convertDataTable(dataTable)}
             loading={false}
             hasMoreOption
@@ -449,14 +482,14 @@ function Menu(props) {
         </div>
         <Popup
           title={"Thêm mới menu"}
-          show={isShowPopupAddnew}
-          onClickClose={() => setIsShowPopupAddnew(false)}
+          show={isShowPopupAddnew.show}
+          onClickClose={() => setIsShowPopupAddnew({show: false, title:'', key: -1})}
           button={[
             <Button2
               name={"Đóng"}
               onClick={() => {
                 setFoodName("")
-                setIsShowPopupAddnew(false)
+                setIsShowPopupAddnew({show: false, title:'', key: -1})
               }}
             />,
             <Button2
@@ -487,9 +520,9 @@ function Menu(props) {
                     </div>
                   );
                 })}
-                <div onClick={() => setIsShowPopupAddNewTypeFood(true)}>
+                {/* <div onClick={() => setIsShowPopupAddNewTypeFood(true)}>
                   <PlusOutlined />
-                </div>
+                </div> */}
               </div>
               <div className="menu-manager__popup-content">
                 {index.item?.isMany && (

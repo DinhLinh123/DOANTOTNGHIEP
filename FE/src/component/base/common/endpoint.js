@@ -17,7 +17,8 @@ const API_AREA = {
 const API_MENU = {
     GET_ALL: PART + "/DoAn",
     CREATE_NEW: PART + "/DoAn",
-    GET_BY_ID: PART + "/DoAn/"
+    GET_BY_ID: PART + "/DoAn/",
+    GET_BY_FILTER: PART + "/DoAn/filter?_filter=",
 };
 
 const API_TYPE_FOOD = {
