@@ -4,6 +4,9 @@
     &__filter {
         display: flex;
         margin-bottom: 24px;
+        &-search{
+            width: 40%;
+        }
 
         &-create-new {
             margin-left: auto;
