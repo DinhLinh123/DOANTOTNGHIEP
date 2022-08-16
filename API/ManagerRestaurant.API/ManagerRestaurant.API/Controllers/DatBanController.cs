@@ -39,13 +39,13 @@ namespace ManagerRestaurant.API.Controllers
                         Id = item.Id,
                         IdBan = item.IdBan.Value,
                         KhachHang = await (from s in _context.KhachHang
-                                          where s.Id == item.MaKhachHang
-                                          select new KhachHangModel
-                                          {
-                                              Id = s.Id,
-                                              Name = s.Name,
-                                              SoDienThoai = s.SoDienThoai
-                                          }).FirstOrDefaultAsync(),
+                                           where s.Id == item.MaKhachHang
+                                           select new KhachHangModel
+                                           {
+                                               Id = s.Id,
+                                               Name = s.Name,
+                                               SoDienThoai = s.SoDienThoai
+                                           }).FirstOrDefaultAsync(),
                         GioDen = item.GioDen.Value,
                         ThoiGian = item.ThoiGian,
                         SoNguoiLon = item.SoNguoiLon,
@@ -231,17 +231,17 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.TenKhachHang.Contains(filter.TextSearch));
                 }
+                if (filter.TimeStart != null && filter.TimeStart > DateTime.MinValue && filter.TimeEnd != null && filter.TimeEnd > DateTime.MinValue)
+                {
+                    query = query.Where((x) => (x.GioDen >= filter.TimeEnd && x.GioDen <= filter.TimeEnd));
+                }
                 //if (filter.MaTheLoai != Guid.Empty)
                 //{
                 //    query = query.Where((x) => x.MaTheLoai == filter.MaTheLoai);
                 //}
-                if (filter.PageNumber > 0)
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
-                    query = query.Take(filter.PageNumber);
-                }
-                if (filter.PageSize > 0)
-                {
-                    query = query.Skip(filter.PageSize);
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
                 }
 
                 var data = await query.ToListAsync();
@@ -269,6 +269,7 @@ namespace ManagerRestaurant.API.Controllers
 
     class DatBanFilter : BaseFilter
     {
-
+        public DateTime? TimeStart { get; set; }
+        public DateTime? TimeEnd { get; set; }
     }
 }

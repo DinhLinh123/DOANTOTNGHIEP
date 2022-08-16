@@ -135,8 +135,8 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
 
-                var filter = JsonConvert.DeserializeObject<DoAnFilter>(_filter);
-                var query = from s in _context.DoAn select s;
+                var filter = JsonConvert.DeserializeObject<QuyenFilter>(_filter);
+                var query = from s in _context.Quyen select s;
                 if (filter.Id != Guid.Empty)
                 {
                     query = query.Where((x) => x.Id == filter.Id);
@@ -145,16 +145,11 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
-               
-                if (filter.PageNumber > 0)
-                {
-                    query = query.Take(filter.PageNumber);
-                }
-                if (filter.PageSize > 0)
-                {
-                    query = query.Skip(filter.PageSize);
-                }
 
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
+                }
                 var data = await query.ToListAsync();
 
                 var mes = "";

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
 using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -253,9 +254,52 @@ namespace ManagerRestaurant.API.Controllers
             return NoContent();
         }
 
-        private bool PhieuOderExists(Guid id)
+        //[HttpGet("filter")]
+        //public async Task<Responsive> GetFilterPhieuOder([FromQuery] string _filter)
+        //{
+        //    try
+        //    {
+
+        //        var filter = JsonConvert.DeserializeObject<PhieuOderFilter>(_filter);
+        //        var query = from s in _context.PhieuOder select s;
+        //        if (filter.Id != Guid.Empty)
+        //        {
+        //            query = query.Where((x) => x.Id == filter.Id);
+        //        }
+        //        if (filter.TextSearch.Length > 0)
+        //        {
+        //            query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+        //        }
+
+        //        if (filter.PageNumber > 0 && filter.PageSize > 0)
+        //        {
+        //            query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
+        //        }
+
+        //        var data = await query.ToListAsync();
+
+        //        var mes = "";
+        //        if (data.Count == 0)
+        //        {
+        //            mes = "Not data";
+        //        }
+        //        else
+        //        {
+        //            mes = "Get success";
+        //        }
+
+        //        var res = new Responsive(200, mes, data);
+        //        return res;
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        var res = new Responsive(500, err.Message, err.ToString());
+        //        return res;
+        //    }
+        //}
+
+        class PhieuOderFilter : BaseFilter
         {
-            return _context.PhieuOder.Any(e => e.Id == id);
         }
     }
 }

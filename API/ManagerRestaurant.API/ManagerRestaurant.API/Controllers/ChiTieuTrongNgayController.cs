@@ -161,14 +161,10 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
-                 
-                if (filter.PageNumber > 0)
+
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
-                    query = query.Take(filter.PageNumber);
-                }
-                if (filter.PageSize > 0)
-                {
-                    query = query.Skip(filter.PageSize);
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
                 }
 
                 var data = await query.ToListAsync();
