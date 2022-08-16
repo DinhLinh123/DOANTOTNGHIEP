@@ -5,6 +5,7 @@ namespace ManagerRestaurant.API.Models
     public class PhieuNhapVatTuModel
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Kieu { get; set; }
         public float TongTien { get; set; }
         public Guid? CreatedByUserId { get; set; }
@@ -14,7 +15,9 @@ namespace ManagerRestaurant.API.Models
         public string LastModifiedByUserName { get; set; }
     }
     public class PhieuNhapVatTuCreateModel
-    {public Guid Id { get; set; }
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Kieu { get; set; }
         public float TongTien { get; set; }
         public Guid? CreatedByUserId { get; set; }
@@ -24,7 +27,9 @@ namespace ManagerRestaurant.API.Models
         public string LastModifiedByUserName { get; set; }
     }
     public class PhieuNhapVatTuUpdateModel
-    {public Guid Id { get; set; }
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Kieu { get; set; }
         public float TongTien { get; set; }
         public Guid? CreatedByUserId { get; set; }

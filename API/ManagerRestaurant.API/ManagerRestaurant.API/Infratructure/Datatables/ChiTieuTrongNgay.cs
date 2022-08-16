@@ -9,7 +9,8 @@ namespace Infratructure.Datatables
         public string Anh { get; set; }
         public float TongSoTien { get; set; }
         public string TrangThaiHienTai { get; set; }
-        public string GhiChu { get; set; }       
+        public string GhiChu { get; set; }
+        
         public DateTime ThoiGianKeToanDuyet { get; set; }
         public string NameKeToanDuyet { get; set; }
         public Guid IdKeToanDuyet { get; set; } 

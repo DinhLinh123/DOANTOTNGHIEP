@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -98,11 +100,58 @@ namespace ManagerRestaurant.API.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        } 
+        [HttpGet("filter")]
+        public async Task<Responsive> GetFilterKhuVuc([FromQuery] string _filter)
+        {
+            try
+            {
+
+                var filter = JsonConvert.DeserializeObject<KhuVucFilter>(_filter);
+                var query = from s in _context.KhuVuc select s;
+                if (filter.Id != Guid.Empty)
+                {
+                    query = query.Where((x) => x.Id == filter.Id);
+                }
+                if (filter.TextSearch.Length > 0)
+                {
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+                }
+
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
+                }
+
+                var data = await query.ToListAsync();
+
+                var mes = "";
+                if (data.Count == 0)
+                {
+                    mes = "Not data";
+                }
+                else
+                {
+                    mes = "Get success";
+                }
+
+                var res = new Responsive(200, mes, data);
+                return res;
+            }
+            catch (Exception err)
+            {
+                var res = new Responsive(500, err.Message, err.ToString());
+                return res;
+            }
         }
 
         private bool KhuVucExists(Guid id)
         {
             return _context.KhuVuc.Any(e => e.Id == id);
+        }
+
+        class KhuVucFilter : BaseFilter
+        { 
         }
     }
 }
