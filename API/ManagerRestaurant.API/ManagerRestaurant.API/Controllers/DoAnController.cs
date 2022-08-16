@@ -83,6 +83,8 @@ namespace ManagerRestaurant.API.Controllers
             }
             else
             {
+                res.Code = 200;
+                res.Mess = "get success";
                 res.Data = new DoAnModel
                 {
                     Id = item.Id,

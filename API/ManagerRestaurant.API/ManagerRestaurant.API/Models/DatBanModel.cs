@@ -21,9 +21,7 @@ namespace ManagerRestaurant.API.Models
         public string LastModifiedByUserName { get; set; } 
     }
     public class DatBanCreateModel
-    {
-        public Guid Id { get; set; }
-        public Guid IdBan { get; set; }
+    { 
         public Guid MaKhachHang { get; set; }
         public string TenKhachHang { get; set; }
         public string SoDienThoai { get; set; }
@@ -42,6 +40,7 @@ namespace ManagerRestaurant.API.Models
         public Guid IdBan { get; set; }
         public Guid MaKhachHang { get; set; }
         public string TenKhachHang { get; set; }
+        public string SoDienThoai { get; set; }
         public DateTime GioDen { get; set; }
         public DateTime ThoiGian { get; set; }
         public int SoNguoiLon { get; set; }
