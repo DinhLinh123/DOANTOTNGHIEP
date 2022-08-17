@@ -9,7 +9,7 @@ namespace ManagerRestaurant.API.Infratructure.Datatables
         public string Anh { get; set; }
         public string NoiDung { get; set; }
         public float GiaTri { get; set; }
-        public string TheLoai { get; set; }
+        public int TheLoai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

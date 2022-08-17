@@ -110,7 +110,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.NoiDung.Contains(filter.TextSearch.Trim()) || x.SoDienThoai.Contains(filter.TextSearch.Trim()));
+                    query = query.Where((x) => x.NoiDung.Contains(filter.TextSearch.Trim()) || x.SoDienThoai.Contains(filter.TextSearch.Trim())||x.TenKH.Contains(filter.TextSearch.Trim()));
                 }
 
                 if (filter.PageNumber > 0 && filter.PageSize > 0)

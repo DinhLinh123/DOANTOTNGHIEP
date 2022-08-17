@@ -45,7 +45,7 @@ namespace ManagerRestaurant.API.Models
     {
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
-        
+        public List<DoAnModel> MonAns { get; set; }
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
         public float TongTien { get; set; }
