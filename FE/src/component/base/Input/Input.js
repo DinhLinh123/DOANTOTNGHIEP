@@ -29,9 +29,6 @@ InputField.defaultValue = {
   autoFocus: false,
   isTextAria: true,
   messageNote: "email",
-  setDangerNote: () => { },
-  onPressEnter: () => { },
-  onBlurInput: () => { },
   showCount: false,
   width: 250,
   key: ''
@@ -63,40 +60,39 @@ function InputField(props) {
   const [message, setMessage] = useState("");
   const [isFocus, setIsFocus] = useState(false);
 
-  useEffect(()=>{
-    if(isFocus){
+  useEffect(() => {
+    if (isFocus) {
       inputRef.current.focus && inputRef.current.focus()
     }
-  },[isFocus])
-  
+  }, [isFocus])
+
 
   function onBlur(event) {
     let value = event.target.value;
-    
-    onBlurInput(value)
+    if (onBlurInput) { onBlurInput(value) }
+
     if (required && (value?.length == 0 || value == undefined)) {
       setIsDanger(true);
       setMessage("Trường này không được bỏ trống");
-      setDangerNote(true);
+      if (setDangerNote) { setDangerNote(true) }
     } else {
       if (pattern && !regex.test(value)) {
         setIsDanger(true);
         setMessage(messageNote);
-        setDangerNote(true);
+        if (setDangerNote) { setDangerNote(true) }
       } else {
         setIsDanger(false);
-        setDangerNote(false);
+        if (setDangerNote) { setDangerNote(false) }
         setMessage("");
       }
     }
-    
   }
 
   function onChangeInput(event) {
     onChange(event);
     setIsDanger(false);
     setMessage("");
-    setDangerNote(false);
+    if (setDangerNote) { setDangerNote(false) }
   }
 
   return (

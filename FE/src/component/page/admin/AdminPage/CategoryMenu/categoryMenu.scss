@@ -5,20 +5,9 @@
         width: 100%;
         display: flex;
         margin-bottom: 24px;
-        &-name{
-            margin-right: 10px;
-            width: 30%;
-        }
-        &-phone{
-            margin-right: 10px;
-            width: 30%;
-        }
-        &-date{
-            width: 20%;
-            margin-right: 10px;
-        }
-        &-create-new {
-            padding-top: 33px;
+        align-items: center;
+
+        &-create {
             margin-left: auto;
         }
         

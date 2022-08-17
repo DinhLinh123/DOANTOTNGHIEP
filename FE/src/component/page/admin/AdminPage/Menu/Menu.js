@@ -32,11 +32,12 @@ function Menu(props) {
   const [foodPrice, setFoodPrice] = useState("");
   const [foodDescribe, setFoodDescribe] = useState("");
   const [foodImage, setFoodImage] = useState("dfsd");
-  const [foodStatus, setFoodStatus] = useState(1);
+  const [foodStatus, setFoodStatus] = useState(true);
   const [foodNote, setFoodNote] = useState("");
   const [foodDetail, setFoodDetail] = useState({});
   const [dataTable, setDataTable] = useState([]);
   const [dataTotal, setDataTotal] = useState(0);
+  const [textSearch, setTextSearch] = useState("");
   const [nameTypeFood, setNameTypeFood] = useState('');
   const [isManyTypeFood, setIsManyTypeFood] = useState(0);
   const [isShowPopupAddNewTypeFood, setIsShowPopupAddNewTypeFood] = useState(false);
@@ -50,7 +51,6 @@ function Menu(props) {
   const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({ show: false, item: '' });
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
   const [listMenu, setListMenu] = useState([]);
-  const [textSearch, setTextSearch] = useState("");
 
 
   const [images, setImages] = useState([]);
@@ -109,8 +109,9 @@ function Menu(props) {
     },
     {
       title: "Sửa",
-      onSelect: () => {
-        alert("Sửa");
+      onSelect: (val) => {
+        setFoodDetail(val.detail)
+        handleEditMenu(val.detail)
       },
     },
     {
@@ -187,7 +188,8 @@ function Menu(props) {
     return [...listData];
   }
 
-  useEffect(() => { if (isShowPopupAddnew.show) { callGetTypeFood() } }, [isShowPopupAddnew])
+  useEffect(() => { if (isShowPopupAddnew.show && isShowPopupAddnew.key ==0) { callGetTypeFood() } }, [isShowPopupAddnew])
+  useEffect(() => { console.log(index)}, [index])
 
   function callGetTypeFood() {
 
@@ -205,35 +207,19 @@ function Menu(props) {
     )
   }
 
-  function callAddTypeFood() {
-    let body = {
-      "name": nameTypeFood,
-      "isMany": isManyTypeFood == 1,
-      "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "createdByUserName": "string",
-      "createdOnDate": "2022-08-11T04:57:29.357Z",
-      "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "lastModifiedByUserName": "string"
-    }
-    baseApi.post(
+  function callGetTypeFoodByID(id) {
+
+    baseApi.get(
       (res) => {
-        setListMenu(res)
-        callGetTypeFood()
-        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm thể loại món ăn thành công")
+        setIndex({ value: 0, item: res })
       },
       () => {
-        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm thể loại món ăn thất bại")
-
       },
       null,
-      API_TYPE_FOOD.GET_ALL,
+      API_TYPE_FOOD.GET_BY_ID + id,
       null,
-      body
+      {}
     )
-  }
-
-  function handleClickAddnew(type) {
-    setIsShowPopupAddnew({ show: true, title: 'Thêm mới menu', key: 0 });
   }
 
   function onChangeTab(item, index) {
@@ -261,6 +247,16 @@ function Menu(props) {
     setImages([])
     setShowPopupWarningChangeTab({ show: false, newIndex: 0 });
     setIndex({ value: showPopupWarningChangeTab.newIndex, item: '' })
+  }
+  function resetValue() {
+    setFoodName("")
+    setFoodUnit("")
+    setFoodPrice("")
+    setFoodDescribe("")
+    setFoodNote("")
+    setListFood([])
+    setImages("")
+    setFoodStatus(true)
   }
 
   function ChangeNameFood(val, index) {
@@ -332,18 +328,18 @@ function Menu(props) {
     }
   }
 
-  function handleEditMenu() {
-
-    setIndex({ value: isShowPopupDetail.index, item: '' })
+  function handleEditMenu(item) {
+    callGetTypeFoodByID(item?.maTheLoai)
+    setIsShowPopupDetail({ show: false })
     setIsShowPopupAddnew({ show: true, title: 'Sửa menu', key: 1 })
-    setFoodName(foodDetail.name)
-    setFoodUnit(foodDetail.unit)
-    setFoodPrice(foodDetail.price)
-    setListFood(JSON.parse(foodDetail.listFoods || ''))
-    setFoodDescribe(foodDetail.describe)
-    setFoodNote(foodDetail.name)
+    setFoodName(item.name)
+    setFoodUnit(item.donViTinh)
+    setFoodPrice(item.donGia)
+    setListFood(JSON.parse(item.danhSachMonAn))
+    setFoodDescribe(item.ghiChu)
+    setFoodNote(item.ghiChu)
     setImages([])
-    setFoodStatus(foodDetail.statuss)
+    setFoodStatus(item.trangThai)
     // setIsShowPopupDetail({ show: false, index: -1 })
   }
 
@@ -359,13 +355,14 @@ function Menu(props) {
       "ghiChu": foodNote,
       "danhSachMonAn": JSON.stringify(listFood),
       "donViTinh": foodUnit,
-      "trangThai": foodStatus != 0,
+      "trangThai": foodStatus,
       "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "createdByUserName": "string",
       "createdOnDate": "2022-08-04T14:31:40.035Z"
     }
     baseApi.post(
       (res) => {
+        resetValue()
         dispatch(changeLoadingApp(false))
         setIsShowPopupAddnew({ show: false, title: '', key: -1 })
         callGetAddFood()
@@ -383,30 +380,45 @@ function Menu(props) {
     )
   }
 
+  function callUpdateFood() {
+    dispatch(changeLoadingApp(true))
+    let body = foodDetail;
+    body.name = foodName
+    body.linkAnh = foodImage
+    body.donGia = foodPrice
+    body.loai = "string"
+    body.ghiChu = foodNote
+    body.danhSachMonAn = JSON.stringify(listFood)
+    body.donViTinh = foodUnit
+    body.trangThai = foodStatus
+    baseApi.put(
+      (res) => {
+        resetValue()
+        dispatch(changeLoadingApp(false))
+        setIsShowPopupAddnew({ show: false, title: '', key: -1 })
+        callGetAddFood()
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa món thành công")
+      },
+      () => {
+        dispatch(changeLoadingApp(false))
+        setIsShowPopupAddnew({ show: false, title: '', key: -1 })
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Sửa món thất bại")
+      },
+      null,
+      API_MENU.UPDATE_BY_ID + foodDetail.id,
+      null,
+      body
+    )
+  }
+
   function callGetAddFood() {
-    // dispatch(changeLoadingApp(true))
-
-    // baseApi.get(
-    //   (res) => {
-    //     setDataTable(res.data || [])
-    //     setDataTotal(res?.data?.length)
-    //     dispatch(changeLoadingApp(false))
-    //   },
-    //   () => {
-    //     dispatch(changeLoadingApp(false))
-    //   },
-    //   null,
-    //   API_MENU.GET_ALL,
-    //   null,
-    //   {}
-    // )
-
     dispatch(changeLoadingApp(true))
     let param = {
       "TextSearch": textSearch
     }
     baseApi.get(
       (res) => {
+        resetValue()
         setDataTable(res.data || [])
         setDataTotal(res?.data?.length)
         dispatch(changeLoadingApp(false))
@@ -421,12 +433,11 @@ function Menu(props) {
     )
   }
 
-  // useEffect(() => { console.log(isShowPopupDetail) }, [dataTotal])
-
   function callDeleteMenu() {
     dispatch(changeLoadingApp(true))
     baseApi.delete(
       (res) => {
+        resetValue()
         dispatch(changeLoadingApp(false))
         setIsShowPopupComfirmDelete({ show: false, item: '' })
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa món thành công")
@@ -461,7 +472,7 @@ function Menu(props) {
             <Button2
               name={"Thêm mới món ăn"}
               leftIcon={<PlusOutlined />}
-              onClick={() => handleClickAddnew()}
+              onClick={() => setIsShowPopupAddnew({ show: true, title: 'Thêm mới menu', key: 0 })}
             />
           </div>
         </div>
@@ -483,20 +494,30 @@ function Menu(props) {
           />
         </div>
         <Popup
-          title={"Thêm mới menu"}
+          title={isShowPopupAddnew.title}
           show={isShowPopupAddnew.show}
-          onClickClose={() => setIsShowPopupAddnew({ show: false, title: '', key: -1 })}
+          onClickClose={() => {
+            resetValue()
+            setIsShowPopupAddnew({ show: false, title: '', key: -1 })
+          }}
           button={[
             <Button2
               name={"Đóng"}
               onClick={() => {
-                setFoodName("")
+                resetValue()
                 setIsShowPopupAddnew({ show: false, title: '', key: -1 })
               }}
             />,
             <Button2
               name={"Lưu"}
-              onClick={() => callAddNewFood()}
+              onClick={() => {
+                if (isShowPopupAddnew.key === 0) {
+                  callAddNewFood()
+                }
+                if (isShowPopupAddnew.key === 1) {
+                  callUpdateFood()
+                }
+              }}
               background="#fa983a"
             />,
           ]}
@@ -504,7 +525,7 @@ function Menu(props) {
           className={"menu-popup-create"}
           body={
             <div className="menu-manager__popup">
-              <div className="menu-manager__popup-header">
+              {isShowPopupAddnew.key != 1 && <div className="menu-manager__popup-header">
                 {listMenu.map((item, key) => {
                   return (
                     <div
@@ -522,17 +543,15 @@ function Menu(props) {
                     </div>
                   );
                 })}
-                {/* <div onClick={() => setIsShowPopupAddNewTypeFood(true)}>
-                  <PlusOutlined />
-                </div> */}
-              </div>
+              </div>}
+
               <div className="menu-manager__popup-content">
                 {index.item?.isMany && (
                   <div className="menu-manager__popup-content-buffet">
                     <div className="menu-manager__popup-content-buffet-name">
                       <Input
                         label={"Tên gói buffet"}
-                        defaultValue={foodName}
+                        value={foodName}
                         onChange={(val) => {
                           setFoodName(val);
                         }}
@@ -561,32 +580,32 @@ function Menu(props) {
                     </div>
                     <Input
                       label={"Đơn vị tính"}
-                      defaultValue={foodUnit}
+                      value={foodUnit}
                       onChange={(val) => { setFoodUnit(val) }}
                       autoFocus
                     />
                     <Input
                       label={"Giá tiền"}
-                      defaultValue={foodPrice}
+                      value={foodPrice}
                       onChange={(val) => { setFoodPrice(val) }}
                       autoFocus
                     />
                     <Input
                       label={"Mô tả"}
-                      defaultValue={foodDescribe}
+                      value={foodDescribe}
                       onChange={(val) => { setFoodDescribe(val) }}
                       autoFocus
                     />
                     <Input
                       label={"Ghi chú"}
-                      defaultValue={foodNote}
+                      value={foodNote}
                       onChange={(val) => { setFoodNote(val) }}
                       autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
-                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
-                      <Radio value={1}>Còn</Radio>
-                      <Radio value={0}>Hết</Radio>
+                    <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} defaultValue={foodStatus}>
+                      <Radio value={true}>Còn</Radio>
+                      <Radio value={false}>Hết</Radio>
                     </Radio.Group>
                   </div>
                 )}
@@ -631,8 +650,8 @@ function Menu(props) {
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>
-                      <Radio value={1}>Còn</Radio>
-                      <Radio value={0}>Hết</Radio>
+                      <Radio value={true}>Còn</Radio>
+                      <Radio value={false}>Hết</Radio>
                     </Radio.Group>
                   </div>
                 )}
@@ -675,7 +694,7 @@ function Menu(props) {
             <Button2
               name={"Sửa"}
               onClick={() => {
-                handleEditMenu()
+                handleEditMenu(foodDetail)
               }}
               background="#fa983a"
             />,
@@ -754,65 +773,6 @@ function Menu(props) {
                     </div>
                   </div>
                 )}
-              </div>
-            </div>
-          }
-        />
-        <Popup
-          title={"Thêm mới thể loại đồ ăn"}
-          show={isShowPopupAddNewTypeFood}
-          onClickClose={() => setIsShowPopupAddNewTypeFood(false)}
-          button={[
-            <Button2
-              name={"Đóng"}
-              onClick={() => {
-                setFoodName("")
-                setIsShowPopupAddNewTypeFood(false)
-              }}
-            />,
-            <Button2
-              name={"Lưu"}
-              onClick={() => callAddTypeFood()}
-              background="#fa983a"
-              disabled={nameTypeFood?.length <= 0}
-            />,
-          ]}
-          width={600}
-          className={"menu-popup-create-type-food"}
-          body={
-            <div className="menu-manager__popup">
-              <div className="menu-manager__popup-content">
-
-                <div className="menu-manager__popup-content-buffet">
-                  <div className="menu-manager__popup-content-buffet-name">
-                    <Input
-                      label={"Tên thể loại đồ ăn"}
-                      defaultValue={nameTypeFood}
-                      onChange={(val) => {
-                        setNameTypeFood(val);
-                      }}
-                      placeholder={"Tên thể loại đồ ăn..."}
-                      required
-                    />
-                  </div>
-                  <div className="menu-manager__popup-content-buffet-many">
-                    <RadioCheck
-                      title={"Kiểu"}
-                      valueDefault={isManyTypeFood}
-                      listOption={[
-                        {
-                          label: 'Một món',
-                          value: 0
-                        }, {
-                          label: 'Nhiều món',
-                          value: 1
-                        }
-                      ]}
-                      onChange={(val) => { setIsManyTypeFood(val) }}
-                    />
-                  </div>
-
-                </div>
               </div>
             </div>
           }
