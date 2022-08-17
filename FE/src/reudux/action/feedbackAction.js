@@ -36,3 +36,22 @@ export const getFeedbackFail = (data) => ({
     payload: data
 
 })
+
+// tìm kiếm
+export const searchFeedback = (data) => ({
+
+    type: types.SEARCH_FEEDBACK,
+    payload: data
+})
+
+export const searchFeedbackSuccess = (data) => ({
+
+    type: types.SEARCH_FEEDBACK_SUCCESS,
+    payload: data
+})
+
+export const searchFeedbackFail = (data) => ({
+
+    type: types.SEARCH_FEEDBACK_FAIL,
+    payload: data
+})

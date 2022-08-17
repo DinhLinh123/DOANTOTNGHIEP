@@ -21,6 +21,7 @@ import {
   deleteStaff,
   getStaff,
   postStaff,
+  searchStaff,
   updateStaff,
 } from "../../../../../reudux/action/staffAction";
 import { CarryOutOutlined, FormOutlined } from "@ant-design/icons";
@@ -39,7 +40,7 @@ function Staff(props) {
   const [staffSex, setStaffSex] = useState("Nam");
   const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
   const [staffDate, setStaffDate] = useState(moment().unix() * 1000);
-  const [staffPosition, setStaffPosition] = useState("Phục vụ bàn");
+  const [staffPosition, setStaffPosition] = useState("");
   console.log("staffPosition", staffPosition);
   const [staffPhone, setStaffPhone] = useState("");
   const [staffAddress, setStaffAddress] = useState("");
@@ -491,12 +492,18 @@ function Staff(props) {
   ];
 
   const { dataStaff, loading } = useSelector((state) => state.staffReducer);
-  console.log("dataStaff", dataStaff);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getStaff());
   }, [dispatch, loading]);
+
+  useEffect(() => {
+    if(staffPosition){
+      dispatch(searchStaff(staffPosition));
+    }
+    
+  }, [dispatch, staffPosition]);
 
   // Select chức vụ
   const { Option } = Select;
@@ -647,24 +654,32 @@ function Staff(props) {
     console.log("onSelect", info);
     setSelectedKeys(selectedKeysValue);
   };
+
+  const searchUser = (text) => {
+    console.log("text", text);
+    setTimeout(() => {
+      dispatch(searchStaff(text || staffPosition))
+    },500)
+  }
   return (
     <AdminPage title={"Quản lý nhân viên"} index={MENU_TAB_ADMIN.STAFF}>
       <div className="staff-manager">
         <div className="staff-manager__filter">
           <div className="staff-manager__filter-code">
             <InputField
-              label={"Mã nhân viên"}
-              placeholder={"Mã nhân viên"}
+              label={"Mã nhân viên/Tên nhân viên"}
+              placeholder={"Mã nhân viên/Tên nhân viên"}
+              onChange = {(event) => searchUser(event)}
               //width={"20%"}
             />
           </div>
-          <div className="staff-manager__filter-name">
+          {/* <div className="staff-manager__filter-name">
             <InputField
               label={"Tên nhân viên"}
               placeholder={"Tên nhân viên"}
               //width={"20%"}
             />
-          </div>
+          </div> */}
           <div className="staff-manager__filter-position">
             <Dropdown
               listOption={dataPosition}
@@ -675,13 +690,13 @@ function Staff(props) {
           </div>
         </div>
         <div className="staff-manager__button">
-          <div className="staff-manager__button-search">
+          {/* <div className="staff-manager__button-search">
             <Button2
               name={"Tìm kiếm"}
               leftIcon={<SearchOutlined />}
               //onClick={() => handleClickAddPosition()}
             />
-          </div>
+          </div> */}
           <div className="staff-manager__button-create-new">
             <Button2
               name={"Thêm mới nhân viên"}

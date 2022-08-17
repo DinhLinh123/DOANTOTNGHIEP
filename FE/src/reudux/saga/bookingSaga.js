@@ -59,7 +59,18 @@ function * updateDataBooking({payload}){
     } catch (error) {
         yield put(actions.updateBookingFail(error))        
     }
+}
 
+function * searchDataBooking({payload}){
+
+    try {
+        const res = yield axios.get(`${URL_API}/DatBan/filter?_filter={"TextSearch":"${payload}"}`)
+        if(res){
+            yield put(actions.searchBookingSuccess(res.data))
+        }
+    } catch (error) {
+        yield put(actions.searchBookingFail(error))        
+    }
 }
 
 
@@ -68,6 +79,8 @@ export function * watchingBooking(){
     yield takeLatest(types.GET_BOOKING, getBooking)
     yield takeLatest(types.DELETE_BOOKING, deleteDataBooking)
     yield takeLatest(types.UPDATE_BOOKING, updateDataBooking)
+    yield takeLatest(types.SEARCH_BOOKING, searchDataBooking)
+
 
 
 

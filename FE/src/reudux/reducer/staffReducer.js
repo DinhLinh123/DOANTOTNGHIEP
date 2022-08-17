@@ -29,7 +29,7 @@ export default function staffReducer(state = initalState, action ) {
             case types.GET_STAFF_SUCCESS:
                 return{
                     ...state,
-                    dataStaff: action.payload,
+                    dataStaff: action.payload.data,
                 }
             case types.GET_STAFF_FAIL:
                 return{
@@ -66,6 +66,21 @@ export default function staffReducer(state = initalState, action ) {
                     return{
                         ...state,
                     }
+
+            case types.SEARCH_STAFF:
+                return{
+                    ...state,
+                }
+            case types.SEARCH_STAFF_SUCCESS:
+                return{
+                    ...state,
+                    dataStaff: action.payload.data,
+                }
+            case types.SEARCH_STAFF_FAIL:
+                return{
+                    ...state,
+                    dataStaff: state.dataStaff
+                }
         default:
             return state
     }

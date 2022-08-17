@@ -56,15 +56,23 @@ function * updateDataStaff({payload}){
     }
 }
 
+function * searchDataStaff({payload}){
 
-
-
+    try {
+        const res = yield axios.get(`${URL_API}/User/filter?_filter={"TextSearch":"${payload}"}`)
+        if(res){
+            yield put(actions.searchStaffSuccess(res.data))
+        }
+    } catch (error) {
+        yield put(actions.searchStaffFail(error))
+        
+    }
+}
 
 export function * watchingStaffs(){
     yield takeLatest(types.POST_STAFF, postDataStaff)
     yield takeLatest(types.GET_STAFF, getDataStaff)
     yield takeLatest(types.DELETE_STAFF, deleteDataStaff)
     yield takeLatest(types.UPDATE_STAFF, updateDataStaff)
-
-
+    yield takeLatest(types.SEARCH_STAFF, searchDataStaff)
 }

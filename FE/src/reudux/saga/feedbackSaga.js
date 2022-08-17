@@ -32,8 +32,26 @@ function * getDataFeedback(){
 
 }
 
+function * searchDataFeedback({payload}){
+
+    try {
+        const res = yield axios.get(`${URL_API}/YKienDongGop/filter?_filter={"TextSearch":"${payload}"}`)
+        console.log("res", res);
+        if(res){
+            yield put(actions.searchFeedbackSuccess(res))
+        }else{
+            yield put(actions.searchFeedbackFail(""))
+        }
+    } catch (error) {
+        
+    }
+
+}
+
 export function * watchingFeedback(){
     yield takeLatest(types.POST_FEEDBACK, postDataFeedback)
     yield takeLatest(types.GET_FEEDBACK, getDataFeedback)
+    yield takeLatest(types.SEARCH_FEEDBACK, searchDataFeedback)
+
 
 }

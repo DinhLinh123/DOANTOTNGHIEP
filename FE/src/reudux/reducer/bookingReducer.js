@@ -11,7 +11,6 @@ export default function bookingReducer(state = initalState, action ) {
                 ...state,
             }
         case types.GET_BOOKING_SUCCESS:
-            console.log("dataBooking123", action.payload);
             return{
                 ...state,
             dataBooking: action.payload.data.data
@@ -51,7 +50,21 @@ export default function bookingReducer(state = initalState, action ) {
                     ...state,
                 dataBooking: {...state.dataBooking}
                 }
+        case types.SEARCH_BOOKING:
+            return{
+                ...state,
+            }
+        case types.SEARCH_BOOKING_SUCCESS:
+            return{
+                ...state,
+            dataBooking: action.payload.data
+            }
     
+        case types.SEARCH_BOOKING_FAIL:
+            return{
+                ...state,
+            dataBooking: state.dataBooking
+            }
 
         default:
             return state

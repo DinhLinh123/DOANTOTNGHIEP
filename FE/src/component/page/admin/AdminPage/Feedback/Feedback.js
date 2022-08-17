@@ -13,7 +13,7 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { getFeedback } from "../../../../../reudux/action/feedbackAction";
+import { getFeedback, searchFeedback } from "../../../../../reudux/action/feedbackAction";
 
 function ManagerFeedback(props) {
     const [sortType, setSortType] = useState();
@@ -29,6 +29,8 @@ function ManagerFeedback(props) {
     const [amountDrinks, setAmountDrinks] = useState("");
     const [unitDrinks, setUnitDrinks] = useState(""); 
     const [unitPriceDrinks, setUnitPriceDrinks] = useState(""); 
+    const [textSearch, setTextSearch] = useState("")
+    console.log("textSearch", textSearch);
     
 
     // Thêm mới chức vụ
@@ -125,10 +127,10 @@ function ManagerFeedback(props) {
     const {dataFeedback} = useSelector(state => state.feedbackReducer)
     console.log("dataFeedback", dataFeedback);
 
-    const disptach = useDispatch()
+    const dispatch = useDispatch()
     useEffect(() => {
-        disptach(getFeedback())
-    },[disptach])
+        dispatch(getFeedback())
+    },[dispatch])
 
     // Select chức vụ
     const { Option } = Select;
@@ -177,7 +179,11 @@ function ManagerFeedback(props) {
         setIsShowPopupAddnew(true);
     }
     function handleClickAddPosition(type) {
-        setIsShowPopupAddPosition(true);
+        // setIsShowPopupAddPosition(true);
+        setTimeout(() => {
+
+            dispatch(searchFeedback(type))
+        },500)
     }
     function onChangeTab() {
         setIsShowPopupAddnew(false)
@@ -205,24 +211,25 @@ function ManagerFeedback(props) {
                 <div className="managerfeedback-manager__filter">
                     <div className="managerfeedback-manager__filter-code">
                         <InputField
-                            label={"Họ tên"}
-                            placeholder={"Họ Tên"}
+                            label={"Họ tên/Số điện thoại"}
+                            placeholder={"Họ Tên/Số điện thoại..."}
+                            onChange = {(event) => handleClickAddPosition(event)}
                         //width={"20%"} 
                         />
                     </div>
-                    <div className="managerfeedback-manager__filter-name">
+                    {/* <div className="managerfeedback-manager__filter-name">
                         <InputField
                             label={"Số điện thoại"}
                             placeholder={"Số điện thoại"}
                         //width={"20%"} 
                         />
-                    </div>
+                    </div> */}
                     
                     <div className="managerfeedback-manager__filter-search">
                         <Button2
                             name={"Tìm kiếm"}
                             leftIcon={<SearchOutlined />}
-                        //onClick={() => handleClickAddPosition()}
+                            onClick={() => handleClickAddPosition()}
                         />
                     </div> 
                 </div>

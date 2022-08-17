@@ -61,16 +61,40 @@ export const updateStaff = (data) => ({
     type: types.UPDATE_STAFF,
     payload: data
 })
+
 export const updateStaffSuccess = (data) => ({
 
     type: types.UPDATE_STAFF_SUCCESS,
     payload: data
 })
+
 export const updateStaffFail = (data) => ({
 
     type: types.UPDATE_STAFF_FAIL,
     payload: data
 })
+
+// 
+export const searchStaff = (data) => ({
+
+    type: types.SEARCH_STAFF,
+    payload: data
+})
+
+export const searchStaffSuccess = (data) => ({
+
+    type: types.SEARCH_STAFF_SUCCESS,
+    payload: data
+})
+
+export const searchStaffFail = (data) => ({
+
+    type: types.SEARCH_STAFF_FAIL,
+    payload: data
+})
+
+
+
 
 
 

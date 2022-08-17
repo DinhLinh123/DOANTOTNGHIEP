@@ -3,6 +3,7 @@ import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
   SORT_TYPE,
+  TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
@@ -16,8 +17,9 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import { changeAccount } from "../../../../../reudux/action/accountAction";
 import { useDispatch, useSelector } from "react-redux";
-import { getSpending } from "../../../../../reudux/action/spendingsAction";
+import { deleteSpending, getSpending, postSpending } from "../../../../../reudux/action/spendingsAction";
 import moment from "moment";
+import commonFunction from "../../../../base/common/commonFunction";
 
 function Spending(props) {
   const [sortType, setSortType] = useState();
@@ -129,6 +131,7 @@ function Spending(props) {
     {
       title: "Chi tiết",
       onSelect: (item) => {
+        console.log("item", item);
         window.open(`/admin/spending/detail/${item.key}`, "_self");
       },
     },
@@ -140,8 +143,8 @@ function Spending(props) {
     },
     {
       title: "Xóa",
-      onSelect: () => {
-        alert("Xóa");
+      onSelect: (item) => {
+        dispatch(deleteSpending(item.key))
       },
     },
   ];
@@ -150,7 +153,8 @@ function Spending(props) {
     return <div>{item?.name}</div>;
   }
   function columnAmount(item) {
-    return <div>{item?.matHang}</div>;
+   const matHang =  JSON.parse(item?.matHang)
+    return <div>{matHang.length}</div>;
   }
   function columnBillDate(item) {
     return (
@@ -181,7 +185,7 @@ function Spending(props) {
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
         [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
-        key: idx,
+        key: item.id,
       };
     });
     return [...listData];
@@ -227,7 +231,6 @@ function Spending(props) {
     _listItems.push({ name: "", unit: "", amount: "", unitprice: "" });
     setListItems(_listItems);
   }
-
   const Card = (props) => {
     const {
       listItems,
@@ -295,15 +298,32 @@ function Spending(props) {
     );
   };
 
+  function renderTotalMoney(data) {
+    let total = 0
+    data?.map((item) => {
+        total += item?.amount * item?.unitprice
+    })
+    return total;
+}
+
+
   const onSubmitSave = () => {
+    const userName = JSON.parse(localStorage.getItem("roleType"))
     const body = {
       name: itemBill,
-      matHang: addIteams,
+      matHang: JSON.stringify(listItems),
+      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))),10),
+      createdByUserName: userName.userName
     };
+    dispatch(postSpending(body))
+    setListItems([
+      { name: "", unit: "", amount: "", unitprice: "" },
+    ])
+    setItemBill()
+    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm chi tiêu thành công")
   };
 
   const { dataSpending } = useSelector((state) => state.spendingsReducer);
-  console.log("dataSpending", dataSpending);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -316,7 +336,7 @@ function Spending(props) {
         <div className="spending-manager__filter">
           <div className="spending-manager__filter-search">
             <div className="spending-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} />
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"}/>
             </div>
             <div className="spending-manager__filter-search-date">
               <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} />
@@ -345,9 +365,9 @@ function Spending(props) {
                 order: order,
               });
             }}
-            onClickRow={(record, rowIndex, event) => {
-              window.open(`/admin/spending/detail/${record.key}`, "_self");
-            }}
+            // onClickRow={(record, rowIndex, event) => {
+            //   window.open(`/admin/spending/detail/${record.key}`, "_self");
+            // }}
             onContextMenu={(record, rowIndex, event) => {}}
           />
         </div>
@@ -373,7 +393,7 @@ function Spending(props) {
               <div className="spending-manager__popup-bill">
                 <Input
                   label={"Tên hóa đơn"}
-                  defaultValue={itemBill}
+                  value={itemBill}
                   onChange={(val) => {
                     setItemBill(val);
                   }}

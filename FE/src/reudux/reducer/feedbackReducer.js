@@ -33,8 +33,24 @@ export default function feedbackReducer(state = initalState, action ) {
         case types.GET_FEEDBACK_FAIL:
             return{
                 ...state,
-                dataFeedback: [...state.dataFeedback]
+                dataFeedback: state.dataFeedback
             }
+
+            case types.SEARCH_FEEDBACK:
+                return{
+                    ...state,
+                }
+            case types.SEARCH_FEEDBACK_SUCCESS:
+                console.log("action", action.payload.data);
+                return{
+                    ...state,
+                dataFeedback: action.payload.data.data
+                }
+            case types.SEARCH_FEEDBACK_FAIL:
+                return{
+                    ...state,
+                    dataFeedback: state.dataFeedback
+                }
 
         default:
             return state

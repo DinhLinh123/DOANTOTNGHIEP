@@ -37,3 +37,22 @@ export const getSpendingFail = (data) => ({
     type: types.GET_SPENDING_FAIL,
     payload: data
 })
+
+// 
+export const deleteSpending = (data) => ({
+
+    type: types.DELETE_SPENDING,
+    payload: data
+})
+
+export const deleteSpendingSuccess = (data) => ({
+
+    type: types.DELETE_SPENDING_SUCCESS,
+    payload: data
+})
+
+export const deleteSpendingFail = (data) => ({
+
+    type: types.DELETE_SPENDING_FAIL,
+    payload: data
+})

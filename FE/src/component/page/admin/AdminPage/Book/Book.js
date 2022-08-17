@@ -21,6 +21,7 @@ import {
   deleteBooking,
   getBooking,
   postBooking,
+  searchBooking,
   updateBooking,
 } from "../../../../../reudux/action/bookingActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -285,8 +286,9 @@ function Book(props) {
   //Cột bảng Đặt bàn
 
   const { dataBooking } = useSelector((state) => state.bookingReducer);
-  console.log("dataBooking", dataBooking);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getBooking());
   }, [dispatch]);
@@ -448,34 +450,43 @@ function Book(props) {
   const closeTab = () => {
     setIsShowPopupAddnew(false);
   };
+
+  const searchBook = (text) => {
+    dispatch(searchBooking(text))
+  }
   return (
     <AdminPage title={"Quản lý đặt bàn"} index={MENU_TAB_ADMIN.BOOK}>
       <div className="book-manager">
         <div className="book-manager__filter">
           <div className="book-manager__filter-name">
             <InputField
-              placeholder={"Tên khách hàng"}
+              placeholder={"Tên khách hàng/Số điện thoại"}
               width={"100%"}
-              label={"Tên khách"}
+              label={"Tên khách/Số điện thoại"}
+              onChange={(event) => searchBook(event)}
             />
           </div>
-          <div className="book-manager__filter-phone">
+          {/* <div className="book-manager__filter-phone">
             <InputField
               placeholder={"Số điện thoại"}
               width={"100%"}
               label={"Số điện thoại"}
             />
-          </div>
+          </div> */}
           <div className="book-manager__filter-date">
             <DatePicker
               defaultValue={moment().unix() * 1000}
-              min={moment().unix() * 1000 - ONE_DAY}
+              // min={moment().unix() * 1000 - ONE_DAY}
               // onChange={(val) => {
               //     setStaffDate(val);
               // }}
               placeholder="dd/MM/yyyy"
               label={"Ngày checkin"}
               width={"100%"}
+              onChange={(val) => {
+                const date = new Date()
+                  searchBook(date.toISOString(val));
+              }}
             />
           </div>
           <div className="book-manager__filter-create-new">

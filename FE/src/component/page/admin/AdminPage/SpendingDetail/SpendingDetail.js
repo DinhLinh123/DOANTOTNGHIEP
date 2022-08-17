@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { URL_API } from "../../../../../utils/urpapi";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import commonFunction from "../../../../base/common/commonFunction";
 import InputField from "../../../../base/Input/Input";
@@ -7,6 +10,21 @@ import AdminPage from "../AdminPage";
 import "./spendingDetail.scss"
 
 function SpendingDetail(props) {
+    const {spendingID} = useParams();
+    const [spendingDetail, setPendingDetail] = useState([]);
+    console.log("spendingDetail", spendingDetail);
+    useEffect(() => {
+        const spenDingDetail =  async (id) => {
+            try {
+                const res = await axios.get(`${URL_API}/ChiTieuTrongNgay/${id}`)
+                console.log("res", res);
+                setPendingDetail(res.data)
+            } catch (error) {
+                
+            }
+        }
+        spenDingDetail(spendingID)
+    },[])
     const [sortType, setSortType] = useState();
     const COLUMN_TABLE_INDEX_MENU = {
         SERIAL: "serial",
@@ -58,7 +76,7 @@ function SpendingDetail(props) {
         billName: "HD01",
         billDate: "27/08/2022",
         image: "",
-        listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
+        listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "100"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
         note: "ghi chú",
         status: "Đã duyệt",
         person: "Linhdtt",
@@ -103,7 +121,6 @@ function SpendingDetail(props) {
 
     function renderTotalMoney(data) {
         let total = 0
-
         data?.map((item) => {
             total += item?.amount * item?.unitprice
         })
@@ -116,10 +133,10 @@ function SpendingDetail(props) {
             title={"Chi tiết hóa đơn"}
             index={MENU_TAB_ADMIN.SPENDING}
         >
-            <div className="spendingDetail-manager">
+            {spendingDetail.length === 0 ? null :  <div className="spendingDetail-manager">
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Tên hóa đơn</span>
-                    <span className="spendingDetail-manager__item-content">{data.billName}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.name}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ngày hóa đơn</span>
@@ -129,23 +146,23 @@ function SpendingDetail(props) {
                     <div className="spendingDetail-manager__table-title">Danh sách mặt hàng</div>
                     <div className="spendingDetail-manager__table-content">
                         <TableBase
-                            columns={columns}
-                            data={convertDataTable(JSON.parse(data?.listItems))}
-                            loading={false}
-                            //hasMoreOption
-                            setObjectSort={(field, order) => {
-                                setSortType({
-                                    field: field,
-                                    order: order,
-                                });
-                            }}
-                            isPaging={false}
-                        />
+                        columns={columns}
+                        data={convertDataTable(JSON.parse(spendingDetail?.matHang))}
+                        loading={false}
+                        //hasMoreOption
+                        setObjectSort={(field, order) => {
+                            setSortType({
+                                field: field,
+                                order: order,
+                            });
+                        }}
+                        isPaging={false}
+                    />
                     </div>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">TỔNG TIỀN: </span>
-                    <span className="spendingDetail-manager__item-content">{commonFunction.numberWithCommas(renderTotalMoney(JSON.parse(data?.listItems)))}</span>
+                    <span className="spendingDetail-manager__item-content">{commonFunction.numberWithCommas(renderTotalMoney(JSON.parse(spendingDetail?.matHang)))}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ảnh hóa đơn</span>
@@ -153,15 +170,15 @@ function SpendingDetail(props) {
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ghi chú</span>
-                    <span className="spendingDetail-manager__item-content">{data.note}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Trạng thái</span>
-                    <span className="spendingDetail-manager__item-content">{data.status}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.trangThaiHienTai}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Người nhập</span>
-                    <span className="spendingDetail-manager__item-content">{data.person}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.createdByUserName}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ngày nhập</span>
@@ -186,8 +203,8 @@ function SpendingDetail(props) {
                         </div>
                     </div>
                 </div>
-
-            </div>
+            </div>}
+           
         </AdminPage>
     )
 

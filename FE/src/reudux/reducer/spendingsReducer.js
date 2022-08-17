@@ -21,19 +21,34 @@ export default function spendingsReducer(state = initalState, action ) {
                 dataSpending: [...state.dataSpending]
             }
 
-            case types.GET_SPENDING:
+        case types.GET_SPENDING:
+            return{
+                ...state,
+            }
+        case types.GET_SPENDING_SUCCESS:
+            return{
+                ...state,
+            dataSpending: action.payload
+            }
+        case types.GET_SPENDING_FAIL:
+            return{
+                ...state,
+                dataSpending: [...state.dataSpending]
+            }
+
+        case types.DELETE_SPENDING:
                 return{
                     ...state,
                 }
-            case types.GET_SPENDING_SUCCESS:
+        case types.DELETE_SPENDING_SUCCESS:
                 return{
                     ...state,
-                dataSpending: action.payload
+                    dataSpending: state.dataSpending.filter((item) => item.id !== action.payload)
                 }
-            case types.GET_SPENDING_FAIL:
+        case types.DELETE_SPENDING_FAIL:
                 return{
                     ...state,
-                    dataSpending: [...state.dataSpending]
+                    dataBooking: state.dataBooking
                 }
     
         default:

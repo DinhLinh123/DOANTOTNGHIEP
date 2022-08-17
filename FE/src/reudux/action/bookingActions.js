@@ -85,3 +85,23 @@ export const updateBookingFail = (data) => (
     type : types.DELETE_BOOKING_FAIL,
     payload: data
 })
+
+// Tìm dữ liệu
+
+export const searchBooking = (data) => (
+    {
+    type : types.SEARCH_BOOKING,
+    payload: data
+})
+
+export const searchBookingSuccess = (data) => (
+    {
+    type : types.SEARCH_BOOKING_SUCCESS,
+    payload: data
+})
+
+export const searchBookingFail = (data) => (
+    {
+    type : types.SEARCH_BOOKING_FAIL,
+    payload: data
+})
