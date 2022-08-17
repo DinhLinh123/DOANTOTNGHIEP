@@ -145,7 +145,7 @@ function Order(props) {
     }}
   }
 
-  useEffect(() => { callGetTypeFood()  }, [])
+  // useEffect(() => { callGetTypeFood()  }, [])
 
   // function callGetTypeFood() {
   //   baseApi.get(
