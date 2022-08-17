@@ -165,7 +165,8 @@ function TableOrder(props) {
                     style={{
                       borderRadius: item?.kieuDang == 0 ? '50%' : '8px',
                       backgroundColor: item.status == 0 ? '#dcdde1' : item.status == 1 ? '#c23616' : '#fbc531',
-                      color: item.status == 0 ? '#000' : item.status == 1 ? '#fff' : '#fff'
+                      color: item.status == 0 ? '#000' : item.status == 1 ? '#fff' : '#fff',
+                      position: 'absolute', top: '8px', left: '8px'
                     }}
                     onClick={() => {
                       // if (item.status == 0) {

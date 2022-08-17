@@ -110,6 +110,7 @@ function Login() {
       console.log(res.data.data);
       if(res.data.data){
         window.open("/admin/menus", '_self')
+
       }else{
         setError("Sai tài khoản hoặc mật khẩu!")
       }

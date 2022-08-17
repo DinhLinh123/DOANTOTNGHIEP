@@ -116,7 +116,7 @@ function KitchensDay (props) {
             },
         },
         {
-            title: "Gửi phê duyệt",
+            title: "Sửa",
             onSelect: () => {
                 alert("Sửa");
             },
@@ -231,7 +231,7 @@ function KitchensDay (props) {
             <div className="kitchensDay-manager">
                 <div className="kitchensDay-manager__filter">
                     <div className="kitchensDay-manager__filter-search">
-                        <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
+                        <DatePicker placeholder="dd/MM/yyyy" label={"Ngày sử dụng"} />
                     </div>
                     <div className="kitchensDay-manager__filter-create-new">
                         <Button2

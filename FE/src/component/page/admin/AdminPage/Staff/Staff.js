@@ -1,445 +1,833 @@
 import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, ONE_DAY, SORT_TYPE } from "../../../../base/common/commonConstant";
+import {
+  MENU_TAB_ADMIN,
+  ONE_DAY,
+  SORT_TYPE,
+} from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import Input from "../../../../base/Input/Input";
-import "./staff.scss"
+import "./staff.scss";
 import Popup from "../../../../base/Popup/Popup";
 import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStaff, getStaff, postStaff, updateStaff } from "../../../../../reudux/action/staffAction";
+import {
+  deleteStaff,
+  getStaff,
+  postStaff,
+  updateStaff,
+} from "../../../../../reudux/action/staffAction";
+import { CarryOutOutlined, FormOutlined } from "@ant-design/icons";
+import { Switch, Tree } from "antd";
 
 function Staff(props) {
-    const [sortType, setSortType] = useState();
-    const [statusAction, setStatusAction] = useState("ADD")
-    const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
-    const [idStaff, setIdStaff] = useState();
-    console.log("idStaff", idStaff);
-    const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [staffCode, setStaffCode] = useState(0);
-    console.log("staffCode", staffCode);
-    const [staffName, setStaffName] = useState("");
-    const [staffSex, setStaffSex] = useState("Nam");
-    const [staffDate, setStaffDate] = useState(moment().unix()
-    * 1000);
-    const [staffPosition, setStaffPosition] = useState("Phục vụ bàn");
-    console.log("staffPosition", staffPosition);
-    const [staffPhone, setStaffPhone] = useState("");
-    const [staffAddress, setStaffAddress] = useState("");
-    const [staffNote, setStaffNote] = useState("");
+  const [sortType, setSortType] = useState();
+  const [statusAction, setStatusAction] = useState("ADD");
+  const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+  const [idStaff, setIdStaff] = useState();
+  console.log("idStaff", idStaff);
+  const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
+  const [staffCode, setStaffCode] = useState(0);
+  console.log("staffCode", staffCode);
+  const [staffName, setStaffName] = useState("");
+  const [staffSex, setStaffSex] = useState("Nam");
+  const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
+  const [staffDate, setStaffDate] = useState(moment().unix() * 1000);
+  const [staffPosition, setStaffPosition] = useState("Phục vụ bàn");
+  console.log("staffPosition", staffPosition);
+  const [staffPhone, setStaffPhone] = useState("");
+  const [staffAddress, setStaffAddress] = useState("");
+  const [staffNote, setStaffNote] = useState("");
 
-    // Thêm mới chức vụ
-    const [PositionCode, setPositionCode] = useState("");
-    const [PositionName, setPositionName] = useState("");
-    const COLUMN_TABLE_INDEX_MENU = {
-        CODE: "code",
-        NAME: "name",
-        SEX: "sex",
-        DATE: "date",
-        POSITION: "position",
-        PHONE: "phone",
-        ADDRESS: "address",
-        NOTE: "note",
-    };
+  // Thêm mới chức vụ
+  const [PositionCode, setPositionCode] = useState("");
+  const [PositionName, setPositionName] = useState("");
+  const [role, setRole] = useState("");
+  const COLUMN_TABLE_INDEX_MENU = {
+    CODE: "code",
+    NAME: "name",
+    SEX: "sex",
+    DATE: "date",
+    POSITION: "position",
+    PHONE: "phone",
+    ADDRESS: "address",
+    NOTE: "note",
+  };
 
-    const columns = [
-        {
-            title: "Mã nhân viên",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.CODE,
-            width: "150px",
-        },
-        {
-            title: "Tên nhân viên",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: true,
-            width: "250px",
-        },
-        {
-            title: "Giới tính",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.SEX,
-            width: "100px",
-        },
-        {
-            title: "Ngày sinh",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
-            width: "200px",
-        },
-        {
-            title: "Chức vụ",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.POSITION,
-            width: "200px",
-        },
-        {
-            title: "Số điện thoại",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.PHONE,
-            width: "200px",
-        },
-        {
-            title: "Địa chỉ",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
-            width: "300px",
-        },
-        {
-            title: "Ghi chú",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
-            width: "250px",
-        },
-    ];
 
-    const data = [
-        {
-            key: "1",
-            code: "B001",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
-        {
-            key: "2",
-            code: "B002",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
-        {
-            key: "3",
-            code: "B003",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
-        {
-            key: "4",
-            code: "B004",
-            name: "John Brown",
-            sex: "Nữ",
-            date: "12/12/2022",
-            position: "Nhân viên bàn",
-            phone: "0358100337",
-            address: "18 phố viên",
-            note: "nhân viên order"
-        },
-    ];
-    const dataPosition = [
-        {
-            value: "Phục vụ bàn",
-            label: "Phục vụ bàn"
-        },
-        {
-            value: "Bếp",
-            label: "Bếp"
-        },
-        {
-            value: "Thu ngân",
-            label: "Thu ngân"
-        },
-    ]
 
-    const OPTION_MORE_TABLE = [
-        {
-            title: "Sửa",
-            onSelect: (item) => {
-            // console.log("aaa", item?.fullName.props.children);
-            setIsShowPopupAddnew(true);
-            setStatusAction("UPDATE")
-            console.log({item});
-            setIdStaff(item?.code.props.children[1].props.children)
-            setStaffCode(item?.code.props.children[0])
-            setStaffName(item?.name.props.children)
-            setStaffSex(item?.sex.props.children)
-            setStaffDate(item?.date.props.children)
-            setStaffPosition(item?.position.props.children)
-            setStaffPhone(item?.phone.props.children)
-            setStaffAddress(item?.address.props.children)
-            setStaffNote(item?.note.props.children)
-            },
-        },
-        {
-            title: "Xóa",
-            onSelect: async (item) => {
+  const columns = [
+    {
+      title: "Mã nhân viên",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.CODE,
+      width: "150px",
+    },
+    {
+      title: "Tên nhân viên",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
+      sorter: true,
+      width: "250px",
+    },
+    {
+      title: "Giới tính",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.SEX,
+      width: "100px",
+    },
+    {
+      title: "Ngày sinh",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+      width: "200px",
+    },
+    {
+      title: "Chức vụ",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.POSITION,
+      width: "200px",
+    },
+    {
+      title: "Số điện thoại",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.PHONE,
+      width: "200px",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.ADDRESS,
+      width: "300px",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+      width: "250px",
+    },
+  ];
 
-                dispatch(deleteStaff(item?.code.props.children[1].props.children))
-            },
-        },
-    ];
+  const data = [
+    {
+      key: "1",
+      code: "B001",
+      name: "John Brown",
+      sex: "Nữ",
+      date: "12/12/2022",
+      position: "Nhân viên bàn",
+      phone: "0358100337",
+      address: "18 phố viên",
+      note: "nhân viên order",
+    },
+    {
+      key: "2",
+      code: "B002",
+      name: "John Brown",
+      sex: "Nữ",
+      date: "12/12/2022",
+      position: "Nhân viên bàn",
+      phone: "0358100337",
+      address: "18 phố viên",
+      note: "nhân viên order",
+    },
+    {
+      key: "3",
+      code: "B003",
+      name: "John Brown",
+      sex: "Nữ",
+      date: "12/12/2022",
+      position: "Nhân viên bàn",
+      phone: "0358100337",
+      address: "18 phố viên",
+      note: "nhân viên order",
+    },
+    {
+      key: "4",
+      code: "B004",
+      name: "John Brown",
+      sex: "Nữ",
+      date: "12/12/2022",
+      position: "Nhân viên bàn",
+      phone: "0358100337",
+      address: "18 phố viên",
+      note: "nhân viên order",
+    },
+  ];
+  const dataPosition = [
+    {
+      value: "Phục vụ bàn",
+      label: "Phục vụ bàn",
+    },
+    {
+      value: "Bếp",
+      label: "Bếp",
+    },
+    {
+      value: "Thu ngân",
+      label: "Thu ngân",
+    },
+  ];
 
-    const {dataStaff, loading} = useSelector(state => state.staffReducer);
-    console.log("dataStaff", dataStaff);
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(getStaff())
-    },[dispatch, loading])
-
-    // Select chức vụ
-    const { Option } = Select;
-    const onChange = (value) => {
-        console.log(`selected ${value}`);
-        setStaffPosition(value)
-    };
-
-    const onSearch = (value) => {
-        console.log('search:', value);
-    };
-
-    
-    function columnCode(item) {
-        return <div>{item?.maNV}
-            <div className="hidden-id">{item.id}</div>
-        </div>;
-    }
-    function columnName(item) {
-        return <div>{item?.fullName}</div>;
-    }
-    function columnSex(item) {
-        return <div>{item?.phai}</div>;
-    }
-    function columnDate(item) {
-        return <div>{moment(item?.ngaySinh).format("DD-MM-YYYY")}</div>;
-    }
-    function columnPosition(item) {
-        return <div>{item?.chucVu}</div>;
-    }
-    function columnPhone(item) {
-        return <div>{item?.soDienThoai}</div>;
-    }
-    function columnAddress(item) {
-        return <div>{item?.diaChi}</div>;
-    }
-    function columnNote(item) {
-        return <div>{item?.chiChu}</div>;
-    }
-
-    function convertDataTable(dataTable) {
-        let listData;
-        listData = dataTable?.map((item, idx) => {
-            return {
-                [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
-                [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
-                [COLUMN_TABLE_INDEX_MENU.SEX]: columnSex(item),
-                [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
-                [COLUMN_TABLE_INDEX_MENU.POSITION]: columnPosition(item),
-                [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
-                [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
-                [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
-                key: idx,
-            };
-        });
-        return [...listData];
-    }
-
-    function handleClickAddnew(type) {
+  const OPTION_MORE_TABLE = [
+    {
+      title: "Phân quyền",
+      onSelect: (item) => {
+        setIdStaff(item?.code.props.children[1].props.children);
+        setStaffCode(item?.code.props.children[0]);
+        setStaffName(item?.name.props.children);
+        setStaffSex(item?.sex.props.children);
+        setStaffDate(item?.date.props.children);
+        setStaffPosition(item?.position.props.children);
+        setStaffPhone(item?.phone.props.children);
+        setStaffAddress(item?.address.props.children);
+        setStaffNote(item?.note.props.children);
+        setIsShowPopupSetup(true);
+      },
+    },
+    {
+      title: "Sửa",
+      onSelect: (item) => {
+        // console.log("aaa", item?.fullName.props.children);
         setIsShowPopupAddnew(true);
-        setStatusAction("ADD")
-       
-    }
-    function handleClickAddPosition(type) {
-        setIsShowPopupAddPosition(true);
-    }
-    function onChangeTab() {
-        const date = new Date()
-        if (statusAction === "ADD") {
-            const body = {
-                maNV: 0,
-                fullName: staffName,
-                phai: staffSex,
-                ngaySinh: date.toISOString(staffDate),
-                chucVu: staffPosition,
-                soDienThoai: staffPhone,
-                diaChi: staffAddress,
-                chiChu: staffNote
-            }
-            dispatch(postStaff(body))
-        } else {
-            const body = {
-                id: idStaff,
-                maNV: staffCode,
-                fullName: staffName,
-                phai: staffSex,
-                ngaySinh: date.toISOString(staffDate),
-                chucVu: staffPosition,
-                soDienThoai: staffPhone,
-                diaChi: staffAddress,
-                chiChu: staffNote
-            }
-            console.log("VÀo đây");
+        setStatusAction("UPDATE");
+        setIdStaff(item?.code.props.children[1].props.children);
+        setStaffCode(item?.code.props.children[0]);
+        setStaffName(item?.name.props.children);
+        setStaffSex(item?.sex.props.children);
+        setStaffDate(item?.date.props.children);
+        setStaffPosition(item?.position.props.children);
+        setStaffPhone(item?.phone.props.children);
+        setStaffAddress(item?.address.props.children);
+        setStaffNote(item?.note.props.children);
+      },
+    },
+    {
+      title: "Xóa",
+      onSelect: async (item) => {
+        dispatch(deleteStaff(item?.code.props.children[1].props.children));
+      },
+    },
+  ];
+  //Phân quyền
 
-            dispatch(updateStaff({id: body.id, body}))
-        }
-       
-        setIsShowPopupAddnew(false)
-        setStaffAddress("")
-        setStaffCode("")
-        setStaffName("")
-        setStaffDate("")
-        setStaffPhone("")
-        setStaffNote("")
-        setStaffSex(1)
-        setStaffPosition(1)
+  console.log("releUser", role)
+  const treeData = [
+    {
+      title: "Menu",
+      key: "0-0",
+      icon: <CarryOutOutlined/>,
+      children: [
+        {
+          title: "Thêm menu",
+          key: "0-0-0",
+          icon: <CarryOutOutlined/>,
+        },
+        {
+          title: "Sửa menu",
+          key: "0-0-1",
+          icon: <CarryOutOutlined/>,
+        },
+        {
+          title: "Xóa menu",
+          key: "0-0-2",
+          icon: <CarryOutOutlined/>,
+        },
+      ],
+    },
+    {
+      title: "Chi tiêu",
+      key: "0-1",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm chi tiêu",
+          key: "0-1-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa chi tiêu",
+          key: "0-1-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa chi tiêu",
+          key: "0-1-2",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+        title: "Doanh thu",
+        key: "0-2",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Xem doanh thu",
+            key: "0-2-0",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Bếp",
+        key: "0-3",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm yêu cầu nguyên liệu",
+            key: "0-3-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa yêu cầu nguyên liệu",
+            key: "0-3-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa yêu cầu nguyên liệu",
+            key: "0-3-2",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Thêm Hóa đơn bếp",
+            key: "0-3-3",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa Hóa đơn bếp",
+            key: "0-3-4",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa Hóa đơn bếp",
+            key: "0-3-5",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Bar",
+        key: "0-4",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm mặt hàng",
+            key: "0-4-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa mặt hàng",
+            key: "0-4-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa mặt hàng",
+            key: "0-4-2",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Nhân viên",
+        key: "0-5",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm nhân viên",
+            key: "0-5-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa nhân viên",
+            key: "0-5-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa nhân viên",
+            key: "0-5-2",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Đặt bàn",
+        key: "0-6",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm đặt bàn",
+            key: "0-6-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa đặt bàn",
+            key: "0-6-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa đặt bàn",
+            key: "0-6-2",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xếp bàn",
+            key: "0-6-3",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Khu vực",
+        key: "0-7",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm Khu vực",
+            key: "0-7-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa Khu vực",
+            key: "0-7-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa Khu vực",
+            key: "0-7-2",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Thêm bàn",
+            key: "0-7-3",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa bàn",
+            key: "0-7-4",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa bàn",
+            key: "0-7-5",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Danh mục",
+        key: "0-8",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thêm danh mục menu",
+            key: "0-8-0",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa danh mục menu",
+            key: "0-8-1",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa danh mục menu",
+            key: "0-8-2",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Thêm danh mục quầy bar",
+            key: "0-8-3",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa danh mục quầy bar",
+            key: "0-8-4",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa danh mục quầy bar",
+            key: "0-8-5",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Thêm danh mục quầy chức vụ",
+            key: "0-8-6",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Sửa danh mục quầy chức vụ",
+            key: "0-8-7",
+            icon: <CarryOutOutlined />,
+          },
+          {
+            title: "Xóa danh mục quầy chức vụ",
+            key: "0-8-8",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Thanh toán ",
+        key: "0-9",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Thanh toán hóa đơn",
+            key: "0-9-0",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+      {
+        title: "Order ",
+        key: "0-10",
+        icon: <CarryOutOutlined />,
+        children: [
+          {
+            title: "Order",
+            key: "0-10-0",
+            icon: <CarryOutOutlined />,
+          },
+        ],
+      },
+  ];
 
-    }
-    function onChangeAddPosition() {
-        setIsShowPopupAddPosition(false)
-    }
+  const { dataStaff, loading } = useSelector((state) => state.staffReducer);
+  console.log("dataStaff", dataStaff);
+  const dispatch = useDispatch();
 
-    useEffect(()=>{console.log(staffName)},[staffName])
+  useEffect(() => {
+    dispatch(getStaff());
+  }, [dispatch, loading]);
+
+  // Select chức vụ
+  const { Option } = Select;
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+    setStaffPosition(value);
+  };
+
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+
+  function columnCode(item) {
     return (
-        <AdminPage
-            title={"Quản lý nhân viên"}
-            index={MENU_TAB_ADMIN.STAFF}
-        >
-            <div className="staff-manager">
-                <div className="staff-manager__filter">
-                    <div className="staff-manager__filter-code">
-                        <InputField
-                            label={"Mã nhân viên"}
-                            placeholder={"Mã nhân viên"}
-                        //width={"20%"} 
-                        />
-                    </div>
-                    <div className="staff-manager__filter-name">
-                        <InputField
-                            label={"Tên nhân viên"}
-                            placeholder={"Tên nhân viên"}
-                        //width={"20%"} 
-                        />
-                    </div>
-                    <div className="staff-manager__filter-position">
-                            <Dropdown listOption={dataPosition} placeholder={"Chọn chức vụ"} title={"Chức vụ"} setStaffPosition = {setStaffPosition}/>
-                    </div>
-                </div>
-                <div className="staff-manager__button">
-                    <div className="staff-manager__button-search">
-                        <Button2
-                            name={"Tìm kiếm"}
-                            leftIcon={<SearchOutlined />}
-                        //onClick={() => handleClickAddPosition()}
-                        />
-                    </div>
-                    <div className="staff-manager__button-create-new">
-                        <Button2
-                            name={"Thêm mới nhân viên"}
-                            leftIcon={<PlusOutlined />}
-                            onClick={() => handleClickAddnew()}
-                        />
-                    </div>
-                </div>
-                <div className="staff-manager__content">
-                    <TableBase
-                        // onChangePagination={(page, pageSize)=>{}}
-                        columns={columns}
-                        total={90}
-                        data={convertDataTable(dataStaff)}
-                        loading={false}
-                        hasMoreOption
-                        option={OPTION_MORE_TABLE}
-                        setObjectSort={(field, order) => {
-                            setSortType({
-                                field: field,
-                                order: order,
-                            });
-                        }}
-                    />
-                </div>
-                <Popup
-                    title={"Thêm mới nhân viên"}
-                    show={isShowPopupAddnew}
-                    onClickClose={() =>setIsShowPopupAddnew(false)}
-                    button={[
-                        <Button2
-                            name={"Đóng"}
-                            onClick={() =>setIsShowPopupAddnew(false)}
-                        />,
-                        <Button2
-                            name={"Lưu"}
-                            onClick={() => onChangeTab()}
-                            background="#fa983a"
-                        />,
-                    ]}
-                    width={600}
-                    //className={"staff-manager-create"}
-                    body={
-                        <div className="staff-manager__popup">
-                            <Input
-                                label={"Mã nhân viên"}
-                                type = "number"
-                                value={staffCode}
-                                onChange={(val) => {
-                                    setStaffCode(val);
-                                }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Tên nhân viên"}
-                                value={staffName}
-                                onChange={(val) => { setStaffName(val) }}
-                                autoFocus
-                            />
-                            <div className="staff-manager__popup-sex-lable">Giới tính</div>
-                            <Radio.Group onChange={(val) => { setStaffSex(val.target.value) }} value={staffSex}>
-                                <Radio value={'Nam'}>Nam</Radio>
-                                <Radio value={'Nữ'}>Nữ</Radio>
-                            </Radio.Group>
-                            <DatePicker
-                                defaultValue={staffDate}
-                                onChange={(val) => {
-                                    setStaffDate(val);
-                                }}
-                                placeholder="dd/MM/yyyy"
-                                label={"Ngày sinh"}
-                            />
-                            <Dropdown 
-                                listOption={dataPosition}  
-                                placeholder={"Chọn chức vụ"} 
-                                title={"Chức vụ"}
-                                value={staffPosition}
-                                setStaffPosition = {setStaffPosition}
-                                onChange={(val) => { setStaffPosition(val) }}
-                                />
-                            <Input
-                                label={"Số điện thoại"}
-                                value={staffPhone}
-                                onChange={(val) => { setStaffPhone(val) }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Địa chỉ"}
-                                value={staffAddress}
-                                onChange={(val) => { setStaffAddress(val) }}
-                                autoFocus
-                            />
-                            <Input
-                                label={"Ghi chú"}
-                                value={staffNote}
-                                onChange={(val) => { setStaffNote(val) }}
-                                autoFocus
-                            />
-                        </div>
-                    }
-                />
-                
+      <div>
+        {item?.maNV}
+        <div className="hidden-id">{item.id}</div>
+      </div>
+    );
+  }
+  function columnName(item) {
+    return <div>{item?.fullName}</div>;
+  }
+  function columnSex(item) {
+    return <div>{item?.phai}</div>;
+  }
+  function columnDate(item) {
+    return <div>{moment(item?.ngaySinh).format("DD-MM-YYYY")}</div>;
+  }
+  function columnPosition(item) {
+    return <div>{item?.chucVu}</div>;
+  }
+  function columnPhone(item) {
+    return <div>{item?.soDienThoai}</div>;
+  }
+  function columnAddress(item) {
+    return <div>{item?.diaChi}</div>;
+  }
+  function columnNote(item) {
+    return <div>{item?.chiChu}</div>;
+  }
+
+  function convertDataTable(dataTable) {
+    let listData;
+    listData = dataTable?.map((item, idx) => {
+      return {
+        [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
+        [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+        [COLUMN_TABLE_INDEX_MENU.SEX]: columnSex(item),
+        [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
+        [COLUMN_TABLE_INDEX_MENU.POSITION]: columnPosition(item),
+        [COLUMN_TABLE_INDEX_MENU.PHONE]: columnPhone(item),
+        [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
+        [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
+        key: idx,
+      };
+    });
+    return [...listData];
+  }
+
+  function handleClickAddnew(type) {
+    setIsShowPopupAddnew(true);
+    setStatusAction("ADD");
+  }
+  function handleClickAddPosition(type) {
+    setIsShowPopupAddPosition(true);
+  }
+  function onChangeTab() {
+    const date = new Date();
+    if (statusAction === "ADD") {
+      const body = {
+        maNV: 0,
+        fullName: staffName,
+        phai: staffSex,
+        ngaySinh: date.toISOString(staffDate),
+        chucVu: staffPosition,
+        soDienThoai: staffPhone,
+        diaChi: staffAddress,
+        chiChu: staffNote,
+      };
+      dispatch(postStaff(body));
+    } else {
+      const body = {
+        id: idStaff,
+        maNV: staffCode,
+        fullName: staffName,
+        phai: staffSex,
+        ngaySinh: date.toISOString(staffDate),
+        chucVu: staffPosition,
+        soDienThoai: staffPhone,
+        diaChi: staffAddress,
+        chiChu: staffNote,
+      };
+      dispatch(updateStaff({ id: body.id, body }));
+    }
+
+    setIsShowPopupAddnew(false);
+    setStaffAddress("");
+    setStaffCode("");
+    setStaffName("");
+    setStaffDate("");
+    setStaffPhone("");
+    setStaffNote("");
+    setStaffSex(1);
+    setStaffPosition(1);
+  }
+  function onChangeAddPosition() {
+    setIsShowPopupAddPosition(false);
+  }
+
+  useEffect(() => {
+    console.log(staffName);
+  }, [staffName]);
+
+  const [expandedKeys, setExpandedKeys] = useState([]);
+  const [checkedKeys, setCheckedKeys] = useState();
+  const [selectedKeys, setSelectedKeys] = useState([]);
+  const [autoExpandParent, setAutoExpandParent] = useState(true);
+
+  const onExpand = (expandedKeysValue) => {
+    console.log("onExpand", expandedKeysValue); // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+
+    setExpandedKeys(expandedKeysValue);
+    setAutoExpandParent(false);
+  };
+
+  const onCheck = (checkedKeysValue) => {
+    const date = new Date();
+    const body = {
+      id: idStaff,
+      maNV: staffCode,
+      fullName: staffName,
+      phai: staffSex,
+      quyen: JSON.stringify(checkedKeysValue),
+      ngaySinh: date.toISOString(staffDate),
+      chucVu: staffPosition,
+      soDienThoai: staffPhone,
+      diaChi: staffAddress,
+      chiChu: staffNote,
+    };
+
+    dispatch(updateStaff({ id: body.id, body }));
+    setCheckedKeys(checkedKeysValue);
+  };
+
+  const onSelect = (selectedKeysValue, info) => {
+    console.log("onSelect", info);
+    setSelectedKeys(selectedKeysValue);
+  };
+  return (
+    <AdminPage title={"Quản lý nhân viên"} index={MENU_TAB_ADMIN.STAFF}>
+      <div className="staff-manager">
+        <div className="staff-manager__filter">
+          <div className="staff-manager__filter-code">
+            <InputField
+              label={"Mã nhân viên"}
+              placeholder={"Mã nhân viên"}
+              //width={"20%"}
+            />
+          </div>
+          <div className="staff-manager__filter-name">
+            <InputField
+              label={"Tên nhân viên"}
+              placeholder={"Tên nhân viên"}
+              //width={"20%"}
+            />
+          </div>
+          <div className="staff-manager__filter-position">
+            <Dropdown
+              listOption={dataPosition}
+              placeholder={"Chọn chức vụ"}
+              title={"Chức vụ"}
+              setStaffPosition={setStaffPosition}
+            />
+          </div>
+        </div>
+        <div className="staff-manager__button">
+          <div className="staff-manager__button-search">
+            <Button2
+              name={"Tìm kiếm"}
+              leftIcon={<SearchOutlined />}
+              //onClick={() => handleClickAddPosition()}
+            />
+          </div>
+          <div className="staff-manager__button-create-new">
+            <Button2
+              name={"Thêm mới nhân viên"}
+              leftIcon={<PlusOutlined />}
+              onClick={() => handleClickAddnew()}
+            />
+          </div>
+        </div>
+        <div className="staff-manager__content">
+          <TableBase
+            // onChangePagination={(page, pageSize)=>{}}
+            columns={columns}
+            total={90}
+            data={convertDataTable(dataStaff)}
+            loading={false}
+            hasMoreOption
+            option={OPTION_MORE_TABLE}
+            setObjectSort={(field, order) => {
+              setSortType({
+                field: field,
+                order: order,
+              });
+            }}
+          />
+        </div>
+        <Popup
+          title={"Thêm mới nhân viên"}
+          show={isShowPopupAddnew}
+          onClickClose={() => setIsShowPopupAddnew(false)}
+          button={[
+            <Button2
+              name={"Đóng"}
+              onClick={() => setIsShowPopupAddnew(false)}
+            />,
+            <Button2
+              name={"Lưu"}
+              onClick={() => onChangeTab()}
+              background="#fa983a"
+            />,
+          ]}
+          width={600}
+          //className={"staff-manager-create"}
+          body={
+            <div className="staff-manager__popup">
+              <Input
+                label={"Mã nhân viên"}
+                type="number"
+                value={staffCode}
+                onChange={(val) => {
+                  setStaffCode(val);
+                }}
+                autoFocus
+              />
+              <Input
+                label={"Tên nhân viên"}
+                value={staffName}
+                onChange={(val) => {
+                  setStaffName(val);
+                }}
+                autoFocus
+              />
+              <div className="staff-manager__popup-sex-lable">Giới tính</div>
+              <Radio.Group
+                onChange={(val) => {
+                  setStaffSex(val.target.value);
+                }}
+                value={staffSex}
+              >
+                <Radio value={"Nam"}>Nam</Radio>
+                <Radio value={"Nữ"}>Nữ</Radio>
+              </Radio.Group>
+              <DatePicker
+                defaultValue={staffDate}
+                onChange={(val) => {
+                  setStaffDate(val);
+                }}
+                placeholder="dd/MM/yyyy"
+                label={"Ngày sinh"}
+              />
+              <Dropdown
+                listOption={dataPosition}
+                placeholder={"Chọn chức vụ"}
+                title={"Chức vụ"}
+                value={staffPosition}
+                setStaffPosition={setStaffPosition}
+                onChange={(val) => {
+                  setStaffPosition(val);
+                }}
+              />
+              <Input
+                label={"Số điện thoại"}
+                value={staffPhone}
+                onChange={(val) => {
+                  setStaffPhone(val);
+                }}
+                autoFocus
+              />
+              <Input
+                label={"Địa chỉ"}
+                value={staffAddress}
+                onChange={(val) => {
+                  setStaffAddress(val);
+                }}
+                autoFocus
+              />
+              <Input
+                label={"Ghi chú"}
+                value={staffNote}
+                onChange={(val) => {
+                  setStaffNote(val);
+                }}
+                autoFocus
+              />
             </div>
-        </AdminPage>
-
-    )
-
+          }
+        />
+        <Popup
+          title={"Phân quyền"}
+          show={isShowPopupSetup}
+          onClickClose={() => setIsShowPopupSetup(false)}
+          button={[
+            <Button2
+              name={"Đóng"}
+              onClick={() => setIsShowPopupSetup(false)}
+            />,
+          ]}
+          width={"60%"}
+          //className={"staff-manager-create"}
+          body={
+            <div>
+              <Tree
+                checkable
+                onExpand={onExpand}
+                expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                onSelect={onSelect}
+                selectedKeys={selectedKeys}
+                treeData={treeData}
+              />
+            </div>
+          }
+        />
+      </div>
+    </AdminPage>
+  );
 }
-export default Staff
+export default Staff;

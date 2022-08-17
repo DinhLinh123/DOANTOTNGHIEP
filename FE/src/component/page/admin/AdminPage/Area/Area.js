@@ -19,9 +19,12 @@ function Area(props) {
     const dispatch = useDispatch();
     const [sortType, setSortType] = useState();
     const [dataTable, setDataTable] = useState([]);
+    const [dataTotal, setDataTotal] = useState(0);
     const [areaName, setAreaName] = useState("");
-    const [isShowPopupAddNew, setIsShowPopupAddNew] = useState(false);
-    const [isShowPopupConfirmDelete, setIsShowPopupConfirmDelete] = useState({show: false, item:''});
+    const [areaDetail, setAreaDetail] = useState();
+    const [isShowPopupAddNew, setIsShowPopupAddNew] = useState({ show: false, title: '', key: -1 });
+    const [isShowPopupConfirmDelete, setIsShowPopupConfirmDelete] = useState({ show: false, item: '' });
+    
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
         AGE: "age",
@@ -57,15 +60,16 @@ function Area(props) {
         },
         {
             title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
+            onSelect: (item) => {
+                setAreaDetail(item.item)
+                setIsShowPopupAddNew({ show: true, title: 'Sửa Khu vực', key: 1 })
+                setAreaName(item.item.name)
             },
         },
         {
             title: "Xóa",
             onSelect: (item) => {
-                debugger
-                setIsShowPopupConfirmDelete({show: true, item: item.item})
+                setIsShowPopupConfirmDelete({ show: true, item: item.item })
             },
         },
     ];
@@ -103,6 +107,7 @@ function Area(props) {
         baseApi.get(
             (res) => {
                 setDataTable(res)
+                setDataTotal(res?.length)
                 dispatch(changeLoadingApp(false))
             },
             () => {
@@ -118,7 +123,7 @@ function Area(props) {
     function callAddArea() {
         dispatch(changeLoadingApp(true))
 
-        let body ={
+        let body = {
             name: areaName
         }
 
@@ -128,12 +133,12 @@ function Area(props) {
                 dispatch(changeLoadingApp(false))
                 callGetAllArea()
                 setAreaName('')
-                setIsShowPopupAddNew(false)
+                setIsShowPopupAddNew({ show: false, title: '', key: -1 })
             },
             () => {
                 commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm khu vực thất bại")
                 dispatch(changeLoadingApp(false))
-                setIsShowPopupAddNew(false)
+                setIsShowPopupAddNew({ show: false, title: '', key: -1 })
             },
             null,
             API_AREA.GET_ALL,
@@ -142,18 +147,46 @@ function Area(props) {
         )
     }
 
+    function callUpdateArea() {
+        dispatch(changeLoadingApp(true))
+
+        let body = areaDetail;
+        body.name = areaName
+
+        baseApi.put(
+            (res) => {
+                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa khu vực thành công")
+                dispatch(changeLoadingApp(false))
+                callGetAllArea()
+                setAreaName('')
+                setIsShowPopupAddNew({ show: false, title: '', key: -1 })
+            },
+            () => {
+                commonFunction.messages(TYPE_MESSAGE.ERROR, "Sửa khu vực thất bại")
+                dispatch(changeLoadingApp(false))
+                setIsShowPopupAddNew({ show: false, title: '', key: -1 })
+            },
+            null,
+            API_AREA.UPDATE_BY_ID + areaDetail.id,
+            null,
+            body
+        )
+    }
+
+    
+
     function callDeleterea() {
         dispatch(changeLoadingApp(true))
 
         baseApi.delete(
             (res) => {
-                setIsShowPopupConfirmDelete({show: false, item:''})
+                setIsShowPopupConfirmDelete({ show: false, item: '' })
                 commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa khu vực thành công")
                 dispatch(changeLoadingApp(false))
                 callGetAllArea()
             },
             () => {
-                setIsShowPopupConfirmDelete({show: false, item:''})
+                setIsShowPopupConfirmDelete({ show: false, item: '' })
                 commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa khu vực thất bại")
                 dispatch(changeLoadingApp(false))
             },
@@ -179,7 +212,7 @@ function Area(props) {
                         <Button2
                             name={"Thêm mới Khu vực"}
                             leftIcon={<PlusOutlined />}
-                            onClick={() => setIsShowPopupAddNew(true)}
+                            onClick={() => setIsShowPopupAddNew({ show: true, title: 'Thêm mới Khu vực', key: 0 })}
                         />
                     </div>
                 </div>
@@ -187,7 +220,7 @@ function Area(props) {
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
-                        total={90}
+                        total={dataTotal}
                         data={convertDataTable(dataTable)}
                         loading={false}
                         hasMoreOption
@@ -204,20 +237,20 @@ function Area(props) {
                 </div>
             </div>
             <Popup
-                title={"Thêm mới khu vực"}
-                show={isShowPopupAddNew}
-                onClickClose={() => setIsShowPopupAddNew(false)}
+                title={isShowPopupAddNew.title}
+                show={isShowPopupAddNew.show}
+                onClickClose={() => setIsShowPopupAddNew({ show: false, title: '', key: -1 })}
                 button={[
                     <Button2
                         name={"Đóng"}
                         onClick={() => {
                             setAreaName("")
-                            setIsShowPopupAddNew(false)
+                            setIsShowPopupAddNew({ show: false, title: '', key: -1 })
                         }}
                     />,
                     <Button2
                         name={"Lưu"}
-                        onClick={() => callAddArea()}
+                        onClick={() => isShowPopupAddNew.key == 0 ? callAddArea() : callUpdateArea()}
                         background="#fa983a"
                         disabled={areaName?.length <= 0}
                     />,
@@ -231,7 +264,7 @@ function Area(props) {
                                 <div className="menu-manager__popup-content-buffet-name">
                                     <InputField
                                         label={"Tên khu vực"}
-                                        defaultValue={areaName}
+                                        value={areaName}
                                         onChange={(val) => {
                                             setAreaName(val);
                                         }}
@@ -248,9 +281,9 @@ function Area(props) {
             />
             <ModalConfirm
                 title={"khu vực"}
-                setShow={(val)=>setIsShowPopupConfirmDelete({show: val, item: ''})}
+                setShow={(val) => setIsShowPopupConfirmDelete({ show: val, item: '' })}
                 show={isShowPopupConfirmDelete.show}
-                onClickSuccess={()=>callDeleterea()}
+                onClickSuccess={() => callDeleterea()}
                 contentName={isShowPopupConfirmDelete.item.name}
             />
         </AdminPage>

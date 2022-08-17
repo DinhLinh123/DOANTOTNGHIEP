@@ -62,11 +62,14 @@ function AreaDetail(props) {
     }, [list])
 
     function updatePosition(item, value, value2) {
+        debugger
         let abc = list
         let objIndex = abc.findIndex((obj => obj.name == item.name));
-        abc[objIndex].top = parseFloat(value2?.x)
-        abc[objIndex].left = parseFloat(value2?.y)
-        callSaveTable(item.id ,item, abc[objIndex].left, abc[objIndex].top)
+        abc[objIndex].left = parseInt(value2?.x)
+        abc[objIndex].top = parseInt(value2?.y)
+        console.log(value2?.y);
+        console.log(value2?.x);
+        callSaveTable(item.id ,item, parseInt(value2?.x),parseInt(value2?.y))
         setList(abc)
     }
 
@@ -86,6 +89,10 @@ function AreaDetail(props) {
             "createdByUserName": "string",
             "createdOnDate": "2022-08-11T14:08:44.118Z"
         }
+
+        // let _list =[...list]
+        // _list.push(body)
+        // setList(_list)
 
         baseApi.post(
             (res) => {
@@ -109,7 +116,7 @@ function AreaDetail(props) {
         )
     }
 
-    function callSaveTable(id, item, top, left) {
+    function callSaveTable(id, item, left, top ) {
         let body = item;
         body.top = top.toString()
         body.left = left.toString()
@@ -126,7 +133,6 @@ function AreaDetail(props) {
             body
         )
     }
-    console.log("list", list);
     return (
         <AdminPage
             title={"Chi tiết khu vực"}
@@ -143,25 +149,23 @@ function AreaDetail(props) {
                         </div>
                     </div>
                     <div className="area-detail__header-button">
-                        <div className="area-detail__header-button-save">
-                            <Button2
-                                name={"Lưu"}
-                            // onClick={() => callSaveArea()} 
-                            />
-                        </div>
                         <div className="area-detail__header-button-add">
                             <Button2 name={"Thêm mới bàn ăn"} onClick={() => { setShowPopupAddNew(true) }} />
                         </div>
                     </div>
                 </div>
-                <div className="area-detail__content" style={{ height: '600px', width: '1000px', position: 'relative' }}>
-                    <div className="area-detail__content-drag" style={{ height: '600px', width: '1000px', position: 'absolute', top: '0' }}>
+                <div className="area-detail__content"
+                style={{ height: '600px', width: '1000px', position: 'relative' }}
+                >
+                    <div className="area-detail__content-drag" 
+                    style={{ height: '600px', width: '1000px', position: 'absolute', top: '0', left: '0'}}
+                    >
                         {list && list.length > 0 ? list?.map((item) => {
                             return (
-                                <Draggable defaultPosition={{ x: parseInt(item?.left), y: parseInt(item?.top) }} bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} key={1} className={item?.title}>
+                                <Draggable enableUserSelectHack defaultPosition={{x: parseInt(item?.left), y: parseInt(item?.top)}} bounds="parent" onStop={(val, val2) => {updatePosition(item, val, val2) }} className={item?.title}>
                                     <div
                                         className="area-detail__content-drag-item"
-                                        style={{ borderRadius: item?.kieuDang == 0 ? '50%' : '8px' }}
+                                        style={{ borderRadius: item?.kieuDang == 0 ? '50%' : '8px', position: 'absolute', top: '8px', left: '8px' }}
                                     // onClick={() => alert(item?.title)}
                                     >
                                         {item?.name}
