@@ -46,8 +46,8 @@ function Menu(props) {
     newIndex: 0,
   });
   const [listFood, setListFood] = useState([{ food: "" }]);
-  const [isShowPopupAddnew, setIsShowPopupAddnew] = useState({show: false, title:'', key: -1});
-  const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({show: false, item: ''});
+  const [isShowPopupAddnew, setIsShowPopupAddnew] = useState({ show: false, title: '', key: -1 });
+  const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({ show: false, item: '' });
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
   const [listMenu, setListMenu] = useState([]);
   const [textSearch, setTextSearch] = useState("");
@@ -102,8 +102,8 @@ function Menu(props) {
   const OPTION_MORE_TABLE = [
     {
       title: "Chi tiết",
-      onSelect: (val) => { 
-        setFoodDetail(val.detail); 
+      onSelect: (val) => {
+        setFoodDetail(val.detail);
         callGetTypeFoodById(val.detail.maTheLoai)
       },
     },
@@ -116,7 +116,7 @@ function Menu(props) {
     {
       title: "Xóa",
       onSelect: (val) => {
-        setIsShowPopupComfirmDelete({show: true, item: val.detail})
+        setIsShowPopupComfirmDelete({ show: true, item: val.detail })
       },
     },
   ];
@@ -124,12 +124,12 @@ function Menu(props) {
   function callGetTypeFoodById(id) {
     baseApi.get(
       (res) => {
-        setIsShowPopupDetail({ show: true, isMany: res.isMany }) 
+        setIsShowPopupDetail({ show: true, isMany: res.isMany })
       },
       () => {
       },
       null,
-      API_TYPE_FOOD.GET_BY_ID+ id,
+      API_TYPE_FOOD.GET_BY_ID + id,
       null,
       {}
     )
@@ -150,7 +150,7 @@ function Menu(props) {
     return <div>{item?.donViTinh}</div>;
   }
   function columnCategory(item) {
-    return <div>{item.theLoaiDoAn}</div>
+    return <div>mày bị điên à</div>
   }
   function columnDescribe(item) {
     return <div>{item?.describe}</div>;
@@ -233,7 +233,7 @@ function Menu(props) {
   }
 
   function handleClickAddnew(type) {
-    setIsShowPopupAddnew({show: true, title:'Thêm mới menu', key: 0});
+    setIsShowPopupAddnew({ show: true, title: 'Thêm mới menu', key: 0 });
   }
 
   function onChangeTab(item, index) {
@@ -275,7 +275,7 @@ function Menu(props) {
     setListFood(_listFood);
   }
 
-  useEffect(() => { console.log(isShowPopupDetail) }, [isShowPopupDetail])
+
 
   function addNameFood() {
     let _listFood = [...listFood];
@@ -335,7 +335,7 @@ function Menu(props) {
   function handleEditMenu() {
 
     setIndex({ value: isShowPopupDetail.index, item: '' })
-    setIsShowPopupAddnew({show: true, title:'Sửa menu', key: 1})
+    setIsShowPopupAddnew({ show: true, title: 'Sửa menu', key: 1 })
     setFoodName(foodDetail.name)
     setFoodUnit(foodDetail.unit)
     setFoodPrice(foodDetail.price)
@@ -351,7 +351,7 @@ function Menu(props) {
     dispatch(changeLoadingApp(true))
     let body = {
       "name": foodName,
-      "theLoaiDoAn": index.item,
+      "theLoaiDoAn": index.item.name,
       "linkAnh": foodImage,
       "donGia": foodPrice,
       "maTheLoai": index.item.id,
@@ -367,13 +367,13 @@ function Menu(props) {
     baseApi.post(
       (res) => {
         dispatch(changeLoadingApp(false))
-        setIsShowPopupAddnew({show: false, title:'', key: -1})
+        setIsShowPopupAddnew({ show: false, title: '', key: -1 })
         callGetAddFood()
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm món thành công")
       },
       () => {
         dispatch(changeLoadingApp(false))
-        setIsShowPopupAddnew({show: false, title:'', key: -1})
+        setIsShowPopupAddnew({ show: false, title: '', key: -1 })
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm món thất bại")
       },
       null,
@@ -384,8 +384,27 @@ function Menu(props) {
   }
 
   function callGetAddFood() {
-    dispatch(changeLoadingApp(true))
+    // dispatch(changeLoadingApp(true))
 
+    // baseApi.get(
+    //   (res) => {
+    //     setDataTable(res.data || [])
+    //     setDataTotal(res?.data?.length)
+    //     dispatch(changeLoadingApp(false))
+    //   },
+    //   () => {
+    //     dispatch(changeLoadingApp(false))
+    //   },
+    //   null,
+    //   API_MENU.GET_ALL,
+    //   null,
+    //   {}
+    // )
+
+    dispatch(changeLoadingApp(true))
+    let param = {
+      "TextSearch": textSearch
+    }
     baseApi.get(
       (res) => {
         setDataTable(res.data || [])
@@ -396,52 +415,35 @@ function Menu(props) {
         dispatch(changeLoadingApp(false))
       },
       null,
-      API_MENU.GET_ALL,
+      API_MENU.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
       null,
       {}
     )
-
-  //   dispatch(changeLoadingApp(true))
-  //   let param= {
-  //     "TextSearch": textSearch
-  // }
-  //   baseApi.get(
-  //     (res) => {
-  //       setDataTable(res.data || [])
-  //       setDataTotal(res?.data?.length)
-  //       dispatch(changeLoadingApp(false))
-  //     },
-  //     () => {
-  //       dispatch(changeLoadingApp(false))
-  //     },
-  //     null,
-  //     API_MENU.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
-  //     null,
-  //     {}
-  //   )
   }
+
+  // useEffect(() => { console.log(isShowPopupDetail) }, [dataTotal])
 
   function callDeleteMenu() {
     dispatch(changeLoadingApp(true))
     baseApi.delete(
       (res) => {
         dispatch(changeLoadingApp(false))
-        setIsShowPopupComfirmDelete({show: false, item: ''})
+        setIsShowPopupComfirmDelete({ show: false, item: '' })
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa món thành công")
         callGetAddFood()
       },
       () => {
         dispatch(changeLoadingApp(false))
-        setIsShowPopupComfirmDelete({show: false, item: ''})
+        setIsShowPopupComfirmDelete({ show: false, item: '' })
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa món thất bại")
       },
       null,
-      API_MENU.GET_BY_ID+ isShowPopupComfirmDelete.item.id,
+      API_MENU.GET_BY_ID + isShowPopupComfirmDelete.item.id,
       null,
       {}
     )
 
-    
+
   }
 
   return (
@@ -449,11 +451,11 @@ function Menu(props) {
       <div className="menu-manager">
         <div className="menu-manager__filter">
           <div className="menu-manager__filter-search">
-            <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val)=>{
+            <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val) => {
               setTimeout(() => {
                 setTextSearch(val)
               }, 200);
-            }}/>
+            }} />
           </div>
           <div className="menu-manager__filter-create-new">
             <Button2
@@ -483,13 +485,13 @@ function Menu(props) {
         <Popup
           title={"Thêm mới menu"}
           show={isShowPopupAddnew.show}
-          onClickClose={() => setIsShowPopupAddnew({show: false, title:'', key: -1})}
+          onClickClose={() => setIsShowPopupAddnew({ show: false, title: '', key: -1 })}
           button={[
             <Button2
               name={"Đóng"}
               onClick={() => {
                 setFoodName("")
-                setIsShowPopupAddnew({show: false, title:'', key: -1})
+                setIsShowPopupAddnew({ show: false, title: '', key: -1 })
               }}
             />,
             <Button2
@@ -816,12 +818,12 @@ function Menu(props) {
           }
         />
         <ModalConfirm
-                title={"món ăn"}
-                setShow={(val)=>setIsShowPopupComfirmDelete({show: val, item: ''})}
-                show={isShowPopupComfirmDelete.show}
-                onClickSuccess={()=>callDeleteMenu()}
-                contentName={isShowPopupComfirmDelete.item.name}
-            />
+          title={"món ăn"}
+          setShow={(val) => setIsShowPopupComfirmDelete({ show: val, item: '' })}
+          show={isShowPopupComfirmDelete.show}
+          onClickSuccess={() => callDeleteMenu()}
+          contentName={isShowPopupComfirmDelete.item.name}
+        />
       </div>
     </AdminPage>
   );

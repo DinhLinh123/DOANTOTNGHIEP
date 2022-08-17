@@ -15,7 +15,7 @@ import { Tooltip } from "antd";
 import noDataimg from "../../../../../image/no-data2.png"
 import { useParams } from "react-router-dom";
 import baseApi from "../../../../../api/baseApi";
-import { API_MENU, API_TABLE } from "../../../../base/common/endpoint";
+import { API_MENU, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 function Order(props) {
@@ -28,6 +28,8 @@ function Order(props) {
     index: ""
   })
   const [listMenu, setListMenu] = useState([])
+  const [listType, setListType] = useState([])
+  const [textSearch, setTextSearch] = useState("");
   const renderChoose = useRef([])
   let { tableID } = useParams();
   const dispatch = useDispatch();
@@ -42,107 +44,12 @@ function Order(props) {
   }, [tableID])
 
   useEffect(() => {
-    callGetAddFood()
+    callGetAllFood()
   }, [index])
 
   let logo = [
     {
       img: logo1,
-    }
-  ]
-  // data fake món
-  let dataFake = [
-
-    {
-      img: ud2,
-      title: "Rau muống xào tỏi Rau muống xào tỏi 2",
-      money: 10000000,
-      id: 1
-    },
-    {
-      img: ud1,
-      title: "Rau muống xào tỏi Rau muống xào tỏi Rau muống xào tỏi Rau muống xào tỏi 3",
-      money: 99000,
-      id: 2
-    },
-
-    {
-      img: ud3,
-      title: "Buffet 199k 4",
-      money: 199000,
-      id: 3
-    },
-    {
-      img: ud4,
-      title: "Rau muống xào tỏi 5",
-      money: 100000,
-      id: 4
-    },
-    {
-      img: ud5,
-      title: "Rau muống xào tỏi 6",
-      money: 100000,
-      id: 5
-    },
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 7",
-      money: 100000,
-      id: 6
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 8",
-      money: 100000,
-      id: 7
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 9",
-      money: 100000,
-      id: 8
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 10",
-      money: 100000,
-      id: 9
-    },
-    {
-      img: ud5,
-      title: "Rau muống xào tỏi 11",
-      money: 100000,
-      id: 11
-    },
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi Rau muống xào tỏi ",
-      money: 100000,
-      id: 15
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi Rau muống xào tỏi Rau muống xào tỏi Rau muống xào tỏi ",
-      money: 100000,
-      id: 12
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 13",
-      money: 100000,
-      id: 13
-    }
-    ,
-    {
-      img: ud6,
-      title: "Rau muống xào tỏi 14",
-      money: 100000,
-      id: 14
     }
   ]
 
@@ -168,7 +75,6 @@ function Order(props) {
 
 
   function handleChooseFood(item) {
-    debugger
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id)
     if (a == -1) {
@@ -207,23 +113,29 @@ function Order(props) {
     return total
   }
 
-  function callGetAddFood() {
+  function callGetAllFood() {
     dispatch(changeLoadingApp(true))
+    let param = {
+      "TextSearch": textSearch,
 
+    }
     baseApi.get(
       (res) => {
-        setListMenu(res)
+        setListMenu(res.data || [])
+        // setDataTotal(res?.data?.length)
         dispatch(changeLoadingApp(false))
       },
       () => {
         dispatch(changeLoadingApp(false))
       },
       null,
-      API_MENU.GET_ALL,
+      API_MENU.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
       null,
       {}
     )
   }
+
+  
 
   const onSubmitOrderConfirm = () => {
     console.log("vào đây", orderSelected);
@@ -232,6 +144,23 @@ function Order(props) {
       
     }}
   }
+
+  useEffect(() => { callGetTypeFood()  }, [])
+
+  // function callGetTypeFood() {
+  //   baseApi.get(
+  //     (res) => {
+  //       setListType(res)
+  //       // setIndex({ value: 0, item: res[0] })
+  //     },
+  //     () => {
+  //     },
+  //     null,
+  //     API_TYPE_FOOD.GET_ALL,
+  //     null,
+  //     {}
+  //   )
+  // }
   
   return (
     <div className="order-page-container">
@@ -248,15 +177,16 @@ function Order(props) {
           </div>
           <div className="order-page-container__food-list__top__search">
             <div className="order-page-container__food-list__top__search__textbox">
-              <InputField placeholder={"Nhập tên món ăn..."} />
-            </div >
-            <div className="order-page-container__food-list__top__search__icon">
-              <SearchOutlined style={{ fontSize: '24px', color: '#fff', cursor: 'pointer' }} />
+              <InputField placeholder={"Nhập tên món ăn..."} onChange={(val)=>{
+                setTimeout(() => {
+                  setTextSearch(val)
+                }, 200);
+              }}/>
             </div>
           </div>
         </div>
         <div className="order-page-container__food-list__list">
-          {listMenu.data && listMenu.data.length > 0 ?  listMenu.data.map((item) => {
+          {listType.data && listType.data.length > 0 ?  listType.data.map((item) => {
               return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
                 <div className="order-page-container__food-list__list-item-img">
                   <img src={item.img} alt = "" />
@@ -273,13 +203,13 @@ function Order(props) {
         </div>
         <div className="order-page-container__food-list__choose">
           {
-            listCategory.map((item, key) => {
+            listMenu?.map((item, key) => {
               return (
                 <div className={`order-page-container__food-list__choose__children ${index == item.index ? 'order-selected' : ''}`}
-                  style={{ width: `calc(100% / ${listCategory?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
-                  onClick={() => { setIndex(item.index) }}
+                  style={{ width: `calc(100% / ${listMenu?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
+                  // onClick={() => { setIndex(item.index) }}
                 >
-                  {item.title}
+                  {item.name}
                 </div>
               )
             })

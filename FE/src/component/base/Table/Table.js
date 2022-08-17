@@ -149,6 +149,7 @@ function TableBase(props) {
     return columnsList;
   }
 
+
   return (
     <div className="table-container">
       <div className="table-container__table">

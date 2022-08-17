@@ -15,17 +15,19 @@ import RadioCheck from "../../../../../base/Radio/Radio";
 import { API_AREA, API_TABLE } from "../../../../../base/common/endpoint";
 import { useParams } from "react-router-dom";
 import commonFunction from "../../../../../base/common/commonFunction";
+import ModalConfirm from "../../../../../base/ModalConfirm/ModalConfirm";
 
 function AreaDetail(props) {
 
     let dispatch = useDispatch();
-    const [showPopupAddNew, setShowPopupAddNew] = useState(false)
+    const [showPopupAddNew, setShowPopupAddNew] = useState({ show: false, title: '', key: -1 })
     const [tableType, setTableType] = useState(1)
     const [tableName, setTableName] = useState("")
     const [areaName, setAreaName] = useState("");
     const [adults, setAdults] = useState(1)
     const [list, setList] = useState([])
     const [areaDetail, setAreaDetail] = useState()
+    const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({ show: false, item: '' });
 
     let { areaID } = useParams();
 
@@ -43,8 +45,12 @@ function AreaDetail(props) {
 
 
     useEffect(() => {
-        let param= {
-            "idKhuVuc":areaID
+        callApiGetTableInArea()
+    }, [])
+
+    function callApiGetTableInArea() {
+        let param = {
+            "idKhuVuc": areaID
         }
         baseApi.get(
             (res) => {
@@ -56,20 +62,16 @@ function AreaDetail(props) {
             {},
             {}
         )
-    }, [])
-    useEffect(() => {
-        console.log(list);
-    }, [list])
+    }
 
     function updatePosition(item, value, value2) {
-        debugger
         let abc = list
         let objIndex = abc.findIndex((obj => obj.name == item.name));
         abc[objIndex].left = parseInt(value2?.x)
         abc[objIndex].top = parseInt(value2?.y)
         console.log(value2?.y);
         console.log(value2?.x);
-        callSaveTable(item.id ,item, parseInt(value2?.x),parseInt(value2?.y))
+        callSaveTable(item.id, item, parseInt(value2?.x), parseInt(value2?.y))
         setList(abc)
     }
 
@@ -90,23 +92,20 @@ function AreaDetail(props) {
             "createdOnDate": "2022-08-11T14:08:44.118Z"
         }
 
-        // let _list =[...list]
-        // _list.push(body)
-        // setList(_list)
-
         baseApi.post(
             (res) => {
-                
+
                 dispatch(changeLoadingApp(false))
-                setShowPopupAddNew(false)
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
                 let _listTable = [...list]
-                
+
                 _listTable.push(res.data)
                 setList(_listTable)
                 commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm bàn thành công")
             },
             () => {
                 dispatch(changeLoadingApp(false))
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
                 commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm bàn thất bại")
             },
             null,
@@ -116,7 +115,7 @@ function AreaDetail(props) {
         )
     }
 
-    function callSaveTable(id, item, left, top ) {
+    function callSaveTable(id, item, left, top) {
         let body = item;
         body.top = top.toString()
         body.left = left.toString()
@@ -133,6 +132,48 @@ function AreaDetail(props) {
             body
         )
     }
+
+    function updateTable(item) {
+        let body = item;
+        body.name = tableName;
+        body.soNguoiToiDa = adults;
+        body.kieuDang = tableType.toString();
+
+        baseApi.put(
+            (res) => {
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
+                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa bàn ăn thành công")
+            },
+            () => {
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
+                commonFunction.messages(TYPE_MESSAGE.ERROR, "Sửa bàn ăn thất bại")
+            },
+            null,
+            API_TABLE.UPDATE_BY_ID + item.id,
+            {},
+            body
+        )
+    }
+
+    function deleteTable() {
+        baseApi.delete(
+            (res) => {
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
+                setIsShowPopupComfirmDelete({ show: false, item: '' })
+                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa bàn ăn thành công")
+                callApiGetTableInArea()
+            },
+            () => {
+                setShowPopupAddNew({ show: false, title: '', key: -1 })
+                setIsShowPopupComfirmDelete({ show: false, item: '' })
+                commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa bàn ăn thất bại")
+            },
+            null,
+            API_TABLE.DELETE_BY_ID + showPopupAddNew.item.id,
+            {},
+        )
+    }
+
     return (
         <AdminPage
             title={"Chi tiết khu vực"}
@@ -150,52 +191,60 @@ function AreaDetail(props) {
                     </div>
                     <div className="area-detail__header-button">
                         <div className="area-detail__header-button-add">
-                            <Button2 name={"Thêm mới bàn ăn"} onClick={() => { setShowPopupAddNew(true) }} />
+                            <Button2 name={"Thêm mới bàn ăn"} onClick={() => { setShowPopupAddNew({ show: true, title: 'Thêm mới món ăn', key: 0 }) }} />
                         </div>
                     </div>
                 </div>
                 <div className="area-detail__content"
-                style={{ height: '600px', width: '1000px', position: 'relative' }}
+                    style={{ height: '600px', width: '1000px', position: 'relative' }}
                 >
-                    <div className="area-detail__content-drag" 
-                    style={{ height: '600px', width: '1000px', position: 'absolute', top: '0', left: '0'}}
+                    <div className="area-detail__content-drag"
+                        style={{ height: '600px', width: '1000px', position: 'absolute', top: '0', left: '0' }}
                     >
                         {list && list.length > 0 ? list?.map((item) => {
+                            debugger
                             return (
-                                <Draggable enableUserSelectHack defaultPosition={{x: parseInt(item?.left), y: parseInt(item?.top)}} bounds="parent" onStop={(val, val2) => {updatePosition(item, val, val2) }} className={item?.title}>
+                                <Draggable defaultPosition={{ x: parseInt(item?.left), y: parseInt(item?.top) }} bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} className={item?.title}>
                                     <div
                                         className="area-detail__content-drag-item"
                                         style={{ borderRadius: item?.kieuDang == 0 ? '50%' : '8px', position: 'absolute', top: '8px', left: '8px' }}
-                                    // onClick={() => alert(item?.title)}
+                                        onDoubleClick={() => {
+                                            setTableName(item.name)
+                                            setAdults(item.soNguoiToiDa)
+                                            setTableType(item.kieuDang)
+                                            setShowPopupAddNew({ show: true, title: 'Sửa bàn ăn', key: 1, item: item })
+                                        }}
                                     >
                                         {item?.name}
                                     </div>
                                 </Draggable>
                             )
                         }) : null}
-                        
+
                     </div>
                 </div>
             </div>
             <Popup
-                title={"Thêm mới bàn ăn"}
+                title={showPopupAddNew.title}
                 button={[
-                    <Button2 name={"Hủy"} onClick={() => { setShowPopupAddNew(false) }} />,
+                    <Button2 name={"Hủy"} onClick={() => { setShowPopupAddNew({ show: false, title: '', key: -1 }) }} />,
+                    <Button2 name={"Xóa"} background="#ff4d4d" style={{ display: showPopupAddNew.key == 0 ? "none" : "block" }} onClick={() => { 
+                        setIsShowPopupComfirmDelete({show: true, item:''}) }} />,
                     <Button2
-                        name={"Thêm mới"}
+                        name={"Lưu"}
                         background="#fa983a"
-                        onClick={() => { addNewTable() }}
+                        onClick={() => { showPopupAddNew.key == 0 ? addNewTable() : updateTable(showPopupAddNew.item) }}
                     />
                 ]}
                 className="add-table"
-                show={showPopupAddNew}
-                onClickClose={() => { setShowPopupAddNew(false) }}
+                show={showPopupAddNew.show}
+                onClickClose={() => { setShowPopupAddNew({ show: false, title: '', key: -1 }) }}
                 body={
                     <>
                         <div className="add-table__item">
                             <InputField
                                 label={"Tên bàn"}
-                                defaultValue={tableName}
+                                value={tableName}
                                 onChange={(val) => {
                                     setTableName(val);
                                 }}
@@ -204,7 +253,7 @@ function AreaDetail(props) {
                         </div>
                         <div className="add-table__item">
                             <InputField
-                                defaultValue={adults}
+                                value={adults}
                                 onChange={(val) => {
                                     setAdults(parseInt(val));
                                 }}
@@ -220,12 +269,19 @@ function AreaDetail(props) {
                             <RadioCheck
                                 listOption={[{ label: "Hình tròn", value: 0 }, { label: "Hình Vuông", value: 1 }]}
                                 title={"Kiểu dáng"}
-                                valueDefault={tableType}
+                                valueDefault={parseInt(tableType)}
                                 onChange={(val) => { setTableType(val) }}
                             />
                         </div>
                     </>
                 }
+            />
+            <ModalConfirm
+                title={"bàn ăn"}
+                setShow={(val) => setIsShowPopupComfirmDelete({ show: val, item: '' })}
+                show={isShowPopupComfirmDelete.show}
+                onClickSuccess={() => deleteTable()}
+                contentName={showPopupAddNew?.item?.name}
             />
         </AdminPage>
 

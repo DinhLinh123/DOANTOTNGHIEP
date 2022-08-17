@@ -4,6 +4,7 @@ const API_TABLE = {
     ALL_NEW: PART + "/Ban",
     GET_BY_ID: PART + "/Ban/",
     UPDATE_BY_ID: PART + "/Ban/",
+    DELETE_BY_ID: PART + "/Ban/",
     GET_BY_FILTER: PART + "/Ban/filter?_filter=",
 };
 
@@ -11,7 +12,8 @@ const API_AREA = {
     UPDATE_BY_ID: PART + "/KhuVuc/",
     GET_ALL: PART + "/KhuVuc",
     GET_BY_ID: PART + "/KhuVuc/",
-    DELETE_BY_ID: PART + "/KhuVuc/"
+    DELETE_BY_ID: PART + "/KhuVuc/",
+    GET_BY_FILTER: PART + "/KhuVuc/filter?_filter=",
 };
 
 const API_MENU = {

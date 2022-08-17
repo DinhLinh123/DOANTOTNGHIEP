@@ -24,7 +24,8 @@ function Area(props) {
     const [areaDetail, setAreaDetail] = useState();
     const [isShowPopupAddNew, setIsShowPopupAddNew] = useState({ show: false, title: '', key: -1 });
     const [isShowPopupConfirmDelete, setIsShowPopupConfirmDelete] = useState({ show: false, item: '' });
-    
+    const [textSearch, setTextSearch] = useState("");
+
     const COLUMN_TABLE_INDEX_MENU = {
         NAME: "name",
         AGE: "age",
@@ -77,6 +78,9 @@ function Area(props) {
     useEffect(() => {
         callGetAllArea()
     }, [])
+    useEffect(() => {
+        callGetAllArea()
+    }, [textSearch])
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
@@ -102,19 +106,22 @@ function Area(props) {
     }
 
     function callGetAllArea() {
-        dispatch(changeLoadingApp(true))
 
+        dispatch(changeLoadingApp(true))
+        let param = {
+            "TextSearch": textSearch
+        }
         baseApi.get(
             (res) => {
-                setDataTable(res)
-                setDataTotal(res?.length)
+                setDataTable(res.data || [])
+                setDataTotal(res?.data?.length)
                 dispatch(changeLoadingApp(false))
             },
             () => {
                 dispatch(changeLoadingApp(false))
             },
             null,
-            API_AREA.GET_ALL,
+            API_AREA.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
             null,
             {}
         )
@@ -173,7 +180,7 @@ function Area(props) {
         )
     }
 
-    
+
 
     function callDeleterea() {
         dispatch(changeLoadingApp(true))
@@ -206,7 +213,11 @@ function Area(props) {
             <div className="area-manager">
                 <div className="area-manager__filter">
                     <div className="area-manager__filter-search">
-                        <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} />
+                        <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val) => {
+                            setTimeout(() => {
+                                setTextSearch(val)
+                            }, 200);
+                        }} />
                     </div>
                     <div className="area-manager__filter-create-new">
                         <Button2
