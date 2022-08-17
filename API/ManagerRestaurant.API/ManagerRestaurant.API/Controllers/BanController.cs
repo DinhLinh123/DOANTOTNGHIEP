@@ -204,9 +204,9 @@ namespace ManagerRestaurant.API.Controllers
                 var res = new Responsive(200, mes, data);
                 return res;
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                var res = new Responsive(500, err.Message, err.ToString());
+                var res = new Responsive(500, ex.InnerException.Message, ex.ToString());
                 return res;
             }
         }
@@ -235,8 +235,8 @@ namespace ManagerRestaurant.API.Controllers
     }
     class BanFilter : BaseFilter
     {
-        public Guid MaTheLoai { get; set; }
-        public Guid IdKhuVuc { get; set; }
+        public Guid? MaTheLoai { get; set; }
+        public Guid? IdKhuVuc { get; set; }
         public string TrangThai { get; set; }
     }
 }

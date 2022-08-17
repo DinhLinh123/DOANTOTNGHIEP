@@ -108,7 +108,7 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Id == filter.Id);
                 }
-                if (filter.TextSearch.Length > 0)
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
                     query = query.Where((x) => x.NoiDung.Contains(filter.TextSearch.Trim()) || x.SoDienThoai.Contains(filter.TextSearch.Trim())||x.TenKH.Contains(filter.TextSearch.Trim()));
                 }

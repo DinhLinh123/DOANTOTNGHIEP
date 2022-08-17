@@ -202,7 +202,7 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Id == filter.Id);
                 }
-                if (filter.TextSearch.Length > 0)
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }

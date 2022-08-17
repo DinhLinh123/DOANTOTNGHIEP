@@ -111,7 +111,7 @@ namespace ManagerRestaurant.API.Controllers
         public async Task<Responsive> GetFilterKhachHang([FromQuery] string _filter)
         {
             try
-            { 
+            {
                 var filter = JsonConvert.DeserializeObject<KhachHangFilter>(_filter);
                 var query = from s in _context.KhachHang select s;
                 if (filter.Id != Guid.Empty)
@@ -119,11 +119,11 @@ namespace ManagerRestaurant.API.Controllers
                     query = query.Where((x) => x.Id == filter.Id);
                 }
 
-                if (filter.TextSearch.Length > 0)
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
-                if (filter.SoDienThoai.Length > 0)
+                if (filter.SoDienThoai != null && filter.SoDienThoai.Length > 0)
                 {
                     query = query.Where((x) => x.SoDienThoai.Contains(filter.SoDienThoai));
                 }
