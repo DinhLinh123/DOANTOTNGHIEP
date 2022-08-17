@@ -25,11 +25,53 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
+        public async Task<Responsive> GetUser()
         {
-            return await _context.User.ToListAsync();
-        }
+            var res = new Responsive();
+            try
+            {
+                var data = await _context.User.ToListAsync();
+                res.Code = 200;
+                res.Mess = "Get success";
+                var Data = new List<UserModel>();
+                foreach (var item in data)
+                {
+                    Data.Add(ConverUser(item));
+                }
 
+                res.Data = Data;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
+        }
+        UserModel ConverUser(User item)
+        {
+            var res = new UserModel();
+            res.Id = item.Id;
+            res.MaNV = item.MaNV;
+            res.FullName = item.FullName;
+            res.Phai = item.Phai;
+            res.ChucVu = item.ChucVu;
+            res.NgaySinh = item.NgaySinh;
+            res.SoDienThoai = item.SoDienThoai;
+            res.DiaChi = item.DiaChi;
+            res.ChiChu = item.ChiChu;
+            res.Quyen = item.Quyen;
+            res.IsDelete = item.IsDelete;
+            res.UserName = item.UserName;
+            //res.Password = item.Password;
+            res.CreatedByUserId = item.CreatedByUserId;
+            res.CreatedByUserName = item.CreatedByUserName;
+            res.CreatedOnDate = item.CreatedOnDate;
+            res.LastModifiedByUserId = item.LastModifiedByUserId;
+            res.LastModifiedByUserName = item.LastModifiedByUserName;
+            return res;
+        }
         // GET: api/User
         [HttpGet("active")]
         public async Task<Responsive> GetUserActive()
@@ -50,16 +92,31 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/User/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<Responsive> GetUser(Guid id)
         {
-            var user = await _context.User.FindAsync(id);
-
-            if (user == null)
+            var res = new Responsive();
+            try
             {
-                return NotFound();
-            }
+                var item = await _context.User.FindAsync(id);
+                if (res == null)
+                {
 
-            return user;
+                    res.Code = 204;
+                    res.Mess = "not found";
+                    return res;
+                }
+                else
+                {
+                    res.Data = ConverUser(item);
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // PUT: api/User/5
