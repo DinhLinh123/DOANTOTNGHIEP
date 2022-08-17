@@ -37,7 +37,7 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
                 var res = new Responsive();
-                var query = _context.User.Where(x=> x.IsDelete == false);
+                var query = _context.User.Where(x => x.IsDelete == false);
                 res.Mess = "Get success";
                 res.Data = await query.ToListAsync();
                 return res;
@@ -181,15 +181,15 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Id == filter.Id);
                 }
-                if (filter.TextSearch.Length > 0)
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
                     query = query.Where((x) => x.FullName.Contains(filter.TextSearch));
                 }
-                if (filter.SoDienThoai.Length > 0)
+                if (filter.SoDienThoai != null && filter.SoDienThoai.Length > 0)
                 {
                     query = query.Where((x) => x.SoDienThoai.Contains(filter.SoDienThoai));
                 }
-                if (filter.ChucVu.Length > 0)
+                if (filter.ChucVu != null && filter.ChucVu.Length > 0)
                 {
                     query = query.Where((x) => x.ChucVu.Contains(filter.ChucVu));
                 }
