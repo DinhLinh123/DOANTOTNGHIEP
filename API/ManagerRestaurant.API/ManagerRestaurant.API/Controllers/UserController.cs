@@ -118,6 +118,34 @@ namespace ManagerRestaurant.API.Controllers
                 return res;
             }
         }
+        // GET: api/User/username
+        [HttpGet("/checkexist/{username}")]
+        public async Task<Responsive> GetUserByName(string username)
+        {
+            var res = new Responsive();
+            try
+            {
+                var item = await _context.User.Where(s=> s.UserName.Equals(username)).FirstOrDefaultAsync();
+                if (item == null)
+                {
+
+                    res.Code = 204;
+                    res.Mess = "not found";
+                    return res;
+                }
+                else
+                {
+                    res.Data = ConverUser(item);
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
+        }
 
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
