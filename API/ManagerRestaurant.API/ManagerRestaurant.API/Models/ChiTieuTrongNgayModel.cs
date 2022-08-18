@@ -11,6 +11,7 @@ namespace ManagerRestaurant.API.Models
         public float TongSoTien { get; set; }
         public string TrangThaiHienTai { get; set; }
         public string GhiChu { get; set; }
+        public DateTime NgayHoaDon { get; set; }
         public DateTime ThoiGianKeToanDuyet { get; set; }
         public string NameKeToanDuyet { get; set; }
         public DateTime ThoiGianQuanLyDuyet { get; set; }
@@ -28,6 +29,7 @@ namespace ManagerRestaurant.API.Models
         public string MatHang { get; set; }
         public string Anh { get; set; }
         public float TongSoTien { get; set; }
+        public DateTime NgayHoaDon { get; set; }
         public string TrangThaiHienTai { get; set; }
         public string GhiChu { get; set; }
         public DateTime ThoiGianKeToanDuyet { get; set; }
@@ -45,6 +47,7 @@ namespace ManagerRestaurant.API.Models
         public string MatHang { get; set; }
         public string Anh { get; set; }
         public float TongSoTien { get; set; }
+        public DateTime NgayHoaDon { get; set; }
         public string TrangThaiHienTai { get; set; }
         public string GhiChu { get; set; }
         public DateTime ThoiGianKeToanDuyet { get; set; }

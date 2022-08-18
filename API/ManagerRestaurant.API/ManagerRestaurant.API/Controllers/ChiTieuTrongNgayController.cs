@@ -67,6 +67,7 @@ namespace ManagerRestaurant.API.Controllers
                     doAn.TongSoTien = item.TongSoTien;
                     doAn.TrangThaiHienTai = item.TrangThaiHienTai;
                     doAn.GhiChu = item.GhiChu;
+                    doAn.NgayHoaDon = item.NgayHoaDon;
                     doAn.ThoiGianKeToanDuyet = item.ThoiGianKeToanDuyet;
                     doAn.NameKeToanDuyet = item.NameKeToanDuyet;
                     doAn.ThoiGianQuanLyDuyet = item.ThoiGianQuanLyDuyet;
@@ -108,6 +109,7 @@ namespace ManagerRestaurant.API.Controllers
                 chiTieuTrongNgay.TongSoTien = item.TongSoTien;
                 chiTieuTrongNgay.TrangThaiHienTai = item.TrangThaiHienTai;
                 chiTieuTrongNgay.GhiChu = item.GhiChu;
+                chiTieuTrongNgay.NgayHoaDon = item.NgayHoaDon;
                 chiTieuTrongNgay.ThoiGianKeToanDuyet = item.ThoiGianKeToanDuyet;
                 chiTieuTrongNgay.NameKeToanDuyet = item.NameKeToanDuyet;
                 chiTieuTrongNgay.ThoiGianQuanLyDuyet = item.ThoiGianQuanLyDuyet;
