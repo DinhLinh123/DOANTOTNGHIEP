@@ -42,6 +42,7 @@ import CategoryDrinks from './component/page/admin/AdminPage/CategoryDrinks/Cate
 import CategoryMenu from './component/page/admin/AdminPage/CategoryMenu/CategoryMenu';
 import CategoryPosition from './component/page/admin/AdminPage/CategoryPosition/CategoryPosition';
 import ManagerFeedback from './component/page/admin/AdminPage/Feedback/Feedback';
+import Promotion from './component/page/admin/AdminPage/Promotion/Promotion';
 
 let historyApp;
 function App() {
@@ -93,6 +94,7 @@ function App() {
             <Route path={"/admin/kitchenday"}> <Staff /></Route>
             <Route path={"/admin/pays"}> <Pay /></Route>
             <Route path={"/admin/feedback"}> <ManagerFeedback /></Route>
+            <Route path={"/admin/promotion"}> <Promotion /></Route>
 
             {/* order */}
             <Route path={"/admin/tables"}> <TableOrder /></Route>

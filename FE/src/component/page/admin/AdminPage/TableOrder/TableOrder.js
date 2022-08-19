@@ -39,12 +39,6 @@ function TableOrder(props) {
     callApiAllGetArea()
   },[])
 
-  
-  useEffect(()=>{
-    console.log(listArea)
-  },[listArea])
-
-
   function renderMenuPage() {
     let list = listArea?.map((item, key) => {
       return (
@@ -83,6 +77,7 @@ function TableOrder(props) {
       (res) => {
         dispatch(changeLoadingApp(false))
         setlistArea(res)
+        callApiGetTable(res[0].id)
       },
       () => {
         dispatch(changeLoadingApp(false))
@@ -95,7 +90,7 @@ function TableOrder(props) {
 
   function callApiGetTable(areaID) {
     let param= {
-      "idKhuVuc":areaID
+      "idKhuVuc": areaID
   }
   baseApi.get(
       (res) => {

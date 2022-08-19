@@ -36,7 +36,9 @@ function Order(props) {
 
   useEffect(() => {
     baseApi.get(
-      (res) => { setTableName(res?.name) },
+      (res) => { 
+        setTableName(res?.data?.name) 
+      },
       () => { },
       null,
       API_TABLE.GET_BY_ID + tableID
@@ -117,22 +119,25 @@ function Order(props) {
     dispatch(changeLoadingApp(true))
     let param = {
       "TextSearch": textSearch,
-
+      "maTheLoai": index
     }
-    baseApi.get(
+    let endpoint = encodeURIComponent(JSON.stringify(param))
+    if(index?.length >0)
+    {
+      baseApi.get(
       (res) => {
-        setListMenu(res.data || [])
-        // setDataTotal(res?.data?.length)
+        setListMenu(res.data)
         dispatch(changeLoadingApp(false))
       },
       () => {
         dispatch(changeLoadingApp(false))
       },
       null,
-      API_MENU.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
+      API_MENU.GET_BY_FILTER + endpoint,
       null,
       {}
     )
+    }
   }
 
   
@@ -145,22 +150,23 @@ function Order(props) {
     }}
   }
 
-  // useEffect(() => { callGetTypeFood()  }, [])
+  useEffect(() => { callGetTypeFood()  }, [])
+  useEffect(() => { callGetAllFood() }, [textSearch])
 
-  // function callGetTypeFood() {
-  //   baseApi.get(
-  //     (res) => {
-  //       setListType(res)
-  //       // setIndex({ value: 0, item: res[0] })
-  //     },
-  //     () => {
-  //     },
-  //     null,
-  //     API_TYPE_FOOD.GET_ALL,
-  //     null,
-  //     {}
-  //   )
-  // }
+  function callGetTypeFood() {
+    baseApi.get(
+      (res) => {
+        setListType(res)
+        setIndex(res[0]?.id)
+      },
+      () => {
+      },
+      null,
+      API_TYPE_FOOD.GET_ALL,
+      null,
+      {}
+    )
+  }
   
   return (
     <div className="order-page-container">
@@ -186,16 +192,16 @@ function Order(props) {
           </div>
         </div>
         <div className="order-page-container__food-list__list">
-          {listType.data && listType.data.length > 0 ?  listType.data.map((item) => {
+          {listMenu && listMenu?.length > 0 ?  listMenu?.map((item) => {
               return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
                 <div className="order-page-container__food-list__list-item-img">
-                  <img src={item.img} alt = "" />
+                  <img src={item.linkAnh} alt = "" />
                 </div>
                 <div className="order-page-container__food-list__list-item-title">
-                  {commonFunction.smartText(40, item.name)}
+                  {commonFunction.smartText(40, item?.name)}
                 </div>
                 <div className="order-page-container__food-list__list-item-money">
-                  {commonFunction.numberWithCommas(parseInt(item.donGia))}đ
+                  {commonFunction.numberWithCommas(parseInt(item?.donGia))}đ
                 </div>
               </div>)
             }) : null}
@@ -203,11 +209,11 @@ function Order(props) {
         </div>
         <div className="order-page-container__food-list__choose">
           {
-            listMenu?.map((item, key) => {
+            listType?.map((item, key) => {
               return (
-                <div className={`order-page-container__food-list__choose__children ${index == item.index ? 'order-selected' : ''}`}
-                  style={{ width: `calc(100% / ${listMenu?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
-                  // onClick={() => { setIndex(item.index) }}
+                <div className={`order-page-container__food-list__choose__children ${index == item.id ? 'order-selected' : ''}`}
+                  style={{ width: `calc(100% / ${listType?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
+                  onClick={() => { setIndex(item.id) }}
                 >
                   {item.name}
                 </div>

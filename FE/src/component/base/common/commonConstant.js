@@ -26,7 +26,8 @@ const MENU_TAB_ADMIN = {
   CATEGOGY_MENU: "category_menu",
   CATEGOGY_DRINKS: "category_drink",
   CATEGOGY_POSITION: "category_position",
-  FEEDBACK: "Feedback"
+  FEEDBACK: "Feedback",
+  PROMOTION: "promotion"
 
 };
 

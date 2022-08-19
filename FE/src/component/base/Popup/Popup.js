@@ -22,7 +22,7 @@ Popup.defaultProps = {
   show: false,
   button: [],
   body: [],
-  onClickClose: () => {},
+  onClickClose: () => { },
   mess: "",
   width: "500px",
   height: "",
@@ -45,14 +45,24 @@ function Popup(props) {
 
   let list = button
     ? button?.map((item, index) => {
-        return (
-          <div key={index} className="item-button">
-            {item}
-          </div>
-        );
-      })
+      return (
+        <div key={index} className="item-button">
+          {item}
+        </div>
+      );
+    })
     : "";
-
+  // useEffect(() => {
+  //   if (show) {
+  //     let heightpopup = $(".popup-container ").height();
+  //     let heightLap = $(window).height();
+  //     if (heightLap < heightpopup + 40) {
+  //       let newHeight = heightLap - 40 - 55 - 69 - 49;
+  //       $(".ant-modal-body ").height(newHeight);
+  //       $(".ant-modal-body ").css("overflow", "auto");
+  //     }
+  //   }
+  // }, [show])
   setTimeout(() => {
     let heightpopup = $(".popup-container ").height();
     let heightLap = $(window).height();
@@ -61,7 +71,7 @@ function Popup(props) {
       $(".ant-modal-body ").height(newHeight);
       $(".ant-modal-body ").css("overflow", "auto");
     }
-  }, 100);
+  }, 10);
 
   return (
     <Modal

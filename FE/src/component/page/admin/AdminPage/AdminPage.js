@@ -30,6 +30,7 @@ import {
   ReconciliationOutlined,
   CoffeeOutlined,
   GroupOutlined,
+  TeamOutlined
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -161,7 +162,7 @@ function AdminPage(props) {
     },
     {
       link: MENU_TAB_ADMIN.STAFF,
-      icon: <ShoppingOutlined />,
+      icon: <TeamOutlined />,
       title: "Nhân viên",
     },
     {
@@ -189,6 +190,11 @@ function AdminPage(props) {
       link: MENU_TAB_ADMIN.PAY,
       icon: <CheckCircleOutlined />,
       title: "Thanh toán",
+    },
+    {
+      link: MENU_TAB_ADMIN.PROMOTION,
+      icon: <ShoppingOutlined />,
+      title: "Ưu đãi",
     },
   ];
 

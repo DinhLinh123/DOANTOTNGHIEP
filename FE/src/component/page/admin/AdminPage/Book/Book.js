@@ -270,7 +270,6 @@ function Book(props) {
         setBookDate(item?.date?.props?.children);
         setBookTime(item?.time?.props?.children);
         setBookNote(item?.note?.props?.children);
-        console.log("dataaa", item);
         setStatus("UPDATE");
       },
     },
