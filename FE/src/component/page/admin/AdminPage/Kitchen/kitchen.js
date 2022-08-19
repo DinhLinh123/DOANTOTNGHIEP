@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
@@ -11,6 +11,10 @@ import Input from "../../../../base/Input/Input";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import commonFunction from "../../../../base/common/commonFunction";
+import { deleteKitchens, getChickens, postChickens } from "../../../../../reudux/action/kitchensAction";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment"
 
 function Kitchen(props) {
   const [sortType, setSortType] = useState();
@@ -73,19 +77,19 @@ function Kitchen(props) {
   ];
 
   function columnBill(item) {
-    return <div>{item?.namebill}</div>;
+    return <div>{item?.name}</div>;
   }
   function columnAmount(item) {
     return <div>{item?.amount}</div>;
   }
   function columnBillDate(item) {
-    return <div>{item?.billdate}</div>;
+    return <div>{moment(item?.billdate).format("")}</div>;
   }
   function columnTotalmoney(item) {
     return <div>{item?.totalmoney}</div>;
   }
   function columnDataentrydate(item) {
-    return <div>{item?.dataentrydate}</div>;
+    return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
   }
   function columnDataentryperson(item) {
     return <div>{item?.dataentryperson}</div>;
@@ -95,7 +99,7 @@ function Kitchen(props) {
   }
   function convertDataTable(dataTable) {
     let listData;
-    listData = dataTable.map((item, idx) => {
+    listData = dataTable?.map((item, idx) => {
       return {
         [COLUMN_TABLE_INDEX_MENU.BILL]: columnBill(item),
         [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
@@ -104,7 +108,7 @@ function Kitchen(props) {
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
         [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
-        key: idx,
+        key: item?.id,
       };
     });
     return [...listData];
@@ -168,8 +172,8 @@ function Kitchen(props) {
     },
     {
       title: "Xóa",
-      onSelect: () => {
-        alert("Xóa");
+      onSelect: (item) => {
+        dispatch(deleteKitchens(item.key))
       },
     },
   ];
@@ -281,6 +285,38 @@ function Kitchen(props) {
       </>
     );
   };
+  function renderTotalMoney(data) {
+    let total = 0
+    data?.map((item) => {
+      total += item?.amount * item?.unitprice
+    })
+    return total;
+  }
+
+  const dispatch = useDispatch();
+  const { dataChickens } = useSelector(state => state.chickensReducer)
+  console.log("dataChickens", dataChickens);
+
+  useEffect(() => {
+    dispatch(getChickens())
+  }, [dispatch])
+
+  const onSubmitSave = () => {
+    setIsShowPopupAddnew(false)
+    const userName = JSON.parse(localStorage.getItem("roleType"))
+    const date = new Date();
+    const body = {
+      name: itemBill,
+      ngayHoaDon: date.toISOString(itemBillDate),
+      kieu: "Quản lý hóa đơn bếp",
+      matHang: JSON.stringify(listItems),
+      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+      createdByUserName: userName.userName,
+      createdOnDate: date
+    };
+    console.log("body", body);
+    dispatch(postChickens(body))
+  }
 
   return (
     <AdminPage title={"Quản lý bếp"} index={MENU_TAB_ADMIN.KITCHEN}>
@@ -307,7 +343,7 @@ function Kitchen(props) {
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
             total={90}
-            data={convertDataTable(data)}
+            data={convertDataTable(dataChickens)}
             loading={false}
             hasMoreOption
             option={OPTION_MORE_TABLE}
@@ -318,7 +354,7 @@ function Kitchen(props) {
               });
             }}
             //onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
-            onContextMenu={(record, rowIndex, event) => {}}
+            onContextMenu={(record, rowIndex, event) => { }}
           />
         </div>
         <Popup
@@ -332,7 +368,7 @@ function Kitchen(props) {
             />,
             <Button2
               name={"Lưu"}
-              onClick={() => setIsShowPopupAddnew(false)}
+              onClick={() => onSubmitSave()}
               background="#fa983a"
             />,
           ]}

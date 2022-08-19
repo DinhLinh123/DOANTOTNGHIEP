@@ -153,12 +153,12 @@ function Spending(props) {
     return <div>{item?.name}</div>;
   }
   function columnAmount(item) {
-   const matHang =  JSON.parse(item?.matHang)
+    const matHang = JSON.parse(item?.matHang)
     return <div>{matHang.length}</div>;
   }
   function columnBillDate(item) {
     return (
-      <div>{moment(item?.thoiGianKeToanDuyet).format("DD-MM-YYYY hh:mm")}</div>
+      <div>{moment(item?.ngayHoaDon).format("DD-MM-YYYY")}</div>
     );
   }
   function columnTotalmoney(item) {
@@ -301,19 +301,22 @@ function Spending(props) {
   function renderTotalMoney(data) {
     let total = 0
     data?.map((item) => {
-        total += item?.amount * item?.unitprice
+      total += item?.amount * item?.unitprice
     })
     return total;
-}
+  }
 
 
   const onSubmitSave = () => {
     const userName = JSON.parse(localStorage.getItem("roleType"))
+    const date = new Date();
     const body = {
       name: itemBill,
+      ngayHoaDon: date.toISOString(itemBillDate),
       matHang: JSON.stringify(listItems),
-      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))),10),
-      createdByUserName: userName.userName
+      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+      createdByUserName: userName.userName,
+      createdOnDate: date
     };
     dispatch(postSpending(body))
     setListItems([
@@ -336,10 +339,10 @@ function Spending(props) {
         <div className="spending-manager__filter">
           <div className="spending-manager__filter-search">
             <div className="spending-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"}/>
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} />
             </div>
             <div className="spending-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} />
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}/>
             </div>
           </div>
           <div className="spending-manager__filter-create-new">
@@ -368,7 +371,7 @@ function Spending(props) {
             // onClickRow={(record, rowIndex, event) => {
             //   window.open(`/admin/spending/detail/${record.key}`, "_self");
             // }}
-            onContextMenu={(record, rowIndex, event) => {}}
+            onContextMenu={(record, rowIndex, event) => { }}
           />
         </div>
         <Popup

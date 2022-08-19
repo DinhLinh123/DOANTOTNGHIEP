@@ -4,6 +4,7 @@ import {
   MENU_TAB_ADMIN,
   ONE_DAY,
   SORT_TYPE,
+  TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
@@ -26,6 +27,9 @@ import {
 } from "../../../../../reudux/action/staffAction";
 import { CarryOutOutlined, FormOutlined } from "@ant-design/icons";
 import { Switch, Tree } from "antd";
+import axios from "axios";
+import { URL_API } from "../../../../../utils/urpapi";
+import commonFunction from "../../../../base/common/commonFunction";
 
 function Staff(props) {
   const [sortType, setSortType] = useState();
@@ -45,7 +49,8 @@ function Staff(props) {
   const [staffPhone, setStaffPhone] = useState("");
   const [staffAddress, setStaffAddress] = useState("");
   const [staffNote, setStaffNote] = useState("");
-
+  const [acountName, setAcountName] = useState("")
+  const [password, setPassword] = useState("") 
   // Thêm mới chức vụ
   const [PositionCode, setPositionCode] = useState("");
   const [PositionName, setPositionName] = useState("");
@@ -502,8 +507,7 @@ function Staff(props) {
     if(staffPosition){
       dispatch(searchStaff(staffPosition));
     }
-    
-  }, [dispatch, staffPosition]);
+  }, [dispatch]);
 
   // Select chức vụ
   const { Option } = Select;
@@ -571,21 +575,33 @@ function Staff(props) {
   function handleClickAddPosition(type) {
     setIsShowPopupAddPosition(true);
   }
-  function onChangeTab() {
+  async function onChangeTab() {
     const date = new Date();
+    const user = JSON.parse(localStorage.getItem("roleType"))
     if (statusAction === "ADD") {
-      const body = {
-        maNV: 0,
-        fullName: staffName,
-        phai: staffSex,
-        ngaySinh: date.toISOString(staffDate),
-        chucVu: staffPosition,
-        soDienThoai: staffPhone,
-        diaChi: staffAddress,
-        chiChu: staffNote,
-      };
-      dispatch(postStaff(body));
-    } else {
+
+      const res = await axios.get(`http://sqldemo-001-site1.htempurl.com/checkexist/${acountName}`)
+      if(res.data.code === 500){
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
+      }else{
+          const body = {
+                  maNV: parseInt(staffCode, 10),
+                  fullName: staffName,
+                  phai: staffSex,
+                  ngaySinh: date.toISOString(staffDate),
+                  chucVu: staffPosition,
+                  soDienThoai: staffPhone,
+                  diaChi: staffAddress,
+                  chiChu: staffNote,
+                  userName: acountName,
+                  password: password,
+                  createdByUserName: user.userName,
+                  createdOnDate: date
+                };
+                dispatch(postStaff(body));
+      }
+     
+    } else if(statusAction === "UPDATE") {
       const body = {
         id: idStaff,
         maNV: staffCode,
@@ -802,6 +818,25 @@ function Staff(props) {
                 }}
                 autoFocus
               />
+              {statusAction === "UPDATE " && <> 
+              <Input
+                label={"Tài khoản"}
+                value={acountName}
+                onChange={(val) => {
+                  setAcountName(val);
+                }}
+                autoFocus
+              />
+               <Input
+                label={"Mật khẩu"}
+                type = "password"
+                value={password}
+                onChange={(val) => {
+                  setPassword(val);
+                }}
+                autoFocus
+              /></> }
+              
               <Input
                 label={"Ghi chú"}
                 value={staffNote}

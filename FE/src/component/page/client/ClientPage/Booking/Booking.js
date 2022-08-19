@@ -49,9 +49,10 @@ function Booking(props) {
       }
       dispatch(postBooking(body))
       setCustomerName("")
-      setCustomerName("")
-      setAdults("")
+      setCustomerPhone("")
+      setAdults(1)
       setChildren("")
+      setNote("")
     } else {
       commonFunction.messages(TYPE_MESSAGE.ERROR, "Số người lớn không được bằng 0. Vui lòng nhập lại!")
     }

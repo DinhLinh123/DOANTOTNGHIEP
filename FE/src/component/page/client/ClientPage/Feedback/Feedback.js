@@ -85,6 +85,7 @@ function Feedback(props) {
             <div className="feedback-container__book-right-item">
               <Input
                 defaultValue={customerName}
+                value={customerName}
                 onChange={(val) => {
                   setCustomerName(val);
                 }}
@@ -96,6 +97,7 @@ function Feedback(props) {
             <div className="feedback-container__book-right-item">
               <Input
                 defaultValue={customerEmail}
+                value={customerEmail}
                 onChange={(val) => {
                   setCustomerEmail(val);
                 }}
@@ -112,6 +114,7 @@ function Feedback(props) {
             <div className="feedback-container__book-right-item">
               <Input
                 defaultValue={customerPhone}
+                value={customerPhone}
                 onChange={(val) => {
                   setCustomerPhone(val);
                 }}
@@ -127,6 +130,7 @@ function Feedback(props) {
               <Input
                 isTextAria={true}
                 defaultValue={customercontent}
+                value={customercontent}
                 onChange={(val) => {
                   setCustomerContent(val);
                 }}

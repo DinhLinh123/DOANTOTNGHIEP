@@ -3,6 +3,8 @@ import * as actions from "../action/bookingActions"
 import {takeLatest, put} from "redux-saga/effects"
 import axios from "axios"
 import { URL_API } from "../../utils/urpapi"
+import commonFunction from "../../component/base/common/commonFunction"
+import { TYPE_MESSAGE } from "../../component/base/common/commonConstant"
 
 function * postDataBooking({payload}){
 
@@ -11,10 +13,12 @@ function * postDataBooking({payload}){
         console.log("Thêm bàn", res);
         if(res){
             yield put(actions.postBookingSuccess(res.data))
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm mới đặt bàn thành công")
+        }else{
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm mới đặt bàn thất bại")
         }
     } catch (error) {
         yield put(actions.postBookingFail(error))
-        console.log("error", error);
         
     }
 
@@ -24,13 +28,11 @@ function * getBooking(){
     
     try {
         const res = yield axios.get(`${URL_API}/DatBan`)
-        console.log("resss" ,res);
         if(res){
             yield put(actions.getBookingSuccess(res))
         }
     } catch (error) {
         yield put(actions.getBookingFail(error))
-        console.log("error", error);
         
     }
 
@@ -42,6 +44,11 @@ function * deleteDataBooking({payload}){
         const res = yield axios.delete(`${URL_API}/DatBan/${payload}`)
         if(res){
             yield put(actions.deleteBookingSuccess(payload))
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa đặt bàn thành công")
+
+        }else{
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa đặt bàn thất bại")
+
         }
     } catch (error) {
         yield put(actions.deleteBookingFail(error))        
@@ -55,6 +62,9 @@ function * updateDataBooking({payload}){
         const res = yield axios.put(`${URL_API}/DatBan/${payload.id}`, payload.body)
         if(res){
             yield put(actions.updateBookingSuccess(res.data))
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa đặt bàn thành công")
+        }else{
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa đặt bàn thất bại")
         }
     } catch (error) {
         yield put(actions.updateBookingFail(error))        
