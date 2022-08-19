@@ -95,7 +95,7 @@ namespace ManagerRestaurant.API.Controllers
                 res.Data = new DatBanModel
                 {
                     Id = item.Id,
-                    IdBan = item.IdBan.Value,
+                    IdBan = item.IdBan.Value == null ? Guid.Empty: item.IdBan.Value,
                     KhachHang = await (from s in _context.KhachHang
                                        where s.Id == item.MaKhachHang
                                        select new KhachHangModel
