@@ -8,7 +8,7 @@ namespace Infratructure.Datatables
     public class DatBan
     {
         public Guid Id { get; set; }
-        public Guid? IdBan { get; set; }
+        public Guid? IdBan { get; set; } = Guid.Empty;
         public Guid? MaKhachHang { get; set; }
         public string TenKhachHang { get; set; }
         public DateTime? GioDen { get; set; } = DateTime.MinValue;
