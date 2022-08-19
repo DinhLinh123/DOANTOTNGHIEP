@@ -4,57 +4,67 @@
     &__filter {
         display: flex;
         margin-bottom: 24px;
+        align-items: baseline;
         width: 100%;
-        &-code{
+
+        &-code {
             width: 30%;
-            margin-right: 20px;     
+            margin-right: 20px;
         }
-        &-name{
+
+        &-name {
             width: 30%;
-            margin-right: 20px;     
+            margin-right: 20px;
         }
-        &-position{
+
+        &-position {
             margin-right: 20px;
             width: 30%;
             text-align: left;
-            &-lable{
+
+            &-lable {
                 margin-bottom: 8px;
                 font-size: 16px;
                 font-weight: bold;
             }
-            &-select{
+
+            &-select {
                 width: 100%;
                 background-color: antiquewhite;
             }
         }
-        
-    
+
+
     }
-    &__button{
+
+    &__button {
         display: flex;
         justify-content: flex-end;
         padding-bottom: 20px;
+
         &-search {
             margin-right: 20px;
         }
-        &-create-new {
-        }
-        &-position{
+
+        &-create-new {}
+
+        &-position {
             margin-right: 20px;
         }
     }
 
-    &__content{
+    &__content {
         height: calc(100% - 150px);
     }
-    &__popup{
-        &-intoMoney{
-            &-lable{
+
+    &__popup {
+        &-intoMoney {
+            &-lable {
                 font-size: 16px;
                 font-weight: bold;
             }
-            
+
         }
-        
+
     }
 }

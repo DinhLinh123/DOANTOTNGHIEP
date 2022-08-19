@@ -312,10 +312,16 @@ function Kitchen(props) {
       matHang: JSON.stringify(listItems),
       tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
       createdByUserName: userName.userName,
-      createdOnDate: date
+      createdOnDate: date,
+      ghiChu: itemNote
     };
-    console.log("body", body);
     dispatch(postChickens(body))
+    setItemBill("")
+    setItemBillDate("")
+    setListItems([
+      { name: "", unit: "", amount: "", unitprice: "" },
+    ])
+    setItemNote("")
   }
 
   return (
@@ -380,6 +386,7 @@ function Kitchen(props) {
                 <Input
                   label={"Tên hóa đơn"}
                   defaultValue={itemBill}
+                  value={itemBill}
                   onChange={(val) => {
                     setItemBill(val);
                   }}
@@ -426,6 +433,7 @@ function Kitchen(props) {
               <Input
                 label={"Ghi chú"}
                 defaultValue={itemNote}
+                value={itemNote}
                 onChange={(val) => {
                   setItemNote(val);
                 }}

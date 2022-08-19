@@ -4,7 +4,10 @@
   &__filter {
     display: flex;
     margin-bottom: 24px;
+    align-items: end;
+    
     &-search {
+      align-items: baseline;
       width: 100%;
       display: flex;
       &-name {

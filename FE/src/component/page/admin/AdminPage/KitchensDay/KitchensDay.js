@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
@@ -11,8 +11,12 @@ import Input from "../../../../base/Input/Input";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteKitChensDay, getKitChensDay, postKitChensDay } from "../../../../../reudux/action/kitchensDayAction";
+import moment from "moment"
+import commonFunction from "../../../../base/common/commonFunction";
 
-function KitchensDay (props) {
+function KitchensDay(props) {
 
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
@@ -51,27 +55,27 @@ function KitchensDay (props) {
     ];
 
     function columnUseName(item) {
-        return <div>{item?.usename}</div>;
+        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
     function columnAmount(item) {
         return <div>{item?.amount}</div>;
     }
     function columnDataentrydate(item) {
-        return <div>{item?.dataentrydate}</div>;
+        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
     function columnDataentryperson(item) {
-        return <div>{item?.dataentryperson}</div>;
+        return <div>{item?.createdByUserName}</div>;
     }
 
     function convertDataTable(dataTable) {
         let listData;
-        listData = dataTable.map((item, idx) => {
+        listData = dataTable?.map((item, idx) => {
             return {
                 [COLUMN_TABLE_INDEX_MENU.USENAME]: columnUseName(item),
                 [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
                 [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
                 [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
-                key: idx,
+                key: item.id,
             };
         });
         return [...listData];
@@ -105,7 +109,7 @@ function KitchensDay (props) {
             amount: 5,
             dataentrydate: "28/07/2022",
             dataentryperson: "Linhdtt",
-        }, 
+        },
     ];
 
     const OPTION_MORE_TABLE = [
@@ -123,13 +127,47 @@ function KitchensDay (props) {
         },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: (item) => {
+                dispatch(deleteKitChensDay(item.key))
             },
         },
     ];
+
+    const { dataChickensDay } = useSelector(state => state.chickensDayReducer)
+    console.log("dataChickensDay", dataChickensDay);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getKitChensDay())
+    }, [dispatch])
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
+    }
+
+    function renderTotalMoney(data) {
+        let total = 0
+        data?.map((item) => {
+          total += item?.amount * item?.unitprice
+        })
+        return total;
+      }
+
+    const onSubmitSave = () => {
+        setIsShowPopupAddnew(false)
+        const userName = JSON.parse(localStorage.getItem("roleType"))
+        const date = new Date();
+        const body = {
+            ngayHoaDon: date.toISOString(itemUseDate),
+            kieu: "Yêu cầu nguyên liệu",
+            matHang: JSON.stringify(listItems),
+            tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+            createdByUserName: userName.userName,
+            createdOnDate: date
+        };
+        setListItems([
+            { name: "", unit: "", amount: "", unitprice: "" },
+          ])
+        dispatch(postKitChensDay(body))
     }
 
     //thêm nhiều mặt hàng
@@ -173,7 +211,7 @@ function KitchensDay (props) {
     }
 
     const Card = (props) => {
-        const { listItems, ChangeNameItems,ChangeUnitItems, ChangeAmountItems, ChangeUnitpriceItems, deleteItems } = props;
+        const { listItems, ChangeNameItems, ChangeUnitItems, ChangeAmountItems, ChangeUnitpriceItems, deleteItems } = props;
         return (
             <>
                 {listItems?.map((item, index) => {
@@ -224,7 +262,7 @@ function KitchensDay (props) {
     };
 
     return (
-        <AdminPage 
+        <AdminPage
             title={"Quản lý yêu cầu nguyên liệu/Thực phẩm"}
             index={MENU_TAB_ADMIN.KITCHEN_DAY}
         >
@@ -246,7 +284,7 @@ function KitchensDay (props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataChickensDay)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -257,7 +295,7 @@ function KitchensDay (props) {
                             });
                         }}
                         //onClickRow={(record, rowIndex, event)=>{window.open(`/admin/spending/detail/${record.key}`, "_self")}}
-                        onContextMenu={(record, rowIndex, event)=>{}}
+                        onContextMenu={(record, rowIndex, event) => { }}
                     />
                 </div>
                 <Popup
@@ -271,7 +309,7 @@ function KitchensDay (props) {
                         />,
                         <Button2
                             name={"Lưu"}
-                            onClick={() => setIsShowPopupAddnew(false)}
+                            onClick={() => onSubmitSave() }
                             background="#fa983a"
                         />,
                     ]}
@@ -280,14 +318,14 @@ function KitchensDay (props) {
                     body={
                         <div className="kitchensDay-manager__popup">
                             <div className="kitchensDay-manager__popup-bill">
-                            <DatePicker
-                                defaultValue={itemUseDate}
-                                onChange={(val) => {
-                                    setItemUseDate(val);
-                                }}
-                                placeholder="dd/MM/yyyy"
-                                label={"Ngày sử dụng"}
-                            />
+                                <DatePicker
+                                    defaultValue={itemUseDate}
+                                    onChange={(val) => {
+                                        setItemUseDate(val);
+                                    }}
+                                    placeholder="dd/MM/yyyy"
+                                    label={"Ngày sử dụng"}
+                                />
                             </div>
                             <div className="kitchensDay-manager__popup-buttonAdd">
                                 <Button2

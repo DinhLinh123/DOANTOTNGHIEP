@@ -225,13 +225,13 @@ function ManagerFeedback(props) {
                         />
                     </div> */}
                     
-                    <div className="managerfeedback-manager__filter-search">
+                    {/* <div className="managerfeedback-manager__filter-search">
                         <Button2
                             name={"Tìm kiếm"}
                             leftIcon={<SearchOutlined />}
                             onClick={() => handleClickAddPosition()}
                         />
-                    </div> 
+                    </div>  */}
                 </div>
                 
                 <div className="managerfeedback-manager__content">
