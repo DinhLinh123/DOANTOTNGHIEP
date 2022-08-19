@@ -164,12 +164,12 @@ function Kitchen(props) {
         window.open(`/admin/kitchen/detail/${item.key}`, "_self");
       },
     },
-    {
-      title: "Gửi phê duyệt",
-      onSelect: () => {
-        alert("Sửa");
-      },
-    },
+    // {
+    //   title: "Gửi phê duyệt",
+    //   onSelect: () => {
+    //     alert("Sửa");
+    //   },
+    // },
     {
       title: "Xóa",
       onSelect: (item) => {

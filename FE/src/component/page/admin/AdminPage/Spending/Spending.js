@@ -135,12 +135,12 @@ function Spending(props) {
         window.open(`/admin/spending/detail/${item.key}`, "_self");
       },
     },
-    {
-      title: "Gửi phê duyệt",
-      onSelect: () => {
-        alert("Sửa");
-      },
-    },
+    // {
+    //   title: "Gửi phê duyệt",
+    //   onSelect: () => {
+    //     alert("Sửa");
+    //   },
+    // },
     {
       title: "Xóa",
       onSelect: (item) => {

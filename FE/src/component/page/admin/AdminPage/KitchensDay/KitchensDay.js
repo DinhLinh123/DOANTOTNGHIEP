@@ -165,8 +165,8 @@ function KitchensDay(props) {
             createdOnDate: date
         };
         setListItems([
-            { name: "", unit: "", amount: "", unitprice: "" },
-          ])
+      { name: "", unit: "", amount: "", unitprice: "" },
+    ])
         dispatch(postKitChensDay(body))
     }
 
