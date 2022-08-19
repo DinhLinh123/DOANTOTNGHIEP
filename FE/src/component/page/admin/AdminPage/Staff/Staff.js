@@ -50,7 +50,7 @@ function Staff(props) {
   const [staffAddress, setStaffAddress] = useState("");
   const [staffNote, setStaffNote] = useState("");
   const [acountName, setAcountName] = useState("")
-  const [password, setPassword] = useState("") 
+  const [password, setPassword] = useState("")
   // Thêm mới chức vụ
   const [PositionCode, setPositionCode] = useState("");
   const [PositionName, setPositionName] = useState("");
@@ -220,22 +220,22 @@ function Staff(props) {
     {
       title: "Menu",
       key: "0-0",
-      icon: <CarryOutOutlined/>,
+      icon: <CarryOutOutlined />,
       children: [
         {
           title: "Thêm menu",
           key: "0-0-0",
-          icon: <CarryOutOutlined/>,
+          icon: <CarryOutOutlined />,
         },
         {
           title: "Sửa menu",
           key: "0-0-1",
-          icon: <CarryOutOutlined/>,
+          icon: <CarryOutOutlined />,
         },
         {
           title: "Xóa menu",
           key: "0-0-2",
-          icon: <CarryOutOutlined/>,
+          icon: <CarryOutOutlined />,
         },
       ],
     },
@@ -262,238 +262,238 @@ function Staff(props) {
       ],
     },
     {
-        title: "Doanh thu",
-        key: "0-2",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Xem doanh thu",
-            key: "0-2-0",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Bếp",
-        key: "0-3",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm yêu cầu nguyên liệu",
-            key: "0-3-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa yêu cầu nguyên liệu",
-            key: "0-3-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa yêu cầu nguyên liệu",
-            key: "0-3-2",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Thêm Hóa đơn bếp",
-            key: "0-3-3",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa Hóa đơn bếp",
-            key: "0-3-4",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa Hóa đơn bếp",
-            key: "0-3-5",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Bar",
-        key: "0-4",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm mặt hàng",
-            key: "0-4-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa mặt hàng",
-            key: "0-4-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa mặt hàng",
-            key: "0-4-2",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Nhân viên",
-        key: "0-5",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm nhân viên",
-            key: "0-5-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa nhân viên",
-            key: "0-5-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa nhân viên",
-            key: "0-5-2",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Đặt bàn",
-        key: "0-6",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm đặt bàn",
-            key: "0-6-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa đặt bàn",
-            key: "0-6-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa đặt bàn",
-            key: "0-6-2",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xếp bàn",
-            key: "0-6-3",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Khu vực",
-        key: "0-7",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm Khu vực",
-            key: "0-7-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa Khu vực",
-            key: "0-7-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa Khu vực",
-            key: "0-7-2",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Thêm bàn",
-            key: "0-7-3",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa bàn",
-            key: "0-7-4",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa bàn",
-            key: "0-7-5",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Danh mục",
-        key: "0-8",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thêm danh mục menu",
-            key: "0-8-0",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa danh mục menu",
-            key: "0-8-1",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa danh mục menu",
-            key: "0-8-2",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Thêm danh mục quầy bar",
-            key: "0-8-3",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa danh mục quầy bar",
-            key: "0-8-4",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa danh mục quầy bar",
-            key: "0-8-5",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Thêm danh mục quầy chức vụ",
-            key: "0-8-6",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Sửa danh mục quầy chức vụ",
-            key: "0-8-7",
-            icon: <CarryOutOutlined />,
-          },
-          {
-            title: "Xóa danh mục quầy chức vụ",
-            key: "0-8-8",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Thanh toán ",
-        key: "0-9",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Thanh toán hóa đơn",
-            key: "0-9-0",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
-      {
-        title: "Order ",
-        key: "0-10",
-        icon: <CarryOutOutlined />,
-        children: [
-          {
-            title: "Order",
-            key: "0-10-0",
-            icon: <CarryOutOutlined />,
-          },
-        ],
-      },
+      title: "Doanh thu",
+      key: "0-2",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Xem doanh thu",
+          key: "0-2-0",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Bếp",
+      key: "0-3",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm yêu cầu nguyên liệu",
+          key: "0-3-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa yêu cầu nguyên liệu",
+          key: "0-3-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa yêu cầu nguyên liệu",
+          key: "0-3-2",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Thêm Hóa đơn bếp",
+          key: "0-3-3",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa Hóa đơn bếp",
+          key: "0-3-4",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa Hóa đơn bếp",
+          key: "0-3-5",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Bar",
+      key: "0-4",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm mặt hàng",
+          key: "0-4-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa mặt hàng",
+          key: "0-4-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa mặt hàng",
+          key: "0-4-2",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Nhân viên",
+      key: "0-5",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm nhân viên",
+          key: "0-5-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa nhân viên",
+          key: "0-5-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa nhân viên",
+          key: "0-5-2",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Đặt bàn",
+      key: "0-6",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm đặt bàn",
+          key: "0-6-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa đặt bàn",
+          key: "0-6-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa đặt bàn",
+          key: "0-6-2",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xếp bàn",
+          key: "0-6-3",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Khu vực",
+      key: "0-7",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm Khu vực",
+          key: "0-7-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa Khu vực",
+          key: "0-7-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa Khu vực",
+          key: "0-7-2",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Thêm bàn",
+          key: "0-7-3",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa bàn",
+          key: "0-7-4",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa bàn",
+          key: "0-7-5",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Danh mục",
+      key: "0-8",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thêm danh mục menu",
+          key: "0-8-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa danh mục menu",
+          key: "0-8-1",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa danh mục menu",
+          key: "0-8-2",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Thêm danh mục quầy bar",
+          key: "0-8-3",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa danh mục quầy bar",
+          key: "0-8-4",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa danh mục quầy bar",
+          key: "0-8-5",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Thêm danh mục quầy chức vụ",
+          key: "0-8-6",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Sửa danh mục quầy chức vụ",
+          key: "0-8-7",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa danh mục quầy chức vụ",
+          key: "0-8-8",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Thanh toán ",
+      key: "0-9",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Thanh toán hóa đơn",
+          key: "0-9-0",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
+    {
+      title: "Order ",
+      key: "0-10",
+      icon: <CarryOutOutlined />,
+      children: [
+        {
+          title: "Order",
+          key: "0-10-0",
+          icon: <CarryOutOutlined />,
+        },
+      ],
+    },
   ];
 
   const { dataStaff, loading } = useSelector((state) => state.staffReducer);
@@ -504,7 +504,7 @@ function Staff(props) {
   }, [dispatch, loading]);
 
   useEffect(() => {
-    if(staffPosition){
+    if (staffPosition) {
       dispatch(searchStaff(staffPosition));
     }
   }, [dispatch]);
@@ -581,27 +581,27 @@ function Staff(props) {
     if (statusAction === "ADD") {
 
       const res = await axios.get(`http://sqldemo-001-site1.htempurl.com/checkexist/${acountName}`)
-      if(res.data.code === 500){
+      if (res.data.code === 500) {
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
-      }else{
-          const body = {
-                  maNV: parseInt(staffCode, 10),
-                  fullName: staffName,
-                  phai: staffSex,
-                  ngaySinh: date.toISOString(staffDate),
-                  chucVu: staffPosition,
-                  soDienThoai: staffPhone,
-                  diaChi: staffAddress,
-                  chiChu: staffNote,
-                  userName: acountName,
-                  password: password,
-                  createdByUserName: user.userName,
-                  createdOnDate: date
-                };
-                dispatch(postStaff(body));
+      } else {
+        const body = {
+          maNV: parseInt(staffCode, 10),
+          fullName: staffName,
+          phai: staffSex,
+          ngaySinh: date.toISOString(staffDate),
+          chucVu: staffPosition,
+          soDienThoai: staffPhone,
+          diaChi: staffAddress,
+          chiChu: staffNote,
+          userName: acountName,
+          password: password,
+          createdByUserName: user.userName,
+          createdOnDate: date
+        };
+        dispatch(postStaff(body));
       }
-     
-    } else if(statusAction === "UPDATE") {
+
+    } else if (statusAction === "UPDATE") {
       const body = {
         id: idStaff,
         maNV: staffCode,
@@ -675,7 +675,7 @@ function Staff(props) {
     console.log("text", text);
     setTimeout(() => {
       dispatch(searchStaff(text || staffPosition))
-    },500)
+    }, 500)
   }
   return (
     <AdminPage title={"Quản lý nhân viên"} index={MENU_TAB_ADMIN.STAFF}>
@@ -685,8 +685,8 @@ function Staff(props) {
             <InputField
               label={"Mã nhân viên/Tên nhân viên"}
               placeholder={"Mã nhân viên/Tên nhân viên"}
-              onChange = {(event) => searchUser(event)}
-              //width={"20%"}
+              onChange={(event) => searchUser(event)}
+            //width={"20%"}
             />
           </div>
           {/* <div className="staff-manager__filter-name">
@@ -818,25 +818,26 @@ function Staff(props) {
                 }}
                 autoFocus
               />
-              {statusAction === "UPDATE " && <> 
-              <Input
-                label={"Tài khoản"}
-                value={acountName}
-                onChange={(val) => {
-                  setAcountName(val);
-                }}
-                autoFocus
-              />
-               <Input
-                label={"Mật khẩu"}
-                type = "password"
-                value={password}
-                onChange={(val) => {
-                  setPassword(val);
-                }}
-                autoFocus
-              /></> }
-              
+              {statusAction}
+              {statusAction === "UPDATE" ? null : <>
+                <Input
+                  label={"Tài khoản"}
+                  value={acountName}
+                  onChange={(val) => {
+                    setAcountName(val);
+                  }}
+                  autoFocus
+                />
+                <Input
+                  label={"Mật khẩu"}
+                  type="password"
+                  value={password}
+                  onChange={(val) => {
+                    setPassword(val);
+                  }}
+                  autoFocus
+                /></>}
+
               <Input
                 label={"Ghi chú"}
                 value={staffNote}
