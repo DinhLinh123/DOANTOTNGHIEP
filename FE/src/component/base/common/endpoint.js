@@ -24,6 +24,13 @@ const API_MENU = {
     GET_BY_FILTER: PART + "/DoAn/filter?_filter=",
 };
 
+const API_PROMOTION = {
+    GET_ALL: PART + "/UuDai",
+    CREATE_NEW: PART + "/UuDai",
+    GET_BY_ID: PART + "/UuDai/",
+    GET_BY_FILTER: PART + "/UuDai/filter?_filter=",
+};
+
 const API_TYPE_FOOD = {
     GET_ALL: PART + "/TheLoaiMonAn",
     CREATE_NEW: PART + "/TheLoaiMonAn",
@@ -45,5 +52,6 @@ export {
     API_AREA,
     API_MENU,
     API_TYPE_FOOD,
-    API_CATEGORY_MENU
+    API_CATEGORY_MENU,
+    API_PROMOTION
 };
