@@ -22,6 +22,8 @@ import baseApi from "../../../../../api/baseApi";
 import { API_MENU, API_PROMOTION } from "../../../../base/common/endpoint";
 import commonFunction from "../../../../base/common/commonFunction";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import RadioCheck from "../../../../base/Radio/Radio";
+import Dropdown from "../../../../base/Dropdown/Dropdown";
 
 function Promotion(props) {
   const [sortType, setSortType] = useState();
@@ -31,12 +33,15 @@ function Promotion(props) {
     key: -1,
   });
   const [promotionName, setPromotionName] = useState("");
-  const [categoryName, setCategoryName] = useState("");
-  const [categoryNote, setCategoryNote] = useState("");
-  const [dataTable, setDataTable] = useState([]);
+  const [promotionDescribe, setPromotionDescribe] = useState("");
+  const [promotionType, setPromotionType] = useState(0);
+  const [promotionStatus, setPromotionStatus] = useState(0);
+  const [promotionNote, setPromotionNote] = useState("");
+  const [promotionUnit, setPromotionUnit] = useState(0);
   const [dataTotal, setDataTotal] = useState(0);
   const [textSearch, setTextSearch] = useState("");
   const [moneyPromotion, setMoneyPromotion] = useState(0);
+  const [idFood, setIdFood] = useState('');
   const [images, setImages] = useState([]);
 
   const dispatch = useDispatch();
@@ -104,6 +109,16 @@ function Promotion(props) {
       date: "28/07/2022",
     },
   ];
+  const dataMenu = [
+    {
+      value: "1",
+      label: "buffet 199k",
+    },
+    {
+      value: "2",
+      label: "buffet 299k",
+    },
+  ];
 
   const OPTION_MORE_TABLE = [
     {
@@ -169,7 +184,7 @@ function Promotion(props) {
     };
     baseApi.get(
       (res) => {
-        setDataTable(res.data || []);
+        //setDataTable(res.data || []);
         setDataTotal(res?.data?.length);
         dispatch(changeLoadingApp(false));
       },
@@ -186,16 +201,16 @@ function Promotion(props) {
   function callApiAddPromotion() {
     dispatch(changeLoadingApp(true));
     let body = {
-        "name": promotionName,
-        "anh": images,
-        "noiDung": "",
-        "giaTri": 0,
-        "theLoai": "string",
-        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "createdByUserName": "string",
-        "createdOnDate": "2022-08-17T13:45:27.692Z",
-        "lastModifiedByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "lastModifiedByUserName": "string"
+      name: promotionName,
+      anh: images,
+      noiDung: "",
+      giaTri: 0,
+      theLoai: "string",
+      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      createdByUserName: "string",
+      createdOnDate: "2022-08-17T13:45:27.692Z",
+      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      lastModifiedByUserName: "string",
     };
     baseApi.post(
       (res) => {
@@ -308,10 +323,10 @@ function Promotion(props) {
                 }}
               />
               <Input
-                label={"Tên nhóm mặt hàng"}
-                defaultValue={categoryName}
+                label={"Mô tả ưu đãi"}
+                defaultValue={promotionDescribe}
                 onChange={(val) => {
-                  setCategoryName(val);
+                  setPromotionDescribe(val);
                 }}
               />
               <div className="menu-manager__popup-content-buffet-image">
@@ -326,6 +341,42 @@ function Promotion(props) {
                   }}
                 />
               </div>
+              <RadioCheck
+                listOption={[
+                  { label: "Trừ tiền trên tổng hóa đơn", value: 0 },
+                  { label: "trừ tiền theo món ăn", value: 1 },
+                ]}
+                title={"Loại ưu đãi"}
+                valueDefault={parseInt(promotionType)}
+                onChange={(val) => {
+                  setPromotionType(val);
+                }}
+              />
+              {promotionType === 1 && (
+                <div className="">
+                  <Dropdown
+                    listOption={dataMenu}
+                    defaultValue={dataMenu[0]}
+                    placeholder={"Tên món ăn"}
+                    title={"Tên món ăn"}
+                    style={{ width: "100%" }}
+                    onChange={(val)=>{setIdFood(val)}}
+                    required
+                  />
+                </div>
+              )}
+
+              <RadioCheck
+                listOption={[
+                  { label: "%", value: 0 },
+                  { label: "vnđ", value: 1 },
+                ]}
+                title={"Đơn vị tính"}
+                valueDefault={parseInt(promotionUnit)}
+                onChange={(val) => {
+                  setPromotionUnit(val);
+                }}
+              />
               <Input
                 label={"Gía ưu đãi"}
                 defaultValue={moneyPromotion}
@@ -335,9 +386,20 @@ function Promotion(props) {
               />
               <Input
                 label={"Ghi chú"}
-                defaultValue={categoryNote}
+                defaultValue={promotionNote}
                 onChange={(val) => {
-                  setCategoryNote(val);
+                  setPromotionNote(val);
+                }}
+              />
+              <RadioCheck
+                listOption={[
+                  { label: "Hiệu lực", value: 0 },
+                  { label: "Hết hiệu lực", value: 1 },
+                ]}
+                title={"Trạng thái"}
+                valueDefault={parseInt(promotionStatus)}
+                onChange={(val) => {
+                  setPromotionStatus(val);
                 }}
               />
             </div>
