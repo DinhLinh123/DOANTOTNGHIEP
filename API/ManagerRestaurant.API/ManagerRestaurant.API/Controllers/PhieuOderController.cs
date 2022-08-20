@@ -238,13 +238,66 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<Responsive> GetByIdBan(PhieuOderCreateModel item)
+        [HttpPost("findbyidban/{idban}")]
+        public async Task<Responsive> GetByIdBan(Guid idban)
         {
             try
             {
-                 
-                return new Responsive(200, "Thêm mới thành công", null);
+                //Lấy thông tin khách hàng theo bàn
+                var phieu = await _context.PhieuOder.Where(x => x.IdBan == idban && x.TrangThai == 0).FirstAsync();
+                if (phieu != null)
+                {
+                    var res = new Responsive();
+                    res.Data = CoverPhieuOder(phieu);
+                    res.Mess = "Get success";
+                    return res;
+                }
+                else
+                {
+                    var datban = await _context.DatBan.Where(x => x.IdBan == idban && x.TrangThai == 1).FirstAsync();
+                    if (datban != null)
+                    {
+                        //conver
+                        var phieuOder = new PhieuOder();
+                        phieuOder.Id = Guid.NewGuid();
+                        phieuOder.IdBan = idban;
+                        phieuOder.IdThuNgan = Guid.Empty;
+                        phieuOder.IdKhachHang = datban.MaKhachHang.Value;
+                        phieuOder.Vocher = "";
+                        phieuOder.TongTien = 0;
+                        phieuOder.ThucThu = 0;
+                        phieuOder.SoTienGiam = 0;
+                        phieuOder.TrangThai = 0;
+                        //phieuOder.CreatedByUserId = item.CreatedByUserId;
+                        //phieuOder.CreatedByUserName = item.CreatedByUserName;
+                        phieuOder.CreatedOnDate = DateTime.Now;
+
+                        _context.PhieuOder.Add(phieuOder);
+                        await _context.SaveChangesAsync();
+                        return new Responsive(200, "Lấy thông tin thành công", phieuOder);
+                    }
+                    else
+                    {
+                        //conver
+                        var phieuOder = new PhieuOder();
+                        phieuOder.Id = Guid.NewGuid();
+                        phieuOder.IdBan = idban;
+                        phieuOder.IdThuNgan = Guid.Empty;
+                        phieuOder.IdKhachHang = Guid.Empty;
+                        phieuOder.Vocher = "";
+                        phieuOder.TongTien = 0;
+                        phieuOder.ThucThu = 0;
+                        phieuOder.SoTienGiam = 0;
+                        phieuOder.TrangThai = 0;
+                        //phieuOder.CreatedByUserId = item.CreatedByUserId;
+                        //phieuOder.CreatedByUserName = item.CreatedByUserName;
+                        phieuOder.CreatedOnDate = DateTime.Now;
+                        _context.PhieuOder.Add(phieuOder);
+                        await _context.SaveChangesAsync();
+                        return new Responsive(200, "Thêm mới thành công", phieuOder);
+                    }
+                }
+
             }
             catch (Exception ex)
             {

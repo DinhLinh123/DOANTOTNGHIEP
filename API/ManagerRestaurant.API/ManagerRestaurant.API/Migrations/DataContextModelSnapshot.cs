@@ -184,8 +184,8 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime>("ThoiGian")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TrangThai")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TrangThai")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -365,6 +365,12 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("GhiChu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HinhAnh")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Kieu")
                         .HasColumnType("nvarchar(max)");
 
@@ -374,11 +380,14 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MatHangs")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TongTien")
-                        .HasColumnType("real");
+                    b.Property<DateTime>("NgayHoaDon")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -631,8 +640,14 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime?>("CreatedOnDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DonViTinh")
+                        .HasColumnType("int");
+
                     b.Property<float>("GiaTri")
                         .HasColumnType("real");
+
+                    b.Property<Guid?>("IdDoAn")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
@@ -640,13 +655,16 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("LoaiUuDai")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NoiDung")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TheLoai")
+                    b.Property<int>("TrangThai")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

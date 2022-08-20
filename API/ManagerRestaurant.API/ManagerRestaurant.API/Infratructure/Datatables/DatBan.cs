@@ -16,7 +16,7 @@ namespace Infratructure.Datatables
         public int SoNguoiLon { get; set; } = 0;
         public int SoTreEm { get; set; } = 0;
         public string GhiChu { get; set; }
-        public string TrangThai { get; set; }
+        public int TrangThai { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

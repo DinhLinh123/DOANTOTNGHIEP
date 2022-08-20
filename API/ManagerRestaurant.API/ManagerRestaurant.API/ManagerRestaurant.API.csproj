@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="IntegrationEvents\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

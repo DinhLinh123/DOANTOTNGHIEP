@@ -179,12 +179,28 @@ namespace ManagerRestaurant.API.Controllers
                     datBan.ThoiGian = item.ThoiGian;
                     datBan.SoNguoiLon = item.SoNguoiLon;
                     datBan.SoTreEm = item.SoTreEm;
-
-                    datBan.IdBan=item.IdBan;
                     datBan.GhiChu = item.GhiChu;
-                    datBan.TrangThai = item.TrangThai;
                     datBan.LastModifiedByUserId = item.LastModifiedByUserId;
                     datBan.LastModifiedByUserName = item.LastModifiedByUserName;
+
+                    if (item.IdBan != null && item.IdBan!=Guid.Empty)
+                    {
+                        var ban = await _context.Ban.FindAsync(item.IdBan);
+                        if (ban==null)
+                        {
+                            res.Mess = "Id bàn không hợp lệ";
+                            res.Data = null;
+                            return res;
+                        }
+                        else
+                        {
+                            ban.TrangThai = 1;
+                            datBan.IdBan = item.IdBan;
+                            datBan.TrangThai = item.TrangThai;
+
+                        }
+                        
+                    }
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
@@ -252,7 +268,7 @@ namespace ManagerRestaurant.API.Controllers
                 datBan.IdBan = item.IdBan;
                 datBan.SoTreEm = item.SoTreEm;
                 datBan.GhiChu = item.GhiChu;
-                datBan.TrangThai = "Chờ Xếp";
+                datBan.TrangThai = 0;
                 datBan.CreatedByUserId = idKH;
                 datBan.CreatedByUserName = item.TenKhachHang;
                 datBan.CreatedOnDate = DateTime.Now;
