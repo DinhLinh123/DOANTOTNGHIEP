@@ -3,6 +3,7 @@ import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
   SORT_TYPE,
+  TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
@@ -16,7 +17,7 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import { changeAccount } from "../../../../../reudux/action/accountAction";
 import commonFunction from "../../../../base/common/commonFunction";
-import { API_TABLE } from "../../../../base/common/endpoint";
+import { API_AREA, API_ORDER, API_TABLE } from "../../../../base/common/endpoint";
 import baseApi from "../../../../../api/baseApi";
 import ud1 from "../../../../../image/ud1.jpg";
 import ud2 from "../../../../../image/ud2.jpg";
@@ -24,8 +25,12 @@ import ud3 from "../../../../../image/ud3.jpg";
 import ud4 from "../../../../../image/ud4.jpg";
 import ud5 from "../../../../../image/ud5.jpg";
 import ud6 from "../../../../../image/ud6.png";
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import RadioCheck from "../../../../base/Radio/Radio";
 
 function Spending(props) {
+  const dispatch = useDispatch();
   const [listTable, setListTable] = useState([
     {
       id: "6879a96c-aff7-4a34-13bc-08da7223d6dd",
@@ -136,28 +141,7 @@ function Spending(props) {
     },
   ]);
 
-  const [listArea, setListArea] = useState([
-    {
-      id: "1",
-      name: "Tầng 1",
-      htmlObject: "string",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-08-02T15:12:10.380Z",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-    },
-    {
-      id: "2",
-      name: "Tầng 2",
-      htmlObject: "string",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-08-02T15:12:10.380Z",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-    },
-  ]);
+  const [listArea, setListArea] = useState([]);
 
   const [listOffer, setListOffer] = useState([
     {
@@ -205,27 +189,88 @@ function Spending(props) {
   ]);
 
   const [orderSelected, setoOrderSelected] = useState([]);
-  const [tableName, setTableName] = useState("");
+  const [table, setTable] = useState();
+  const [order, setOrder] = useState();
   const [displayLine2ChooseOrder, setDisplayLine2ChooseOrder] = useState({
     show: false,
     index: "",
   });
   const [showPopupOffer, setShowPopupOffer] = useState(false);
   const [showPopupOfferDetail, setShowPopupOfferDetail] = useState(false);
+  const [showPopupPayMethod, setShowPopupPayMethod] = useState(false);
   const [offerDetail, setOfferDetail] = useState({});
   const [offerChoose, setOfferChoose] = useState({});
+  const [tableID, setTableID] = useState('');
+  const [moneyCustomer, setMoneyCustomer] = useState();
+  const [payMethod, setPayMethod] = useState(0);
 
-  let tableID = "";
+  //lấy chi tiết bàn
   useEffect(() => {
+    dispatch(changeLoadingApp(true))
+    if (tableID) {
+      baseApi.get(
+        (res) => {
+          setTable(res?.data);
+          let param = {
+            "idBan": tableID
+          }
+          baseApi.get(
+            (res) => {
+              setOrder(res?.data);
+              setoOrderSelected(res?.data?.doAns)
+              dispatch(changeLoadingApp(false))
+
+            },
+            () => { dispatch(changeLoadingApp(false))},
+            null,
+            API_ORDER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
+          );
+          dispatch(changeLoadingApp(false))
+        },
+        () => { dispatch(changeLoadingApp(false))},
+        null,
+        API_TABLE.GET_BY_ID + tableID
+      );
+    }
+  }, [tableID]);
+
+  function callApiGetOrder() {
     baseApi.get(
       (res) => {
-        setTableName(res?.name);
+        setTable(res?.data);
+        dispatch(changeLoadingApp(false))
       },
-      () => {},
+      () => { dispatch(changeLoadingApp(false))},
       null,
       API_TABLE.GET_BY_ID + tableID
     );
-  }, [tableID]);
+  }
+
+  //lấy danh sách khu vực
+  useEffect(() => {
+    dispatch(changeLoadingApp(true))
+    baseApi.get(
+      (res) => {
+        dispatch(changeLoadingApp(false))
+        setListArea(res);
+      },
+      () => { dispatch(changeLoadingApp(false)) },
+      null,
+      API_AREA.GET_ALL
+    );
+
+    //lấy danh sách bàn
+    baseApi.get(
+      (res) => {
+        dispatch(changeLoadingApp(false))
+        setListTable(res?.data);
+      },
+      () => { dispatch(changeLoadingApp(false)) },
+      null,
+      API_TABLE.GET_ALL
+    );
+  }, []);
+
 
   function handleChooseFood(item) {
     let _list = [...orderSelected];
@@ -266,6 +311,45 @@ function Spending(props) {
     return total;
   }
 
+  function renderMoneyReturn(moneyCustomer) {
+    if (moneyCustomer) {
+      let _return = parseInt(moneyCustomer) - 20000;
+      return _return
+    }
+    return 0
+  }
+
+  //thực hiện thanh toán
+  function callApiPay() {
+    dispatch(changeLoadingApp(true))
+    let body= 
+
+    baseApi.put(
+      (res) => {
+        let _table = table;
+        _table.trangThai = 0;
+        baseApi.put(
+          () => { },
+          () => { },
+          null,
+          API_ORDER.UPDATE_BY_ID + order?.id,
+          null,
+          _table
+        )
+        setListArea(res);
+        setShowPopupPayMethod(false)
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công")
+        dispatch(changeLoadingApp(false))
+      },
+      () => { 
+        dispatch(changeLoadingApp(false)) 
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thanh toán thất bại")
+      },
+      null,
+      API_AREA.GET_ALL
+    );
+  }
+
   return (
     <AdminPage title={"Thanh toán hóa đơn"} index={MENU_TAB_ADMIN.PAY}>
       <div className="pay-manager">
@@ -285,15 +369,16 @@ function Spending(props) {
                               _item.status == 0
                                 ? "#dcdde1"
                                 : _item.status == 1
-                                ? "#c23616"
-                                : "#fbc531",
+                                  ? "#c23616"
+                                  : "#fbc531",
                             color:
                               _item.status == 0
                                 ? "#000"
                                 : _item.status == 1
-                                ? "#fff"
-                                : "#fff",
+                                  ? "#fff"
+                                  : "#fff",
                           }}
+                          onClick={() => {setTableID(_item?.id)}}
                         >
                           {_item?.name}
                         </div>
@@ -312,7 +397,7 @@ function Spending(props) {
                 Món đã chọn{`(${orderSelected?.length})`}
               </div>
               <div className="pay-manager__bill-dish-top-table">
-                Bàn: {tableName}
+                Bàn: {table?.name}
               </div>
             </div>
             <div className="pay-manager__bill-dish-content">
@@ -455,7 +540,7 @@ function Spending(props) {
                   className="pay-manager__bill-dish-footer-offer-choose"
                   onClick={() => setShowPopupOffer(true)}
                 >
-                  {JSON.stringify(offerChoose) !== '{}'? offerChoose.name : "Chọn voucher"}
+                  {JSON.stringify(offerChoose) !== '{}' ? offerChoose.name : "Chọn voucher"}
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-money-offer">
@@ -475,7 +560,12 @@ function Spending(props) {
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-confirm">
-                <Button2 name={"Thanh toán"} />
+                <div className="pay-manager__bill-dish-footer-confirm-edit">
+                  <Button2 name={"Sửa"} background={'#fdcb6e'} />
+                </div>
+                <div className="pay-manager__bill-dish-footer-confirm-pay">
+                  <Button2 name={"Thanh toán"} background={'#0984e3'} onClick={() => setShowPopupPayMethod(true)} />
+                </div>
               </div>
             </div>
           </div>
@@ -500,20 +590,29 @@ function Spending(props) {
           <div className="pay-offer-container__list">
             {listOffer?.map((item) => {
               return (
-                <div
-                  className="pay-offer-container__list-item"
-                  onClick={() => {
-                    setShowPopupOffer(false)
-                    setOfferChoose(item)
-                  }}
-                >
-                  <div className="pay-offer-container__list-item-img">
+                <div className="pay-offer-container__list-item">
+                  <div className="pay-offer-container__list-item-img"
+                    onClick={() => {
+                      setShowPopupOffer(false)
+                      setOfferChoose(item)
+                    }}
+                  >
                     <img src={item?.anh} />
                   </div>
-                  <div className="pay-offer-container__list-item-title">
+                  <div className="pay-offer-container__list-item-title"
+                    onClick={() => {
+                      setShowPopupOffer(false)
+                      setOfferChoose(item)
+                    }}
+                  >
                     {item?.name}
                   </div>
-                  <div className="pay-offer-container__list-item-more">
+                  <div className="pay-offer-container__list-item-more"
+                    onClick={() => {
+                      setShowPopupOffer(false)
+                      setOfferChoose(item)
+                    }}
+                  >
                     {commonFunction.smartText(35, item?.noiDung)}
                   </div>
                   <div
@@ -550,6 +649,75 @@ function Spending(props) {
             </div>
             <div className="popup-detail-body__title">{offerDetail.name}</div>
             <div className="popup-detail-body__more">{offerDetail.noiDung}</div>
+          </div>
+        }
+      />
+
+      <Popup
+        title={"Phương thức thanh toán"}
+        show={showPopupPayMethod}
+        onClickClose={() => setShowPopupPayMethod(false)}
+        button={[
+          <Button2
+            name={"Đóng"}
+            onClick={() => setShowPopupPayMethod(false)}
+          />,
+          <Button2
+            name={"Thanh toán"}
+            onClick={() => callApiPay()}
+            background={'#0984e3'}
+          />,
+        ]}
+        width={600}
+        body={
+          <div className="popup-pay">
+            <div className="popup-pay__request">
+                  <div className="popup-pay__request-label">
+                    Tiền phải thanh toán
+                  </div>
+                  <div className="popup-pay__request-label">
+                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}
+                  </div>
+                </div>
+            <div className="popup-pay__method">
+              <RadioCheck
+                title={"Chọn phương thức thanh toán"}
+                listOption={[{ label: "Tiền mặt", value: 0 }, { label: "Chuyển khoản/Quẹt thẻ", value: 1 }]}
+                onChange={(val) => { setPayMethod(val) }}
+                valueDefault={payMethod}
+              />
+            </div>
+            {
+              payMethod === 0 &&
+              <>
+                <div className="popup-pay__customer">
+                  <div className="popup-pay__customer-input">
+                    <InputField
+                      label={"Tiền khách đưa"}
+                      type={'number'}
+                      value={moneyCustomer}
+                      onChange={(val) => setMoneyCustomer(val)}
+                    />
+                  </div><div className="popup-pay__customer-radio">
+                    <RadioCheck
+                      listOption={[{ label: "200.000", value: 200000 }, { label: "500.000", value: 500000 }, { label: "1.000.000", value: 1000000 }, { label: "1.500.000", value: 1500000 }, { label: "2.000.000", value: 2000000 }]}
+                      onChange={(val) => { setMoneyCustomer(val) }}
+                      valueDefault={moneyCustomer}
+                    />
+                  </div>
+                </div>
+                <div className="popup-pay__return">
+                  <div className="popup-pay__return-label">
+                    Tiền trả lại khách
+                  </div>
+                  <div className="popup-pay__return-label">
+                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}
+                  </div>
+                </div>
+              </>
+            }
+
+
           </div>
         }
       />

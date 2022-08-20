@@ -47,11 +47,21 @@ const API_CATEGORY_MENU = {
     GET_BY_FILTER: PART + "/TheLoaiMonAn/filter?_filter=",
 };
 
+const API_ORDER = {
+    GET_ALL: PART + "/PhieuOder",
+    CREATE_NEW: PART + "/PhieuOder",
+    GET_BY_ID: PART + "/PhieuOder/",
+    UPDATE_BY_ID: PART + "/PhieuOder/",
+    DELETE_BY_ID: PART + "/PhieuOder/",
+    GET_BY_FILTER: PART + "/PhieuOder/filter?_filter=",
+};
+
 export {
     API_TABLE,
     API_AREA,
     API_MENU,
     API_TYPE_FOOD,
     API_CATEGORY_MENU,
-    API_PROMOTION
+    API_PROMOTION,
+    API_ORDER
 };

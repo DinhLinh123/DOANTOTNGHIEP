@@ -15,14 +15,14 @@ import { Tooltip } from "antd";
 import noDataimg from "../../../../../image/no-data2.png"
 import { useParams } from "react-router-dom";
 import baseApi from "../../../../../api/baseApi";
-import { API_MENU, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
+import { API_MENU, API_ORDER, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 function Order(props) {
 
   const [index, setIndex] = useState(1)
   const [orderSelected, setoOrderSelected] = useState([])
-  const [tableName, setTableName] = useState('')
+  const [table, setTable] = useState('')
   const [displayLine2ChooseOrder, setDisplayLine2ChooseOrder] = useState({
     show: false,
     index: ""
@@ -36,8 +36,8 @@ function Order(props) {
 
   useEffect(() => {
     baseApi.get(
-      (res) => { 
-        setTableName(res?.data?.name) 
+      (res) => {
+        setTable(res?.data)
       },
       () => { },
       null,
@@ -53,26 +53,6 @@ function Order(props) {
     {
       img: logo1,
     }
-  ]
-
-  //Datafake danh mục món
-  let listCategory = [
-    {
-      title: 'Buffet',
-      index: 1
-    },
-    {
-      title: 'Món riêng',
-      index: 2
-    },
-    {
-      title: 'Đồ uống',
-      index: 3
-    },
-    {
-      title: 'Khác',
-      index: 4
-    },
   ]
 
 
@@ -122,35 +102,25 @@ function Order(props) {
       "maTheLoai": index
     }
     let endpoint = encodeURIComponent(JSON.stringify(param))
-    if(index?.length >0)
-    {
+    if (index?.length > 0) {
       baseApi.get(
-      (res) => {
-        setListMenu(res.data)
-        dispatch(changeLoadingApp(false))
-      },
-      () => {
-        dispatch(changeLoadingApp(false))
-      },
-      null,
-      API_MENU.GET_BY_FILTER + endpoint,
-      null,
-      {}
-    )
+        (res) => {
+          dispatch(changeLoadingApp(false))
+          setListMenu(res.data)
+        },
+        () => {
+          dispatch(changeLoadingApp(false))
+        },
+        null,
+        API_MENU.GET_BY_FILTER + endpoint,
+        null,
+        {}
+      )
     }
+    dispatch(changeLoadingApp(false))
   }
 
-  
-
-  const onSubmitOrderConfirm = () => {
-    console.log("vào đây", orderSelected);
-    const data = {idPhieuOder: "", phieuOder : {
-      idBan : "",
-      
-    }}
-  }
-
-  useEffect(() => { callGetTypeFood()  }, [])
+  useEffect(() => { callGetTypeFood() }, [])
   useEffect(() => { callGetAllFood() }, [textSearch])
 
   function callGetTypeFood() {
@@ -167,7 +137,36 @@ function Order(props) {
       {}
     )
   }
-  
+
+  function callOrderFood() {
+    let body = {
+      "idBan": tableID,
+      "tongTien": renderTotalCount(),
+      "doAns": orderSelected
+    }
+    baseApi.post(
+      (res) => {
+        let _table = table;
+        _table.trangThai = 1;
+        baseApi.put(
+          () => { },
+          () => { },
+          null,
+          API_TABLE.UPDATE_BY_ID + tableID,
+          null,
+          _table
+        )
+        window.open(`/admin/tables`, "_self")
+      },
+      () => {
+      },
+      null,
+      API_ORDER.CREATE_NEW,
+      null,
+      body
+    )
+  }
+
   return (
     <div className="order-page-container">
       <div className="order-page-container__food-list">
@@ -183,29 +182,29 @@ function Order(props) {
           </div>
           <div className="order-page-container__food-list__top__search">
             <div className="order-page-container__food-list__top__search__textbox">
-              <InputField placeholder={"Nhập tên món ăn..."} onChange={(val)=>{
+              <InputField placeholder={"Nhập tên món ăn..."} onChange={(val) => {
                 setTimeout(() => {
                   setTextSearch(val)
                 }, 200);
-              }}/>
+              }} />
             </div>
           </div>
         </div>
         <div className="order-page-container__food-list__list">
-          {listMenu && listMenu?.length > 0 ?  listMenu?.map((item) => {
-              return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
-                <div className="order-page-container__food-list__list-item-img">
-                  <img src={item.linkAnh} alt = "" />
-                </div>
-                <div className="order-page-container__food-list__list-item-title">
-                  {commonFunction.smartText(40, item?.name)}
-                </div>
-                <div className="order-page-container__food-list__list-item-money">
-                  {commonFunction.numberWithCommas(parseInt(item?.donGia))}đ
-                </div>
-              </div>)
-            }) : null}
-      
+          {listMenu && listMenu?.length > 0 ? listMenu?.map((item) => {
+            return (<div className="order-page-container__food-list__list-item" onClick={(e) => { e.stopPropagation(); handleChooseFood(item) }}>
+              <div className="order-page-container__food-list__list-item-img">
+                <img src={item.linkAnh} alt="" />
+              </div>
+              <div className="order-page-container__food-list__list-item-title">
+                {commonFunction.smartText(40, item?.name)}
+              </div>
+              <div className="order-page-container__food-list__list-item-money">
+                {commonFunction.numberWithCommas(parseInt(item?.donGia))}đ
+              </div>
+            </div>)
+          }) : null}
+
         </div>
         <div className="order-page-container__food-list__choose">
           {
@@ -228,7 +227,7 @@ function Order(props) {
             Món đã chọn{`(${orderSelected?.length})`}
           </div>
           <div className="order-page-container__selected-dish-top-table">
-            Bàn: {tableName}
+            Bàn: {table?.name}
           </div>
         </div>
         <div className="order-page-container__selected-dish-content" ref={renderChoose}>
@@ -288,7 +287,7 @@ function Order(props) {
             </div>
           </div>
           <div className="order-page-container__selected-dish-footer-confirm">
-            <Button2 name={"Xác nhận"} onClick={() => onSubmitOrderConfirm()} />
+            <Button2 name={"Xác nhận"} onClick={() => callOrderFood()} />
           </div>
         </div>
       </div>

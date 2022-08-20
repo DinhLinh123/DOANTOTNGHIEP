@@ -38,7 +38,7 @@
     width: calc(100% - 300px);
 
     &-dish {
-      width: 400px;
+      width: 600px;
       margin-left: auto;
       background-color: #fff;
 
@@ -286,6 +286,14 @@
         }
 
         &-confirm {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &-edit{
+            margin-right: 16px;
+          }
+
           .button-common {
             button {
               width: 70%;
@@ -336,6 +344,40 @@
       &:hover {
         color: #01a3a4;
       }
+    }
+  }
+}
+
+.popup-pay{
+  &__customer{
+    &-radio{
+      margin-top: 12px;
+    }
+  }
+
+  &__request{
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-label{
+      font-weight: bold;
+      font-size: 16px;
+      color: #eb4d4b;
+    }
+  }
+
+  &__return{
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-label{
+      font-weight: bold;
+      font-size: 16px;
+      color: #eb4d4b;
     }
   }
 }

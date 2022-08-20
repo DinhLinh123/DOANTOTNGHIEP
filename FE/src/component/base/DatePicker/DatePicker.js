@@ -37,7 +37,7 @@ function DatePic(props) {
                     if (min) return date < min
                     if (max) return date > max
                     return false
-                }} value={value} onChange={(val) => { onChange(new Date(new Date(val.toISOString()).setHours(0, 0, 0, 0))) }} defaultValue={defaultValue ? moment(new Date(defaultValue)) : undefined} format={"DD-MM-yyyy"} />
+                }} value={value} dropdownAlign onChange={(val) => { onChange(new Date(new Date(val.toISOString()).setHours(0, 0, 0, 0))) }} defaultValue={defaultValue ? moment(new Date(defaultValue)) : undefined} format={"DD-MM-yyyy"} />
             </ConfigProvider>
             <div className='container-date-picker__mess'>
 
