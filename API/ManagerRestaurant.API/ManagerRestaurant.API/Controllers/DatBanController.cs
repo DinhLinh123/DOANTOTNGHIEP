@@ -139,26 +139,48 @@ namespace ManagerRestaurant.API.Controllers
                 if (datBan != null)
                 {
                     datBan.Id = item.Id;
-                    datBan.IdBan = item.IdBan != null ? item.IdBan : Guid.Empty;
-                    var kh = _context.KhachHang.Find(item.MaKhachHang);
-                    if (kh == null)
+                    datBan.IdBan = item.IdBan;
+                    Guid idkh = Guid.Empty;
+                    if (item.IdBan!= Guid.Empty)
                     {
-                        var khachhang = new KhachHang();
-                        khachhang.Id = item.MaKhachHang;
-                        khachhang.Name = item.TenKhachHang;
-                        khachhang.SoDienThoai = item.SoDienThoai;
-                        khachhang.CreatedByUserId = Guid.Empty;
-                        khachhang.CreatedByUserName = "";
-                        khachhang.CreatedOnDate = DateTime.Now;
-                        //create new khach hang
-                        _context.KhachHang.Add(khachhang);
+                        var ban = _context.Ban.Find(item.IdBan);
+                        if (ban == null)
+                        {
+                            res.Code = 204;
+                            res.Mess = "IdBan not exist";
+                            return res;
+                        }
                     }
-                    datBan.MaKhachHang = item.MaKhachHang;
+                    if (item.MaKhachHang!= Guid.Empty)
+                    {
+                        var kh = _context.KhachHang.Find(item.MaKhachHang);
+                        if (kh == null)
+                        {
+                            var khachhang = new KhachHang();
+                            khachhang.Id = Guid.NewGuid();
+                            khachhang.Name = item.TenKhachHang;
+                            khachhang.SoDienThoai = item.SoDienThoai;
+                            khachhang.CreatedByUserId = Guid.Empty;
+                            khachhang.CreatedByUserName = "";
+                            khachhang.CreatedOnDate = DateTime.Now;
+                            //create new khach hang
+                            idkh = khachhang.Id;
+                            _context.KhachHang.Add(khachhang);
+                        }
+                        else
+                        {
+                            idkh = kh.Id;
+                        }
+                    }
+                    
+                    datBan.MaKhachHang = idkh;
                     datBan.TenKhachHang = item.TenKhachHang;
                     datBan.GioDen = item.GioDen;
                     datBan.ThoiGian = item.ThoiGian;
                     datBan.SoNguoiLon = item.SoNguoiLon;
                     datBan.SoTreEm = item.SoTreEm;
+
+                    datBan.IdBan=item.IdBan;
                     datBan.GhiChu = item.GhiChu;
                     datBan.TrangThai = item.TrangThai;
                     datBan.LastModifiedByUserId = item.LastModifiedByUserId;
@@ -188,11 +210,22 @@ namespace ManagerRestaurant.API.Controllers
         {
             try
             {
+                Responsive res = new Responsive();
                 if (item.SoDienThoai == null)
                 {
                     return new Responsive(500, "Dữ liệu không hợp lệ", null);
                 }
                 var idKH = Guid.Empty;
+                if (item.IdBan != Guid.Empty)
+                {
+                    var ban = _context.Ban.Find(item.IdBan);
+                    if (ban == null)
+                    {
+                        res.Code = 204;
+                        res.Mess = "IdBan not exist";
+                        return res;
+                    }
+                }
                 var data = (from s in _context.KhachHang where s.SoDienThoai == item.SoDienThoai select s).FirstOrDefault();
                 if (data == null)
                 {
@@ -211,11 +244,12 @@ namespace ManagerRestaurant.API.Controllers
 
                 DatBan datBan = new DatBan();
                 datBan.Id = Guid.NewGuid();
-                datBan.MaKhachHang = idKH != Guid.Empty ? idKH : item.MaKhachHang;
+                datBan.MaKhachHang = (idKH == Guid.Empty) ? data.Id: idKH;
                 datBan.TenKhachHang = item.TenKhachHang;
                 datBan.GioDen = item.GioDen;
                 datBan.ThoiGian = item.ThoiGian;
                 datBan.SoNguoiLon = item.SoNguoiLon;
+                datBan.IdBan = item.IdBan;
                 datBan.SoTreEm = item.SoTreEm;
                 datBan.GhiChu = item.GhiChu;
                 datBan.TrangThai = "Chờ Xếp";
