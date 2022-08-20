@@ -56,7 +56,7 @@ namespace ManagerRestaurant.API.Controllers
                         CreatedByUserName = item.CreatedByUserName,
                         CreatedOnDate = item.CreatedOnDate,
                         LastModifiedByUserId = item.LastModifiedByUserId,
-                        LastModifiedByUserName = item.LastModifiedByUserName,
+                        LastModifiedByUserName = item.LastModifiedByUserName
 
                     });
                 }
@@ -95,7 +95,7 @@ namespace ManagerRestaurant.API.Controllers
                 res.Data = new DatBanModel
                 {
                     Id = item.Id,
-                    IdBan = item.IdBan.Value == null ? Guid.Empty: item.IdBan.Value,
+                    IdBan = item.IdBan == null ? Guid.Empty : item.IdBan.Value,
                     KhachHang = await (from s in _context.KhachHang
                                        where s.Id == item.MaKhachHang
                                        select new KhachHangModel
@@ -139,17 +139,17 @@ namespace ManagerRestaurant.API.Controllers
                 if (datBan != null)
                 {
                     datBan.Id = item.Id;
-                    datBan.IdBan = item.IdBan;
+                    datBan.IdBan = item.IdBan != null ? item.IdBan : Guid.Empty;
                     var kh = _context.KhachHang.Find(item.MaKhachHang);
                     if (kh == null)
-                    { 
+                    {
                         var khachhang = new KhachHang();
                         khachhang.Id = item.MaKhachHang;
                         khachhang.Name = item.TenKhachHang;
                         khachhang.SoDienThoai = item.SoDienThoai;
                         khachhang.CreatedByUserId = Guid.Empty;
                         khachhang.CreatedByUserName = "";
-                        khachhang.CreatedOnDate = DateTime.Now; 
+                        khachhang.CreatedOnDate = DateTime.Now;
                         //create new khach hang
                         _context.KhachHang.Add(khachhang);
                     }
@@ -158,7 +158,7 @@ namespace ManagerRestaurant.API.Controllers
                     datBan.GioDen = item.GioDen;
                     datBan.ThoiGian = item.ThoiGian;
                     datBan.SoNguoiLon = item.SoNguoiLon;
-                    datBan.SoTreEm = item.SoTreEm; 
+                    datBan.SoTreEm = item.SoTreEm;
                     datBan.GhiChu = item.GhiChu;
                     datBan.TrangThai = item.TrangThai;
                     datBan.LastModifiedByUserId = item.LastModifiedByUserId;
@@ -182,7 +182,7 @@ namespace ManagerRestaurant.API.Controllers
                 return res;
             }
         }
-         
+
         [HttpPost]
         public async Task<Responsive> PostDatBan(DatBanCreateModel item)
         {
@@ -195,7 +195,7 @@ namespace ManagerRestaurant.API.Controllers
                 var idKH = Guid.Empty;
                 var data = (from s in _context.KhachHang where s.SoDienThoai == item.SoDienThoai select s).FirstOrDefault();
                 if (data == null)
-                { 
+                {
                     var khachhang = new KhachHang();
                     khachhang.Id = Guid.NewGuid();
                     khachhang.Name = item.TenKhachHang;
@@ -251,7 +251,7 @@ namespace ManagerRestaurant.API.Controllers
 
             return NoContent();
         }
-         
+
 
         // POST: api/DoAn
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

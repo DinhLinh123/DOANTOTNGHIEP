@@ -25,64 +25,143 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/PhieuNhapVatTus
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PhieuNhapVatTu>>> GetPhieuNhapVatTu()
+        public async Task<Responsive> GetPhieuNhapVatTu()
         {
-            return await _context.PhieuNhapVatTu.ToListAsync();
+            Responsive res = new Responsive();
+            try
+            {
+                List<PhieuNhapVatTuModel> data = new List<PhieuNhapVatTuModel>();
+                var d = await _context.PhieuNhapVatTu.ToListAsync();
+                foreach (var item in d)
+                {
+                    data.Add(CovenerPhieu(item));
+                }
+                res.Mess = "Get sussces";
+                res.Data = data;
+                res.Code = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Mess = ex.InnerException.Message;
+                res.Data = null;
+                res.Code = 500;
+                return res;
+            }
         }
 
         // GET: api/PhieuNhapVatTus/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PhieuNhapVatTu>> GetPhieuNhapVatTu(Guid id)
+        public async Task<Responsive> GetPhieuNhapVatTu(Guid id)
         {
-            var phieuNhapVatTu = await _context.PhieuNhapVatTu.FindAsync(id);
-
-            if (phieuNhapVatTu == null)
+            var res = new Responsive();
+            var item = await _context.PhieuNhapVatTu.FindAsync(id);
+            if (item == null)
             {
-                return NotFound();
-            }
 
-            return phieuNhapVatTu;
+                res.Code = 204;
+                res.Mess = "not found";
+                return res;
+            }
+            else
+            {
+                res.Code = 200;
+                res.Mess = "get success";
+                res.Data = CovenerPhieu(item);
+            }
+            return res;
+        }
+
+        PhieuNhapVatTuModel CovenerPhieu(PhieuNhapVatTu item)
+        {
+            PhieuNhapVatTuModel res = new PhieuNhapVatTuModel();
+            res.Id = item.Id;
+            res.Name = item.Name;
+            res.Kieu = item.Kieu;
+            res.NgayHoaDon = item.NgayHoaDon;
+            res.MatHangs = item.MatHangs;
+            res.HinhAnh = item.HinhAnh;
+            res.GhiChu = item.GhiChu;
+            res.CreatedByUserId = item.CreatedByUserId;
+            res.CreatedByUserName = item.CreatedByUserName;
+            res.CreatedOnDate = item.CreatedOnDate;
+            res.LastModifiedByUserId = item.LastModifiedByUserId;
+            res.LastModifiedByUserName = item.LastModifiedByUserName;
+            return res;
         }
 
         // PUT: api/PhieuNhapVatTus/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPhieuNhapVatTu(Guid id, PhieuNhapVatTu phieuNhapVatTu)
+        public async Task<Responsive> PutPhieuNhapVatTu(Guid id, PhieuNhapVatTuUpdateModel item)
         {
-            if (id != phieuNhapVatTu.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(phieuNhapVatTu).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PhieuNhapVatTuExists(id))
+                var phieunhapvt = _context.PhieuNhapVatTu.Find(id);
+                if (phieunhapvt != null)
                 {
-                    return NotFound();
+                    phieunhapvt.Name = item.Name;
+                    phieunhapvt.Kieu = item.Kieu;
+                    phieunhapvt.NgayHoaDon = item.NgayHoaDon;
+                    phieunhapvt.MatHangs = item.MatHangs;
+                    phieunhapvt.HinhAnh = item.HinhAnh;
+                    phieunhapvt.GhiChu = item.GhiChu;
+                    phieunhapvt.LastModifiedByUserId = item.LastModifiedByUserId;
+                    phieunhapvt.LastModifiedByUserName = item.LastModifiedByUserName;
+
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/PhieuNhapVatTus
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PhieuNhapVatTu>> PostPhieuNhapVatTu(PhieuNhapVatTu phieuNhapVatTu)
+        public async Task<Responsive> PostPhieuNhapVatTu(PhieuNhapVatTuCreateModel item)
         {
-            _context.PhieuNhapVatTu.Add(phieuNhapVatTu);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var phieunhapvt = new PhieuNhapVatTu();
+                phieunhapvt.Id = Guid.NewGuid();
+                phieunhapvt.Name = item.Name;
+                phieunhapvt.Kieu = item.Kieu;
+                phieunhapvt.NgayHoaDon = item.NgayHoaDon;
+                phieunhapvt.MatHangs = item.MatHangs;
+                phieunhapvt.HinhAnh = item.HinhAnh;
+                phieunhapvt.GhiChu = item.GhiChu;
+                phieunhapvt.CreatedByUserId = item.CreatedByUserId;
+                phieunhapvt.CreatedByUserName = item.CreatedByUserName;
+                phieunhapvt.CreatedOnDate = item.CreatedOnDate;
+                _context.PhieuNhapVatTu.Add(phieunhapvt);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPhieuNhapVatTu", new { id = phieuNhapVatTu.Id }, phieuNhapVatTu);
+                return new Responsive(200, "Thêm mới thành công", phieunhapvt);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
         }
 
         // DELETE: api/PhieuNhapVatTus/5
@@ -121,6 +200,10 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
+                if (filter.NgayHoaDon != null)
+                {
+                    query = query.Where((x) => x.CreatedOnDate.Equals(filter.NgayHoaDon));
+                }
 
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
@@ -151,6 +234,7 @@ namespace ManagerRestaurant.API.Controllers
 
         class PhieuNhapVatTuFilter : BaseFilter
         {
+            public DateTime? NgayHoaDon { get; set; }
         }
     }
 }

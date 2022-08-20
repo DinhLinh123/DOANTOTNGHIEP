@@ -154,7 +154,7 @@ namespace ManagerRestaurant.API.Controllers
             {
 
                 var filter = JsonConvert.DeserializeObject<ChiTieuTrongNgayFilter>(_filter);
-                var query = from s in _context.DoAn select s;
+                var query = from s in _context.ChiTieuTrongNgay select s;
                 if (filter.Id != Guid.Empty)
                 {
                     query = query.Where((x) => x.Id == filter.Id);
@@ -163,7 +163,10 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
-
+                if (filter.NgayHoaDon != null)
+                {
+                    query = query.Where((x) => x.NgayHoaDon.Equals(filter.NgayHoaDon));
+                }
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
                     query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
@@ -192,7 +195,7 @@ namespace ManagerRestaurant.API.Controllers
         }
         class ChiTieuTrongNgayFilter : BaseFilter
         {
-
+            public DateTime? NgayHoaDon { get; set; }
         }
     }
    

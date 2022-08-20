@@ -238,6 +238,20 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<Responsive> GetByIdBan(PhieuOderCreateModel item)
+        {
+            try
+            {
+                 
+                return new Responsive(200, "Thêm mới thành công", null);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
+        }
+
         // DELETE: api/PhieuOder/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePhieuOder(Guid id)
@@ -300,6 +314,7 @@ namespace ManagerRestaurant.API.Controllers
 
         class PhieuOderFilter : BaseFilter
         {
+            public Guid? IdBan { get; set; }
         }
     }
 }

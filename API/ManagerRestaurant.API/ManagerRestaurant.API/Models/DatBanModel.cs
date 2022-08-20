@@ -37,7 +37,7 @@ namespace ManagerRestaurant.API.Models
     public class DatBanUpdateModel
     {
         public Guid Id { get; set; }
-        public Guid IdBan { get; set; }
+        public Guid? IdBan { get; set; }
         public Guid MaKhachHang { get; set; }
         public string TenKhachHang { get; set; }
         public string SoDienThoai { get; set; }

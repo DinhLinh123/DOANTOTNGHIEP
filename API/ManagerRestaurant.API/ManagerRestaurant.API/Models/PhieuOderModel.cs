@@ -26,10 +26,10 @@ namespace ManagerRestaurant.API.Models
     public class PhieuOderCreateModel
     {
         public Guid Id { get; set; }
-        public Guid IdBan { get; set; }
-        
+        public Guid IdBan { get; set; } 
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
+        public List<DoAnModel> MonAns { get; set; }
         public float TongTien { get; set; }
         public float ThucThu { get; set; }
         public float SoTienGiam{ get; set; }

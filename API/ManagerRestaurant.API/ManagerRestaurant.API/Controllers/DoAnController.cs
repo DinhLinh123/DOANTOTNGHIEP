@@ -34,25 +34,7 @@ namespace ManagerRestaurant.API.Controllers
                 var d = await _context.DoAn.ToListAsync();
                 foreach (var item in d)
                 {
-                    data.Add(new DoAnModel
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        MaTheLoai = item.MaTheLoai,
-                        TenTheLoai = _context.TheLoaiDoAn.Find(item.MaTheLoai).Name,
-                        LinkAnh = item.LinkAnh,
-                        GhiChu = item.GhiChu,
-                        DanhSachMonAn = item.DanhSachMonAn,
-                        DonViTinh = item.DonViTinh,
-                        DonGia = item.DonGia,
-                        TrangThai = item.TrangThai,
-                        CreatedByUserId = item.CreatedByUserId,
-                        CreatedByUserName = item.CreatedByUserName,
-                        CreatedOnDate = item.CreatedOnDate,
-                        LastModifiedByUserId = item.LastModifiedByUserId,
-                        LastModifiedByUserName = item.LastModifiedByUserName,
-
-                    });
+                    data.Add(Convert(item));
                 }
                 res.Mess = "Get sussces";
                 res.Data = data;
@@ -85,29 +67,31 @@ namespace ManagerRestaurant.API.Controllers
             {
                 res.Code = 200;
                 res.Mess = "get success";
-                res.Data = new DoAnModel
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    MaTheLoai = item.MaTheLoai,
-                    TenTheLoai = _context.TheLoaiDoAn.Find(item.MaTheLoai).Name,
-                    LinkAnh = item.LinkAnh,
-                    GhiChu = item.GhiChu,
-                    DanhSachMonAn = item.DanhSachMonAn,
-                    DonViTinh = item.DonViTinh,
-                    DonGia = item.DonGia,
-                    TrangThai = item.TrangThai,
-                    CreatedByUserId = item.CreatedByUserId,
-                    CreatedByUserName = item.CreatedByUserName,
-                    CreatedOnDate = item.CreatedOnDate,
-                    LastModifiedByUserId = item.LastModifiedByUserId,
-                    LastModifiedByUserName = item.LastModifiedByUserName,
-
-                };
+                res.Data = Convert(item);
             }
             return res;
         }
 
+        DoAnModel Convert(DoAn item)
+        {
+            DoAnModel res = new DoAnModel();
+            res.Id = item.Id;
+            res.Name = item.Name;
+            res.MaTheLoai = item.MaTheLoai;
+            res.TenTheLoai = _context.TheLoaiDoAn.Find(item.MaTheLoai).Name;
+            res.LinkAnh = item.LinkAnh;
+            res.GhiChu = item.GhiChu;
+            res.DanhSachMonAn = item.DanhSachMonAn;
+            res.DonViTinh = item.DonViTinh;
+            res.DonGia = item.DonGia;
+            res.TrangThai = item.TrangThai;
+            res.CreatedByUserId = item.CreatedByUserId;
+            res.CreatedByUserName = item.CreatedByUserName;
+            res.CreatedOnDate = item.CreatedOnDate;
+            res.LastModifiedByUserId = item.LastModifiedByUserId;
+            res.LastModifiedByUserName = item.LastModifiedByUserName;
+            return res;
+        }
         // PUT: api/DoAn/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -226,8 +210,13 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     mes = "Get success";
                 }
+                var resData = new List<DoAnModel>();
+                foreach (var item in data)
+                {
+                    resData.Add(Convert(item));
+                }
 
-                var res = new Responsive(200, mes, data);
+                var res = new Responsive(200, mes, resData);
                 return res;
             }
             catch (Exception err)
