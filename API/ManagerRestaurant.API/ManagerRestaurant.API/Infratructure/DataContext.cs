@@ -28,5 +28,6 @@ namespace Infratructure
         public DbSet<UuDai> UuDai { get; set; }
         public DbSet<Quyen> Quyen { get; set; }
         public DbSet<TheLoaiDoAn> TheLoaiDoAn { get; set; }
+        public DbSet<ManagerRestaurant.API.Infratructure.Datatables.Bar> Bar { get; set; }
     }
 }

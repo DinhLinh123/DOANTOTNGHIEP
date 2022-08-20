@@ -47,36 +47,82 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/UuDai/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUuDai(Guid id, UuDai uuDai)
+        public async Task<Responsive> PutUuDai(Guid id, UuDaiUpdateModule item)
         {
-            if (id != uuDai.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(uuDai).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var uudai = _context.UuDai.Find(id);
+                if (uudai != null)
+                {
+                    uudai.Id = Guid.NewGuid();
+                    uudai.Name = item.Name;
+                    uudai.Anh = item.Anh;
+                    uudai.NoiDung = item.NoiDung;
+                    uudai.GiaTri = item.GiaTri;
+                    uudai.LoaiUuDai = item.LoaiUuDai;
+                    uudai.DonViTinh = item.DonViTinh;
+                    uudai.TrangThai = item.TrangThai;
+                    uudai.IdDoAn = item.IdDoAn;
+                    uudai.LastModifiedByUserId = item.LastModifiedByUserId;
+                    uudai.LastModifiedByUserName = item.LastModifiedByUserName;
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    return res;
+                }
+                else
+                {
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                return NoContent();
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
             }
-
-            return NoContent();
         }
 
         // POST: api/UuDai
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UuDai>> PostUuDai(UuDai uuDai)
+        public async Task<Responsive> PostUuDai(UuDaiCreateModule item)
         {
-            _context.UuDai.Add(uuDai);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var uudai = new UuDai();
+                uudai.Id = Guid.NewGuid();
+                uudai.Name = item.Name;
+                uudai.Anh = item.Anh;
+                uudai.NoiDung = item.NoiDung;
+                uudai.GiaTri = item.GiaTri;
+                uudai.LoaiUuDai = item.LoaiUuDai;
+                uudai.DonViTinh = item.DonViTinh;
+                uudai.TrangThai = item.TrangThai;
+                uudai.IdDoAn = item.IdDoAn;
+                uudai.CreatedByUserId = item.CreatedByUserId;
+                uudai.CreatedByUserName = item.CreatedByUserName;
+                uudai.CreatedOnDate = item.CreatedOnDate;
 
-            return CreatedAtAction("GetUuDai", new { id = uuDai.Id }, uuDai);
+                _context.UuDai.Add(uudai);
+                await _context.SaveChangesAsync();
+
+                return new Responsive(200, "Thêm mới thành công", uudai);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
+
         }
 
         // DELETE: api/UuDai/5
@@ -112,6 +158,10 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch));
                 }
+                if (filter.TrangThai != null)
+                {
+                    query = query.Where(x=> x.TrangThai == filter.TrangThai);
+                }
 
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
@@ -142,6 +192,7 @@ namespace ManagerRestaurant.API.Controllers
 
         class UuDaiFilter : BaseFilter
         {
+            public int? TrangThai { get; set; }
         }
     }
 }
