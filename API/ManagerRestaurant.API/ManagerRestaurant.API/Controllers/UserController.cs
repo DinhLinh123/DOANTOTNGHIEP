@@ -268,7 +268,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.FullName.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.FullName.Contains(filter.TextSearch) || x.MaNV.Equals(filter.TextSearch) || x.UserName.Contains(filter.TextSearch) || x.ChucVu.Contains(filter.TextSearch));
                 }
                 if (filter.SoDienThoai != null && filter.SoDienThoai.Length > 0)
                 {
@@ -278,7 +278,11 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.ChucVu.Contains(filter.ChucVu));
                 }
-                if (filter.PageNumber > 0 && filter.PageSize > 0)
+                if (filter.MaNhanVien != null)
+                {
+                    query = query.Where((x) => x.MaNV.Equals(filter.MaNhanVien));
+                }
+                    if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
                     query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
                 }
@@ -308,6 +312,7 @@ namespace ManagerRestaurant.API.Controllers
         {
             public string SoDienThoai { get; set; }
             public string ChucVu { get; set; }
+            public int? MaNhanVien { get; set; }
         }
     }
 }

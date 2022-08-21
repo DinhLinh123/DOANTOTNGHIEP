@@ -9,6 +9,7 @@ namespace Infratructure.Datatables
     public class PhieuOder
     {
         public Guid Id { get; set; }
+        [ForeignKey("Ban")]
         public Guid IdBan { get; set; }
         public Ban Ban { get; set; } 
         [ForeignKey("User")]

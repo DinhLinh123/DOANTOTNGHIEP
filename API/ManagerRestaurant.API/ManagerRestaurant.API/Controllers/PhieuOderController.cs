@@ -196,8 +196,8 @@ namespace ManagerRestaurant.API.Controllers
                                 Id = Guid.NewGuid(),
                                 IdPhieuOder = phieuOder.Id,
                                 PhieuOder = phieuOder,
-                                IdDoAn = i.IdDoAn,
-                                DoAn = _context.DoAn.Find(i.IdDoAn),
+                                IdDoAn = i.Id,
+                                DoAn = _context.DoAn.Find(i.Id),
                                 SoLuong = i.SoLuong,
                                 IdBan = phieuOder.IdBan,
                                 CreatedByUserId = i.CreatedByUserId,
@@ -260,8 +260,8 @@ namespace ManagerRestaurant.API.Controllers
                             Id = Guid.NewGuid(),
                             IdPhieuOder = phieuOder.Id,
                             PhieuOder = phieuOder,
-                            IdDoAn = i.IdDoAn,
-                            DoAn = _context.DoAn.Find(i.IdDoAn),
+                            IdDoAn = i.Id,
+                            DoAn = _context.DoAn.Find(i.Id),
                             SoLuong = i.SoLuong,
                             IdBan = phieuOder.IdBan,
                             CreatedByUserId = i.CreatedByUserId,
@@ -300,48 +300,10 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 else
                 {
-                    var datban = await _context.DatBan.Where(x => x.IdBan == idban && x.TrangThai == 1).FirstAsync();
-                    if (datban != null)
-                    {
-                        //conver
-                        var phieuOder = new PhieuOder();
-                        phieuOder.Id = Guid.NewGuid();
-                        phieuOder.IdBan = idban;
-                        phieuOder.IdThuNgan = Guid.Empty;
-                        phieuOder.IdKhachHang = datban.MaKhachHang.Value;
-                        phieuOder.Vocher = "";
-                        phieuOder.TongTien = 0;
-                        phieuOder.ThucThu = 0;
-                        phieuOder.SoTienGiam = 0;
-                        phieuOder.TrangThai = 0;
-                        //phieuOder.CreatedByUserId = item.CreatedByUserId;
-                        //phieuOder.CreatedByUserName = item.CreatedByUserName;
-                        phieuOder.CreatedOnDate = DateTime.Now;
-
-                        _context.PhieuOder.Add(phieuOder);
-                        await _context.SaveChangesAsync();
-                        return new Responsive(200, "Lấy thông tin thành công", phieuOder);
-                    }
-                    else
-                    {
-                        //conver
-                        var phieuOder = new PhieuOder();
-                        phieuOder.Id = Guid.NewGuid();
-                        phieuOder.IdBan = idban;
-                        phieuOder.IdThuNgan = Guid.Empty;
-                        phieuOder.IdKhachHang = Guid.Empty;
-                        phieuOder.Vocher = "";
-                        phieuOder.TongTien = 0;
-                        phieuOder.ThucThu = 0;
-                        phieuOder.SoTienGiam = 0;
-                        phieuOder.TrangThai = 0;
-                        //phieuOder.CreatedByUserId = item.CreatedByUserId;
-                        //phieuOder.CreatedByUserName = item.CreatedByUserName;
-                        phieuOder.CreatedOnDate = DateTime.Now;
-                        _context.PhieuOder.Add(phieuOder);
-                        await _context.SaveChangesAsync();
-                        return new Responsive(200, "Thêm mới thành công", phieuOder);
-                    }
+                    var res = new Responsive();
+                    res.Data = null;
+                    res.Mess = "not exist";
+                    return res;
                 }
 
             }
