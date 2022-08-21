@@ -22,11 +22,40 @@ namespace ManagerRestaurant.API.Controllers
         }
 
         // GET: api/ChiTieuTrongNgay
-        [HttpGet]
-        public async Task<Responsive> GetChiTieuTrongNgay()
+        [HttpGet("thuchi/{filter}")]
+        public async Task<Responsive> GetThongKeThuChi(string filter)
         {
             Responsive res = new Responsive();
             return res;
+        }
+        // GET: api/ChiTieuTrongNgay
+        [HttpGet("monan/{filter}")]
+        public async Task<Responsive> GetThongKeMonAn(string filter)
+        {
+            Responsive res = new Responsive();
+            return res;
+        }
+        // GET: api/ChiTieuTrongNgay
+        [HttpGet("nhapxuat/{filter}")]
+        public async Task<Responsive> GetThongKeNhapXuat(string filter)
+        {
+            Responsive res = new Responsive();
+            return res;
+        }
+        // GET: api/ChiTieuTrongNgay
+        [HttpGet("hangden/{filter}")]
+        public async Task<Responsive> GetHangDaDen(string filter)
+        {
+            Responsive res = new Responsive();
+            return res;
+        }
+
+        public class FilterThongKe
+        {
+            public DateTime TimeStart { get; set; }
+            public DateTime TimeEnd { get; set; }
+            public bool? isMonth { get; set; }
+            public int? PageSize { get; set; } = 10;
         }
     }
 }

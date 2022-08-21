@@ -60,8 +60,7 @@ namespace ManagerRestaurant.API.Controllers
             {
                 var uudai = _context.UuDai.Find(id);
                 if (uudai != null)
-                {
-                    uudai.Id = Guid.NewGuid();
+                { 
                     uudai.Name = item.Name;
                     uudai.Anh = item.Anh;
                     uudai.NoiDung = item.NoiDung;
@@ -75,6 +74,7 @@ namespace ManagerRestaurant.API.Controllers
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
+                    res.Data = uudai;
                     return res;
                 }
                 else
