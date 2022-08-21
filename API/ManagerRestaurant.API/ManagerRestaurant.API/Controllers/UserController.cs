@@ -268,7 +268,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.FullName.Contains(filter.TextSearch) || x.MaNV.Equals(filter.TextSearch) || x.UserName.Contains(filter.TextSearch) || x.ChucVu.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.FullName.Contains(filter.TextSearch) || x.MaNV.Contains(filter.TextSearch) || x.UserName.Contains(filter.TextSearch) || x.ChucVu.Contains(filter.TextSearch));
                 }
                 if (filter.SoDienThoai != null && filter.SoDienThoai.Length > 0)
                 {

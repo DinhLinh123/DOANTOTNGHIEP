@@ -5,7 +5,7 @@ namespace ManagerRestaurant.API.Models
     public class UserModel
     {
         public Guid Id { get; set; }
-        public int MaNV { get; set; }
+        public string MaNV { get; set; }
         public string FullName { get; set; }
         public string Phai { get; set; }
         public string ChucVu { get; set; }
@@ -26,7 +26,7 @@ namespace ManagerRestaurant.API.Models
     public class UserCreateModel
     {
         public Guid Id { get; set; }
-        public int MaNV { get; set; }
+        public string MaNV { get; set; }
         public string FullName { get; set; }
         public string Phai { get; set; }
         public string ChucVu { get; set; }
@@ -45,7 +45,7 @@ namespace ManagerRestaurant.API.Models
     public class UserUpdateModel
     {
         public Guid Id { get; set; }
-        public int MaNV { get; set; }
+        public string MaNV { get; set; }
         public string FullName { get; set; }
         public string Phai { get; set; }
         public string ChucVu { get; set; }

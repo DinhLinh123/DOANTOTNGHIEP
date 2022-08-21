@@ -8,7 +8,7 @@ namespace Infratructure.Datatables
     public class User
     {
         public Guid Id { get; set; }
-        public int MaNV { get; set; }
+        public string MaNV { get; set; }
         public string FullName { get; set; }
         public string Phai { get; set; }
         public string ChucVu { get; set; }
