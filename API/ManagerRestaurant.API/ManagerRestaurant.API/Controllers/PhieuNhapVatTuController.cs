@@ -50,6 +50,33 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
+        // GET: api/PhieuNhapVatTus
+        [HttpGet("getbykieu/{kieu}")]
+        public async Task<Responsive> GetPhieuNhapVatTuByKieu(string kieu)
+        {
+            Responsive res = new Responsive();
+            try
+            {
+                List<PhieuNhapVatTuModel> data = new List<PhieuNhapVatTuModel>();
+                var d = await _context.PhieuNhapVatTu.Where(x=>x.Kieu.Contains(kieu)).ToListAsync();
+                foreach (var item in d)
+                {
+                    data.Add(CovenerPhieu(item));
+                }
+                res.Mess = "Get sussces";
+                res.Data = data;
+                res.Code = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Mess = ex.InnerException.Message;
+                res.Data = null;
+                res.Code = 500;
+                return res;
+            }
+        }
+
         // GET: api/PhieuNhapVatTus/5
         [HttpGet("{id}")]
         public async Task<Responsive> GetPhieuNhapVatTu(Guid id)
@@ -82,6 +109,7 @@ namespace ManagerRestaurant.API.Controllers
             res.MatHangs = item.MatHangs;
             res.HinhAnh = item.HinhAnh;
             res.GhiChu = item.GhiChu;
+            res.TongSoTien = item.TongSoTien;
             res.CreatedByUserId = item.CreatedByUserId;
             res.CreatedByUserName = item.CreatedByUserName;
             res.CreatedOnDate = item.CreatedOnDate;
@@ -114,7 +142,7 @@ namespace ManagerRestaurant.API.Controllers
                     phieunhapvt.GhiChu = item.GhiChu;
                     phieunhapvt.LastModifiedByUserId = item.LastModifiedByUserId;
                     phieunhapvt.LastModifiedByUserName = item.LastModifiedByUserName;
-
+                    phieunhapvt.TongSoTien = item.TongSoTien;
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
@@ -150,6 +178,7 @@ namespace ManagerRestaurant.API.Controllers
                 phieunhapvt.MatHangs = item.MatHangs;
                 phieunhapvt.HinhAnh = item.HinhAnh;
                 phieunhapvt.GhiChu = item.GhiChu;
+                phieunhapvt.TongSoTien = item.TongSoTien;
                 phieunhapvt.CreatedByUserId = item.CreatedByUserId;
                 phieunhapvt.CreatedByUserName = item.CreatedByUserName;
                 phieunhapvt.CreatedOnDate = item.CreatedOnDate;

@@ -102,16 +102,16 @@ namespace ManagerRestaurant.API.Controllers
                               ).FirstOrDefaultAsync();
 
             var odertemp = _context.Oder.Where((x) => x.IdPhieuOder == item.Id).ToList();
-            var doans = new List<DoAnModel>();
+            var doans = new List<DoAnV2Model>();
             foreach (var element in odertemp)
             {
-                var ele = _context.DoAn.Find(element.IdDoAn);
-                doans.Add(new DoAnModel
+                var ele = await _context.DoAn.FindAsync(element.IdDoAn);
+                doans.Add(new DoAnV2Model
                 {
                     Id = ele.Id,
                     Name = ele.Name,
                     MaTheLoai = ele.MaTheLoai,
-                    TenTheLoai = ele.TheLoaiDoAn.Name,
+                    TenTheLoai = _context.TheLoaiDoAn.FindAsync(ele.MaTheLoai).Result.Name,
                     LinkAnh = ele.LinkAnh,
                     GhiChu = ele.GhiChu,
                     DanhSachMonAn = ele.DanhSachMonAn,
@@ -122,6 +122,7 @@ namespace ManagerRestaurant.API.Controllers
                     CreatedByUserName = ele.CreatedByUserName,
                     CreatedOnDate = ele.CreatedOnDate,
                     LastModifiedByUserId = ele.LastModifiedByUserId,
+                    SoLuong = element.SoLuong
                 });
             }
             phieuOder.DoAns = doans;
@@ -181,9 +182,15 @@ namespace ManagerRestaurant.API.Controllers
                     phieuOder.ThucThu = item.ThucThu;
                     phieuOder.SoTienGiam = item.SoTienGiam;
                     phieuOder.TrangThai = item.TrangThai;
-                    if (item.TrangThai == 3) { phieuOder.ThoiGianThanhToan = DateTime.Now; }
                     phieuOder.LastModifiedByUserId = item.LastModifiedByUserId;
                     phieuOder.LastModifiedByUserName = item.LastModifiedByUserName;
+                    if (item.TrangThai == 3) { 
+                        var ban = await _context.Ban.FindAsync(item.IdBan);
+                        ban.TrangThai = 0;
+                        phieuOder.ThoiGianThanhToan = DateTime.Now;
+                        await _context.SaveChangesAsync();
+                    }
+                    
                     //delete all order old
                     _context.Oder.RemoveRange(_context.Oder.Where(x => x.IdPhieuOder == phieuOder.Id));
 
@@ -294,7 +301,8 @@ namespace ManagerRestaurant.API.Controllers
                 if (phieu != null)
                 {
                     var res = new Responsive();
-                    res.Data = CoverPhieuOder(phieu);
+                    res.Code = 200;
+                    res.Data = await CoverPhieuOder(phieu);
                     res.Mess = "Get success";
                     return res;
                 }

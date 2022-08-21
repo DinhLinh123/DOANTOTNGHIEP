@@ -7,7 +7,7 @@ namespace Infratructure.Datatables
         public string Name { get; set; }
         public string MatHang { get; set; }
         public string Anh { get; set; }
-        public float TongSoTien { get; set; }
+        public float TongSoTien { get; set; } = 0;
         public string TrangThaiHienTai { get; set; }
         public string GhiChu { get; set; }
         public DateTime NgayHoaDon { get; set; }

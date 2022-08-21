@@ -14,6 +14,7 @@ namespace Infratructure.Datatables
         public string MatHangs { get; set; }
         public string HinhAnh { get; set; }
         public string GhiChu { get; set; }
+        public float TongSoTien { get; set; } = 0;
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }

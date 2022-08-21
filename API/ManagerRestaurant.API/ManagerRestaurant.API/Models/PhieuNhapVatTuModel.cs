@@ -11,6 +11,7 @@ namespace ManagerRestaurant.API.Models
         public string MatHangs { get; set; }
         public string HinhAnh { get; set; }
         public string GhiChu { get; set; }
+        public float TongSoTien { get; set; } = 0;
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; }
@@ -25,6 +26,7 @@ namespace ManagerRestaurant.API.Models
         public string MatHangs { get; set; }
         public string HinhAnh { get; set; }
         public string GhiChu { get; set; }
+        public float TongSoTien { get; set; } = 0;
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
         public DateTime? CreatedOnDate { get; set; } 
@@ -37,7 +39,8 @@ namespace ManagerRestaurant.API.Models
         public DateTime NgayHoaDon { get; set; }
         public string MatHangs { get; set; }
         public string HinhAnh { get; set; }
-        public string GhiChu { get; set; } 
+        public string GhiChu { get; set; }
+        public float TongSoTien { get; set; } = 0;
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
     }

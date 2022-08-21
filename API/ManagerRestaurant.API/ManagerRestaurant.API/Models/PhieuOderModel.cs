@@ -9,7 +9,7 @@ namespace ManagerRestaurant.API.Models
         public BanModel Ban { get; set; }
         public UserModel ThuNgan { get; set; }
         public KhachHangModel KhachHang { get; set; }
-        public List<DoAnModel> DoAns { get; set; }
+        public List<DoAnV2Model> DoAns { get; set; }
         public float TongTien { get; set; }
         public float ThucThu { get; set; }
         public string Vocher { get; set; }
