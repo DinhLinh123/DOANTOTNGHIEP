@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import RadioCheck from "../../../../base/Radio/Radio";
 import ModalConfirm from "../../../../base/ModalConfirm/ModalConfirm";
+import Dropdown from "../../../../base/Dropdown/Dropdown";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
@@ -462,7 +463,7 @@ function Menu(props) {
       <div className="menu-manager">
         <div className="menu-manager__filter">
           <div className="menu-manager__filter-search">
-            <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val) => {
+            <InputField placeholder={"Tên món ăn"} width={400} onChange={(val) => {
               setTimeout(() => {
                 setTextSearch(val)
               }, 200);
@@ -619,18 +620,21 @@ function Menu(props) {
                         setFoodName(val);
                       }}
                       autoFocus
+                      required
                     />
                     <Input
                       label={"Đơn vị tính"}
                       defaultValue={foodUnit}
                       onChange={(val) => { setFoodUnit(val) }}
                       autoFocus
+                      required
                     />
                     <Input
                       label={"Giá tiền"}
                       defaultValue={foodPrice}
                       onChange={(val) => { setFoodPrice(val) }}
                       autoFocus
+                      required
                     />
                     <Input
                       label={"Mô tả"}
@@ -638,7 +642,7 @@ function Menu(props) {
                       onChange={(val) => { setFoodDescribe(val) }}
                       autoFocus
                     />
-                    <div className="menu-manager__popup-content_privateDish_status">Ảnh</div>
+                    <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{color: "red"}}>*</span></div>
                     <div>
                       <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
                     </div>

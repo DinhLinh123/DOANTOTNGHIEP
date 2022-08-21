@@ -47,37 +47,56 @@ function Promotion(props) {
   const dispatch = useDispatch();
 
   const COLUMN_TABLE_INDEX_MENU = {
-    CODE: "code",
     NAME: "name",
+    DESCRIBE: "describe",
+    IMAGE: "image",
+    TYPE: "type",
+    UNIT: "unit",
+    MONEY: "money",
     NOTE: "note",
-    PERSON: "person",
-    DATE: "date",
+    STATUS: "status",
   };
 
   const columns = [
     {
-      title: "Mã nhóm mặt hàng",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.CODE,
-      width: "100px",
-    },
-    {
-      title: "Tên nhóm mặt hàng",
+      title: "Tên ưu đãi",
       dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
       width: "200px",
     },
     {
-      title: "Ghi chú",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+      title: "Mô tả ưu đãi",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.DESCRIBE,
+      width: "300px",
+    },
+    {
+      title: "Ảnh",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.IMAGE,
       width: "250px",
     },
     {
-      title: "Người nhập",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.PERSON,
+      title: "Loại ưu đãi",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.TYPE,
+      width: "200px",
+    },
+    {
+      title: "Đơn vị tính",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
+      sorter: true,
       width: "100px",
     },
     {
-      title: "Ngày nhập",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+      title: "Giá ưu đãi",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.MONEY,
+      width: "150px",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+      width: "200px",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
       sorter: true,
       width: "100px",
     },
@@ -86,28 +105,16 @@ function Promotion(props) {
   const data = [
     {
       key: "1",
-      code: "111",
-      name: "bia",
-      note: "đồ uống",
-      person: "LinhDTT",
-      date: "28/07/2022",
+      name: "Giảm 10% cho tổng hóa đơn lớn hơn 2tr",
+      describe: "Giảm 10% cho tổng hóa đơn lớn hơn 2tr. áp dụng từ thứ 2 đến thứ 6 hàng tuần",
+      image: "",
+      type: "Trừ tiền trên tổng hóa đơn",
+      unit: "%",
+      money: "10",
+      note: "Bàn đi từ 2 người",
+      status: "Hiệu lực",
     },
-    {
-      key: "2",
-      code: "111",
-      name: "rượu",
-      note: "đồ uống",
-      person: "LinhDTT",
-      date: "28/07/2022",
-    },
-    {
-      key: "3",
-      code: "111",
-      name: "nước ngọt",
-      note: "đồ uống",
-      person: "LinhDTT",
-      date: "28/07/2022",
-    },
+    
   ];
   const dataMenu = [
     {
@@ -142,36 +149,68 @@ function Promotion(props) {
     callApiGetPromotion();
   }, [textSearch]);
 
-  function columnCode(item) {
-    return <div>{item?.code}</div>;
-  }
   function columnName(item) {
     return <div>{item?.name}</div>;
   }
+  function columnDescribe(item) {
+    return <div>{item?.describe}</div>;
+  }
+  function columnImage(item) {
+    return <div>{item?.image}</div>;
+  }
+  function columnType(item) {
+    return <div>{item?.type}</div>;
+  }
+  function columnUnit(item) {
+    return <div>{item?.unit}</div>;
+  }
+  function columnMoney(item) {
+    return <div>{item?.money}</div>;
+  }
   function columnNote(item) {
-    return <div>{item?.note}</div>;
+    return <div>{item?.nute}</div>;
   }
-  function columnPerson(item) {
-    return <div>{item?.person}</div>;
-  }
-  function columnDate(item) {
-    return <div>{item?.date}</div>;
+  function columnStatus(item) {
+    return <div>{item?.status}</div>;
   }
 
   function convertDataTable(dataTable) {
     let listData;
     listData = dataTable.map((item, idx) => {
       return {
-        [COLUMN_TABLE_INDEX_MENU.CODE]: columnCode(item),
         [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+        [COLUMN_TABLE_INDEX_MENU.DESCRIBE]: columnDescribe(item),
+        [COLUMN_TABLE_INDEX_MENU.IMAGE]: columnImage(item),
+        [COLUMN_TABLE_INDEX_MENU.TYPE]: columnType(item),
+        [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
+        [COLUMN_TABLE_INDEX_MENU.MONEY]: columnMoney(item),
         [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
-        [COLUMN_TABLE_INDEX_MENU.PERSON]: columnPerson(item),
-        [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
+        [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: idx,
       };
     });
     return [...listData];
   }
+  const dataType = [
+    {
+      value: "0",
+      label: "Trừ tiền trên tổng hóa đơn",
+    },
+    {
+      value: "1",
+      label: "Trừ tiền theo món ăn",
+    },
+  ];
+  const dataStatus = [
+    {
+      value: "0",
+      label: "Hiệu lực",
+    },
+    {
+      value: "1",
+      label: "Hết hiệu lực",
+    },
+  ];
 
   function handleClickAddnew(type) {
     setIsShowPopupAddnew({ show: true, title: "Thêm mới ưu đãi", key: 0 });
@@ -233,13 +272,13 @@ function Promotion(props) {
 
   return (
     <AdminPage title={"Quản lý ưu đãi"} index={MENU_TAB_ADMIN.PROMOTION}>
-      <div className="categorydrinks-manager">
-        <div className="categorydrinks-manager__filter">
-          <div className="categorydrinks-manager__filter-name">
+      <div className="promotion-manager">
+        <div className="promotion-manager__filter">
+          <div className="promotion-manager__filter-name">
             <InputField
-              placeholder={"Mã nhóm mặt hàng"}
+              placeholder={"Tên ưu đãi"}
               width={"100%"}
-              label={"Mã nhóm mặt hàng"}
+              label={"Tên ưu đãi"}
               onChange={(val) => {
                 setTimeout(() => {
                   setTextSearch(val);
@@ -247,26 +286,21 @@ function Promotion(props) {
               }}
             />
           </div>
-          <div className="categorydrinks-manager__filter-phone">
-            <InputField
-              placeholder={"Tên nhóm mặt hàng"}
-              width={"100%"}
-              label={"Tên nhóm mặt hàng"}
+          <div className="promotion-manager__filter-phone">
+          <Dropdown
+              listOption={dataType}
+              placeholder={"Loại ưu đãi"}
+              title={"Loại ưu đãi"}
             />
           </div>
-          <div className="categorydrinks-manager__filter-date">
-            <DatePicker
-              defaultValue={moment().unix() * 1000}
-              min={moment().unix() * 1000 - ONE_DAY}
-              // onChange={(val) => {
-              //     setStaffDate(val);
-              // }}
-              placeholder="dd/MM/yyyy"
-              label={"Ngày nhập"}
-              width={"100%"}
+          <div className="promotion-manager__filter-date">
+          <Dropdown
+              listOption={dataStatus}
+              placeholder={"Trạng thái"}
+              title={"Trạng thái"}
             />
           </div>
-          <div className="categorydrinks-manager__filter-create-new">
+          <div className="promotion-manager__filter-create-new">
             <Button2
               name={"Thêm mới ưu đãi"}
               leftIcon={<PlusOutlined />}
@@ -275,7 +309,7 @@ function Promotion(props) {
           </div>
         </div>
 
-        <div className="categorydrinks-manager__content">
+        <div className="promotion-manager__content">
           <TableBase
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
@@ -307,20 +341,22 @@ function Promotion(props) {
             />,
             <Button2
               name={"Lưu"}
-              onClick={() => callApiAddPromotion()}
+              // onClick={() => callApiAddPromotion()}
               background="#fa983a"
+              disabled={promotionName == "" || promotionDescribe == "" || moneyPromotion == "" || images == ""}
             />,
           ]}
           width={600}
           //className={"staff-manager-create"}
           body={
-            <div className="categorydrinks-manager__popup">
+            <div className="promotion-manager__popup">
               <Input
                 label={"Tên ưu đãi"}
                 defaultValue={promotionName}
                 onChange={(val) => {
                   setPromotionName(val);
                 }}
+                required
               />
               <Input
                 label={"Mô tả ưu đãi"}
@@ -328,10 +364,11 @@ function Promotion(props) {
                 onChange={(val) => {
                   setPromotionDescribe(val);
                 }}
+                required
               />
-              <div className="menu-manager__popup-content-buffet-image">
-                <div className="menu-manager__popup-content-buffet-image-title">
-                  Ảnh
+              <div className="promotion-manager__popup-image">
+                <div className="promotion-manager__popup-image-title">
+                  Ảnh <span style={{color: "red"}}>*</span>
                 </div>
                 <ImageUpload
                   maxImage={1}
@@ -383,6 +420,7 @@ function Promotion(props) {
                 onChange={(val) => {
                   setMoneyPromotion(val);
                 }}
+                required
               />
               <Input
                 label={"Ghi chú"}
