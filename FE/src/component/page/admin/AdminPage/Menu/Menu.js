@@ -51,6 +51,7 @@ function Menu(props) {
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState({ show: false, title: '', key: -1 });
   const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({ show: false, item: '' });
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
+  const [isShowPopupWarningCategory, setIsShowPopupWarningCategory] = useState(false);
   const [listMenu, setListMenu] = useState([]);
 
 
@@ -139,6 +140,7 @@ function Menu(props) {
 
   useEffect(() => {
     callGetAddFood()
+    callGetTypeFood()
   }, [])
 
   useEffect(() => {
@@ -152,7 +154,7 @@ function Menu(props) {
     return <div>{item?.donViTinh}</div>;
   }
   function columnCategory(item) {
-    return <div>mày bị điên à</div>
+    return <div>{item?.tenTheLoai}</div>
   }
   function columnDescribe(item) {
     return <div>{item?.describe}</div>;
@@ -189,8 +191,8 @@ function Menu(props) {
     return [...listData];
   }
 
-  useEffect(() => { if (isShowPopupAddnew.show && isShowPopupAddnew.key ==0) { callGetTypeFood() } }, [isShowPopupAddnew])
-  useEffect(() => { console.log(index)}, [index])
+  // useEffect(() => { if (isShowPopupAddnew.show && isShowPopupAddnew.key == 0) { callGetTypeFood() } }, [isShowPopupAddnew])
+  useEffect(() => { console.log(index) }, [index])
 
   function callGetTypeFood() {
 
@@ -473,7 +475,13 @@ function Menu(props) {
             <Button2
               name={"Thêm mới món ăn"}
               leftIcon={<PlusOutlined />}
-              onClick={() => setIsShowPopupAddnew({ show: true, title: 'Thêm mới menu', key: 0 })}
+              onClick={() => {
+                if (listMenu?.length > 0) {
+                  setIsShowPopupAddnew({ show: true, title: 'Thêm mới menu', key: 0 })
+                } else {
+                  setIsShowPopupWarningCategory(true)
+                }
+              }}
             />
           </div>
         </div>
@@ -724,7 +732,7 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.theLoaiDoAn}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.tenTheLoai}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
@@ -757,7 +765,7 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Thể loại: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.theLoaiDoAn}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.tenTheLoai}</span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
@@ -787,6 +795,30 @@ function Menu(props) {
           show={isShowPopupComfirmDelete.show}
           onClickSuccess={() => callDeleteMenu()}
           contentName={isShowPopupComfirmDelete.item.name}
+        />
+
+        <Popup
+          title={"Cảnh báo"}
+          show={isShowPopupWarningCategory}
+          onClickClose={() => setIsShowPopupWarningCategory(false)}
+          button={[
+            <Button2
+              name={"Hủy"}
+              onClick={() => setIsShowPopupWarningCategory(false)}
+            />,
+            <Button2
+              name={"Thêm mới danh mục món ăn"}
+              onClick={() => {
+                window.open(`/admin/category_menu`, "_self");
+              }}
+              background="#fa983a"
+            />,
+          ]}
+          width={600}
+          className={"menu-popup-detail"}
+          body={
+            <div style={{ marginTop: '24px', fontSize: '16px', }}>Bạn cần thêm mới danh mục menu trước</div>
+          }
         />
       </div>
     </AdminPage>

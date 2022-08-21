@@ -11,6 +11,7 @@ const MENU_TAB_CLIENT = {
 };
 
 const MENU_TAB_ADMIN = {
+  REPORT: "report",
   MENU: "menus",
   AREA: "areas",
   BAR: "bars",

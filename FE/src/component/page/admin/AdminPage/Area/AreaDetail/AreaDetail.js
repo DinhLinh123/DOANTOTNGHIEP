@@ -202,12 +202,16 @@ function AreaDetail(props) {
                         style={{ height: '600px', width: '1000px', position: 'absolute', top: '0', left: '0' }}
                     >
                         {list && list.length > 0 ? list?.map((item) => {
-                            debugger
                             return (
                                 <Draggable defaultPosition={{ x: parseInt(item?.left), y: parseInt(item?.top) }} bounds="parent" onStop={(val, val2) => { updatePosition(item, val, val2) }} className={item?.title}>
                                     <div
                                         className="area-detail__content-drag-item"
-                                        style={{ borderRadius: item?.kieuDang == 0 ? '50%' : '8px', position: 'absolute', top: '8px', left: '8px' }}
+                                        style={{
+                                            borderRadius: item?.kieuDang == 0 ? '50%' : '8px',
+                                            position: 'absolute',
+                                            top: '8px',
+                                            left: '8px'
+                                        }}
                                         onDoubleClick={() => {
                                             setTableName(item.name)
                                             setAdults(item.soNguoiToiDa)
@@ -228,8 +232,9 @@ function AreaDetail(props) {
                 title={showPopupAddNew.title}
                 button={[
                     <Button2 name={"Hủy"} onClick={() => { setShowPopupAddNew({ show: false, title: '', key: -1 }) }} />,
-                    <Button2 name={"Xóa"} background="#ff4d4d" style={{ display: showPopupAddNew.key == 0 ? "none" : "block" }} onClick={() => { 
-                        setIsShowPopupComfirmDelete({show: true, item:''}) }} />,
+                    <Button2 name={"Xóa"} background="#ff4d4d" style={{ display: showPopupAddNew.key == 0 ? "none" : "block" }} onClick={() => {
+                        setIsShowPopupComfirmDelete({ show: true, item: '' })
+                    }} />,
                     <Button2
                         name={"Lưu"}
                         background="#fa983a"

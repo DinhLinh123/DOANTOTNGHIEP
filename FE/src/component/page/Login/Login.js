@@ -64,7 +64,7 @@ function Login() {
         roleType: account.roleType
       }))
 
-      window.open("/admin/menus", '_self')
+      window.open("/admin/report", '_self')
     }
 
   function onBlurInputPass() {
@@ -109,7 +109,7 @@ function Login() {
       const res = await axios.post(`http://sqldemo-001-site1.htempurl.com/Login`, body)
       console.log(res.data.data);
       if(res.data.data){
-        window.open("/admin/menus", '_self')
+        window.open("/admin/report", '_self')
 
       }else{
         setError("Sai tài khoản hoặc mật khẩu!")

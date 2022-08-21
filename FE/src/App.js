@@ -43,6 +43,7 @@ import CategoryMenu from './component/page/admin/AdminPage/CategoryMenu/Category
 import CategoryPosition from './component/page/admin/AdminPage/CategoryPosition/CategoryPosition';
 import ManagerFeedback from './component/page/admin/AdminPage/Feedback/Feedback';
 import Promotion from './component/page/admin/AdminPage/Promotion/Promotion';
+import Report from './component/page/admin/AdminPage/Report/Report';
 
 let historyApp;
 function App() {
@@ -72,7 +73,7 @@ function App() {
 
             {/* admin */}
             <Route exact path="/admin">
-              <Redirect to="/admin/menus" />
+              <Redirect to="/admin/report" />
             </Route>
             <Route path={"/admin/menus"} ><Menu /></Route>
             <Route path={"/admin/areas"} ><Area /></Route>
@@ -95,6 +96,7 @@ function App() {
             <Route path={"/admin/pays"}> <Pay /></Route>
             <Route path={"/admin/feedback"}> <ManagerFeedback /></Route>
             <Route path={"/admin/promotion"}> <Promotion /></Route>
+            <Route path={"/admin/report"}> <Report /></Route>
 
             {/* order */}
             <Route path={"/admin/tables"}> <TableOrder /></Route>

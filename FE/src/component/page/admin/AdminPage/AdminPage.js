@@ -30,7 +30,8 @@ import {
   ReconciliationOutlined,
   CoffeeOutlined,
   GroupOutlined,
-  TeamOutlined
+  TeamOutlined,
+  BarChartOutlined
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -135,6 +136,11 @@ function AdminPage(props) {
   }, []);
 
   let listMenu = [
+    {
+      link: MENU_TAB_ADMIN.REPORT,
+      icon: <BarChartOutlined />,
+      title: "Báo cáo",
+    },
     {
       link: MENU_TAB_ADMIN.MENU,
       icon: <UnorderedListOutlined />,

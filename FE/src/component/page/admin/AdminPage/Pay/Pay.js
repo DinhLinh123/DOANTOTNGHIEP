@@ -8,7 +8,7 @@ import {
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
-import { PlusOutlined, DeleteOutlined, TagsOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, TagsOutlined, EditOutlined } from "@ant-design/icons";
 import "./pay.scss";
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
@@ -17,7 +17,7 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import { changeAccount } from "../../../../../reudux/action/accountAction";
 import commonFunction from "../../../../base/common/commonFunction";
-import { API_AREA, API_ORDER, API_TABLE } from "../../../../base/common/endpoint";
+import { API_AREA, API_MENU, API_OFFER, API_ORDER, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
 import baseApi from "../../../../../api/baseApi";
 import ud1 from "../../../../../image/ud1.jpg";
 import ud2 from "../../../../../image/ud2.jpg";
@@ -31,163 +31,9 @@ import RadioCheck from "../../../../base/Radio/Radio";
 
 function Spending(props) {
   const dispatch = useDispatch();
-  const [listTable, setListTable] = useState([
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6dd",
-      name: "bàn 1",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "0",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 2,
-    },
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6df",
-      name: "bàn 2",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "1",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 0,
-    },
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6dg",
-      name: "bàn 6",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "0",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 2,
-    },
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6dh",
-      name: "bàn 5",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "1",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 1,
-    },
-
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6d7",
-      name: "bàn 7",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "0",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 0,
-    },
-    {
-      id: "6879a96c-aff7-4a34-13bc-08da7223d6d4",
-      name: "bàn 8",
-      soNguoiToiDa: 5,
-      loaiBan: "string",
-      kieuDang: "1",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T12:05:12.302",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "1",
-      tenKhuVuc: "Tầng 1",
-      status: 0,
-    },
-
-    {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      name: "bàn 3",
-      soNguoiToiDa: 0,
-      loaiBan: "string",
-      kieuDang: "2",
-      createdByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      createdByUserName: "string",
-      createdOnDate: "2022-07-30T09:42:33.461",
-      lastModifiedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      lastModifiedByUserName: "string",
-      idKhuVuc: "2",
-      tenKhuVuc: "Tầng 2",
-      status: 1,
-    },
-  ]);
-
-  const [listArea, setListArea] = useState([]);
-
-  const [listOffer, setListOffer] = useState([
-    {
-      id: "1",
-      name: "string",
-      anh: ud1,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-    {
-      id: "2",
-      name: "hahah",
-      anh: ud2,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-    {
-      id: "3",
-      name: "string",
-      anh: ud3,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-    {
-      id: "4",
-      name: "string",
-      anh: ud4,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-    {
-      id: "5",
-      name: "string",
-      anh: ud5,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-    {
-      id: "6",
-      name: "string",
-      anh: ud6,
-      noiDung:
-        "hahahah asdjfa sdfnasasdmfas dfmasd fasdmf asdmfa sdfmasd fasdf asdmfa sdfmasd fasdmf asdfmasd famsdf asdfmasd f",
-    },
-  ]);
-
+  const [listTable, setListTable] = useState([]);
+  const [listMenu, setListMenu] = useState([])
+  const [listType, setListType] = useState([])
   const [orderSelected, setoOrderSelected] = useState([]);
   const [table, setTable] = useState();
   const [order, setOrder] = useState();
@@ -203,6 +49,72 @@ function Spending(props) {
   const [tableID, setTableID] = useState('');
   const [moneyCustomer, setMoneyCustomer] = useState();
   const [payMethod, setPayMethod] = useState(0);
+  const [listArea, setListArea] = useState([]);
+  const [listOffer, setListOffer] = useState([]);
+  const [showPopupEditFood, setShowPopupEditFood] = useState({ show: false, key: -1, item: '', action: -1});
+  const [showPopupWarningChoose, setShowPopupWarningChoose] = useState(false);
+  const [index, setIndex] = useState(1)
+
+  //lấy danh sách các ưu đãi
+  useEffect(() => {
+    if (showPopupOffer) {
+      let param = {
+        "trangThai": 0
+      }
+      dispatch(changeLoadingApp(true))
+      baseApi.get(
+        (res) => {
+          setListOffer(res?.data);
+          dispatch(changeLoadingApp(false))
+        },
+        () => { dispatch(changeLoadingApp(false)) },
+        null,
+        API_OFFER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
+      );
+    }
+  }, [showPopupOffer])
+
+  useEffect(() => {
+    setoOrderSelected([
+      {
+        "id": "88745c25-aa00-4425-804b-c538c30e4f50",
+        "name": "Thịt",
+        "maTheLoai": "334e851f-2cd8-477f-e9ab-08da81fe0e2d",
+        "theLoaiDoAn": null,
+        "linkAnh": "dfsd",
+        "ghiChu": "không",
+        "danhSachMonAn": "[]",
+        "donGia": 20000,
+        "donViTinh": "Đĩa",
+        "trangThai": true,
+        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "createdByUserName": "string",
+        "createdOnDate": "2022-08-19T09:31:17.8352754",
+        "lastModifiedByUserId": null,
+        "lastModifiedByUserName": null,
+        "count": 1
+      },
+      {
+        "id": "2531362a-829b-4c4d-8c40-1462a19d31d3",
+        "name": "Coca",
+        "maTheLoai": "3cbdc6a0-6111-433f-e9ac-08da81fe0e2d",
+        "theLoaiDoAn": null,
+        "linkAnh": "dfsd",
+        "ghiChu": "không",
+        "danhSachMonAn": "[]",
+        "donGia": 10000,
+        "donViTinh": "Lon",
+        "trangThai": true,
+        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "createdByUserName": "string",
+        "createdOnDate": "2022-08-19T09:31:44.3297018",
+        "lastModifiedByUserId": null,
+        "lastModifiedByUserName": null,
+        "count": 1
+      }
+    ])
+  }, [])
+
 
   //lấy chi tiết bàn
   useEffect(() => {
@@ -221,13 +133,13 @@ function Spending(props) {
               dispatch(changeLoadingApp(false))
 
             },
-            () => { dispatch(changeLoadingApp(false))},
+            () => { dispatch(changeLoadingApp(false)) },
             null,
             API_ORDER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
           );
           dispatch(changeLoadingApp(false))
         },
-        () => { dispatch(changeLoadingApp(false))},
+        () => { dispatch(changeLoadingApp(false)) },
         null,
         API_TABLE.GET_BY_ID + tableID
       );
@@ -240,7 +152,7 @@ function Spending(props) {
         setTable(res?.data);
         dispatch(changeLoadingApp(false))
       },
-      () => { dispatch(changeLoadingApp(false))},
+      () => { dispatch(changeLoadingApp(false)) },
       null,
       API_TABLE.GET_BY_ID + tableID
     );
@@ -269,18 +181,9 @@ function Spending(props) {
       null,
       API_TABLE.GET_ALL
     );
+
+    callGetTypeFood()
   }, []);
-
-
-  function handleChooseFood(item) {
-    let _list = [...orderSelected];
-    let a = _list?.findIndex((l) => l.id === item.id);
-    if (a == -1) {
-      item.count = 1;
-      _list.push(item);
-    }
-    setoOrderSelected(_list);
-  }
 
   function handleClickDelete(item) {
     setDisplayLine2ChooseOrder({ show: false, index: "" });
@@ -306,8 +209,13 @@ function Spending(props) {
   function renderTotalCount() {
     let total = 0;
     orderSelected?.map((item) => {
-      total += parseInt(item?.money) * parseInt(item?.count);
+      total += parseInt(item?.donGia) * parseInt(item?.count);
     });
+    return total;
+  }
+
+  function renderTotalMust() {
+    let total = 0;
     return total;
   }
 
@@ -322,8 +230,10 @@ function Spending(props) {
   //thực hiện thanh toán
   function callApiPay() {
     dispatch(changeLoadingApp(true))
-    let body= 
-
+    let body = order
+    body.doAns = orderSelected
+    body.tongTien = renderTotalCount()
+    body.thucThu = renderTotalMust()
     baseApi.put(
       (res) => {
         let _table = table;
@@ -332,7 +242,7 @@ function Spending(props) {
           () => { },
           () => { },
           null,
-          API_ORDER.UPDATE_BY_ID + order?.id,
+          API_TABLE.UPDATE_BY_ID + table?.id,
           null,
           _table
         )
@@ -341,13 +251,95 @@ function Spending(props) {
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công")
         dispatch(changeLoadingApp(false))
       },
-      () => { 
-        dispatch(changeLoadingApp(false)) 
+      () => {
+        dispatch(changeLoadingApp(false))
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Thanh toán thất bại")
       },
       null,
-      API_AREA.GET_ALL
+      API_ORDER.UPDATE_BY_ID + order?.id,
+      null,
+      body
     );
+  }
+
+  function callGetTypeFood() {
+    baseApi.get(
+      (res) => {
+        setListType(res)
+        setIndex(res[0]?.id)
+      },
+      () => {
+      },
+      null,
+      API_TYPE_FOOD.GET_ALL,
+      null,
+      {}
+    )
+  }
+
+  function callGetAllFood() {
+    dispatch(changeLoadingApp(true))
+    let param = {
+      "maTheLoai": index
+    }
+    let endpoint = encodeURIComponent(JSON.stringify(param))
+    if (index?.length > 0) {
+      baseApi.get(
+        (res) => {
+          dispatch(changeLoadingApp(false))
+          setListMenu(res.data)
+        },
+        () => {
+          dispatch(changeLoadingApp(false))
+        },
+        null,
+        API_MENU.GET_BY_FILTER + endpoint,
+        null,
+        {}
+      )
+    }
+    dispatch(changeLoadingApp(false))
+  }
+
+  useEffect(() => {
+    if (showPopupEditFood.show) {
+      callGetAllFood()
+    }
+  }, [showPopupEditFood, index])
+
+  function handldChangeFood(val) {
+    if(showPopupEditFood.action===0){
+      let _list = [...orderSelected];
+      let a = _list?.findIndex((l) => l.id === val.id)
+      if (a == -1) {
+        val.count = 1
+        _list.push(val)
+      }
+      else{
+        setShowPopupWarningChoose(true)
+      }
+      setoOrderSelected(_list)
+      setShowPopupEditFood({ show: false, key: -1, item: '' , action: -1})
+    }
+    else{
+      let _list = [...orderSelected]
+      let _listID = _list.map((item) => { return item.id })
+      let _index = _listID.indexOf(val.id)
+      if (_index == -1) {
+  
+        val.count = showPopupEditFood.item?.count
+        _list.splice(showPopupEditFood.key, 1, val)
+        setoOrderSelected(_list)
+        setShowPopupEditFood({ show: false })
+      }
+      else {
+        setShowPopupWarningChoose(true)
+       }
+    }
+    }
+
+  function handleChooseFood(item) {
+    
   }
 
   return (
@@ -378,7 +370,7 @@ function Spending(props) {
                                   ? "#fff"
                                   : "#fff",
                           }}
-                          onClick={() => {setTableID(_item?.id)}}
+                          onClick={() => { setTableID(_item?.id) }}
                         >
                           {_item?.name}
                         </div>
@@ -395,6 +387,9 @@ function Spending(props) {
             <div className="pay-manager__bill-dish-top">
               <div className="pay-manager__bill-dish-top-title">
                 Món đã chọn{`(${orderSelected?.length})`}
+              </div>
+              <div className="pay-manager__bill-dish-top-add">
+                <Button2 name={"thêm món ăn"} onClick={()=>{setShowPopupEditFood({show: true, key: -1, item: '', action: 0})}}/>
               </div>
               <div className="pay-manager__bill-dish-top-table">
                 Bàn: {table?.name}
@@ -413,7 +408,7 @@ function Spending(props) {
                 </div>
               </div>
               {orderSelected.length > 0 ? (
-                orderSelected?.map((item) => {
+                orderSelected?.map((item, key) => {
                   return (
                     <div className="pay-manager__bill-dish-content-choose">
                       <div
@@ -441,76 +436,90 @@ function Spending(props) {
                         }}
                       >
                         <div className="food-name">
-                          {commonFunction.smartText(35, item.title)}
+                          {commonFunction.smartText(35, item.name)}
                         </div>
                         <div className="line1-food-count">{item.count}</div>
                         <div className="food-money">
-                          {commonFunction.numberWithCommas(item.money)}(đ)
+                          {commonFunction.numberWithCommas(item.donGia)}(đ)
                         </div>
                       </div>
                       {displayLine2ChooseOrder.show &&
                         displayLine2ChooseOrder.index == item.id && (
-                          <div
-                            className="pay-manager__bill-dish-content-choose-line2"
-                            onMouseEnter={() =>
-                              setDisplayLine2ChooseOrder({
-                                show: true,
-                                index: item.id,
-                              })
-                            }
-                            onMouseLeave={() =>
-                              setDisplayLine2ChooseOrder({
-                                show: false,
-                                index: "",
-                              })
-                            }
-                            style={{
-                              backgroundColor:
-                                displayLine2ChooseOrder.show &&
-                                displayLine2ChooseOrder.index == item.id &&
-                                "#dff9fb",
-                            }}
-                          >
-                            <div className="food-count">
-                              <div className="food-count-button">
-                                <Tooltip
-                                  title={"Giảm số lượng"}
-                                  placement="bottom"
-                                >
-                                  <Button2
-                                    name={"-"}
-                                    onClick={() => handleClickDownCount(item)}
-                                    disabled={item?.count <= 1}
-                                  />
-                                </Tooltip>{" "}
-                              </div>
-                              <div className="food-count-number">
-                                {item.count}
-                              </div>
-                              <div className="food-count-button">
-                                <Tooltip
-                                  title={"Tăng số lượng"}
-                                  placement="bottom"
-                                >
-                                  <Button2
-                                    name={"+"}
-                                    onClick={() => handleClickUpCount(item)}
-                                  />
-                                </Tooltip>
-                              </div>
-                            </div>
-                            <div className="food-close">
-                              <Tooltip title={"Xóa món"} placement="bottom">
+                        <div
+                          className="pay-manager__bill-dish-content-choose-line2"
+                          onMouseEnter={() =>
+                            setDisplayLine2ChooseOrder({
+                              show: true,
+                              index: item.id,
+                            })
+                          }
+                          onMouseLeave={() =>
+                            setDisplayLine2ChooseOrder({
+                              show: false,
+                              index: "",
+                            })
+                          }
+                          style={{
+                            backgroundColor:
+                              displayLine2ChooseOrder.show &&
+                              displayLine2ChooseOrder.index == item.id &&
+                              "#dff9fb",
+                          }}
+                        >
+                          <div className="food-edit">
+                            <Tooltip
+                              title={"Sửa món ăn"}
+                              placement="bottom"
+                            >
+                              <Button2
+                                onClick={() => {
+                                  setShowPopupEditFood({ show: true, key: key, item: item, action: 1 })
+                                }}
+                                leftIcon={<EditOutlined />}
+                              />
+                            </Tooltip>{" "}
+                          </div>
+                          <div className="food-count">
+
+                            <div className="food-count-button">
+                              <Tooltip
+                                title={"Giảm số lượng"}
+                                placement="bottom"
+                              >
                                 <Button2
-                                  name={"x"}
-                                  onClick={() => {
-                                    handleClickDelete(item);
-                                  }}
+                                  name={"-"}
+                                  onClick={() => handleClickDownCount(item)}
+                                  disabled={item?.count <= 1}
+                                />
+                              </Tooltip>{" "}
+                            </div>
+                            <div className="food-count-number">
+                              {item.count}
+                            </div>
+                            <div className="food-count-button">
+                              <Tooltip
+                                title={"Tăng số lượng"}
+                                placement="bottom"
+                              >
+                                <Button2
+                                  name={"+"}
+                                  onClick={() => handleClickUpCount(item)}
                                 />
                               </Tooltip>
                             </div>
                           </div>
-                        )}
+                          <div className="food-close">
+                            <Tooltip title={"Xóa món"} placement="bottom">
+                              <Button2
+                                name={"x"}
+                                onClick={() => {
+                                  handleClickDelete(item);
+                                }}
+                              />
+                            </Tooltip>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })
@@ -556,7 +565,7 @@ function Spending(props) {
                   Tiền phải trả
                 </div>
                 <div className="pay-manager__bill-dish-footer-money-choose">
-                  {commonFunction.numberWithCommas(20000)}(đ)
+                  {commonFunction.numberWithCommas(renderTotalMust())}(đ)
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-confirm">
@@ -672,13 +681,13 @@ function Spending(props) {
         body={
           <div className="popup-pay">
             <div className="popup-pay__request">
-                  <div className="popup-pay__request-label">
-                    Tiền phải thanh toán
-                  </div>
-                  <div className="popup-pay__request-label">
-                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}
-                  </div>
-                </div>
+              <div className="popup-pay__request-label">
+                Tiền phải thanh toán
+              </div>
+              <div className="popup-pay__request-label">
+                {commonFunction.numberWithCommas(renderTotalMust())}
+              </div>
+            </div>
             <div className="popup-pay__method">
               <RadioCheck
                 title={"Chọn phương thức thanh toán"}
@@ -719,6 +728,69 @@ function Spending(props) {
 
 
           </div>
+        }
+      />
+      <Popup
+        title={"Sửa món ăn"}
+        show={showPopupEditFood.show}
+        onClickClose={() => setShowPopupEditFood({ show: false, key: -1, item: '' })}
+        button={[
+          <Button2
+            name={"Đóng"}
+            onClick={() => setShowPopupEditFood({ show: false, key: -1, item: '' })}
+          />,
+        ]}
+        width={800}
+        body={
+          <div className="popup-edit-food">
+            <div className="popup-edit-food__list">
+              {listMenu && listMenu?.length > 0 ? listMenu?.map((item) => {
+                return (<div className="popup-edit-food__list-item" onClick={(e) => { e.stopPropagation(); handldChangeFood(item) }}>
+                  <div className="popup-edit-food__list-item-img">
+                    <img src={item.linkAnh} alt="" />
+                  </div>
+                  <div className="popup-edit-food__list-item-title">
+                    {commonFunction.smartText(40, item?.name)}
+                  </div>
+                  <div className="popup-edit-food__list-item-money">
+                    {commonFunction.numberWithCommas(parseInt(item?.donGia))}đ
+                  </div>
+                </div>)
+              }) : null}
+
+            </div>
+            <div className="popup-edit-food__choose">
+              {
+                listType?.map((item, key) => {
+                  return (
+                    <div className={`popup-edit-food__choose__children ${index == item.id ? 'order-selected' : ''}`}
+                      style={{ width: `calc(100% / ${listType?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
+                      onClick={() => { setIndex(item.id) }}
+                    >
+                      {item.name}
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+        }
+      />
+
+      <Popup
+        title={"Cảnh báo"}
+        show={showPopupWarningChoose}
+        onClickClose={() => setShowPopupWarningChoose(false)}
+        button={[
+          <Button2
+            name={"Hủy"}
+            onClick={() => setShowPopupWarningChoose(false)}
+          />,
+        ]}
+        width={600}
+        className={"menu-popup-detail"}
+        body={
+          <div style={{ marginTop: '24px', fontSize: '16px', }}>Món ăn đã có trong danh sách, bạn có thể thay đổi số lượng</div>
         }
       />
     </AdminPage>

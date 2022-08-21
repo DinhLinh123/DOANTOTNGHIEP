@@ -140,6 +140,16 @@
             transition: height 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
               opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
 
+            .food-edit {
+              .button-common {
+
+                button {
+                  min-width: 24px;
+                  border-radius: 8px;
+                }
+              }
+            }
+
             .food-count {
               display: flex;
               align-items: center;
@@ -290,7 +300,7 @@
           align-items: center;
           justify-content: center;
 
-          &-edit{
+          &-edit {
             margin-right: 16px;
           }
 
@@ -348,36 +358,110 @@
   }
 }
 
-.popup-pay{
-  &__customer{
-    &-radio{
+.popup-pay {
+  &__customer {
+    &-radio {
       margin-top: 12px;
     }
   }
 
-  &__request{
+  &__request {
     margin-top: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    &-label{
+    &-label {
       font-weight: bold;
       font-size: 16px;
       color: #eb4d4b;
     }
   }
 
-  &__return{
+  &__return {
     margin-top: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    &-label{
+    &-label {
       font-weight: bold;
       font-size: 16px;
       color: #eb4d4b;
+    }
+  }
+}
+
+.popup-edit-food {
+  &__list {
+    margin: 20px 0;
+    padding: 0 2%;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 24px;
+    overflow-y: auto;
+    height: calc(100vh - 56px - 253px);
+
+
+    &-item {
+      // width: 272px;
+      height: fit-content;
+      border-radius: 10px;
+      padding: 2px;
+      box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
+      cursor: pointer;
+
+      &-img {
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+      }
+
+      &-title {
+        margin: 8px 0;
+        font-size: 18px;
+        font-weight: bold;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      &-money {
+        text-align: right;
+        padding-right: 16px;
+        color: red;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__choose {
+    background-color: #01a3a4;
+    height: 56px;
+    display: flex;
+
+
+    &__children {
+      padding: 0 16px;
+      cursor: pointer;
+      color: #fff;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      transition: 0.2s;
+      justify-content: center;
+
+      &:hover {
+        background-color: #00d2d3;
+        color: #fff;
+        ;
+      }
+    }
+
+    .order-selected {
+      background-color: #006266;
     }
   }
 }

@@ -19,7 +19,7 @@ Button2.propTypes = {
 
 Button2.defaultProps = {
   className: "",
-  name: "Button",
+  name: "",
   background: "",
   onClick: () => {},
   color: "#fff",

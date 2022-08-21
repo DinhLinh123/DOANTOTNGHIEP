@@ -56,6 +56,15 @@ const API_ORDER = {
     GET_BY_FILTER: PART + "/PhieuOder/filter?_filter=",
 };
 
+const API_OFFER = {
+    GET_ALL: PART + "/UuDai",
+    CREATE_NEW: PART + "/UuDai",
+    GET_BY_ID: PART + "/UuDai/",
+    UPDATE_BY_ID: PART + "/UuDai/",
+    DELETE_BY_ID: PART + "/UuDai/",
+    GET_BY_FILTER: PART + "/UuDai/filter?_filter=",
+};
+
 export {
     API_TABLE,
     API_AREA,
@@ -63,5 +72,6 @@ export {
     API_TYPE_FOOD,
     API_CATEGORY_MENU,
     API_PROMOTION,
-    API_ORDER
+    API_ORDER,
+    API_OFFER
 };

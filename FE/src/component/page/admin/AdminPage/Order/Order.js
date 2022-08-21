@@ -49,6 +49,10 @@ function Order(props) {
     callGetAllFood()
   }, [index])
 
+  useEffect(() => {
+    console.log(orderSelected)
+  }, [orderSelected])
+
   let logo = [
     {
       img: logo1,
@@ -142,7 +146,7 @@ function Order(props) {
     let body = {
       "idBan": tableID,
       "tongTien": renderTotalCount(),
-      "doAns": orderSelected
+      "monAns": orderSelected
     }
     baseApi.post(
       (res) => {
@@ -156,7 +160,7 @@ function Order(props) {
           null,
           _table
         )
-        window.open(`/admin/tables`, "_self")
+        // window.open(`/admin/tables`, "_self")
       },
       () => {
       },
