@@ -12,8 +12,11 @@ import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { getBars } from "../../../../../reudux/action/barsAction";
 
 function BarList(props) {
+    const [textSearch, setTextSearch] = useState("")
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
@@ -146,21 +149,32 @@ function BarList(props) {
         console.log('search:', value);
     };
 
+    const {dataBars} = useSelector(state => state.barsReducer)
+    const disptach = useDispatch()
+
+    useEffect(() => {
+        disptach(getBars({
+            PageSize: 1,
+            Page: 10,
+            textSearch
+        }))
+    },[disptach, textSearch])
+
     
     function columnCode(item) {
-        return <div>{item?.code}</div>;
+        return <div>{item?.maMatHang}</div>;
     }
     function columnName(item) {
-        return <div>{item?.name}</div>;
+        return <div>{item?.tenMatHang}</div>;
     }
     function columnGroup(item) {
-        return <div>{item?.group}</div>;
+        return <div>{item?.nhomMatHang}</div>;
     }
     function columnAmount(item) {
-        return <div>{item?.amount}</div>;
+        return <div>{item?.soLuong}</div>;
     }
     function columnUnit(item) {
-        return <div>{item?.unit}</div>;
+        return <div>{item?.donVi}</div>;
     }
     function columnNote(item) {
         return <div>{item?.note}</div>;
@@ -214,18 +228,19 @@ function BarList(props) {
                 <div className="barlist-manager__filter">
                     <div className="barlist-manager__filter-code">
                         <InputField
-                            label={"Mã mặt hàng"}
-                            placeholder={"Mã mặt hàng"}
+                            label={"Mã mặt hàng/Tên mặt hàng"}
+                            placeholder={"Mã mặt hàng/Tên mặt hàng"}
+                            onChange = {(val) => setTextSearch(val)}
                         //width={"20%"} 
                         />
                     </div>
-                    <div className="barlist-manager__filter-name">
+                    {/* <div className="barlist-manager__filter-name">
                         <InputField
                             label={"Tên mặt hàng"}
                             placeholder={"Tên mặt hàng"}
                         //width={"20%"} 
                         />
-                    </div>
+                    </div> */}
                     <div className="barlist-manager__filter-position">
                             <Dropdown 
                                 listOption={dataDrinks} 
@@ -235,7 +250,7 @@ function BarList(props) {
                     </div>
                     
                 </div>
-                <div className="barlist-manager__button">
+                {/* <div className="barlist-manager__button">
                     <div className="barlist-manager__button-search">
                         <Button2
                             name={"Tìm kiếm"}
@@ -243,13 +258,13 @@ function BarList(props) {
                         //onClick={() => handleClickAddPosition()}
                         />
                     </div>
-                </div>
+                </div> */}
                 <div className="barlist-manager__content">
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataBars)}
                         loading={false}
                         //hasMoreOption
                         option={OPTION_MORE_TABLE}

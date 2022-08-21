@@ -28,7 +28,7 @@ export default function chickensReducer(state = initalState, action) {
         case types.GET_CHICKEN_SUCCESS:
             return {
                 ...state,
-                dataChickens: action.payload
+                dataChickens: action.payload.data
             }
         case types.GET_CHICKEN_FAIL:
             return {

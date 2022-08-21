@@ -12,22 +12,27 @@ import { Radio, Select } from "antd";
 import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBars, getBars, postBars, updateBars } from "../../../../../reudux/action/barsAction";
 
 function BarInsert(props) {
+    const [idData, setIdData] = useState()
+    const [statusAction, setStatusAction] = useState("")
+    const [textSearch, setTextSearch] = useState("")
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [drinksCode, setDrinksCode] = useState(""); 
+    const [drinksCode, setDrinksCode] = useState("");
     const [drinksGroup, setDrinksGroup] = useState("");
     const [drinksName, setDrinksName] = useState("");
     const [staffSex, setStaffSex] = useState(1);
     const [staffDate, setStaffDate] = useState(moment().unix()
-    * 1000);
+        * 1000);
     const [staffPosition, setStaffPosition] = useState(1);
     const [amountDrinks, setAmountDrinks] = useState("");
-    const [unitDrinks, setUnitDrinks] = useState(""); 
-    const [unitPriceDrinks, setUnitPriceDrinks] = useState(""); 
-    
+    const [unitDrinks, setUnitDrinks] = useState("");
+    const [unitPriceDrinks, setUnitPriceDrinks] = useState("");
+
 
     // Thêm mới chức vụ
     const [PositionCode, setPositionCode] = useState("");
@@ -127,19 +132,19 @@ function BarInsert(props) {
             person: "Linhdtt",
             date: "12/12/2022"
         },
-        
+
     ];
     const dataDrinks = [
         {
-            value: "1",
+            value: "Nước ngọt",
             label: "Rượu"
         },
         {
-            value: "2",
+            value: "Nước ngọt",
             label: "bia"
         },
         {
-            value: "3",
+            value: "Nước ngọt",
             label: "Nước ngọt"
         },
     ]
@@ -147,14 +152,23 @@ function BarInsert(props) {
     const OPTION_MORE_TABLE = [
         {
             title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
+            onSelect: (item) => {
+                setIsShowPopupAddnew(true)
+                setStatusAction("UPDATE")
+                const id = item.key
+                setIdData(id);
+                setDrinksCode(item.data.maMatHang)
+                setDrinksName(item.data.tenMatHang)
+                setDrinksGroup(item.data.nhomMatHang)
+                setAmountDrinks(item.data.soLuong)
+                setUnitDrinks(item.data.donVi)
+                setUnitPriceDrinks(item.data.donGia)
             },
         },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: (item) => {
+                disptach(deleteBars(item.key))
             },
         },
     ];
@@ -169,36 +183,47 @@ function BarInsert(props) {
         console.log('search:', value);
     };
 
-    
+    const { dataBars, loading } = useSelector(state => state.barsReducer)
+    const disptach = useDispatch()
+
+    useEffect(() => {
+        disptach(getBars({
+            PageSize: 1,
+            Page: 10,
+            textSearch
+        }))
+    }, [disptach, loading, textSearch])
+
+
     function columnCode(item) {
-        return <div>{item?.code}</div>;
+        return <div>{item?.maMatHang}</div>;
     }
     function columnName(item) {
-        return <div>{item?.name}</div>;
+        return <div>{item?.tenMatHang}</div>;
     }
     function columnGroup(item) {
-        return <div>{item?.group}</div>;
+        return <div>{item?.nhomMatHang}</div>;
     }
     function columnAmount(item) {
-        return <div>{item?.amount}</div>;
+        return <div>{item?.soLuong}</div>;
     }
     function columnUnit(item) {
-        return <div>{item?.unit}</div>;
+        return <div>{item?.donVi}</div>;
     }
     function columnUnitPrice(item) {
-        return <div>{item?.unitPrice}</div>;
+        return <div>{item?.donGia}</div>;
     }
     function columnIntoMoney(item) {
-        return <div>{item?.intoMoney}</div>;
+        return <div>{item?.thanhTien}</div>;
     }
     function columnNote(item) {
         return <div>{item?.note}</div>;
     }
     function columnPerson(item) {
-        return <div>{item?.person}</div>;
+        return <div>{item?.createdByUserName}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.date}</div>;
+        return <div>{item?.createdOnDate}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -215,7 +240,8 @@ function BarInsert(props) {
                 [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
                 [COLUMN_TABLE_INDEX_MENU.PERSON]: columnPerson(item),
                 [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
-                key: idx,
+                key: item?.id,
+                data: item
             };
         });
         return [...listData];
@@ -223,21 +249,51 @@ function BarInsert(props) {
 
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
+        setStatusAction("ADD")
     }
     function handleClickAddPosition(type) {
         setIsShowPopupAddPosition(true);
     }
     function onChangeTab() {
-        setIsShowPopupAddnew(false)
-        // setStaffAddress("")
-        // setStaffCode("")
-        // setStaffName("")
-        setStaffDate("")
-        setAmountDrinks("")
-        setUnitPriceDrinks("")
-        setStaffSex(1)
-        setStaffPosition(1)
+        const date = new Date()
+        const userName = JSON.parse(localStorage.getItem("roleType"))
 
+        if (statusAction === "ADD") {
+            const body = {
+                maMatHang: drinksCode,
+                tenMatHang: drinksName,
+                nhomMatHang: drinksGroup,
+                soLuong: amountDrinks,
+                donVi: unitDrinks,
+                donGia: unitPriceDrinks,
+                thanhTien: parseInt(parseInt(amountDrinks) * parseInt(unitPriceDrinks)),
+                createdOnDate: date.toISOString(),
+                createdByUserName: userName.userName,
+            }
+            disptach(postBars(body))
+            setDrinksCode("")
+            setDrinksName("")
+            setDrinksGroup("")
+            setAmountDrinks("")
+            setUnitDrinks("")
+            setUnitPriceDrinks("")
+
+        } else {
+            const body = {
+                id: idData,
+                maMatHang: drinksCode,
+                tenMatHang: drinksName,
+                nhomMatHang: drinksGroup,
+                soLuong: amountDrinks,
+                donVi: unitDrinks,
+                donGia: unitPriceDrinks,
+                thanhTien: parseInt(parseInt(amountDrinks) * parseInt(unitPriceDrinks)),
+                createdOnDate: date.toISOString(),
+                createdByUserName: userName.userName,
+            }
+            disptach(updateBars({ id: idData, body }))
+        }
+        setIsShowPopupAddnew(false)
     }
     function onChangeAddPosition() {
         setIsShowPopupAddPosition(false)
@@ -253,27 +309,31 @@ function BarInsert(props) {
                 <div className="barInsert-manager__filter">
                     <div className="barInsert-manager__filter-code">
                         <InputField
-                            label={"Mã mặt hàng"}
-                            placeholder={"Mã mặt hàng"}
-                        //width={"20%"} 
+                            label={"Mã mặt hàng/ Tên mặt hàng"}
+                            placeholder={"Mã mặt hàng/Tên mặt hàng"}
+                            onChange={(val) => setTextSearch(val)}
                         />
                     </div>
-                    <div className="barInsert-manager__filter-name">
+                    {/* <div className="barInsert-manager__filter-name">
                         <InputField
                             label={"Tên mặt hàng"}
                             placeholder={"Tên mặt hàng"}
+                            onChange={(val) => setTextSearch(val)}
+
                         //width={"20%"} 
                         />
-                    </div>
+                    </div> */}
                     <div className="barInsert-manager__filter-position">
-                            <Dropdown 
-                                listOption={dataDrinks} 
-                                placeholder={"Chọn nhóm mặt hàng"} 
-                                title={"Nhóm mặt hàng"}
-                            />
+                        <Dropdown
+                            listOption={dataDrinks}
+                            placeholder={"Chọn nhóm mặt hàng"}
+                            title={"Nhóm mặt hàng"}
+                            onChange={(val) => setTextSearch(val)}
+
+                        />
                     </div>
                     <div className="barInsert-manager__filter-date">
-                    <DatePicker
+                        <DatePicker
                             defaultValue={moment().unix()
                                 * 1000}
                             //min={moment().unix() * 1000 - ONE_DAY}
@@ -283,17 +343,19 @@ function BarInsert(props) {
                             placeholder="dd/MM/yyyy"
                             label={"Ngày nhập"}
                             width={"100%"}
+                            onChange={(val) => setTextSearch(val)}
+
                         />
                     </div>
                 </div>
                 <div className="barInsert-manager__button">
-                    <div className="barInsert-manager__button-search">
+                    {/* <div className="barInsert-manager__button-search">
                         <Button2
                             name={"Tìm kiếm"}
                             leftIcon={<SearchOutlined />}
                         //onClick={() => handleClickAddPosition()}
                         />
-                    </div>
+                    </div> */}
                     <div className="barInsert-manager__button-create-new">
                         <Button2
                             name={"Thêm mới mặt hàng"}
@@ -307,7 +369,7 @@ function BarInsert(props) {
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
                         total={90}
-                        data={convertDataTable(data)}
+                        data={convertDataTable(dataBars)}
                         loading={false}
                         hasMoreOption
                         option={OPTION_MORE_TABLE}
@@ -320,13 +382,15 @@ function BarInsert(props) {
                     />
                 </div>
                 <Popup
-                    title={"Thêm mới mặt hàng"}
+                    title={statusAction === "ADD" ? "Thêm mới mặt hàng" : "Sửa mặt hàng"}
                     show={isShowPopupAddnew}
-                    onClickClose={() => onChangeTab()}
+                    onClickClose={() => setIsShowPopupAddnew(false)
+                    }
                     button={[
                         <Button2
                             name={"Đóng"}
-                            onClick={() => onChangeTab()}
+                            onClick={() => setIsShowPopupAddnew(false)
+                            }
                         />,
                         <Button2
                             name={"Lưu"}
@@ -346,46 +410,52 @@ function BarInsert(props) {
                                 }}
                                 autoFocus
                             />
-                            <Dropdown 
-                                listOption={dataDrinks} 
-                                placeholder={"Nhập hoặc chọn tên mặt hàng"} 
-                                title={"Tên mặt hàng"} 
+                            <Dropdown
+                                listOption={dataDrinks}
+                                placeholder={"Nhập hoặc chọn tên mặt hàng"}
+                                title={"Tên mặt hàng"}
                                 defaultValue={drinksName}
+                                value={drinksName}
                                 onChange={(val) => { setDrinksName(val) }}
-                                />
-                            <Dropdown 
-                                listOption={dataDrinks} 
-                                placeholder={"Chọn nhóm mặt hàng"} 
-                                title={"Nhóm mặt hàng"} 
+                            />
+                            <Dropdown
+                                listOption={dataDrinks}
+                                placeholder={"Chọn nhóm mặt hàng"}
+                                title={"Nhóm mặt hàng"}
                                 defaultValue={drinksGroup}
+                                value={drinksGroup}
+
                                 onChange={(val) => { setDrinksGroup(val) }}
-                                />
+                            />
                             <Input
                                 label={"Số lượng"}
                                 defaultValue={amountDrinks}
+                                value={amountDrinks}
                                 onChange={(val) => { setAmountDrinks(val) }}
                                 autoFocus
                             />
                             <Input
                                 label={"Đơn vị tính"}
                                 defaultValue={unitDrinks}
+                                value={unitDrinks}
                                 onChange={(val) => { setUnitDrinks(val) }}
                                 autoFocus
                             />
                             <Input
                                 label={"Đơn giá"}
                                 defaultValue={unitPriceDrinks}
+                                value={unitPriceDrinks}
                                 onChange={(val) => { setUnitPriceDrinks(val) }}
                                 autoFocus
                             />
                             <div className="barInsert-manager__popup-intoMoney">
                                 <div className="barInsert-manager__popup-intoMoney-lable">Thành tiền</div>
-                                <div>100000</div>
+                                <div>{parseInt(amountDrinks || 0, 10) * parseInt(unitPriceDrinks || 0)}</div>
                             </div>
                         </div>
                     }
                 />
-                
+
             </div>
         </AdminPage>
 

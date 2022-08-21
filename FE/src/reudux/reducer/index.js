@@ -8,6 +8,7 @@ import spendingsReducer from "./spendingsReducer"
 import staffReducer from "./staffReducer"
 import chickensReducer from "./kitchensReducer"
 import chickensDayReducer from "./kitchensDayReducer"
+import barsReducer from "./barsReducer"
 
 const rootReducer = combineReducers({
     menu: menuReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     spendingsReducer,
     staffReducer,
     chickensReducer,
-    chickensDayReducer
+    chickensDayReducer,
+    barsReducer
 })
 
 export default rootReducer

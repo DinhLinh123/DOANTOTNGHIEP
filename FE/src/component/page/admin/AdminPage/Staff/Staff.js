@@ -171,6 +171,10 @@ function Staff(props) {
       value: "Thu ngân",
       label: "Thu ngân",
     },
+    {
+      value: "administrator",
+      label: "admin",
+    },
   ];
 
   const OPTION_MORE_TABLE = [
@@ -674,7 +678,7 @@ function Staff(props) {
   const searchUser = (text) => {
     console.log("text", text);
     setTimeout(() => {
-      dispatch(searchStaff(text || staffPosition))
+      dispatch(searchStaff(text))
     }, 500)
   }
   return (
@@ -702,6 +706,7 @@ function Staff(props) {
               placeholder={"Chọn chức vụ"}
               title={"Chức vụ"}
               setStaffPosition={setStaffPosition}
+              onChange={(item) => searchUser(item)}
             />
           </div>
         </div>

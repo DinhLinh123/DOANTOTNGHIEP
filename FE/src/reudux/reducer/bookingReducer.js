@@ -29,7 +29,7 @@ export default function bookingReducer(state = initalState, action ) {
         case types.POST_BOOKING_SUCCESS:
             return{
                 ...state,
-            dataBooking: [...state.dataBooking, action.payload.data]
+            dataBooking: [...state.dataBooking, action.payload]
             }
         case types.POST_BOOKING_FAIL:
             return{

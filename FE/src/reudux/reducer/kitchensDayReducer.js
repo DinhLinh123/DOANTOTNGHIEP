@@ -28,7 +28,7 @@ export default function chickensDayReducer(state = initalState, action) {
         case types.GET_KIETCHEN_DAY_SUCCESS:
             return {
                 ...state,
-                dataChickensDay: action.payload
+                dataChickensDay: action.payload.data
             }
         case types.GET_KIETCHEN_DAY_FAIL:
             return {
