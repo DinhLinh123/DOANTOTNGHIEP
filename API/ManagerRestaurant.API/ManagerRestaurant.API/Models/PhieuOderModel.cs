@@ -29,7 +29,7 @@ namespace ManagerRestaurant.API.Models
         public Guid IdBan { get; set; } 
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
-        public List<DoAnModel> MonAns { get; set; }
+        public List<OderCreateModule> MonAns { get; set; }
         public float TongTien { get; set; }
         public float ThucThu { get; set; }
         public float SoTienGiam{ get; set; }
@@ -40,12 +40,21 @@ namespace ManagerRestaurant.API.Models
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
     }
-
+    public class OderCreateModule
+    {
+        public Guid IdDoAn { get; set; }
+        public int SoLuong { get; set; }
+        public Guid? CreatedByUserId{get;set;}
+        public string CreatedByUserName{get;set;}
+        public string CreatedOnDate{get;set;}
+        public Guid? LastModifiedByUserId{get;set;}
+        public string LastModifiedByUserName{ get; set; }
+    }
     public class PhieuOderUpdateModel
     {
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
-        public List<DoAnModel> MonAns { get; set; }
+        public List<OderCreateModule> MonAns { get; set; }
         public Guid IdThuNgan { get; set; }
         public Guid IdKhachHang { get; set; }
         public float TongTien { get; set; }

@@ -184,7 +184,31 @@ namespace ManagerRestaurant.API.Controllers
                     if (item.TrangThai == 3) { phieuOder.ThoiGianThanhToan = DateTime.Now; }
                     phieuOder.LastModifiedByUserId = item.LastModifiedByUserId;
                     phieuOder.LastModifiedByUserName = item.LastModifiedByUserName;
+                    //delete all order old
+                    _context.Oder.RemoveRange(_context.Oder.Where(x => x.IdPhieuOder == phieuOder.Id));
 
+                    if (item.MonAns != null)
+                    {
+                        foreach (var i in item.MonAns)
+                        {
+                            _context.Oder.Add(new Oder
+                            {
+                                Id = Guid.NewGuid(),
+                                IdPhieuOder = phieuOder.Id,
+                                PhieuOder = phieuOder,
+                                IdDoAn = i.IdDoAn,
+                                DoAn = _context.DoAn.Find(i.IdDoAn),
+                                SoLuong = i.SoLuong,
+                                IdBan = phieuOder.IdBan,
+                                CreatedByUserId = i.CreatedByUserId,
+                                CreatedByUserName = i.CreatedByUserName,
+                                CreatedOnDate = DateTime.Now,
+                                LastModifiedByUserId = i.LastModifiedByUserId,
+                                LastModifiedByUserName = i.LastModifiedByUserName,
+                            });
+                        }
+
+                    }
                     await _context.SaveChangesAsync();
                     res.Code = 200;
                     res.Mess = "Update success";
@@ -227,6 +251,28 @@ namespace ManagerRestaurant.API.Controllers
                 phieuOder.CreatedByUserName = item.CreatedByUserName;
                 phieuOder.CreatedOnDate = DateTime.Now;
 
+                if (item.MonAns != null)
+                {
+                    foreach (var i in item.MonAns)
+                    {
+                        _context.Oder.Add(new Oder
+                        {
+                            Id = Guid.NewGuid(),
+                            IdPhieuOder = phieuOder.Id,
+                            PhieuOder = phieuOder,
+                            IdDoAn = i.IdDoAn,
+                            DoAn = _context.DoAn.Find(i.IdDoAn),
+                            SoLuong = i.SoLuong,
+                            IdBan = phieuOder.IdBan,
+                            CreatedByUserId = i.CreatedByUserId,
+                            CreatedByUserName = i.CreatedByUserName,
+                            CreatedOnDate = DateTime.Now,
+                            LastModifiedByUserId = i.LastModifiedByUserId,
+                            LastModifiedByUserName = i.LastModifiedByUserName,
+                        });
+                    }
+
+                }
                 _context.PhieuOder.Add(phieuOder);
                 await _context.SaveChangesAsync();
 
