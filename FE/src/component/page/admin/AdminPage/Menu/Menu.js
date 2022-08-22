@@ -468,7 +468,7 @@ function Menu(props) {
             <InputField placeholder={"Tên món ăn"} width={400} onChange={(val) => {
               setTimeout(() => {
                 setTextSearch(val)
-              }, 200);
+              }, 500);
             }} />
           </div>
           <div className="menu-manager__filter-create-new">

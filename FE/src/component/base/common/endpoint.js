@@ -29,6 +29,8 @@ const API_PROMOTION = {
     CREATE_NEW: PART + "/UuDai",
     GET_BY_ID: PART + "/UuDai/",
     GET_BY_FILTER: PART + "/UuDai/filter?_filter=",
+    UPDATE_BY_ID: PART + "/UuDai/",
+    DELETE_BY_ID: PART + "/UuDai/",
 };
 
 const API_TYPE_FOOD = {
@@ -50,7 +52,7 @@ const API_CATEGORY_MENU = {
 const API_ORDER = {
     GET_ALL: PART + "/PhieuOder",
     CREATE_NEW: PART + "/PhieuOder",
-    GET_BY_ID: PART + "/PhieuOder/",
+    GET_BY_ID_TABLE: PART + "/PhieuOder/findbyidban/",
     UPDATE_BY_ID: PART + "/PhieuOder/",
     DELETE_BY_ID: PART + "/PhieuOder/",
     GET_BY_FILTER: PART + "/PhieuOder/filter?_filter=",
@@ -65,6 +67,10 @@ const API_OFFER = {
     GET_BY_FILTER: PART + "/UuDai/filter?_filter=",
 };
 
+const API_REVENUEANDEXPENDITURE = {
+    GET: PART +  '/BaoCaoThongKe/thuchi/'
+};
+
 export {
     API_TABLE,
     API_AREA,
@@ -73,5 +79,6 @@ export {
     API_CATEGORY_MENU,
     API_PROMOTION,
     API_ORDER,
-    API_OFFER
+    API_OFFER,
+    API_REVENUEANDEXPENDITURE
 };

@@ -52,12 +52,15 @@
         padding: 0 16px;
 
         &-title {
-          width: 50%;
           text-align: left;
         }
 
+        &-add {
+          margin-left: 16px;
+        }
+
         &-table {
-          width: 50%;
+          margin-left: auto;
           text-align: right;
         }
       }

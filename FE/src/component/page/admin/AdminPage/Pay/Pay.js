@@ -51,9 +51,12 @@ function Spending(props) {
   const [payMethod, setPayMethod] = useState(0);
   const [listArea, setListArea] = useState([]);
   const [listOffer, setListOffer] = useState([]);
-  const [showPopupEditFood, setShowPopupEditFood] = useState({ show: false, key: -1, item: '', action: -1});
+  const [showPopupEditFood, setShowPopupEditFood] = useState({ show: false, key: -1, item: '', action: -1 });
   const [showPopupWarningChoose, setShowPopupWarningChoose] = useState(false);
   const [index, setIndex] = useState(1)
+  const [moneyVoucher, setMoneyVoucher] = useState(0)
+  const [moneyMust, setMoneyMust] = useState(0)
+  const [moneyTotal, setMoneyTotal] = useState(0)
 
   //lấy danh sách các ưu đãi
   useEffect(() => {
@@ -74,69 +77,26 @@ function Spending(props) {
     }
   }, [showPopupOffer])
 
-  useEffect(() => {
-    setoOrderSelected([
-      {
-        "id": "88745c25-aa00-4425-804b-c538c30e4f50",
-        "name": "Thịt",
-        "maTheLoai": "334e851f-2cd8-477f-e9ab-08da81fe0e2d",
-        "theLoaiDoAn": null,
-        "linkAnh": "dfsd",
-        "ghiChu": "không",
-        "danhSachMonAn": "[]",
-        "donGia": 20000,
-        "donViTinh": "Đĩa",
-        "trangThai": true,
-        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "createdByUserName": "string",
-        "createdOnDate": "2022-08-19T09:31:17.8352754",
-        "lastModifiedByUserId": null,
-        "lastModifiedByUserName": null,
-        "count": 1
-      },
-      {
-        "id": "2531362a-829b-4c4d-8c40-1462a19d31d3",
-        "name": "Coca",
-        "maTheLoai": "3cbdc6a0-6111-433f-e9ac-08da81fe0e2d",
-        "theLoaiDoAn": null,
-        "linkAnh": "dfsd",
-        "ghiChu": "không",
-        "danhSachMonAn": "[]",
-        "donGia": 10000,
-        "donViTinh": "Lon",
-        "trangThai": true,
-        "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "createdByUserName": "string",
-        "createdOnDate": "2022-08-19T09:31:44.3297018",
-        "lastModifiedByUserId": null,
-        "lastModifiedByUserName": null,
-        "count": 1
-      }
-    ])
-  }, [])
-
 
   //lấy chi tiết bàn
   useEffect(() => {
-    dispatch(changeLoadingApp(true))
     if (tableID) {
+      dispatch(changeLoadingApp(true))
       baseApi.get(
         (res) => {
           setTable(res?.data);
-          let param = {
-            "idBan": tableID
-          }
-          baseApi.get(
+          baseApi.post(
             (res) => {
               setOrder(res?.data);
               setoOrderSelected(res?.data?.doAns)
+              setOfferChoose({})
+              setMoneyVoucher(0)
               dispatch(changeLoadingApp(false))
-
             },
-            () => { dispatch(changeLoadingApp(false)) },
+            () => { setoOrderSelected([])},
             null,
-            API_ORDER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
-          );
+            API_ORDER.GET_BY_ID_TABLE + tableID
+          )
           dispatch(changeLoadingApp(false))
         },
         () => { dispatch(changeLoadingApp(false)) },
@@ -146,20 +106,7 @@ function Spending(props) {
     }
   }, [tableID]);
 
-  function callApiGetOrder() {
-    baseApi.get(
-      (res) => {
-        setTable(res?.data);
-        dispatch(changeLoadingApp(false))
-      },
-      () => { dispatch(changeLoadingApp(false)) },
-      null,
-      API_TABLE.GET_BY_ID + tableID
-    );
-  }
-
-  //lấy danh sách khu vực
-  useEffect(() => {
+  function callApiGetAreaAndTable() {
     dispatch(changeLoadingApp(true))
     baseApi.get(
       (res) => {
@@ -183,6 +130,11 @@ function Spending(props) {
     );
 
     callGetTypeFood()
+  }
+
+  //lấy danh sách khu vực
+  useEffect(() => {
+    callApiGetAreaAndTable()
   }, []);
 
   function handleClickDelete(item) {
@@ -195,33 +147,34 @@ function Spending(props) {
   function handleClickUpCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
-    _list[a].count += 1;
+    _list[a].soLuong += 1;
     setoOrderSelected(_list);
   }
 
   function handleClickDownCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
-    _list[a].count -= 1;
+    _list[a].soLuong -= 1;
     setoOrderSelected(_list);
   }
+
+  useEffect(() => {
+    renderTotalCount()
+  }, [orderSelected])
 
   function renderTotalCount() {
     let total = 0;
     orderSelected?.map((item) => {
-      total += parseInt(item?.donGia) * parseInt(item?.count);
+      total += parseInt(item?.donGia) * parseInt(item?.soLuong);
     });
-    return total;
-  }
-
-  function renderTotalMust() {
-    let total = 0;
-    return total;
+    setMoneyTotal(total)
+    handleChooseVoucher(offerChoose, total)
   }
 
   function renderMoneyReturn(moneyCustomer) {
     if (moneyCustomer) {
-      let _return = parseInt(moneyCustomer) - 20000;
+      let _moneyMust = JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust
+      let _return = parseInt(moneyCustomer) - _moneyMust;
       return _return
     }
     return 0
@@ -232,21 +185,24 @@ function Spending(props) {
     dispatch(changeLoadingApp(true))
     let body = order
     body.doAns = orderSelected
-    body.tongTien = renderTotalCount()
-    body.thucThu = renderTotalMust()
+    body.tongTien = moneyTotal
+    body.thucThu = moneyMust
+    body.soTienGiam = moneyVoucher
+    body.idBan = tableID
+    body.trangThai= 1
     baseApi.put(
       (res) => {
-        let _table = table;
-        _table.trangThai = 0;
-        baseApi.put(
-          () => { },
-          () => { },
-          null,
-          API_TABLE.UPDATE_BY_ID + table?.id,
-          null,
-          _table
-        )
-        setListArea(res);
+        // let _table = table;
+        // _table.trangThai = 0;
+        // baseApi.put(
+        //   () => { },
+        //   () => { },
+        //   null,
+        //   API_TABLE.UPDATE_BY_ID + table?.id,
+        //   null,
+        //   _table
+        // )
+        callApiGetAreaAndTable()
         setShowPopupPayMethod(false)
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công")
         dispatch(changeLoadingApp(false))
@@ -308,39 +264,74 @@ function Spending(props) {
   }, [showPopupEditFood, index])
 
   function handldChangeFood(val) {
-    if(showPopupEditFood.action===0){
+    if (showPopupEditFood.action === 0) {
       let _list = [...orderSelected];
       let a = _list?.findIndex((l) => l.id === val.id)
       if (a == -1) {
-        val.count = 1
+        val.soLuong = 1
         _list.push(val)
       }
-      else{
+      else {
         setShowPopupWarningChoose(true)
       }
       setoOrderSelected(_list)
-      setShowPopupEditFood({ show: false, key: -1, item: '' , action: -1})
+      setShowPopupEditFood({ show: false, key: -1, item: '', action: -1 })
     }
-    else{
+    else {
       let _list = [...orderSelected]
       let _listID = _list.map((item) => { return item.id })
       let _index = _listID.indexOf(val.id)
       if (_index == -1) {
-  
-        val.count = showPopupEditFood.item?.count
+
+        val.soLuong = showPopupEditFood.item?.soLuong
         _list.splice(showPopupEditFood.key, 1, val)
         setoOrderSelected(_list)
         setShowPopupEditFood({ show: false })
       }
       else {
         setShowPopupWarningChoose(true)
-       }
+      }
     }
-    }
-
-  function handleChooseFood(item) {
-    
   }
+
+  function handleChooseVoucher(val, total) {
+
+    if (val?.loaiUuDai === 0) {
+      if (val?.donViTinh === 0) {
+        let moneyVoucher = total * (val?.giaTri / 100)
+        setMoneyVoucher(moneyVoucher)
+        let money = total - moneyVoucher;
+        setMoneyMust(money)
+      }
+      if (val?.donViTinh === 1) {
+        setMoneyVoucher(val?.giaTri)
+        setMoneyMust(total - val?.giaTri)
+      }
+    } else {
+      let moneyInFood = 0;
+      if(val?.idDoAn !="" || val?.idDoAn != "00000000-0000-0000-0000-000000000000")
+      {
+        orderSelected?.map((item) => {
+          if (item.id === val?.idDoAn) {
+            moneyInFood = item.donGia * item.soLuong
+          }
+        })
+      }
+
+      if (val?.donViTinh === 0) {
+        let moneyVoucher = moneyInFood * (val?.giaTri / 100)
+        setMoneyVoucher(moneyVoucher)
+        let money = total - moneyVoucher;
+        setMoneyMust(money)
+      }
+      if (val?.donViTinh === 1) {
+        setMoneyVoucher(val?.giaTri)
+        setMoneyMust(total - val?.giaTri)
+      }
+    }
+  }
+
+
 
   return (
     <AdminPage title={"Thanh toán hóa đơn"} index={MENU_TAB_ADMIN.PAY}>
@@ -358,15 +349,15 @@ function Spending(props) {
                           className="pay-manager__area-table-name"
                           style={{
                             backgroundColor:
-                              _item.status == 0
+                              _item.trangThai == 0
                                 ? "#dcdde1"
-                                : _item.status == 1
+                                : _item.trangThai == 1
                                   ? "#c23616"
                                   : "#fbc531",
                             color:
-                              _item.status == 0
+                              _item.trangThai == 0
                                 ? "#000"
-                                : _item.status == 1
+                                : _item.trangThai == 1
                                   ? "#fff"
                                   : "#fff",
                           }}
@@ -389,7 +380,7 @@ function Spending(props) {
                 Món đã chọn{`(${orderSelected?.length})`}
               </div>
               <div className="pay-manager__bill-dish-top-add">
-                <Button2 name={"thêm món ăn"} onClick={()=>{setShowPopupEditFood({show: true, key: -1, item: '', action: 0})}}/>
+                <Button2 name={"thêm món ăn"} background={'#0abde3'} onClick={() => { setShowPopupEditFood({ show: true, key: -1, item: '', action: 0 }) }} />
               </div>
               <div className="pay-manager__bill-dish-top-table">
                 Bàn: {table?.name}
@@ -438,88 +429,88 @@ function Spending(props) {
                         <div className="food-name">
                           {commonFunction.smartText(35, item.name)}
                         </div>
-                        <div className="line1-food-count">{item.count}</div>
+                        <div className="line1-food-count">{item.soLuong}</div>
                         <div className="food-money">
                           {commonFunction.numberWithCommas(item.donGia)}(đ)
                         </div>
                       </div>
                       {displayLine2ChooseOrder.show &&
                         displayLine2ChooseOrder.index == item.id && (
-                        <div
-                          className="pay-manager__bill-dish-content-choose-line2"
-                          onMouseEnter={() =>
-                            setDisplayLine2ChooseOrder({
-                              show: true,
-                              index: item.id,
-                            })
-                          }
-                          onMouseLeave={() =>
-                            setDisplayLine2ChooseOrder({
-                              show: false,
-                              index: "",
-                            })
-                          }
-                          style={{
-                            backgroundColor:
-                              displayLine2ChooseOrder.show &&
-                              displayLine2ChooseOrder.index == item.id &&
-                              "#dff9fb",
-                          }}
-                        >
-                          <div className="food-edit">
-                            <Tooltip
-                              title={"Sửa món ăn"}
-                              placement="bottom"
-                            >
-                              <Button2
-                                onClick={() => {
-                                  setShowPopupEditFood({ show: true, key: key, item: item, action: 1 })
-                                }}
-                                leftIcon={<EditOutlined />}
-                              />
-                            </Tooltip>{" "}
-                          </div>
-                          <div className="food-count">
-
-                            <div className="food-count-button">
+                          <div
+                            className="pay-manager__bill-dish-content-choose-line2"
+                            onMouseEnter={() =>
+                              setDisplayLine2ChooseOrder({
+                                show: true,
+                                index: item.id,
+                              })
+                            }
+                            onMouseLeave={() =>
+                              setDisplayLine2ChooseOrder({
+                                show: false,
+                                index: "",
+                              })
+                            }
+                            style={{
+                              backgroundColor:
+                                displayLine2ChooseOrder.show &&
+                                displayLine2ChooseOrder.index == item.id &&
+                                "#dff9fb",
+                            }}
+                          >
+                            <div className="food-edit">
                               <Tooltip
-                                title={"Giảm số lượng"}
+                                title={"Sửa món ăn"}
                                 placement="bottom"
                               >
                                 <Button2
-                                  name={"-"}
-                                  onClick={() => handleClickDownCount(item)}
-                                  disabled={item?.count <= 1}
+                                  onClick={() => {
+                                    setShowPopupEditFood({ show: true, key: key, item: item, action: 1 })
+                                  }}
+                                  leftIcon={<EditOutlined />}
                                 />
                               </Tooltip>{" "}
                             </div>
-                            <div className="food-count-number">
-                              {item.count}
+                            <div className="food-count">
+
+                              <div className="food-count-button">
+                                <Tooltip
+                                  title={"Giảm số lượng"}
+                                  placement="bottom"
+                                >
+                                  <Button2
+                                    name={"-"}
+                                    onClick={() => handleClickDownCount(item)}
+                                    disabled={item?.soLuong <= 1}
+                                  />
+                                </Tooltip>{" "}
+                              </div>
+                              <div className="food-count-number">
+                                {item.soLuong}
+                              </div>
+                              <div className="food-count-button">
+                                <Tooltip
+                                  title={"Tăng số lượng"}
+                                  placement="bottom"
+                                >
+                                  <Button2
+                                    name={"+"}
+                                    onClick={() => handleClickUpCount(item)}
+                                  />
+                                </Tooltip>
+                              </div>
                             </div>
-                            <div className="food-count-button">
-                              <Tooltip
-                                title={"Tăng số lượng"}
-                                placement="bottom"
-                              >
+                            <div className="food-close">
+                              <Tooltip title={"Xóa món"} placement="bottom">
                                 <Button2
-                                  name={"+"}
-                                  onClick={() => handleClickUpCount(item)}
+                                  name={"x"}
+                                  onClick={() => {
+                                    handleClickDelete(item);
+                                  }}
                                 />
                               </Tooltip>
                             </div>
                           </div>
-                          <div className="food-close">
-                            <Tooltip title={"Xóa món"} placement="bottom">
-                              <Button2
-                                name={"x"}
-                                onClick={() => {
-                                  handleClickDelete(item);
-                                }}
-                              />
-                            </Tooltip>
-                          </div>
-                        </div>
-                      )}
+                        )}
                     </div>
                   );
                 })
@@ -535,7 +526,7 @@ function Spending(props) {
                   Tổng tiền
                 </div>
                 <div className="pay-manager__bill-dish-footer-total-money">
-                  {commonFunction.numberWithCommas(renderTotalCount())}(đ)
+                  {commonFunction.numberWithCommas(moneyTotal)}(đ)
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-offer">
@@ -557,7 +548,7 @@ function Spending(props) {
                   Tiền giảm từ voucher
                 </div>
                 <div className="pay-manager__bill-dish-footer-money-offer-choose">
-                  {commonFunction.numberWithCommas(20000)}(đ)
+                  {commonFunction.numberWithCommas(moneyVoucher)}(đ)
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-money">
@@ -565,15 +556,12 @@ function Spending(props) {
                   Tiền phải trả
                 </div>
                 <div className="pay-manager__bill-dish-footer-money-choose">
-                  {commonFunction.numberWithCommas(renderTotalMust())}(đ)
+                  {commonFunction.numberWithCommas(JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust)}(đ)
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-confirm">
-                <div className="pay-manager__bill-dish-footer-confirm-edit">
-                  <Button2 name={"Sửa"} background={'#fdcb6e'} />
-                </div>
                 <div className="pay-manager__bill-dish-footer-confirm-pay">
-                  <Button2 name={"Thanh toán"} background={'#0984e3'} onClick={() => setShowPopupPayMethod(true)} />
+                  <Button2 name={"Thanh toán"} disabled={moneyMust === 0 && moneyTotal === 0} background={'#0984e3'} onClick={() => setShowPopupPayMethod(true)} />
                 </div>
               </div>
             </div>
@@ -604,6 +592,7 @@ function Spending(props) {
                     onClick={() => {
                       setShowPopupOffer(false)
                       setOfferChoose(item)
+                      handleChooseVoucher(item, moneyTotal)
                     }}
                   >
                     <img src={item?.anh} />
@@ -612,6 +601,7 @@ function Spending(props) {
                     onClick={() => {
                       setShowPopupOffer(false)
                       setOfferChoose(item)
+                      handleChooseVoucher(item, moneyTotal)
                     }}
                   >
                     {item?.name}
@@ -620,6 +610,7 @@ function Spending(props) {
                     onClick={() => {
                       setShowPopupOffer(false)
                       setOfferChoose(item)
+                      handleChooseVoucher(item, moneyTotal)
                     }}
                   >
                     {commonFunction.smartText(35, item?.noiDung)}
@@ -685,7 +676,7 @@ function Spending(props) {
                 Tiền phải thanh toán
               </div>
               <div className="popup-pay__request-label">
-                {commonFunction.numberWithCommas(renderTotalMust())}
+                {commonFunction.numberWithCommas(JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust)}(đ)
               </div>
             </div>
             <div className="popup-pay__method">
@@ -720,7 +711,7 @@ function Spending(props) {
                     Tiền trả lại khách
                   </div>
                   <div className="popup-pay__return-label">
-                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}
+                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}(đ)
                   </div>
                 </div>
               </>

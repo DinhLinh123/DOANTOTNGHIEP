@@ -30,6 +30,7 @@ function Order(props) {
   const [listMenu, setListMenu] = useState([])
   const [listType, setListType] = useState([])
   const [textSearch, setTextSearch] = useState("");
+  const [ballotOrder, setBallotOrder] = useState({});
   const renderChoose = useRef([])
   let { tableID } = useParams();
   const dispatch = useDispatch();
@@ -44,6 +45,21 @@ function Order(props) {
       API_TABLE.GET_BY_ID + tableID
     )
   }, [tableID])
+
+  useEffect(() => {
+    if(table?.trangThai !== 0 && table?.trangThai !== 2)
+    {
+      baseApi.post(
+        (res) => {
+          setoOrderSelected(res?.data?.doAns)
+          setBallotOrder(res?.data)
+        },
+        () => { },
+        null,
+        API_ORDER.GET_BY_ID_TABLE + tableID 
+      )
+    }
+  }, [table])
 
   useEffect(() => {
     callGetAllFood()
@@ -64,7 +80,7 @@ function Order(props) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id)
     if (a == -1) {
-      item.count = 1
+      item.soLuong = 1
       _list.push(item)
     }
     setoOrderSelected(_list)
@@ -80,21 +96,21 @@ function Order(props) {
   function handleClickUpCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
-    _list[a].count += 1
+    _list[a].soLuong += 1
     setoOrderSelected(_list)
   }
 
   function handleClickDownCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
-    _list[a].count -= 1
+    _list[a].soLuong -= 1
     setoOrderSelected(_list)
   }
 
   function renderTotalCount() {
     let total = 0;
     orderSelected?.map((item) => {
-      total += parseInt(item?.donGia) * parseInt(item?.count)
+      total += parseInt(item?.donGia) * parseInt(item?.soLuong)
     })
     return total
   }
@@ -166,6 +182,22 @@ function Order(props) {
       },
       null,
       API_ORDER.CREATE_NEW,
+      null,
+      body
+    )
+  }
+
+  function callUpdateOrderFood() {
+    let body = ballotOrder;
+    body.monAns = orderSelected;
+    body.tongTien = renderTotalCount()
+    baseApi.push(
+      (res) => {
+      },
+      () => {
+      },
+      null,
+      API_ORDER.UPDATE_BY_ID + ballotOrder.id,
       null,
       body
     )
@@ -256,7 +288,7 @@ function Order(props) {
                   style={{ backgroundColor: displayLine2ChooseOrder.show && displayLine2ChooseOrder.index == item.id && '#dff9fb' }}
                 >
                   <div className="food-name">{commonFunction.smartText(35, item.name)}</div>
-                  <div className="line1-food-count">{item.count}</div>
+                  <div className="line1-food-count">{item.soLuong}</div>
                   <div className="food-money">
                     {commonFunction.numberWithCommas(parseInt(item.donGia))}(đ)
                   </div>
@@ -269,7 +301,7 @@ function Order(props) {
                   >
                     <div className="food-count">
                       <div className="food-count-button"><Tooltip title={"Giảm số lượng"} placement="bottom"><Button2 name={"-"} onClick={() => handleClickDownCount(item)} disabled={item?.count <= 1} /></Tooltip> </div>
-                      <div className="food-count-number">{item.count}</div>
+                      <div className="food-count-number">{item.soLuong}</div>
                       <div className="food-count-button"><Tooltip title={"Tăng số lượng"} placement="bottom"><Button2 name={"+"} onClick={() => handleClickUpCount(item)} /></Tooltip></div>
                     </div>
                     <div className="food-close" ><Tooltip title={"Xóa món"} placement="bottom"><Button2 name={"x"} onClick={() => { handleClickDelete(item) }} /></Tooltip></div>
@@ -291,7 +323,14 @@ function Order(props) {
             </div>
           </div>
           <div className="order-page-container__selected-dish-footer-confirm">
-            <Button2 name={"Xác nhận"} onClick={() => callOrderFood()} />
+            <Button2 name={"Xác nhận"} onClick={() => {
+              if(table?.trangThai === 0 || table?.trangThai === 2)
+              {
+                callOrderFood()
+              }else{
+                callUpdateOrderFood()
+              }
+            }} />
           </div>
         </div>
       </div>

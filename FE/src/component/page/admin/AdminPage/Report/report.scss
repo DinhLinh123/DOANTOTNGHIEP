@@ -30,6 +30,31 @@
 
         &-filter {
             margin-left: auto;
+            display: flex;
+            align-items: center;
+
+            &-type{
+                display: flex;
+                align-items: center;
+                margin-right: 24px;
+
+                &-item{
+                    width: fit-content;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 8px;
+                    height: 36px;
+                    padding: 0 4px;
+                    width: 100px;
+                    cursor: pointer;
+                }
+
+                .active{
+                    background-color:  #01a3a4;
+                    color: #ffffff;
+                }
+            }
         }
 
         .menu-active {
