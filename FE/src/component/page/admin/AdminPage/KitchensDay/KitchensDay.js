@@ -58,7 +58,9 @@ function KitchensDay(props) {
         return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
     function columnAmount(item) {
-        return <div>{item?.amount}</div>;
+        const count = JSON.parse(item?.matHangs)
+        console.log("count", count);
+        return <div>{count.length}</div>;
     }
     function columnDataentrydate(item) {
         return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
@@ -159,7 +161,7 @@ function KitchensDay(props) {
         const body = {
             ngayHoaDon: date.toISOString(itemUseDate),
             kieu: "Yêu cầu nguyên liệu",
-            matHang: JSON.stringify(listItems),
+            matHangs: JSON.stringify(listItems),
             tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
             createdByUserName: userName.userName,
             createdOnDate: date

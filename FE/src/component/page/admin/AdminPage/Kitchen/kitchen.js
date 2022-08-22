@@ -80,13 +80,14 @@ function Kitchen(props) {
     return <div>{item?.name}</div>;
   }
   function columnAmount(item) {
-    return <div>{item?.amount}</div>;
+    const count = JSON.parse(item?.matHangs)
+    return <div>{count.length}</div>;
   }
   function columnBillDate(item) {
-    return <div>{moment(item?.billdate).format("")}</div>;
+    return <div>{moment(item?.billdate).format("DD-MM-YYYY")}</div>;
   }
   function columnTotalmoney(item) {
-    return <div>{item?.totalmoney}</div>;
+    return <div>{item?.tongSoTien}</div>;
   }
   function columnDataentrydate(item) {
     return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
@@ -309,12 +310,13 @@ function Kitchen(props) {
       name: itemBill,
       ngayHoaDon: date.toISOString(itemBillDate),
       kieu: "Quản lý hóa đơn bếp",
-      matHang: JSON.stringify(listItems),
+      matHangs: JSON.stringify(listItems),
       tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
       createdByUserName: userName.userName,
       createdOnDate: date,
       ghiChu: itemNote
     };
+    console.log("body", body);
     dispatch(postChickens(body))
     setItemBill("")
     setItemBillDate("")
