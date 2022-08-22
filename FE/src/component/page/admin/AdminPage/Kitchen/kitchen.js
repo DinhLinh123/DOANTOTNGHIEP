@@ -15,6 +15,9 @@ import commonFunction from "../../../../base/common/commonFunction";
 import { deleteKitchens, getChickens, postChickens } from "../../../../../reudux/action/kitchensAction";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment"
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { URL_API } from "../../../../../utils/urpapi";
 
 function Kitchen(props) {
   const [sortType, setSortType] = useState();
@@ -26,6 +29,7 @@ function Kitchen(props) {
   ]);
   const [itemImage, setItemImage] = useState("");
   const [itemNote, setItemNote] = useState("");
+  
 
   const COLUMN_TABLE_INDEX_MENU = {
     BILL: "namebill",
@@ -81,7 +85,7 @@ function Kitchen(props) {
   }
   function columnAmount(item) {
     const count = JSON.parse(item?.matHangs)
-    return <div>{count.length}</div>;
+    return <div>{count?.length}</div>;
   }
   function columnBillDate(item) {
     return <div>{moment(item?.billdate).format("DD-MM-YYYY")}</div>;
@@ -326,6 +330,11 @@ function Kitchen(props) {
     setItemNote("")
   }
 
+  const onSubmitImage = async (val) => {
+    setItemImage(val);
+    await axios.post(`${URL_API}/UploadFile`, {data: val[0].file.name})
+  }
+
   return (
     <AdminPage title={"Quản lý bếp"} index={MENU_TAB_ADMIN.KITCHEN}>
       <div className="Kitchen-manager">
@@ -428,7 +437,7 @@ function Kitchen(props) {
                   maxImage={1}
                   images={itemImage}
                   setImages={(val) => {
-                    setItemImage(val);
+                    onSubmitImage(val)
                   }}
                 />
               </div>

@@ -56,3 +56,25 @@ export const deleteKitChensDayFail = (data) => ({
     type: types.DELETE_KITCHEN_DAY_FAIL,
     payload: data
 })
+
+// 
+
+export const updateKitChensDay = (data) => ({
+
+    type: types.UPDATE_KITCHEN_DAY,
+    payload: data
+})
+
+export const updateKitChensDaySuccess = (data) => ({
+
+    type: types.UPDATE_KITCHEN_DAY_SUCCESS,
+    payload: data
+})
+
+export const updateKitChensDayFail = (data) => ({
+
+    type: types.UPDATE_KITCHEN_DAY_FAIL,
+    payload: data
+})
+
+

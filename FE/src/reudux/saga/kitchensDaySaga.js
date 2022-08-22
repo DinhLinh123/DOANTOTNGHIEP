@@ -56,10 +56,29 @@ function* deleteDataKitchensDay({ payload }) {
     }
 }
 
+function* updateDataKitchensDay({ payload }) {
+
+    try {
+        const res = yield axios.put(`${URL_API}/PhieuNhapVatTu/${payload.id}`, payload.body)
+        if (res) {
+            yield put(actions.updateKitChensDaySuccess(payload))
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thành công")
+        }
+        else {
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thất bại")
+        }
+    } catch (error) {
+        yield put(actions.updateKitChensDayFail(error))
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thất bại")
+
+
+    }
+}
+
 
 export function* watchingKitchensDay() {
     yield takeLatest(types.POST_KITCHEN_DAY, postDataKitchensDay)
     yield takeLatest(types.GET_KIETCHEN_DAY, getDatakitChensDay)
     yield takeLatest(types.DELETE_KITCHEN_DAY, deleteDataKitchensDay)
-
+    yield takeLatest(types.UPDATE_KITCHEN_DAY, updateDataKitchensDay)
 }

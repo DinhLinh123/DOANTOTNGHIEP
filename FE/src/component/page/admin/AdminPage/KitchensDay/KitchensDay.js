@@ -12,12 +12,14 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteKitChensDay, getKitChensDay, postKitChensDay } from "../../../../../reudux/action/kitchensDayAction";
+import { deleteKitChensDay, getKitChensDay, postKitChensDay, updateKitChensDay } from "../../../../../reudux/action/kitchensDayAction";
 import moment from "moment"
 import commonFunction from "../../../../base/common/commonFunction";
 
 function KitchensDay(props) {
 
+    const [statusAction, setStatusAction] = useState("");
+    const [idKitchenDays, setIdKitchendays] = useState()
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [itemUseDate, setItemUseDate] = useState("");
@@ -59,7 +61,6 @@ function KitchensDay(props) {
     }
     function columnAmount(item) {
         const count = JSON.parse(item?.matHangs)
-        console.log("count", count);
         return <div>{count.length}</div>;
     }
     function columnDataentrydate(item) {
@@ -78,6 +79,7 @@ function KitchensDay(props) {
                 [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
                 [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
                 key: item.id,
+                data: item
             };
         });
         return [...listData];
@@ -123,8 +125,13 @@ function KitchensDay(props) {
         },
         {
             title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
+            onSelect: (item) => {
+                setStatusAction("UPDATE")
+                setIdKitchendays(item.key)
+                setIsShowPopupAddnew(true)
+                setItemUseDate(item.data.ngayHoaDon)
+                setListItems(JSON.parse(item?.data?.matHangs))
+                setItemNote(item.data.ghiChu)
             },
         },
         {
@@ -135,41 +142,55 @@ function KitchensDay(props) {
         },
     ];
 
-    const { dataChickensDay } = useSelector(state => state.chickensDayReducer)
-    console.log("dataChickensDay", dataChickensDay);
+    const { dataChickensDay, loading } = useSelector(state => state.chickensDayReducer)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getKitChensDay())
-    }, [dispatch])
+    }, [dispatch, loading])
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
+        setStatusAction("ADD")
     }
 
     function renderTotalMoney(data) {
         let total = 0
         data?.map((item) => {
-          total += item?.amount * item?.unitprice
+            total += item?.amount * item?.unitprice
         })
         return total;
-      }
+    }
 
     const onSubmitSave = () => {
         setIsShowPopupAddnew(false)
         const userName = JSON.parse(localStorage.getItem("roleType"))
         const date = new Date();
-        const body = {
-            ngayHoaDon: date.toISOString(itemUseDate),
-            kieu: "Yêu cầu nguyên liệu",
-            matHangs: JSON.stringify(listItems),
-            tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
-            createdByUserName: userName.userName,
-            createdOnDate: date
-        };
+        if (statusAction === "ADD") {
+            const body = {
+                ngayHoaDon: date.toISOString(itemUseDate),
+                kieu: "Yêu cầu nguyên liệu",
+                matHangs: JSON.stringify(listItems),
+                tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+                createdByUserName: userName.userName,
+                createdOnDate: date
+            };
+
+            dispatch(postKitChensDay(body))
+        } else {
+            const body = {
+                id: idKitchenDays,
+                ngayHoaDon: date.toISOString(itemUseDate),
+                kieu: "Yêu cầu nguyên liệu",
+                matHangs: JSON.stringify(listItems),
+                tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+                createdByUserName: userName.userName,
+                createdOnDate: date
+            };
+            dispatch(updateKitChensDay({ id: idKitchenDays, body }))
+        }
         setListItems([
-      { name: "", unit: "", amount: "", unitprice: "" },
-    ])
-        dispatch(postKitChensDay(body))
+            { name: "", unit: "", amount: "", unitprice: "" },
+        ])
     }
 
     //thêm nhiều mặt hàng
@@ -311,7 +332,7 @@ function KitchensDay(props) {
                         />,
                         <Button2
                             name={"Lưu"}
-                            onClick={() => onSubmitSave() }
+                            onClick={() => onSubmitSave()}
                             background="#fa983a"
                         />,
                     ]}

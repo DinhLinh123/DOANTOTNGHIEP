@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { URL_API } from "../../../../../utils/urpapi";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import commonFunction from "../../../../base/common/commonFunction";
 import TableBase from "../../../../base/Table/Table";
@@ -51,19 +54,41 @@ function KitchenDetail(props) {
         },
     ];
 
-    const data = 
-        {
-            key: "1",
-            billName: "HD01",
-            billDate: "27/08/2022",
-            image: "",
-            listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
-            note: "ghi chú",
-            status: "Đã duyệt",
-            person: "Linhdtt",
-            date: "27/08/2022",
+    const data =
+    {
+        key: "1",
+        billName: "HD01",
+        billDate: "27/08/2022",
+        image: "",
+        listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
+        note: "ghi chú",
+        status: "Đã duyệt",
+        person: "Linhdtt",
+        date: "27/08/2022",
 
-        };
+    };
+
+    const [kitchenDetail, setKitchenDetail] = useState({
+        key: "1",
+        billName: "HD01",
+        billDate: "27/08/2022",
+        image: "",
+        matHangs: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
+        note: "ghi chú",
+        status: "Đã duyệt",
+        person: "Linhdtt",
+        date: "27/08/2022",
+
+    });
+    const { kitchenID } = useParams()
+    useEffect(() => {
+
+        const getChickensDetail = async () => {
+            const res = await axios.get(`${URL_API}/PhieuNhapVatTu/${kitchenID}`)
+            setKitchenDetail(res.data.data)
+        }
+        getChickensDetail()
+    }, [])
 
     function columnSerial(idx) {
         return <div>{idx}</div>;
@@ -78,10 +103,10 @@ function KitchenDetail(props) {
         return <div>{item?.amount}</div>;
     }
     function columnUnitprice(item) {
-        return <div>{commonFunction.numberWithCommas(item?.unitprice)}</div>;
+        return <div>{commonFunction.numberWithCommas(item?.unitprice)} </div>;
     }
     function columnIntomoney(item) {
-        return <div>{commonFunction.numberWithCommas(item?.amount * item?.unitprice) }</div>;
+        return <div>{commonFunction.numberWithCommas(item?.amount * item?.unitprice)}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -101,11 +126,11 @@ function KitchenDetail(props) {
     }
 
     function renderTotalMoney(data) {
-       let total = 0
+        let total = 0
 
-       data?.map((item)=>{
-        total += item?.amount * item?.unitprice
-       })
+        data?.map((item) => {
+            total += item?.amount * item?.unitprice
+        })
         return total;
     }
 
@@ -129,7 +154,7 @@ function KitchenDetail(props) {
                     <div className="kitchenDetail-manager__table-content">
                         <TableBase
                             columns={columns}
-                            data={convertDataTable(JSON.parse(data?.listItems))}
+                            data={convertDataTable(JSON.parse(kitchenDetail?.matHangs))}
                             loading={false}
                             //hasMoreOption
                             setObjectSort={(field, order) => {
@@ -144,7 +169,7 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">TỔNG TIỀN: </span>
-                    <span className="kitchenDetail-manager__item-content">{commonFunction.numberWithCommas(renderTotalMoney(JSON.parse(data?.listItems)))}</span>
+                    <span className="kitchenDetail-manager__item-content">{commonFunction.numberWithCommas(renderTotalMoney(JSON.parse(kitchenDetail?.matHangs)))}</span>
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ảnh hóa đơn</span>
@@ -160,12 +185,12 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Người nhập</span>
-                    <span className="kitchenDetail-manager__item-content">{data.person}</span>
+                    <span className="kitchenDetail-manager__item-content">{kitchenDetail?.createdByUserName}</span>
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ngày nhập</span>
                     <span className="kitchenDetail-manager__item-content">{data.date}</span>
-                </div>    
+                </div>
             </div>
         </AdminPage>
     )

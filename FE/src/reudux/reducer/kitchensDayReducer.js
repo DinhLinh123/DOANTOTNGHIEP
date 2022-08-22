@@ -1,7 +1,8 @@
 import * as types from "../constant/kitchensDayType"
 
 const initalState = {
-    dataChickensDay: []
+    dataChickensDay: [],
+    loading: false
 }
 export default function chickensDayReducer(state = initalState, action) {
     switch (action.type) {
@@ -13,7 +14,7 @@ export default function chickensDayReducer(state = initalState, action) {
         case types.POST_KITCHEN_DAY_SUCCESS:
             return {
                 ...state,
-                dataChickensDay: [...state.dataChickensDay, action.payload]
+                dataChickensDay: [...state.dataChickensDay, action.payload.data]
             }
         case types.POST_KITCHEN_DAY_FAIL:
             return {
@@ -28,7 +29,8 @@ export default function chickensDayReducer(state = initalState, action) {
         case types.GET_KIETCHEN_DAY_SUCCESS:
             return {
                 ...state,
-                dataChickensDay: action.payload.data
+                dataChickensDay: action.payload.data,
+                loading: false
             }
         case types.GET_KIETCHEN_DAY_FAIL:
             return {
@@ -44,6 +46,21 @@ export default function chickensDayReducer(state = initalState, action) {
             return {
                 ...state,
                 dataChickensDay: state.dataChickensDay.filter((item) => item.id !== action.payload)
+            }
+        case types.DELETE_KITCHEN_DAY_FAIL:
+            return {
+                ...state,
+                dataChickensDay: state.dataChickensDay
+            }
+
+        case types.UPDATE_KITCHEN_DAY:
+            return {
+                ...state,
+            }
+        case types.UPDATE_KITCHEN_DAY_SUCCESS:
+            return {
+                ...state,
+                loading: true
             }
         case types.DELETE_KITCHEN_DAY_FAIL:
             return {
