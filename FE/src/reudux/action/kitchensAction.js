@@ -21,9 +21,10 @@ export const postChickensFail = (data) => ({
 })
 
 // 
-export const getChickens = () => ({
+export const getChickens = (data) => ({
 
-    type: types.GET_CHICKEN
+    type: types.GET_CHICKEN,
+    payload: data
 })
 
 export const getChickensSuccess = (data) => ({

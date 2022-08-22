@@ -21,6 +21,7 @@ import { URL_API } from "../../../../../utils/urpapi";
 
 function Kitchen(props) {
   const [sortType, setSortType] = useState();
+  const [textSearch, setTextSearch] = useState("")
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [itemBill, setItemBill] = useState("");
   const [itemBillDate, setItemBillDate] = useState("");
@@ -303,8 +304,10 @@ function Kitchen(props) {
   console.log("dataChickens", dataChickens);
 
   useEffect(() => {
-    dispatch(getChickens())
-  }, [dispatch])
+    dispatch(getChickens({
+      textSearch
+    }))
+  }, [dispatch, textSearch])
 
   const onSubmitSave = () => {
     setIsShowPopupAddnew(false)
@@ -341,10 +344,13 @@ function Kitchen(props) {
         <div className="Kitchen-manager__filter">
           <div className="Kitchen-manager__filter-search">
             <div className="Kitchen-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} />
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"}  onChange={(val) => setTextSearch(val)} />
             </div>
             <div className="Kitchen-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} />
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} onChange= {(val) => {
+                const date = new Date();
+                setTextSearch(date.toISOString(val))
+              }}/>
             </div>
           </div>
           <div className="Kitchen-manager__filter-create-new">

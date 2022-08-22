@@ -23,10 +23,10 @@ function* postDataChickens({ payload }) {
     }
 }
 
-function* getDataChickens() {
+function* getDataChickens({payload}) {
 
     try {
-        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu`)
+        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/filter?_filter={"TextSearch":"${payload.textSearch}"}`)
         if (res) {
             yield put(actions.getChickensSuccess(res.data))
         }
