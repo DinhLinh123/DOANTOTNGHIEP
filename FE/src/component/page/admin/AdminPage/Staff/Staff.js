@@ -186,26 +186,34 @@ function Staff(props) {
   const quyen1 = quyen?.find((item) => item === "0-5-0")
   const quyen2 = quyen?.find((item) => item === "0-5-1")
   const quyen3 = quyen?.find((item) => item === "0-5-2")
+  const quyen4 = quyen?.find((item) => item === "0-5-3")
+
 
   const OPTION_MORE_TABLE = [
     {
       title: "Phân quyền",
       onSelect: (item) => {
-        setIdStaff(item?.code.props.children[1].props.children);
-        setStaffCode(item?.code.props.children[0]);
-        setStaffName(item?.name.props.children);
-        setStaffSex(item?.sex.props.children);
-        setStaffDate(item?.date.props.children);
-        setStaffPosition(item?.position.props.children);
-        setStaffPhone(item?.phone.props.children);
-        setStaffAddress(item?.address.props.children);
-        setStaffNote(item?.note.props.children);
-        setAcountName(item?.data.userName)
-        
-        if(item?.listTree !== "string"){
-         setCheckedKeys(JSON.parse(item?.listTree))
+        if(quyen4 === "0-5-3"){
+          setIdStaff(item?.code.props.children[1].props.children);
+          setStaffCode(item?.code.props.children[0]);
+          setStaffName(item?.name.props.children);
+          setStaffSex(item?.sex.props.children);
+          setStaffDate(item?.date.props.children);
+          setStaffPosition(item?.position.props.children);
+          setStaffPhone(item?.phone.props.children);
+          setStaffAddress(item?.address.props.children);
+          setStaffNote(item?.note.props.children);
+          setAcountName(item?.data.userName)
+          
+          if(item?.listTree !== "string"){
+           setCheckedKeys(JSON.parse(item?.listTree))
+          }
+          setIsShowPopupSetup(true);
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền phân quyền")
+
         }
-        setIsShowPopupSetup(true);
+      
       },
     },
     {
@@ -384,6 +392,11 @@ function Staff(props) {
         {
           title: "Xóa nhân viên",
           key: "0-5-2",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: "Xóa nhân viên",
+          key: "0-5-3",
           icon: <CarryOutOutlined />,
         },
       ],
