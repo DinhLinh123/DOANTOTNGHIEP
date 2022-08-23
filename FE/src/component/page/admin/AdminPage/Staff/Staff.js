@@ -51,6 +51,7 @@ function Staff(props) {
   const [staffNote, setStaffNote] = useState("");
   const [acountName, setAcountName] = useState("")
   const [password, setPassword] = useState("")
+  const [permission, setPermission] = useState([]);
   // Thêm mới chức vụ
   const [PositionCode, setPositionCode] = useState("");
   const [PositionName, setPositionName] = useState("");
@@ -172,8 +173,8 @@ function Staff(props) {
       label: "Thu ngân",
     },
     {
-      value: "administrator",
-      label: "admin",
+      value: "Admin",
+      label: "Admin",
     },
   ];
 
@@ -612,12 +613,14 @@ function Staff(props) {
   async function onChangeTab() {
     const date = new Date();
     const user = JSON.parse(localStorage.getItem("roleType"))
+    
     if (statusAction === "ADD") {
 
       const res = await axios.get(`http://sqldemo-001-site1.htempurl.com/checkexist/${acountName}`)
       if (res.data.code === 500) {
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
       } else {
+        
         const body = {
           maNV: staffCode ,
           fullName: staffName,
@@ -625,6 +628,7 @@ function Staff(props) {
           ngaySinh: date.toISOString(staffDate),
           chucVu: staffPosition,
           soDienThoai: staffPhone,
+          quyen : staffPosition === "Admin" ?   "[\"0-0\",\"0-0-0\",\"0-0-1\",\"0-0-2\",\"0-1\",\"0-1-0\",\"0-1-1\",\"0-1-2\",\"0-2\",\"0-2-0\",\"0-3\",\"0-3-0\",\"0-3-1\",\"0-3-2\",\"0-3-3\",\"0-3-4\",\"0-3-5\",\"0-4\",\"0-4-0\",\"0-4-1\",\"0-4-2\",\"0-5\",\"0-5-0\",\"0-5-1\",\"0-5-2\",\"0-6\",\"0-6-0\",\"0-6-1\",\"0-6-2\",\"0-6-3\",\"0-7\",\"0-7-0\",\"0-7-1\",\"0-7-2\",\"0-7-3\",\"0-7-4\",\"0-7-5\",\"0-8\",\"0-8-0\",\"0-8-1\",\"0-8-2\",\"0-8-3\",\"0-8-4\",\"0-8-5\",\"0-8-6\",\"0-8-7\",\"0-8-8\",\"0-9\",\"0-9-0\",\"0-10\",\"0-10-0\"]" : null,
           diaChi: staffAddress,
           chiChu: staffNote,
           userName: acountName,
@@ -718,7 +722,7 @@ function Staff(props) {
   };
 
   const searchUser = (text) => {
-    console.log("text", text);
+    
     setTimeout(() => {
       dispatch(searchStaff(text))
     }, 500)
