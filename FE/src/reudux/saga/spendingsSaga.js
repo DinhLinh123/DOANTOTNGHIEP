@@ -20,10 +20,10 @@ function * postDataSpending({payload}){
 }
 
 
-function * getDataSpending(){
+function * getDataSpending({payload}){
 
     try {
-        const res = yield axios.get(`${URL_API}/ChiTieuTrongNgay`)
+        const res = yield axios.get(`${URL_API}/ChiTieuTrongNgay/filter?_filter={"TextSearch" : "${payload.textSearch}"}`)
         if(res){
             yield put(actions.getSpendingSuccess(res.data))
         }

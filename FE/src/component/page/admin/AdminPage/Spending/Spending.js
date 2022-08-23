@@ -31,6 +31,8 @@ function Spending(props) {
   const [itemImage, setItemImage] = useState("");
   const [itemNote, setItemNote] = useState("");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
+  const [textSearch, setTextSearch] = useState("")
+  console.log("textSearch", textSearch);
   const COLUMN_TABLE_INDEX_MENU = {
     BILL: "namebill",
     AMOUNT: "amount",
@@ -324,12 +326,14 @@ function Spending(props) {
     const date = new Date();
     const body = {
       name: itemBill,
-      ngayHoaDon: date.toISOString(itemBillDate),
+      ngayHoaDon: date.setHours(0,0,0,0).toISOString(itemBillDate),
+      // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
       matHang: JSON.stringify(listItems),
       tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
       createdByUserName: userName.userName,
       createdOnDate: date
     };
+    setIsShowPopupAddnew(false);
     dispatch(postSpending(body))
     setListItems([
       { name: "", unit: "", amount: "", unitprice: "" },
@@ -342,8 +346,8 @@ function Spending(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSpending());
-  }, [dispatch]);
+    dispatch(getSpending({textSearch}));
+  }, [dispatch, textSearch]);
 
   return (
     <AdminPage title={"Quản lý chi tiêu"} index={MENU_TAB_ADMIN.SPENDING}>
@@ -351,10 +355,16 @@ function Spending(props) {
         <div className="spending-manager__filter">
           <div className="spending-manager__filter-search">
             <div className="spending-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} />
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} onChange = {event => setTextSearch(event)} />
             </div>
             <div className="spending-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}/>
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} 
+              // onChange = {val => {
+              //   const date = new Date();
+              //   console.log(date.setHours(0,0,0,0));
+              //   setTextSearch(date.toISOString(val))
+              // }} 
+              />
             </div>
           </div>
           <div className="spending-manager__filter-create-new">

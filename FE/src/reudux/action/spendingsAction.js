@@ -21,9 +21,10 @@ export const postSpendingFail = (data) => ({
 
 // lấy dữ liệu
 
-export const getSpending = () => ({
+export const getSpending = (data) => ({
 
-    type: types.GET_SPENDING
+    type: types.GET_SPENDING,
+    payload: data
 })
 
 export const getSpendingSuccess = (data) => ({

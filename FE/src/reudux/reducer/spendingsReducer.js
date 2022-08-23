@@ -26,14 +26,15 @@ export default function spendingsReducer(state = initalState, action) {
                 ...state,
             }
         case types.GET_SPENDING_SUCCESS:
+            console.log("action.payload", action.payload);
             return {
                 ...state,
-                dataSpending: action.payload
+                dataSpending: action.payload.data
             }
         case types.GET_SPENDING_FAIL:
             return {
                 ...state,
-                dataSpending: [...state.dataSpending]
+                dataSpending: state.dataSpending
             }
 
         case types.DELETE_SPENDING:
