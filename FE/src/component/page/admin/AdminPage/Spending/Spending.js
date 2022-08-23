@@ -124,6 +124,14 @@ function Spending(props) {
     },
   ];
 
+  const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+  const quyen = getQuyen
+
+  const quyen1 = quyen?.find((item) => item === "0-1-0")
+  const quyen2 = quyen?.find((item) => item === "0-1-1")
+  const quyen3 = quyen?.find((item) => item === "0-1-2")
+
   function handleClickAddnew(type) {
     setIsShowPopupAddnew(true);
   }
@@ -144,7 +152,11 @@ function Spending(props) {
     {
       title: "Xóa",
       onSelect: (item) => {
-        dispatch(deleteSpending(item.key))
+        if(quyen3 === "0-1-2"){
+          dispatch(deleteSpending(item.key))
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa chi tiêu")
+        }
       },
     },
   ];
@@ -346,11 +358,11 @@ function Spending(props) {
             </div>
           </div>
           <div className="spending-manager__filter-create-new">
-            <Button2
+            {quyen1 === "0-1-0" ?  <Button2
               name={"Thêm mới chi tiêu"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
-            />
+            /> : null}
           </div>
         </div>
         <div className="spending-manager__content">

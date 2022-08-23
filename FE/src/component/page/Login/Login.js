@@ -63,6 +63,8 @@ function Login() {
         userAvatar: account.userAvatar,
         roleType: account.roleType
       }))
+      
+
 
       window.open("/admin/report", '_self')
     }
@@ -109,8 +111,10 @@ function Login() {
       const res = await axios.post(`http://sqldemo-001-site1.htempurl.com/Login`, body)
       console.log(res.data.data);
       if(res.data.data){
-        window.open("/admin/report", '_self')
+        localStorage.setItem( 'infoUser', res.data.data.id)
+        localStorage.setItem( 'quyen', res.data.data.quyen)
 
+        window.open("/admin/report", '_self')
       }else{
         setError("Sai tài khoản hoặc mật khẩu!")
       }

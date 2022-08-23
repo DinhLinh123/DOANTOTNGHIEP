@@ -54,6 +54,16 @@ function Menu(props) {
   const [isShowPopupWarningCategory, setIsShowPopupWarningCategory] = useState(false);
   const [listMenu, setListMenu] = useState([]);
 
+  const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+  const quyen = getQuyen
+
+  const quyen1 = quyen?.find((item) => item === "0-0-0")
+  const quyen2 = quyen?.find((item) => item === "0-0-1")
+  const quyen3 = quyen?.find((item) => item === "0-0-2")
+
+  
+
 
   const [images, setImages] = useState([]);
 
@@ -112,14 +122,24 @@ function Menu(props) {
     {
       title: "Sửa",
       onSelect: (val) => {
-        setFoodDetail(val.detail)
-        handleEditMenu(val.detail)
+        if(quyen2 === "0-0-1"){
+          setFoodDetail(val.detail)
+          handleEditMenu(val.detail)
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa menu")
+
+        }
       },
     },
     {
       title: "Xóa",
       onSelect: (val) => {
-        setIsShowPopupComfirmDelete({ show: true, item: val.detail })
+        if(quyen2 === "0-0-3"){
+          setIsShowPopupComfirmDelete({ show: true, item: val.detail })
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa menu")
+
+        }
       },
     },
   ];
@@ -471,7 +491,7 @@ function Menu(props) {
               }, 500);
             }} />
           </div>
-          <div className="menu-manager__filter-create-new">
+          {quyen1 === "0-0-0" ? <div className="menu-manager__filter-create-new">
             <Button2
               name={"Thêm mới món ăn"}
               leftIcon={<PlusOutlined />}
@@ -483,7 +503,8 @@ function Menu(props) {
                 }
               }}
             />
-          </div>
+          </div> : null}
+          
         </div>
         <div className="menu-manager__content">
           <TableBase

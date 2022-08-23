@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -163,6 +163,14 @@ function Kitchen(props) {
     },
   ];
 
+  const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+  const quyen = JSON.parse(getQuyen)
+
+  const quyen1 = quyen?.find((item) => item === "0-3-3")
+  const quyen2 = quyen?.find((item) => item === "0-3-4")
+  const quyen3 = quyen?.find((item) => item === "0-3-5")
+
   const OPTION_MORE_TABLE = [
     {
       title: "Chi tiết",
@@ -179,7 +187,13 @@ function Kitchen(props) {
     {
       title: "Xóa",
       onSelect: (item) => {
-        dispatch(deleteKitchens(item.key))
+        if(quyen3 === "0-3-5"){
+          dispatch(deleteKitchens(item.key))
+        }
+        else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa hóa đơn")
+        }
+        
       },
     },
   ];
@@ -353,12 +367,13 @@ function Kitchen(props) {
               }}/>
             </div>
           </div>
-          <div className="Kitchen-manager__filter-create-new">
-            <Button2
+          <div className="Kitchen-manager__filter -create-new">
+            {quyen1 === "0-3-3" ? <Button2
               name={"Thêm mới"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
-            />
+            /> : null}
+            
           </div>
         </div>
         <div className="Kitchen-manager__content">

@@ -4,6 +4,7 @@ import {
   MENU_TAB_ADMIN,
   ONE_DAY,
   SORT_TYPE,
+  TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
@@ -25,6 +26,7 @@ import {
   updateBooking,
 } from "../../../../../reudux/action/bookingActions";
 import { useDispatch, useSelector } from "react-redux";
+import commonFunction from "../../../../base/common/commonFunction";
 
 function Book(props) {
   const [idBooking, setIdBooking] = useState();
@@ -255,29 +257,43 @@ function Book(props) {
     {
       title: "Xếp bàn",
       onSelect: () => {
-        setIsShowPopupSetup(true);
+        if(quyen4 === "0-6-3"){
+          setIsShowPopupSetup(true);
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xếp bàn")
+        }
       },
     },
     {
       title: "Sửa",
       onSelect: (item) => {
-        setIsShowPopupAddnew(true);
-        setIdBooking(item.name.props.children[1].props.children);
-        setBookName(item?.name?.props?.children[0]);
-        setBookPhone(item?.phone?.props?.children);
-        setBookAdults(item?.adults?.props?.children);
-        setBookChild(item?.child?.props?.children);
-        setBookDate(item?.date?.props?.children);
-        setBookTime(item?.time?.props?.children);
-        setBookNote(item?.note?.props?.children);
-        setStatus("UPDATE");
+        if (quyen2 === "0-6-1") {
+          setIsShowPopupAddnew(true);
+          setIdBooking(item.name.props.children[1].props.children);
+          setBookName(item?.name?.props?.children[0]);
+          setBookPhone(item?.phone?.props?.children);
+          setBookAdults(item?.adults?.props?.children);
+          setBookChild(item?.child?.props?.children);
+          setBookDate(item?.date?.props?.children);
+          setBookTime(item?.time?.props?.children);
+          setBookNote(item?.note?.props?.children);
+          setStatus("UPDATE");
+        } else {
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa đặt bàn")
+        }
+        
       },
     },
     {
       title: "Xóa",
       onSelect: (item) => {
-        const id = item.name.props.children[1].props.children;
-        dispatch(deleteBooking(id));
+        if(quyen3 === "0-6-2"){
+          const id = item.name.props.children[1].props.children;
+          dispatch(deleteBooking(id));
+        }else{
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa đặt bàn")
+        }
+        
       },
     },
   ];
@@ -339,7 +355,15 @@ function Book(props) {
   function columnClient(item) {
     return <div>{item?.client}</div>;
   }
-  console.log("mã trạng thái: ", data_setup.status_code);
+  const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+  const quyen = getQuyen
+
+  const quyen1 = quyen?.find((item) => item === "0-6-0")
+  const quyen2 = quyen?.find((item) => item === "0-6-1")
+  const quyen3 = quyen?.find((item) => item === "0-6-2")
+  const quyen4 = quyen?.find((item) => item === "0-6-3")
+
   function columnActive(item) {
     if (item.status_code === 0) {
       return (
@@ -367,7 +391,6 @@ function Book(props) {
 
   function convertDataTable(dataTable) {
     let listData;
-    console.log("listData", dataTable);
     listData = dataTable?.map((item, idx) => {
       return {
         [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
@@ -489,11 +512,12 @@ function Book(props) {
             />
           </div>
           <div className="book-manager__filter-create-new">
-            <Button2
+            {quyen1 === "0-6-0" ?    <Button2
               name={"Thêm mới đặt bàn"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
-            />
+            /> : null}
+         
           </div>
         </div>
 

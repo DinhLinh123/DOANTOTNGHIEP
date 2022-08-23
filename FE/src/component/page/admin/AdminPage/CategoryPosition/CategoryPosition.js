@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, ONE_DAY, SORT_TYPE } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, ONE_DAY, SORT_TYPE, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
@@ -11,6 +11,7 @@ import moment from "moment";
 import Popup from "../../../../base/Popup/Popup";
 import Input from "../../../../base/Input/Input";
 import TimePicker from "../../../../base/TimePicker/TimePicker";
+import commonFunction from "../../../../base/common/commonFunction";
 
 function CategoryPosition(props) {
     const [sortType, setSortType] = useState();
@@ -85,17 +86,33 @@ function CategoryPosition(props) {
         
     ];
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = getQuyen
+  
+    const quyen1 = quyen?.find((item) => item === "0-8-6")
+    const quyen2 = quyen?.find((item) => item === "0-8-7")
+    const quyen3 = quyen?.find((item) => item === "0-8-8")
+
     const OPTION_MORE_TABLE = [
         {
             title: "Sửa",
             onSelect: () => {
-                alert("Sửa");
+                if(quyen2 === "0-8-7"){
+                    alert("Sửa");
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa danh mục quầy chức vụ")
+                }
             },
         },
         {
             title: "Xóa",
             onSelect: () => {
-                alert("Xóa");
+                if(quyen2 === "0-8-8"){
+                    alert("Xóa");
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa danh mục quầy chức vụ")
+                }
             },
         },
     ];
@@ -172,11 +189,11 @@ function CategoryPosition(props) {
                         />
                     </div>
                     <div className="categoryposition-manager__filter-create-new">
-                        <Button2
+                        {quyen1 === "0-8-6" ? <Button2
                             name={"Thêm mới chức vụ"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
-                        />
+                        /> : null}
                     </div>
                 </div>
 

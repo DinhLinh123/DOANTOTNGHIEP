@@ -67,22 +67,41 @@ function CategoryMenu(props) {
 
     ];
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = getQuyen
+  
+    const quyen1 = quyen?.find((item) => item === "0-8-0")
+    const quyen2 = quyen?.find((item) => item === "0-8-1")
+    const quyen3 = quyen?.find((item) => item === "0-8-2")
+
     const OPTION_MORE_TABLE = [
         {
             title: "Sửa",
             onSelect: (item) => {
-                setNameTypeFood(item?.item?.name)
-                setIsManyTypeFood(item?.item?.isMany)
-                setCategoryNote(item?.item?.ghiChu)
-                setTypeFoodDetail(item?.item)
-                setIsShowPopupAddnew({ show: true, title: 'Sửa danh mục món ăn', key: 1 })
+                if(quyen2 === "0-8-1"){
+                    setNameTypeFood(item?.item?.name)
+                    setIsManyTypeFood(item?.item?.isMany)
+                    setCategoryNote(item?.item?.ghiChu)
+                    setTypeFoodDetail(item?.item)
+                    setIsShowPopupAddnew({ show: true, title: 'Sửa danh mục món ăn', key: 1 })
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa danh mục menu")
+
+                }
+               
             },
         },
         {
             title: "Xóa",
             onSelect: (item) => {
-                setTypeFoodDetail(item?.item)
-                setIsShowPopupComfirmDelete(true)
+                if(quyen3 === "0-8-2"){
+                    setTypeFoodDetail(item?.item)
+                    setIsShowPopupComfirmDelete(true)
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa danh mục menu")
+                }
+                
             },
         },
     ];
@@ -252,11 +271,11 @@ function CategoryMenu(props) {
                         />
                     </div>
                     <div className="categorymenu-manager__filter-create">
-                        <Button2
+                       {quyen1 === "0-8-0" ?  <Button2
                             name={"Thêm mới danh mục"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => setIsShowPopupAddnew({ show: true, title: 'Thêm mới danh mục đồ ăn', key: 0 })}
-                        />
+                        /> : null}
                     </div>
                 </div>
 

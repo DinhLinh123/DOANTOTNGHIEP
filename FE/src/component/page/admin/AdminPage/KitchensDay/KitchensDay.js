@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -116,6 +116,14 @@ function KitchensDay(props) {
         },
     ];
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = JSON.parse(getQuyen)
+
+    const quyen1 = quyen?.find((item) => item === "0-3-0")
+    const quyen2 = quyen?.find((item) => item === "0-3-1")
+    const quyen3 = quyen?.find((item) => item === "0-3-2")
+
     const OPTION_MORE_TABLE = [
         {
             title: "Chi tiết",
@@ -126,18 +134,29 @@ function KitchensDay(props) {
         {
             title: "Sửa",
             onSelect: (item) => {
-                setStatusAction("UPDATE")
-                setIdKitchendays(item.key)
-                setIsShowPopupAddnew(true)
-                setItemUseDate(item.data.ngayHoaDon)
-                setListItems(JSON.parse(item?.data?.matHangs))
-                setItemNote(item.data.ghiChu)
+                if(quyen2 === "0-3-1"){
+                    setStatusAction("UPDATE")
+                    setIdKitchendays(item.key)
+                    setIsShowPopupAddnew(true)
+                    setItemUseDate(item.data.ngayHoaDon)
+                    setListItems(JSON.parse(item?.data?.matHangs))
+                    setItemNote(item.data.ghiChu)
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nguyên liêu")
+
+                }
+            
             },
         },
         {
             title: "Xóa",
             onSelect: (item) => {
-                dispatch(deleteKitChensDay(item.key))
+                if (quyen3 === "0-3-2") {
+                    dispatch(deleteKitChensDay(item.key))
+                    
+                } else {
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa nguyên liêu") 
+                }
             },
         },
     ];
@@ -295,11 +314,12 @@ function KitchensDay(props) {
                         <DatePicker placeholder="dd/MM/yyyy" label={"Ngày sử dụng"} />
                     </div>
                     <div className="kitchensDay-manager__filter-create-new">
-                        <Button2
+                      {quyen1 === "0-3-0" ?   
+                      <Button2
                             name={"Thêm mới"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
-                        />
+                        /> : null}
                     </div>
                 </div>
                 <div className="kitchensDay-manager__content">

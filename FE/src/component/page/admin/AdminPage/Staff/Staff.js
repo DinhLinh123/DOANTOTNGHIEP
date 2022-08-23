@@ -177,6 +177,15 @@ function Staff(props) {
     },
   ];
 
+  const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+  const quyen = getQuyen
+  console.log("quyen", quyen);
+
+  const quyen1 = quyen?.find((item) => item === "0-5-0")
+  const quyen2 = quyen?.find((item) => item === "0-5-1")
+  const quyen3 = quyen?.find((item) => item === "0-5-2")
+
   const OPTION_MORE_TABLE = [
     {
       title: "Phân quyền",
@@ -190,30 +199,45 @@ function Staff(props) {
         setStaffPhone(item?.phone.props.children);
         setStaffAddress(item?.address.props.children);
         setStaffNote(item?.note.props.children);
+        setAcountName(item?.data.userName)
+        
+        if(item?.listTree !== "string"){
+         setCheckedKeys(JSON.parse(item?.listTree))
+        }
         setIsShowPopupSetup(true);
       },
     },
     {
       title: "Sửa",
       onSelect: (item) => {
-        // console.log("aaa", item?.fullName.props.children);
-        setIsShowPopupAddnew(true);
-        setStatusAction("UPDATE");
-        setIdStaff(item?.code.props.children[1].props.children);
-        setStaffCode(item?.code.props.children[0]);
-        setStaffName(item?.name.props.children);
-        setStaffSex(item?.sex.props.children);
-        setStaffDate(item?.date.props.children);
-        setStaffPosition(item?.position.props.children);
-        setStaffPhone(item?.phone.props.children);
-        setStaffAddress(item?.address.props.children);
-        setStaffNote(item?.note.props.children);
+
+        if(quyen2 === "0-5-1"){
+          setIsShowPopupAddnew(true);
+          setStatusAction("UPDATE");
+          setIdStaff(item?.code.props.children[1].props.children);
+          setStaffCode(item?.code.props.children[0]);
+          setStaffName(item?.name.props.children);
+          setStaffSex(item?.sex.props.children);
+          setStaffDate(item?.date.props.children);
+          setStaffPosition(item?.position.props.children);
+          setStaffPhone(item?.phone.props.children);
+          setStaffAddress(item?.address.props.children);
+          setStaffNote(item?.note.props.children);
+        }else{
+            commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nhân viên")
+        }
+       
+       
       },
     },
     {
       title: "Xóa",
       onSelect: async (item) => {
-        dispatch(deleteStaff(item?.code.props.children[1].props.children));
+        if (quyen3 === "0-5-2") {
+          dispatch(deleteStaff(item?.code.props.children[1].props.children));
+        } else {
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa nhân viên")
+        }
       },
     },
   ];
@@ -272,6 +296,11 @@ function Staff(props) {
       children: [
         {
           title: "Xem doanh thu",
+          key: "0-2-0",
+          icon: <CarryOutOutlined />,
+        },
+        {
+          title: " doanh thu",
           key: "0-2-0",
           icon: <CarryOutOutlined />,
         },
@@ -502,7 +531,6 @@ function Staff(props) {
 
   const { dataStaff, loading } = useSelector((state) => state.staffReducer);
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getStaff());
   }, [dispatch, loading]);
@@ -567,6 +595,8 @@ function Staff(props) {
         [COLUMN_TABLE_INDEX_MENU.ADDRESS]: columnAddress(item),
         [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
         key: idx,
+        listTree: item.quyen,
+        data: item
       };
     });
     return [...listData];
@@ -589,7 +619,7 @@ function Staff(props) {
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
       } else {
         const body = {
-          maNV: parseInt(staffCode, 10),
+          maNV: staffCode ,
           fullName: staffName,
           phai: staffSex,
           ngaySinh: date.toISOString(staffDate),
@@ -652,6 +682,10 @@ function Staff(props) {
   };
 
   const onCheck = (checkedKeysValue) => {
+    const idUser = localStorage.getItem("infoUser")
+
+    const findUser = dataStaff?.find(item => item.id === idUser)
+    console.log("findUser", findUser);
     const date = new Date();
     const body = {
       id: idStaff,
@@ -660,6 +694,7 @@ function Staff(props) {
       phai: staffSex,
       quyen: JSON.stringify(checkedKeysValue),
       ngaySinh: date.toISOString(staffDate),
+      userName: acountName,
       chucVu: staffPosition,
       soDienThoai: staffPhone,
       diaChi: staffAddress,
@@ -668,6 +703,13 @@ function Staff(props) {
 
     dispatch(updateStaff({ id: body.id, body }));
     setCheckedKeys(checkedKeysValue);
+    if(findUser) {
+         localStorage.setItem("quyen", findUser.quyen)
+    }else{
+      console.log("Vào đây 1");
+
+    }
+  
   };
 
   const onSelect = (selectedKeysValue, info) => {
@@ -719,11 +761,12 @@ function Staff(props) {
             />
           </div> */}
           <div className="staff-manager__button-create-new">
-            <Button2
+            {quyen1 === "0-5-0" ?  <Button2
               name={"Thêm mới nhân viên"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
-            />
+            /> : null}
+           
           </div>
         </div>
         <div className="staff-manager__content">
@@ -764,7 +807,6 @@ function Staff(props) {
             <div className="staff-manager__popup">
               <Input
                 label={"Mã nhân viên"}
-                type="number"
                 value={staffCode}
                 onChange={(val) => {
                   setStaffCode(val);

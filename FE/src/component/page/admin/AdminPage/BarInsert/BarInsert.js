@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, ONE_DAY, SORT_TYPE } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, ONE_DAY, SORT_TYPE, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
@@ -14,6 +14,7 @@ import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBars, getBars, postBars, updateBars } from "../../../../../reudux/action/barsAction";
+import commonFunction from "../../../../base/common/commonFunction";
 
 function BarInsert(props) {
     const [idData, setIdData] = useState()
@@ -149,26 +150,44 @@ function BarInsert(props) {
         },
     ]
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = JSON.parse(getQuyen)
+
+    const quyen1 = quyen?.find((item) => item === "0-4-0")
+    const quyen2 = quyen?.find((item) => item === "0-4-1")
+    const quyen3 = quyen?.find((item) => item === "0-4-2")
+
     const OPTION_MORE_TABLE = [
         {
             title: "Sửa",
             onSelect: (item) => {
-                setIsShowPopupAddnew(true)
-                setStatusAction("UPDATE")
-                const id = item.key
-                setIdData(id);
-                setDrinksCode(item.data.maMatHang)
-                setDrinksName(item.data.tenMatHang)
-                setDrinksGroup(item.data.nhomMatHang)
-                setAmountDrinks(item.data.soLuong)
-                setUnitDrinks(item.data.donVi)
-                setUnitPriceDrinks(item.data.donGia)
+                if (quyen2 === "0-4-1") {
+                    setIsShowPopupAddnew(true)
+                    setStatusAction("UPDATE")
+                    const id = item.key
+                    setIdData(id);
+                    setDrinksCode(item.data.maMatHang)
+                    setDrinksName(item.data.tenMatHang)
+                    setDrinksGroup(item.data.nhomMatHang)
+                    setAmountDrinks(item.data.soLuong)
+                    setUnitDrinks(item.data.donVi)
+                    setUnitPriceDrinks(item.data.donGia)
+                } else {
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa mặt hàng")
+                }
+                
             },
         },
         {
             title: "Xóa",
             onSelect: (item) => {
-                disptach(deleteBars(item.key))
+                if (quyen3 === "0-4-2") {
+                    disptach(deleteBars(item.key))
+                    
+                } else {
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa mặt hàng")
+                }
             },
         },
     ];
@@ -357,11 +376,11 @@ function BarInsert(props) {
                         />
                     </div> */}
                     <div className="barInsert-manager__button-create-new">
-                        <Button2
+                        {quyen1 === "0-4-1" ?  <Button2
                             name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}
-                        />
+                        /> : null}
                     </div>
                 </div>
                 <div className="barInsert-manager__content">

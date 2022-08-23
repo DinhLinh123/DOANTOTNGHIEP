@@ -51,6 +51,13 @@ function Area(props) {
         //     width: "300px",
         // },
     ];
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = getQuyen
+  
+    const quyen1 = quyen?.find((item) => item === "0-7-0")
+    const quyen2 = quyen?.find((item) => item === "0-7-1")
+    const quyen3 = quyen?.find((item) => item === "0-7-2")
 
     const OPTION_MORE_TABLE = [
         {
@@ -62,15 +69,24 @@ function Area(props) {
         {
             title: "Sửa",
             onSelect: (item) => {
-                setAreaDetail(item.item)
-                setIsShowPopupAddNew({ show: true, title: 'Sửa Khu vực', key: 1 })
-                setAreaName(item.item.name)
+                if(quyen2 === "0-7-2"){
+                    setAreaDetail(item.item)
+                    setIsShowPopupAddNew({ show: true, title: 'Sửa Khu vực', key: 1 })
+                    setAreaName(item.item.name)
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa khu vực")
+                }
+               
             },
         },
         {
             title: "Xóa",
             onSelect: (item) => {
-                setIsShowPopupConfirmDelete({ show: true, item: item.item })
+                if(quyen3 === "0-7-3"){
+                    setIsShowPopupConfirmDelete({ show: true, item: item.item })
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa khu vực")
+                }
             },
         },
     ];
@@ -220,11 +236,13 @@ function Area(props) {
                         }} />
                     </div>
                     <div className="area-manager__filter-create-new">
+                        {quyen1 === "0-7-0" ?  
                         <Button2
                             name={"Thêm mới Khu vực"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => setIsShowPopupAddNew({ show: true, title: 'Thêm mới Khu vực', key: 0 })}
-                        />
+                        /> : null}
+                       
                     </div>
                 </div>
                 <div className="area-manager__content">

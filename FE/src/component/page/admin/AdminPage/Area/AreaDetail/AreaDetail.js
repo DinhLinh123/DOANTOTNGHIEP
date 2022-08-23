@@ -64,6 +64,14 @@ function AreaDetail(props) {
         )
     }
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
+    const quyen = getQuyen
+  
+    const quyen1 = quyen?.find((item) => item === "0-7-3")
+    const quyen2 = quyen?.find((item) => item === "0-7-4")
+    const quyen3 = quyen?.find((item) => item === "0-7-5")
+
     function updatePosition(item, value, value2) {
         let abc = list
         let objIndex = abc.findIndex((obj => obj.name == item.name));
@@ -94,14 +102,19 @@ function AreaDetail(props) {
 
         baseApi.post(
             (res) => {
-
-                dispatch(changeLoadingApp(false))
-                setShowPopupAddNew({ show: false, title: '', key: -1 })
-                let _listTable = [...list]
-
-                _listTable.push(res.data)
-                setList(_listTable)
-                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm bàn thành công")
+                
+                if(quyen1 === "0-7-3"){
+                    dispatch(changeLoadingApp(false))
+                    setShowPopupAddNew({ show: false, title: '', key: -1 })
+                    let _listTable = [...list]
+    
+                    _listTable.push(res.data)
+                    setList(_listTable)
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm bàn thành công")
+                }else{
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền thêm bàn thành công")
+                }
+               
             },
             () => {
                 dispatch(changeLoadingApp(false))
@@ -141,8 +154,14 @@ function AreaDetail(props) {
 
         baseApi.put(
             (res) => {
-                setShowPopupAddNew({ show: false, title: '', key: -1 })
-                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa bàn ăn thành công")
+                if(quyen2 === "0-7-4"){
+                    setShowPopupAddNew({ show: false, title: '', key: -1 })
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa bàn ăn thành công")
+                }
+                else {
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền sửa bàn")
+                }
+               
             },
             () => {
                 setShowPopupAddNew({ show: false, title: '', key: -1 })
@@ -158,10 +177,16 @@ function AreaDetail(props) {
     function deleteTable() {
         baseApi.delete(
             (res) => {
-                setShowPopupAddNew({ show: false, title: '', key: -1 })
-                setIsShowPopupComfirmDelete({ show: false, item: '' })
-                commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa bàn ăn thành công")
-                callApiGetTableInArea()
+                if(quyen3 === "0-7-5"){
+                    setShowPopupAddNew({ show: false, title: '', key: -1 })
+                    setIsShowPopupComfirmDelete({ show: false, item: '' })
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa bàn ăn thành công")
+                    callApiGetTableInArea()
+                }else {
+                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền xóa bàn")
+
+                }
+               
             },
             () => {
                 setShowPopupAddNew({ show: false, title: '', key: -1 })

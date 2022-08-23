@@ -83,6 +83,8 @@ function Turnover(props) {
         },
     ];
 
+    const getQuyen = JSON.parse(localStorage.getItem("quyen"))
+
     function columnName(item) {
         return <div>{item?.name}</div>;
     }
