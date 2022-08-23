@@ -56,7 +56,7 @@ namespace ManagerRestaurant.API.Models
         public string Quyen { get; set; }
         public bool IsDelete { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
     }

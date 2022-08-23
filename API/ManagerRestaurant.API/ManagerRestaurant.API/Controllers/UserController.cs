@@ -175,7 +175,10 @@ namespace ManagerRestaurant.API.Controllers
                     user.Quyen = item.Quyen;
                     user.IsDelete = item.IsDelete;
                     user.UserName = item.UserName;
-                    user.Password = item.Password;
+                    if (item.Password != null && item.Password.Length>0)
+                    {
+                        user.Password = item.Password;
+                    } 
                     user.LastModifiedByUserId = item.LastModifiedByUserId;
                     user.LastModifiedByUserName = item.LastModifiedByUserName;
 
