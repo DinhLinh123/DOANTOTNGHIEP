@@ -152,7 +152,7 @@ function BarInsert(props) {
 
     const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
-    const quyen = JSON.parse(getQuyen)
+    const quyen = getQuyen
 
     const quyen1 = quyen?.find((item) => item === "0-4-0")
     const quyen2 = quyen?.find((item) => item === "0-4-1")

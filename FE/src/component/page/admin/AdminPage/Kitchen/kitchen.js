@@ -165,7 +165,7 @@ function Kitchen(props) {
 
   const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
-  const quyen = JSON.parse(getQuyen)
+  const quyen = getQuyen
 
   const quyen1 = quyen?.find((item) => item === "0-3-3")
   const quyen2 = quyen?.find((item) => item === "0-3-4")
