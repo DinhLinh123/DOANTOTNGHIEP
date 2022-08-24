@@ -9,10 +9,12 @@ import $ from "jquery";
 import TableBase from "../../../../base/Table/Table"
 import Dropdown from "../../../../base/Dropdown/Dropdown"
 import moment from "moment";
-import { API_REVENUEANDEXPENDITURE } from "../../../../base/common/endpoint"
+import { API_REPORT_FOOD, API_REVENUE_AND_EXPENDITURE } from "../../../../base/common/endpoint"
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction"
 import { useDispatch } from "react-redux"
 import baseApi from "../../../../../api/baseApi"
+import InputField from "../../../../base/Input/Input"
+import noDataimg from "../../../../../image/nodatachart.png"
 
 const MENU_TAB = {
     CHART: "chart",
@@ -45,6 +47,9 @@ function Report(props) {
     const [typeFilter, setTypeFilter] = useState(TYPE_FILTER.DATE)
     const [timeStart, setTimeStart] = useState("")
     const [timeEnd, setTimeEnd] = useState("")
+    const [dataLineChart, setDataLineChart] = useState([])
+    const [dataBarChart, setDataBarChart] = useState([])
+    const [pageSize, setPageSize] = useState(5)
 
     const data = [
         {
@@ -243,33 +248,115 @@ function Report(props) {
                 break;
         }
     }, [typeFilter])
+
     useEffect(() => {
         callApiGetRevenueAndExpenditure()
+        callApiGetReportFood()
     }, [timeStart, timeEnd])
+
+    useEffect(() => {
+        callApiGetReportFood()
+    }, [pageSize])
 
     function callApiGetRevenueAndExpenditure() {
         dispatch(changeLoadingApp(true))
         console.log(timeStart)
         console.log(timeEnd)
-    let param = {
-      "TimeStart": moment(timeStart).toISOString(),
-      "TimeEnd": moment(timeEnd).toISOString(),
-      "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
+        let param = {
+            "TimeStart": moment(timeStart).toISOString(),
+            "TimeEnd": moment(timeEnd).toISOString(),
+            "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
+        }
+        baseApi.get(
+            (res) => {
+                let data = res?.data?.map((item) => {
+                    switch (typeFilter) {
+                        case TYPE_FILTER.DATE:
+                        case TYPE_FILTER.WEEK:
+                        case TYPE_FILTER.MONTH:
+                            return ({
+                                ngay: moment(item?.ngay).format('DD/MM/YYYY'),
+                                soThu: item?.soThu,
+                                soChi: item?.soChi
+
+                            })
+                        case TYPE_FILTER.QUARTER:
+                        case TYPE_FILTER.YEAR:
+                            return ({
+                                ngay: moment(item?.ngay).format('MM/YYYY'),
+                                soThu: item?.soThu,
+                                soChi: item?.soChi
+
+                            })
+
+                        default:
+                            break;
+                    }
+
+                })
+                setDataLineChart(data)
+                dispatch(changeLoadingApp(false))
+            },
+            () => {
+                dispatch(changeLoadingApp(false))
+            },
+            null,
+            API_REVENUE_AND_EXPENDITURE.GET + encodeURIComponent(JSON.stringify(param)),
+            null,
+            {}
+        )
     }
-    console.log(param)
-    baseApi.get(
-      (res) => {
-        dispatch(changeLoadingApp(false))
-      },
-      () => {
-        dispatch(changeLoadingApp(false))
-      },
-      null,
-      API_REVENUEANDEXPENDITURE.GET + encodeURIComponent(JSON.stringify(param)),
-      null,
-      {}
-    )
+
+    function callApiGetReportFood() {
+        dispatch(changeLoadingApp(true))
+        let param = {
+            "TimeStart": moment(timeStart).toISOString(),
+            "TimeEnd": moment(timeEnd).toISOString(),
+            "PageSize": pageSize,
+        }
+        baseApi.get(
+            (res) => {
+                let data = res?.data?.map((item) => {
+                    switch (typeFilter) {
+                        case TYPE_FILTER.DATE:
+                        case TYPE_FILTER.WEEK:
+                        case TYPE_FILTER.MONTH:
+                            return ({
+                                ngay: moment(item?.ngay).format('DD/MM/YYYY'),
+                                soThu: item?.soThu,
+                                soChi: item?.soChi
+
+                            })
+                        case TYPE_FILTER.QUARTER:
+                        case TYPE_FILTER.YEAR:
+                            return ({
+                                ngay: moment(item?.ngay).format('MM/YYYY'),
+                                soThu: item?.soThu,
+                                soChi: item?.soChi
+
+                            })
+
+                        default:
+                            break;
+                    }
+
+                })
+                setDataBarChart(data)
+                dispatch(changeLoadingApp(false))
+            },
+            () => {
+                dispatch(changeLoadingApp(false))
+            },
+            null,
+            API_REPORT_FOOD.GET + encodeURIComponent(JSON.stringify(param)),
+            null,
+            {}
+        )
     }
+
+    useEffect(() => {
+        console.log(dataLineChart)
+    }, [dataLineChart])
     return (
         <AdminPage title={"Báo cáo"} index={MENU_TAB_ADMIN.REPORT}>
             <div className="report-container">
@@ -333,46 +420,74 @@ function Report(props) {
                         menuTab === MENU_TAB.CHART &&
                         <div className="report-container__content-chart">
                             <div className="report-container__content-chart-spending">
-                                <div className="report-container__content-chart-spending-label">
-                                    Biểu đồ thống kê chi tiêu
+                                <div className="report-container__content-chart-spending-header">
+                                    <div className="report-container__content-chart-spending-header-label">
+                                        Biểu đồ thống kê chi tiêu
+                                    </div>
                                 </div>
                                 <div className="report-container__content-chart-spending-content">
-                                    <LineChart width={900} height={300} data={data}>
-                                        <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                                        <Line type="monotone" dataKey="pv" stroke="#10ac84" />
-                                        <CartesianGrid stroke="#ccc" />
-                                        <XAxis dataKey="name" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Legend />
-                                    </LineChart>
+                                    {
+                                        dataLineChart?.length === 0 ?
+                                            <div className="report-container__content-chart-spending-content-nodata">
+                                                <img src={noDataimg} height={150} width={150} />
+                                            </div>
+                                            :
+                                            <LineChart width={900} height={300} data={dataLineChart}>
+                                                <Line type="monotone" dataKey="soChi" stroke="#8884d8" />
+                                                <Line type="monotone" dataKey="soThu" stroke="#10ac84" />
+                                                <CartesianGrid stroke="#ccc" />
+                                                <XAxis dataKey="ngay" />
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Legend />
+                                            </LineChart>
+                                    }
+
                                 </div>
                             </div>
 
                             <div className="report-container__content-chart-customer">
-                                <div className="report-container__content-chart-spending-label">
-                                    Biểu đồ thống kê món được gọi nhiều nhất
+                                <div className="report-container__content-chart-spending-header">
+                                    <div className="report-container__content-chart-spending-header-label">
+                                        Biểu đồ thống kê chi tiêu
+                                    </div>
+                                    <div className="report-container__content-chart-spending-header-filter">
+                                        <div className="report-container__content-chart-spending-header-filter-label">
+                                            Số lượng món
+                                        </div>
+                                        <div className="report-container__content-chart-spending-header-filter-input">
+                                            <InputField value={pageSize} onChange={(val) => setPageSize(val)} placeholder={"Nhập số lượng món ăn muốn thông kê"} />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="report-container__content-chart-spending-content">
-                                    <ComposedChart
-                                        layout="vertical"
-                                        width={500}
-                                        height={400}
-                                        data={data}
-                                        margin={{
-                                            top: 20,
-                                            right: 20,
-                                            bottom: 20,
-                                            left: 20
-                                        }}
-                                    >
-                                        <CartesianGrid stroke="#f5f5f5" />
-                                        <XAxis type="number" />
-                                        <YAxis dataKey="name" type="category" />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Bar dataKey="pv" barSize={20} fill="#413ea0" />
-                                    </ComposedChart>
+                                    {
+                                        dataBarChart?.length === 0 ?
+                                            <div className="report-container__content-chart-spending-content-nodata">
+                                                <img src={noDataimg} height={150} width={150} />
+                                            </div>
+                                            :
+                                            <ComposedChart
+                                                layout="vertical"
+                                                width={500}
+                                                height={400}
+                                                data={dataBarChart}
+                                                margin={{
+                                                    top: 20,
+                                                    right: 20,
+                                                    bottom: 20,
+                                                    left: 20
+                                                }}
+                                            >
+                                                <CartesianGrid stroke="#f5f5f5" />
+                                                <XAxis type="number" />
+                                                <YAxis dataKey="name" type="category" />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+                                            </ComposedChart>
+                                    }
+
                                 </div>
                             </div>
                         </div>

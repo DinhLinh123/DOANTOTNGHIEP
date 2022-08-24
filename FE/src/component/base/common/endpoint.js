@@ -67,9 +67,14 @@ const API_OFFER = {
     GET_BY_FILTER: PART + "/UuDai/filter?_filter=",
 };
 
-const API_REVENUEANDEXPENDITURE = {
+const API_REVENUE_AND_EXPENDITURE = {
     GET: PART +  '/BaoCaoThongKe/thuchi/'
 };
+
+const API_REPORT_FOOD = {
+    GET: PART +  '/BaoCaoThongKe/monan/'
+};
+
 
 export {
     API_TABLE,
@@ -80,5 +85,6 @@ export {
     API_PROMOTION,
     API_ORDER,
     API_OFFER,
-    API_REVENUEANDEXPENDITURE
+    API_REVENUE_AND_EXPENDITURE,
+    API_REPORT_FOOD
 };
