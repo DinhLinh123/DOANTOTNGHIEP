@@ -184,7 +184,7 @@ namespace ManagerRestaurant.API.Controllers
                     phieuOder.TrangThai = item.TrangThai;
                     phieuOder.LastModifiedByUserId = item.LastModifiedByUserId;
                     phieuOder.LastModifiedByUserName = item.LastModifiedByUserName;
-                    if (item.TrangThai == 3) { 
+                    if (item.TrangThai == 1) { 
                         var ban = await _context.Ban.FindAsync(item.IdBan);
                         ban.TrangThai = 0;
                         phieuOder.ThoiGianThanhToan = DateTime.Now;
@@ -291,13 +291,13 @@ namespace ManagerRestaurant.API.Controllers
             }
         }
 
-        [HttpPost("findbyidban/{idban}")]
+        [HttpGet("findbyidban/{idban}")]
         public async Task<Responsive> GetByIdBan(Guid idban)
         {
             try
             {
                 //Lấy thông tin khách hàng theo bàn
-                var phieu = await _context.PhieuOder.Where(x => x.IdBan == idban && x.TrangThai == 0).FirstAsync();
+                var phieu = await _context.PhieuOder.Where(x => x.IdBan == idban && x.TrangThai == 0).FirstOrDefaultAsync();
                 if (phieu != null)
                 {
                     var res = new Responsive();
@@ -310,6 +310,7 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     var res = new Responsive();
                     res.Data = null;
+                    res.Code = 204;
                     res.Mess = "not exist";
                     return res;
                 }
