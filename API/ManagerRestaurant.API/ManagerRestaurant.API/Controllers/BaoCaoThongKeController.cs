@@ -25,15 +25,17 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/ChiTieuTrongNgay
         [HttpGet("thuchi/{filter}")]
-        public async Task<Responsive> GetThongKeThuChi(string filter)
+        public Responsive GetThongKeThuChi(string filter)
         {
             Responsive res = new Responsive();
             try
             {
                 var f = JsonConvert.DeserializeObject<FilterThongKe>(filter);
-                if (f.isMonth != null)
+                if (f.isMonth == null)
                 {
-                    throw new Exception("Thiếu trường kiểm tra tháng");
+                    res.Code = 204;
+                    res.Mess = "Thiếu trường kiểm tra tháng";
+                    return res;
                 }
 
                 var ListCTNgay = (from s in _context.ChiTieuTrongNgay where s.NgayHoaDon >= f.TimeStart && s.NgayHoaDon <= f.TimeEnd select s).ToList();
@@ -116,9 +118,9 @@ namespace ManagerRestaurant.API.Controllers
                             SoThu = tienthu
                         });
                     }
-
                 }
-
+                res.Data = Data;
+                res.Code = 200;
                 return res;
             }
             catch (Exception ex)
@@ -157,6 +159,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 res.Mess = "Get Success";
                 res.Data = Data;
+                res.Code = 200;
                 return res;
             }
             catch (Exception ex)
