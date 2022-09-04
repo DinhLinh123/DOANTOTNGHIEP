@@ -47,43 +47,100 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/Bars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBar(Guid id, Bar bar)
+        public async Task<Responsive> PutBar(Guid id, Bar item)
         {
-            if (id != bar.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(bar).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BarExists(id))
+                var bar = _context.Bar.Find(id);
+                if (bar != null)
                 {
-                    return NotFound();
+                    bar.MaMatHang = item.MaMatHang;
+                    bar.TenMatHang = item.TenMatHang;
+                    bar.NhomMatHang = item.NhomMatHang;
+                    bar.SoLuong = item.SoLuong;
+                    bar.DonVi = item.DonVi;
+                    bar.DonGia = item.DonGia;
+                    bar.ThanhTien = item.ThanhTien;
+                    bar.CreatedByUserId = item.CreatedByUserId;
+                    bar.CreatedByUserName = item.CreatedByUserName;
+                    bar.CreatedOnDate = item.CreatedOnDate;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
+                await _context.SaveChangesAsync();
+                res.Code = 200;
+                res.Mess = "Update success";
+                return res;
             }
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
 
-            return NoContent();
+            }
         }
 
         // POST: api/Bars
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Bar>> PostBar(Bar bar)
+        public async Task<Responsive> PostBar(BarCreateModule item)
         {
-            _context.Bar.Add(bar);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBar", new { id = bar.Id }, bar);
+            try
+            {
+                var obj = _context.Bar.Where(x => x.MaMatHang == item.MaMatHang).FirstOrDefaultAsync().Result;
+                if (obj != null)
+                {
+                    obj.Id = Guid.NewGuid();
+                    obj.MaMatHang = item.MaMatHang;
+                    obj.TenMatHang = item.TenMatHang;
+                    obj.NhomMatHang = item.NhomMatHang;
+                    obj.SoLuong = item.SoLuong;
+                    obj.DonVi = item.DonVi;
+                    obj.DonGia = item.DonGia;
+                    obj.ThanhTien = item.ThanhTien;
+                    obj.CreatedByUserId = item.CreatedByUserId;
+                    obj.CreatedByUserName = item.CreatedByUserName;
+                    obj.CreatedOnDate = item.CreatedOnDate;
+                    _context.Bar.Add(obj);
+                    await _context.SaveChangesAsync();
+                    return new Responsive(200, "Cập nhật thành công", obj);
+                }
+                else
+                {
+                    var bar = new Bar();
+                    bar.Id = Guid.NewGuid();
+                    bar.MaMatHang = item.MaMatHang;
+                    bar.TenMatHang = item.TenMatHang;
+                    bar.NhomMatHang = item.NhomMatHang;
+                    bar.SoLuong = item.SoLuong;
+                    bar.DonVi = item.DonVi;
+                    bar.DonGia = item.DonGia;
+                    bar.ThanhTien = item.ThanhTien;
+                    bar.CreatedByUserId = item.CreatedByUserId;
+                    bar.CreatedByUserName = item.CreatedByUserName;
+                    bar.CreatedOnDate = item.CreatedOnDate;
+                    _context.Bar.Add(bar);
+                    await _context.SaveChangesAsync();
+                    return new Responsive(200, "Thêm mới thành công", bar);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
         }
 
         // DELETE: api/Bars/5
@@ -150,7 +207,7 @@ namespace ManagerRestaurant.API.Controllers
         }
 
         class BarFilter : BaseFilter
-        { 
+        {
         }
     }
 }
