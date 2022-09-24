@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Infratructure;
 using ManagerRestaurant.API.Infratructure.Datatables;
+using ManagerRestaurant.API.Models;
+using Newtonsoft.Json;
 
 namespace ManagerRestaurant.API.Controllers
 {
@@ -45,43 +47,82 @@ namespace ManagerRestaurant.API.Controllers
         // PUT: api/UuDai/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUuDai(Guid id, UuDai uuDai)
+        public async Task<Responsive> PutUuDai(Guid id, UuDaiUpdateModule item)
         {
-            if (id != uuDai.Id)
+            var res = new Responsive();
+            if (id != item.Id)
             {
-                return BadRequest();
+                res.Code = 204;
+                res.Mess = "Invalid data";
+                return res;
             }
-
-            _context.Entry(uuDai).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UuDaiExists(id))
-                {
-                    return NotFound();
+                var uudai = _context.UuDai.Find(id);
+                if (uudai != null)
+                { 
+                    uudai.Name = item.Name;
+                    uudai.Anh = item.Anh;
+                    uudai.NoiDung = item.NoiDung;
+                    uudai.GiaTri = item.GiaTri;
+                    uudai.LoaiUuDai = item.LoaiUuDai;
+                    uudai.DonViTinh = item.DonViTinh;
+                    uudai.TrangThai = item.TrangThai;
+                    uudai.IdDoAn = item.IdDoAn;
+                    uudai.LastModifiedByUserId = item.LastModifiedByUserId;
+                    uudai.LastModifiedByUserName = item.LastModifiedByUserName;
+                    await _context.SaveChangesAsync();
+                    res.Code = 200;
+                    res.Mess = "Update success";
+                    res.Data = uudai;
+                    return res;
                 }
                 else
                 {
-                    throw;
+                    res.Code = 204;
+                    res.Mess = "Item not exist";
+                    return res;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                res.Code = 500;
+                res.Mess = ex.InnerException.Message;
+                return res;
+            }
         }
 
         // POST: api/UuDai
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UuDai>> PostUuDai(UuDai uuDai)
+        public async Task<Responsive> PostUuDai(UuDaiCreateModule item)
         {
-            _context.UuDai.Add(uuDai);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var uudai = new UuDai();
+                uudai.Id = Guid.NewGuid();
+                uudai.Name = item.Name;
+                uudai.Anh = item.Anh;
+                uudai.NoiDung = item.NoiDung;
+                uudai.GiaTri = item.GiaTri;
+                uudai.LoaiUuDai = item.LoaiUuDai;
+                uudai.DonViTinh = item.DonViTinh;
+                uudai.TrangThai = item.TrangThai;
+                uudai.IdDoAn = item.IdDoAn;
+                uudai.CreatedByUserId = item.CreatedByUserId;
+                uudai.CreatedByUserName = item.CreatedByUserName;
+                uudai.CreatedOnDate = item.CreatedOnDate;
 
-            return CreatedAtAction("GetUuDai", new { id = uuDai.Id }, uuDai);
+                _context.UuDai.Add(uudai);
+                await _context.SaveChangesAsync();
+
+                return new Responsive(200, "Thêm mới thành công", uudai);
+            }
+            catch (Exception ex)
+            {
+                return new Responsive(500, ex.InnerException.Message, null);
+            }
+
         }
 
         // DELETE: api/UuDai/5
@@ -100,9 +141,58 @@ namespace ManagerRestaurant.API.Controllers
             return NoContent();
         }
 
-        private bool UuDaiExists(Guid id)
+
+        [HttpGet("filter")]
+        public async Task<Responsive> GetFilterUuDai([FromQuery] string _filter)
         {
-            return _context.UuDai.Any(e => e.Id == id);
+            try
+            {
+
+                var filter = JsonConvert.DeserializeObject<UuDaiFilter>(_filter);
+                var query = from s in _context.UuDai select s;
+                if (filter.Id != Guid.Empty)
+                {
+                    query = query.Where((x) => x.Id == filter.Id);
+                }
+                if (filter.TextSearch != null && filter.TextSearch.Length > 0)
+                {
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch));
+                }
+                if (filter.TrangThai != null)
+                {
+                    query = query.Where(x=> x.TrangThai == filter.TrangThai);
+                }
+
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
+                }
+
+                var data = await query.ToListAsync();
+
+                var mes = "";
+                if (data.Count == 0)
+                {
+                    mes = "Not data";
+                }
+                else
+                {
+                    mes = "Get success";
+                }
+
+                var res = new Responsive(200, mes, data);
+                return res;
+            }
+            catch (Exception err)
+            {
+                var res = new Responsive(500, err.Message, err.ToString());
+                return res;
+            }
+        }
+
+        class UuDaiFilter : BaseFilter
+        {
+            public int? TrangThai { get; set; }
         }
     }
 }

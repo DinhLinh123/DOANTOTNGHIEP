@@ -22,11 +22,12 @@ namespace Infratructure
         public DbSet<Oder> Oder { get; set; }
         public DbSet<PhieuNhapVatTu> PhieuNhapVatTu { get; set; }
         public DbSet<PhieuOder> PhieuOder { get; set; }
-        public DbSet<SanPhamTrongDon> SanPhamTrongDon { get; set; }
-        public DbSet<SanPhamTrongPhieu> SanPhamTrongPhieu { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<YKienDongGop> YKienDongGop { get; set; }
-        public DbSet<Infratructure.Datatables.KhuVuc> KhuVuc { get; set; }
-        public DbSet<ManagerRestaurant.API.Infratructure.Datatables.UuDai> UuDai { get; set; }
+        public DbSet<KhuVuc> KhuVuc { get; set; }
+        public DbSet<UuDai> UuDai { get; set; }
+        public DbSet<Quyen> Quyen { get; set; }
+        public DbSet<TheLoaiDoAn> TheLoaiDoAn { get; set; }
+        public DbSet<ManagerRestaurant.API.Infratructure.Datatables.Bar> Bar { get; set; }
     }
 }

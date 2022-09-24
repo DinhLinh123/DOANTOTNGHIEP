@@ -10,7 +10,7 @@ namespace Infratructure.Datatables
         public Guid Id { get; set; }
         public string TenKH { get; set; }
         public string SoDienThoai { get; set; }
-        public string? Email { get; set; }
+        public string Email { get; set; }
         public string NoiDung { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
