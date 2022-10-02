@@ -22,7 +22,6 @@ namespace ManagerRestaurant.API.Controllers
         {
             _context = context;
         }
-
         // GET: api/ChiTieuTrongNgay
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChiTieuTrongNgay>>> GetChiTieuTrongNgay()
