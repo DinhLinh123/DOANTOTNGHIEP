@@ -166,7 +166,6 @@ function Booking(props) {
                 }}
                 //type={"number"}
                 label={"Ghi chú"}
-                required
                 setDangerNote={(val) => {
                   setNote(val);
                 }}

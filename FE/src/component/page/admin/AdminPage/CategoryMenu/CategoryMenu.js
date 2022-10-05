@@ -49,15 +49,16 @@ function CategoryMenu(props) {
             width: "200px",
         },
         {
+            title: "Thể loại",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.TYPE,
+            width: "200px",
+        },
+        {
             title: "Ghi chú",
             dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
             width: "250px",
         },
-        {
-            title: "Một món/Nhiều món",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.TYPE,
-            width: "100px",
-        },
+        
         // {
         //     title: "Ngày nhập",
         //     dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
