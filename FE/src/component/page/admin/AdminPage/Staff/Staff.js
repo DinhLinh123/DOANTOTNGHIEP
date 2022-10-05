@@ -194,6 +194,7 @@ function Staff(props) {
       title: "Phân quyền",
       onSelect: (item) => {
         if(quyen4 === "0-5-3"){
+          
           setIdStaff(item?.code.props.children[1].props.children);
           setStaffCode(item?.code.props.children[0]);
           setStaffName(item?.name.props.children);
@@ -219,7 +220,6 @@ function Staff(props) {
     {
       title: "Sửa",
       onSelect: (item) => {
-
         if(quyen2 === "0-5-1"){
           setIsShowPopupAddnew(true);
           setStatusAction("UPDATE");
@@ -629,7 +629,7 @@ function Staff(props) {
     
     if (statusAction === "ADD") {
 
-      const res = await axios.get(`http://sqldemo-001-site1.htempurl.com/checkexist/${acountName}`)
+      const res = await axios.get(`http://backend1002-001-site1.atempurl.com/checkexist/${acountName}`)
       if (res.data.code === 500) {
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
       } else {

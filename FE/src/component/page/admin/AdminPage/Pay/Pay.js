@@ -85,7 +85,7 @@ function Spending(props) {
       baseApi.get(
         (res) => {
           setTable(res?.data);
-          baseApi.post(
+          baseApi.get(
             (res) => {
               setOrder(res?.data);
               setoOrderSelected(res?.data?.doAns)
@@ -377,7 +377,7 @@ function Spending(props) {
           <div className="pay-manager__bill-dish">
             <div className="pay-manager__bill-dish-top">
               <div className="pay-manager__bill-dish-top-title">
-                Món đã chọn{`(${orderSelected?.length})`}
+                Món đã chọn{`(${orderSelected?.length || 0})`}
               </div>
               <div className="pay-manager__bill-dish-top-add">
                 <Button2 name={"thêm món ăn"} background={'#0abde3'} onClick={() => { setShowPopupEditFood({ show: true, key: -1, item: '', action: 0 }) }} />
@@ -398,7 +398,7 @@ function Spending(props) {
                   Đơn giá
                 </div>
               </div>
-              {orderSelected.length > 0 ? (
+              {orderSelected?.length > 0 ? (
                 orderSelected?.map((item, key) => {
                   return (
                     <div className="pay-manager__bill-dish-content-choose">

@@ -18,6 +18,8 @@ import baseApi from "../../../../../api/baseApi";
 import { API_MENU, API_ORDER, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import Popup from "../../../../base/Popup/Popup";
+import { TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 function Order(props) {
 
   const [index, setIndex] = useState(1)
@@ -31,6 +33,7 @@ function Order(props) {
   const [listType, setListType] = useState([])
   const [textSearch, setTextSearch] = useState("");
   const [ballotOrder, setBallotOrder] = useState({});
+  const [showPopupWarningChoose, setShowPopupWarningChoose] = useState(false);
   const renderChoose = useRef([])
   let { tableID } = useParams();
   const dispatch = useDispatch();
@@ -49,7 +52,7 @@ function Order(props) {
   useEffect(() => {
     if(table?.trangThai !== 0 && table?.trangThai !== 2)
     {
-      baseApi.post(
+      baseApi.get(
         (res) => {
           setoOrderSelected(res?.data?.doAns)
           setBallotOrder(res?.data)
@@ -65,10 +68,6 @@ function Order(props) {
     callGetAllFood()
   }, [index])
 
-  useEffect(() => {
-    console.log(orderSelected)
-  }, [orderSelected])
-
   let logo = [
     {
       img: logo1,
@@ -82,6 +81,9 @@ function Order(props) {
     if (a == -1) {
       item.soLuong = 1
       _list.push(item)
+    }
+    else {
+      setShowPopupWarningChoose(true)
     }
     setoOrderSelected(_list)
   }
@@ -176,9 +178,11 @@ function Order(props) {
           null,
           _table
         )
-        // window.open(`/admin/tables`, "_self")
+        window.open(`/admin/tables`, "_self")
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm phiếu oder thành công!")
       },
       () => {
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thêm phiếu oder thất bại!")
       },
       null,
       API_ORDER.CREATE_NEW,
@@ -189,12 +193,15 @@ function Order(props) {
 
   function callUpdateOrderFood() {
     let body = ballotOrder;
-    body.monAns = orderSelected;
+    debugger
+    body.doAns = orderSelected;
     body.tongTien = renderTotalCount()
-    baseApi.push(
+    baseApi.put(
       (res) => {
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Cập nhật phiếu oder thành công!")
       },
       () => {
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Cập nhật phiếu oder thất bại!")
       },
       null,
       API_ORDER.UPDATE_BY_ID + ballotOrder.id,
@@ -334,6 +341,22 @@ function Order(props) {
           </div>
         </div>
       </div>
+      <Popup
+        title={"Cảnh báo"}
+        show={showPopupWarningChoose}
+        onClickClose={() => setShowPopupWarningChoose(false)}
+        button={[
+          <Button2
+            name={"Hủy"}
+            onClick={() => setShowPopupWarningChoose(false)}
+          />,
+        ]}
+        width={600}
+        className={"menu-popup-detail"}
+        body={
+          <div style={{ marginTop: '24px', fontSize: '16px', }}>Món ăn đã có trong danh sách, bạn có thể thay đổi số lượng</div>
+        }
+      />
     </div>
   );
 }

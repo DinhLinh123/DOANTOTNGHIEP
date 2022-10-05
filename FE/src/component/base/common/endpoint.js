@@ -1,4 +1,4 @@
-const PART = "http://sqldemo-001-site1.htempurl.com/api"
+const PART = "http://backend1002-001-site1.atempurl.com/api"
 const API_TABLE = {
     GET_ALL: PART + "/Ban",
     ALL_NEW: PART + "/Ban",
