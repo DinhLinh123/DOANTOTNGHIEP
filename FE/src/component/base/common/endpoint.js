@@ -1,4 +1,5 @@
-const PART = "http://backend1002-001-site1.atempurl.com/api"
+import { PART } from "./commonConstant";
+
 const API_TABLE = {
     GET_ALL: PART + "/Ban",
     ALL_NEW: PART + "/Ban",
@@ -75,6 +76,7 @@ const API_REPORT_FOOD = {
     GET: PART +  '/BaoCaoThongKe/monan/'
 };
 
+const UPLOAD_FILE = PART +  '/UploadFile';
 
 export {
     API_TABLE,
@@ -86,5 +88,6 @@ export {
     API_ORDER,
     API_OFFER,
     API_REVENUE_AND_EXPENDITURE,
-    API_REPORT_FOOD
+    API_REPORT_FOOD,
+    UPLOAD_FILE
 };

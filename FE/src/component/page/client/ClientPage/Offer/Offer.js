@@ -13,6 +13,10 @@ import Button2 from "../../../../base/Button/Button";
 import Popup from "../../../../base/Popup/Popup";
 import { MENU_TAB_CLIENT } from "../../../../base/common/commonConstant";
 import ClientPage from "../ClientPage";
+import { API_OFFER } from "../../../../base/common/endpoint";
+import { useDispatch } from "react-redux";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import baseApi from "../../../../../api/baseApi";
 Offer.propTypes = {};
 
 Offer.defaultProps = {};
@@ -20,47 +24,29 @@ Offer.defaultProps = {};
 function Offer(props) {
   const [isShowPopupDetail, setIsShowPopupDetail] = useState(false);
   const [offerDetail, setOfferDetail] = useState({});
-  const offer1 = {
-    img: ud1,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore:
-      "hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihihihihihihihi hihihihihih hihihihihi hihihihihihi hihihihihih hihihihihi",
-  };
+  const [listOffer, setListOffer] = useState([]);
 
-  const offer2 = {
-    img: ud2,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore: "hihihihihihi hihihihihih hihihihihi",
-  };
-  const offer3 = {
-    img: ud3,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore: "hihihihihihi hihihihihih hihihihihi",
-  };
-  const offer4 = {
-    img: ud4,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore: "hihihihihihi hihihihihih hihihihihi",
-  };
-  const offer5 = {
-    img: ud5,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore: "hihihihihihi hihihihihih hihihihihi",
-  };
-  const offer6 = {
-    img: ud6,
-    title: "hahahaha",
-    content: "hahahahaa hahahahaha hahahhahah ...",
-    contentMore: "hihihihihihi hihihihihih hihihihihi",
-  };
+  const dispatch = useDispatch();
 
-  function handleClickDetait(type) {
-    setOfferDetail(type);
+
+  useEffect(() => {
+    let param = {
+      "trangThai": 0
+    }
+    dispatch(changeLoadingApp(true))
+    baseApi.get(
+      (res) => {
+        setListOffer(res?.data);
+        dispatch(changeLoadingApp(false))
+      },
+      () => { dispatch(changeLoadingApp(false)) },
+      null,
+      API_OFFER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
+    );
+  }, [])
+
+  function handleClickDetait(item) {
+    setOfferDetail(item);
     setIsShowPopupDetail(true);
   }
   return (
@@ -71,112 +57,27 @@ function Offer(props) {
           style={{ backgroundImage: `url(${home9})` }}
         ></div>
         <div className="offer-container__list">
-          <div className="offer-container__list-row">
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer1)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer1.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer1.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer1.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>{" "}
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer2)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer2.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer2.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer2.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>{" "}
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer3)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer3.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer3.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer3.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>
-          </div>
-          <div className="offer-container__list-row">
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer4)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer4.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer4.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer4.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>{" "}
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer5)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer5.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer5.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer5.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>{" "}
-            <div
-              className="offer-container__list-row-item"
-              onClick={() => handleClickDetait(offer6)}
-            >
-              <div className="offer-container__list-row-item-img">
-                <img src={offer6.img} />
-              </div>
-              <div className="offer-container__list-row-item-title">
-                {offer6.title}
-              </div>
-              <div className="offer-container__list-row-item-more">
-                {offer6.content}
-              </div>
-              <div className="offer-container__list-row-item-detail">
-                {`Chi tiết >>>`}
-              </div>
-            </div>
-          </div>
+          {listOffer?.map((item) => {
+            return (
+              <div
+                className="offer-container__list-item"
+                onClick={() => handleClickDetait(item)}
+              >
+                <div className="offer-container__list-item-img"
+                  style={{ backgroundImage: `url("${item.anh}")` }}>
+                </div>
+                <div className="offer-container__list-item-title">
+                  {item.name}
+                </div>
+                <div className="offer-container__list-item-more">
+                  {item.noiDung}
+                </div>
+                <div className="offer-container__list-item-detail">
+                  {`Chi tiết >>>`}
+                </div>
+              </div>)
+          })}
+
         </div>
       </div>
       <Popup
@@ -189,12 +90,13 @@ function Offer(props) {
         width={800}
         body={
           <div className="popup-detail-body">
-            <div className="popup-detail-body__img">
-              <img src={offerDetail.img} />
+            <div className="popup-detail-body__img"
+              style={{ backgroundImage: `url("${offerDetail.anh}")` }}
+            >
             </div>
-            <div className="popup-detail-body__title">{offerDetail.title}</div>
+            <div className="popup-detail-body__title">{offerDetail.name}</div>
             <div className="popup-detail-body__more">
-              {offerDetail.contentMore}
+              {offerDetail.noiDung}
             </div>
           </div>
         }

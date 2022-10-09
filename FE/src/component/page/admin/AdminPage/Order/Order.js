@@ -50,16 +50,15 @@ function Order(props) {
   }, [tableID])
 
   useEffect(() => {
-    if(table?.trangThai !== 0 && table?.trangThai !== 2)
-    {
+    if (table?.trangThai !== 0 && table?.trangThai !== 2) {
       baseApi.get(
         (res) => {
-          setoOrderSelected(res?.data?.doAns)
+          setoOrderSelected(res?.data?.doAns || [])
           setBallotOrder(res?.data)
         },
         () => { },
         null,
-        API_ORDER.GET_BY_ID_TABLE + tableID 
+        API_ORDER.GET_BY_ID_TABLE + tableID
       )
     }
   }, [table])
@@ -178,7 +177,7 @@ function Order(props) {
           null,
           _table
         )
-        window.open(`/admin/tables`, "_self")
+        // window.open(`/admin/tables`, "_self")
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm phiếu oder thành công!")
       },
       () => {
@@ -192,10 +191,21 @@ function Order(props) {
   }
 
   function callUpdateOrderFood() {
-    let body = ballotOrder;
-    debugger
-    body.doAns = orderSelected;
-    body.tongTien = renderTotalCount()
+    let phieu = ballotOrder;
+    let body = {
+      "id": phieu.id,
+      "idBan": tableID,
+      "tongTien": renderTotalCount(),
+      "monAns": orderSelected,
+      "idThuNgan": phieu.thuNgan == null ? "00000000-0000-0000-0000-000000000000": phieu.thuNgan,
+      "idKhachHang": phieu.khachHang == null ? "00000000-0000-0000-0000-000000000000": phieu.khachHang,
+      "thucThu": 0,
+      "vocher": "string",
+      "soTienGiam": 0,
+      "trangThai": 0,
+      "lastModifiedByUserId": phieu.lastModifiedByUserId,
+      "lastModifiedByUserName": phieu.lastModifiedByUserName
+    }
     baseApi.put(
       (res) => {
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Cập nhật phiếu oder thành công!")
@@ -331,10 +341,9 @@ function Order(props) {
           </div>
           <div className="order-page-container__selected-dish-footer-confirm">
             <Button2 name={"Xác nhận"} onClick={() => {
-              if(table?.trangThai === 0 || table?.trangThai === 2)
-              {
+              if (table?.trangThai === 0 || table?.trangThai === 2) {
                 callOrderFood()
-              }else{
+              } else {
                 callUpdateOrderFood()
               }
             }} />

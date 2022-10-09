@@ -1,3 +1,5 @@
+const PART = "http://backend1002-001-site1.atempurl.com/api"
+const PART_SWAGGER = "http://backend1002-001-site1.atempurl.com"
 const COLOR = "#01a3a4";
 const COLOR_MENU_ADMIN = "#fff";
 const BACKGROUND_MENU_ADMIN = "#01a3a4";
@@ -53,7 +55,10 @@ const TYPE_MESSAGE={
   ERROR: 'ERROR'
 }
 
+
 export {
+  PART,
+  PART_SWAGGER,
   COLOR,
   COLOR_MENU_ADMIN,
   BACKGROUND_MENU_ADMIN,

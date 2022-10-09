@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import ImageUploading from "react-images-uploading";
 import "./imageUpload.scss";
@@ -18,24 +18,26 @@ ImageUpload.propTypes = {
 ImageUpload.defaultProps = {
   maxImage: 1,
   images: [],
-  setImages: () => {},
+  setImages: () => { },
 };
 
 function ImageUpload(props) {
   const { maxImage, images, setImages } = props;
+  const [imageUpload, setImageUpload] = useState([]);
 
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList);
     setImages(imageList);
+    setImageUpload(imageList)
   };
+  useEffect(()=>{console.log(images)},[images])
 
   const [showOption, setShowOption] = useState({ show: false, index: -1 });
 
   return (
     <ImageUploading
       multiple
-      value={images}
+      value={imageUpload}
       onChange={onChange}
       maxNumber={maxImage}
       dataURLKey="data_url"
@@ -60,7 +62,7 @@ function ImageUpload(props) {
               onMouseLeave={() => setShowOption({ show: false, index: -1 })}
             >
               <div className="image-item__img">
-                <img src={image["data_url"]} alt="" />
+                <img src={images} alt="" />
               </div>
               {showOption.show && showOption.index === index && (
                 <div className="image-item__btn-wrapper">
@@ -94,7 +96,7 @@ function ImageUpload(props) {
               )}
             </div>
           ))}
-          {images?.length === maxImage ? (
+          {imageUpload?.length === maxImage ? (
             ""
           ) : (
             <div
