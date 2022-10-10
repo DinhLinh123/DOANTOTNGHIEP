@@ -128,7 +128,7 @@ function KitchensDay(props) {
         {
             title: "Chi tiết",
             onSelect: (item) => {
-                window.open(`/admin/KitchensDay/detail/${item.key}`, "_self")
+                window.open(`/admin/kitchens-day/detail/${item.key}`, "_self")
             },
         },
         {

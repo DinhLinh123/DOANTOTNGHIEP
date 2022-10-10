@@ -181,7 +181,6 @@ function Staff(props) {
   const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
   const quyen = getQuyen
-  console.log("quyen", quyen);
 
   const quyen1 = quyen?.find((item) => item === "0-5-0")
   const quyen2 = quyen?.find((item) => item === "0-5-1")
@@ -205,7 +204,7 @@ function Staff(props) {
           setStaffAddress(item?.address.props.children);
           setStaffNote(item?.note.props.children);
           setAcountName(item?.data.userName)
-          
+          console.log("item?.listTree", item?.listTree);
           if(item?.listTree !== "string"){
            setCheckedKeys(JSON.parse(item?.listTree))
           }
@@ -395,7 +394,7 @@ function Staff(props) {
           icon: <CarryOutOutlined />,
         },
         {
-          title: "Xóa nhân viên",
+          title: "Phân Quyền",
           key: "0-5-3",
           icon: <CarryOutOutlined />,
         },
@@ -700,9 +699,9 @@ function Staff(props) {
 
   const onCheck = (checkedKeysValue) => {
     const idUser = localStorage.getItem("infoUser")
-
     const findUser = dataStaff?.find(item => item.id === idUser)
     console.log("findUser", findUser);
+    console.log("checkedKeysValuecheckedKeysValue", checkedKeysValue);
     const date = new Date();
     const body = {
       id: idStaff,

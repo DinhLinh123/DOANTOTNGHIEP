@@ -1,7 +1,8 @@
 import * as types from "../constant/spendingsType"
 
 const initalState = {
-    dataSpending: []
+    dataSpending: [],
+    loading: false
 }
 export default function spendingsReducer(state = initalState, action) {
     switch (action.type) {
@@ -26,7 +27,6 @@ export default function spendingsReducer(state = initalState, action) {
                 ...state,
             }
         case types.GET_SPENDING_SUCCESS:
-            console.log("action.payload", action.payload);
             return {
                 ...state,
                 dataSpending: action.payload.data
@@ -51,6 +51,23 @@ export default function spendingsReducer(state = initalState, action) {
                 ...state,
                 dataBooking: state.dataBooking
             }
+
+        case types.EDIT_SPENDING:
+            return {
+                ...state,
+                loading: true
+            }
+        case types.EDIT_SPENDING_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+        case types.EDIT_SPENDING_FAIL:
+            return {
+                ...state,
+                dataBooking: state.dataBooking
+            }
+
 
         default:
             return state

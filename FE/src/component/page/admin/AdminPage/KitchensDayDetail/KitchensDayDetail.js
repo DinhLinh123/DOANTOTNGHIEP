@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import commonFunction from "../../../../base/common/commonFunction";
 import TableBase from "../../../../base/Table/Table";
@@ -38,17 +39,17 @@ function KitchensDayDetail(props) {
         },
     ];
 
-    const data = 
-        {
-            key: "1",
-            billName: "HD01",
-            billDate: "27/08/2022",
-            listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10"}]',
-            note: "ghi chú",
-            person: "Linhdtt",
-            date: "27/08/2022",
+    const data =
+    {
+        key: "1",
+        billName: "HD01",
+        billDate: "27/08/2022",
+        listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10"}]',
+        note: "ghi chú",
+        person: "Linhdtt",
+        date: "27/08/2022",
 
-        };
+    };
 
     function columnSerial(idx) {
         return <div>{idx}</div>;
@@ -116,7 +117,11 @@ function KitchensDayDetail(props) {
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable">Ngày nhập</span>
                     <span className="kitchensDayDetail-manager__item-content">{data.date}</span>
-                </div>    
+                </div>
+                <div className="kitchensDayDetail-manager__item">
+                    <span className="kitchensDayDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>quay lại</span>
+                </div>
+
             </div>
         </AdminPage>
     )

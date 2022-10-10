@@ -191,6 +191,9 @@ function KitchenDetail(props) {
                     <span className="kitchenDetail-manager__item-lable">Ngày nhập</span>
                     <span className="kitchenDetail-manager__item-content">{data.date}</span>
                 </div>
+                <div className="kitchenDetail-manager__item">
+                    <span className="kitchenDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>quay lại</span>
+                </div>
             </div>
         </AdminPage>
     )

@@ -17,22 +17,26 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import { changeAccount } from "../../../../../reudux/action/accountAction";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteSpending, getSpending, postSpending } from "../../../../../reudux/action/spendingsAction";
+import { deleteSpending, editSpending, getSpending, postSpending } from "../../../../../reudux/action/spendingsAction";
 import moment from "moment";
 import commonFunction from "../../../../base/common/commonFunction";
+import axios from "axios";
+import { URL_API } from "../../../../../utils/urpapi";
 
 function Spending(props) {
   const [sortType, setSortType] = useState();
+  const [statusAction, setStatusAction] = useState("ADD")
+  const [idSpending, setIdSpending] = useState()
   const [itemBill, setItemBill] = useState("");
   const [itemBillDate, setItemBillDate] = useState("");
   const [listItems, setListItems] = useState([
     { name: "", unit: "", amount: "", unitprice: "" },
   ]);
   const [itemImage, setItemImage] = useState("");
+  console.log("itemImageitemImage", itemImage);
   const [itemNote, setItemNote] = useState("");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [textSearch, setTextSearch] = useState("")
-  console.log("textSearch", textSearch);
   const COLUMN_TABLE_INDEX_MENU = {
     BILL: "namebill",
     AMOUNT: "amount",
@@ -76,11 +80,11 @@ function Spending(props) {
       dataIndex: COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON,
       width: "200px",
     },
-    {
-      title: "Trạng thái",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
-      width: "200px",
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
+    //   width: "200px",
+    // },
   ];
 
   const data = [
@@ -145,18 +149,24 @@ function Spending(props) {
         window.open(`/admin/spending/detail/${item.key}`, "_self");
       },
     },
-    // {
-    //   title: "Gửi phê duyệt",
-    //   onSelect: () => {
-    //     alert("Sửa");
-    //   },
-    // },
+    {
+      title: "Sửa",
+      onSelect: (item) => {
+        console.log("item", item);
+        setStatusAction("UPDATE")
+        setIdSpending(item.key)
+        setIsShowPopupAddnew(true)
+        setItemBill(item.data.name)
+        setItemBillDate(item.data.ngayHoaDon)
+        setListItems(JSON.parse(item?.data?.matHang))
+      },
+    },
     {
       title: "Xóa",
       onSelect: (item) => {
-        if(quyen3 === "0-1-2"){
+        if (quyen3 === "0-1-2") {
           dispatch(deleteSpending(item.key))
-        }else{
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa chi tiêu")
         }
       },
@@ -184,9 +194,9 @@ function Spending(props) {
   function columnDataentryperson(item) {
     return <div>{item?.createdByUserName}</div>;
   }
-  function columnStatus(item) {
-    return <div>{item?.trangThaiHienTai}</div>;
-  }
+  // function columnStatus(item) {
+  //   return <div>{item?.trangThaiHienTai ?? "null"}</div>;
+  // }
 
   function convertDataTable(dataTable) {
     let listData;
@@ -198,8 +208,9 @@ function Spending(props) {
         [COLUMN_TABLE_INDEX_MENU.TOTALMONEY]: columnTotalmoney(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
-        [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
+        // [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: item.id,
+        data: item
       };
     });
     return [...listData];
@@ -321,33 +332,52 @@ function Spending(props) {
   }
 
 
-  const onSubmitSave = () => {
+  const onSubmitSave = async () => {
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
-    const body = {
-      name: itemBill,
-      ngayHoaDon: date.setHours(0,0,0,0).toISOString(itemBillDate),
-      // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
-      matHang: JSON.stringify(listItems),
-      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
-      createdByUserName: userName.userName,
-      createdOnDate: date
-    };
-    setIsShowPopupAddnew(false);
-    dispatch(postSpending(body))
-    setListItems([
-      { name: "", unit: "", amount: "", unitprice: "" },
-    ])
-    setItemBill()
-    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm chi tiêu thành công")
+    if (statusAction === "ADD") {
+      const res = axios.post(`${URL_API}/UploadFile`, { files: itemImage[0] })
+      console.log("itemImageitemImageitemImage", itemImage);
+      const body = {
+        name: itemBill,
+        ngayHoaDon: date.toISOString(itemBillDate),
+        // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
+        matHang: JSON.stringify(listItems),
+        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        createdByUserName: userName.userName,
+        createdOnDate: date
+      };
+      setIsShowPopupAddnew(false);
+      dispatch(postSpending(body))
+      setListItems([
+        { name: "", unit: "", amount: "", unitprice: "" },
+      ])
+      setItemBill()
+      commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm chi tiêu thành công")
+    } else {
+      const body = {
+        id: idSpending,
+        name: itemBill,
+        ngayHoaDon: date.toISOString(itemBillDate),
+        // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
+        matHang: JSON.stringify(listItems),
+        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        createdByUserName: userName.userName,
+        createdOnDate: date
+      };
+      dispatch(editSpending(body))
+      setIsShowPopupAddnew(false);
+    }
+
   };
 
-  const { dataSpending } = useSelector((state) => state.spendingsReducer);
+  const { dataSpending, loading } = useSelector((state) => state.spendingsReducer);
   const dispatch = useDispatch();
+  console.log("loadingloading", loading);
 
   useEffect(() => {
-    dispatch(getSpending({textSearch}));
-  }, [dispatch, textSearch]);
+    dispatch(getSpending({ textSearch }));
+  }, [dispatch, textSearch, loading]);
 
   return (
     <AdminPage title={"Quản lý chi tiêu"} index={MENU_TAB_ADMIN.SPENDING}>
@@ -355,10 +385,10 @@ function Spending(props) {
         <div className="spending-manager__filter">
           <div className="spending-manager__filter-search">
             <div className="spending-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} onChange = {event => setTextSearch(event)} />
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} onChange={event => setTextSearch(event)} />
             </div>
             <div className="spending-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} 
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}
               // onChange = {val => {
               //   const date = new Date();
               //   console.log(date.setHours(0,0,0,0));
@@ -368,7 +398,7 @@ function Spending(props) {
             </div>
           </div>
           <div className="spending-manager__filter-create-new">
-            {quyen1 === "0-1-0" ?  <Button2
+            {quyen1 === "0-1-0" ? <Button2
               name={"Thêm mới chi tiêu"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
@@ -428,6 +458,7 @@ function Spending(props) {
               <div className="spending-manager__popup-bill">
                 <DatePicker
                   defaultValue={itemBillDate}
+                  // value={"01-12-2000"}
                   onChange={(val) => {
                     setItemBillDate(val);
                   }}

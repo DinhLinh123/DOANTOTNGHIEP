@@ -151,12 +151,13 @@ function BarInsert(props) {
     ]
 
     const getQuyen = JSON.parse(localStorage.getItem("quyen"))
-
     const quyen = getQuyen
+    console.log("getQuyengetQuyen", quyen);
 
     const quyen1 = quyen?.find((item) => item === "0-4-0")
     const quyen2 = quyen?.find((item) => item === "0-4-1")
     const quyen3 = quyen?.find((item) => item === "0-4-2")
+    console.log(quyen1, quyen2, quyen3);
 
     const OPTION_MORE_TABLE = [
         {
@@ -376,7 +377,7 @@ function BarInsert(props) {
                         />
                     </div> */}
                     <div className="barInsert-manager__button-create-new">
-                        {quyen1 === "0-4-1" ?  <Button2
+                        {quyen1 === "0-4-0" ?  <Button2
                             name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}

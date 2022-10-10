@@ -74,11 +74,11 @@ function Kitchen(props) {
       dataIndex: COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON,
       width: "200px",
     },
-    {
-      title: "Trạng thái",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
-      width: "200px",
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
+    //   width: "200px",
+    // },
   ];
 
   function columnBill(item) {
@@ -98,11 +98,11 @@ function Kitchen(props) {
     return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
   }
   function columnDataentryperson(item) {
-    return <div>{item?.dataentryperson}</div>;
+    return <div>{item?.createdByUserName}</div>;
   }
-  function columnStatus(item) {
-    return <div>{item?.status}</div>;
-  }
+  // function columnStatus(item) {
+  //   return <div>{item?.status}</div>;
+  // }
   function convertDataTable(dataTable) {
     let listData;
     listData = dataTable?.map((item, idx) => {
@@ -113,7 +113,7 @@ function Kitchen(props) {
         [COLUMN_TABLE_INDEX_MENU.TOTALMONEY]: columnTotalmoney(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYDATE]: columnDataentrydate(item),
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
-        [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
+        // [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: item?.id,
       };
     });
@@ -178,12 +178,12 @@ function Kitchen(props) {
         window.open(`/admin/kitchen/detail/${item.key}`, "_self");
       },
     },
-    // {
-    //   title: "Gửi phê duyệt",
-    //   onSelect: () => {
-    //     alert("Sửa");
-    //   },
-    // },
+    {
+      title: "Sửa",
+      onSelect: () => {
+        alert("Sửa");
+      },
+    },
     {
       title: "Xóa",
       onSelect: (item) => {
@@ -361,7 +361,7 @@ function Kitchen(props) {
               <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"}  onChange={(val) => setTextSearch(val)} />
             </div>
             <div className="Kitchen-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} onChange= {(val) => {
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn 1"} onChange= {(val) => {
                 const date = new Date();
                 setTextSearch(date.toISOString(val))
               }}/>

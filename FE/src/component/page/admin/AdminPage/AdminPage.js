@@ -53,6 +53,8 @@ import {
 import commonFunction from "../../../base/common/commonFunction";
 import { changeAccount } from "../../../../reudux/action/accountAction";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { URL_API } from "../../../../utils/urpapi";
 
 AdminPage.propTypes = {
   title: PropTypes.string,
@@ -134,6 +136,17 @@ function AdminPage(props) {
       window.open("/login", "_self");
     }
   }, []);
+
+  useEffect(() => {
+   async function getUser (){
+
+    const res = await axios.get(`${URL_API}/User`)
+    const infoUser = localStorage.getItem("infoUser")
+    const findUser = res?.data?.data?.find(item => item.id === infoUser)
+    localStorage.setItem("quyen", findUser?.quyen)
+   }
+   getUser()
+  },[])
 
   let listMenu = [
     {
