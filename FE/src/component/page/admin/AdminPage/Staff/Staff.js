@@ -192,8 +192,8 @@ function Staff(props) {
     {
       title: "Phân quyền",
       onSelect: (item) => {
-        if(quyen4 === "0-5-3"){
-          
+        if (quyen4 === "0-5-3") {
+
           setIdStaff(item?.code.props.children[1].props.children);
           setStaffCode(item?.code.props.children[0]);
           setStaffName(item?.name.props.children);
@@ -205,21 +205,21 @@ function Staff(props) {
           setStaffNote(item?.note.props.children);
           setAcountName(item?.data.userName)
           console.log("item?.listTree", item?.listTree);
-          if(item?.listTree !== "string"){
-           setCheckedKeys(JSON.parse(item?.listTree))
+          if (item?.listTree !== "string") {
+            setCheckedKeys(JSON.parse(item?.listTree))
           }
           setIsShowPopupSetup(true);
-        }else{
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền phân quyền")
 
         }
-      
+
       },
     },
     {
       title: "Sửa",
       onSelect: (item) => {
-        if(quyen2 === "0-5-1"){
+        if (quyen2 === "0-5-1") {
           setIsShowPopupAddnew(true);
           setStatusAction("UPDATE");
           setIdStaff(item?.code.props.children[1].props.children);
@@ -231,11 +231,11 @@ function Staff(props) {
           setStaffPhone(item?.phone.props.children);
           setStaffAddress(item?.address.props.children);
           setStaffNote(item?.note.props.children);
-        }else{
-            commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nhân viên")
+        } else {
+          commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nhân viên")
         }
-       
-       
+
+
       },
     },
     {
@@ -618,6 +618,17 @@ function Staff(props) {
   function handleClickAddnew(type) {
     setIsShowPopupAddnew(true);
     setStatusAction("ADD");
+    setIdStaff("");
+    setStaffCode("");
+    setStaffName("");
+    setStaffSex("");
+    setStaffDate("");
+    setStaffPosition("");
+    setStaffPhone("");
+    setStaffAddress("");
+    setStaffNote("");
+    setAcountName("")
+    setPassword("");
   }
   function handleClickAddPosition(type) {
     setIsShowPopupAddPosition(true);
@@ -625,22 +636,22 @@ function Staff(props) {
   async function onChangeTab() {
     const date = new Date();
     const user = JSON.parse(localStorage.getItem("roleType"))
-    
+
     if (statusAction === "ADD") {
 
       const res = await axios.get(`http://backend1002-001-site1.atempurl.com/checkexist/${acountName}`)
       if (res.data.code === 500) {
         commonFunction.messages(TYPE_MESSAGE.ERROR, "Tài khoản đã tồn tại")
       } else {
-        
+
         const body = {
-          maNV: staffCode ,
+          maNV: staffCode,
           fullName: staffName,
           phai: staffSex,
           ngaySinh: date.toISOString(staffDate),
           chucVu: staffPosition,
           soDienThoai: staffPhone,
-          quyen : staffPosition === "Admin" ?   "[\"0-0\",\"0-0-0\",\"0-0-1\",\"0-0-2\",\"0-1\",\"0-1-0\",\"0-1-1\",\"0-1-2\",\"0-2\",\"0-2-0\",\"0-3\",\"0-3-0\",\"0-3-1\",\"0-3-2\",\"0-3-3\",\"0-3-4\",\"0-3-5\",\"0-4\",\"0-4-0\",\"0-4-1\",\"0-4-2\",\"0-5\",\"0-5-0\",\"0-5-1\",\"0-5-2\",\"0-6\",\"0-6-0\",\"0-6-1\",\"0-6-2\",\"0-6-3\",\"0-7\",\"0-7-0\",\"0-7-1\",\"0-7-2\",\"0-7-3\",\"0-7-4\",\"0-7-5\",\"0-8\",\"0-8-0\",\"0-8-1\",\"0-8-2\",\"0-8-3\",\"0-8-4\",\"0-8-5\",\"0-8-6\",\"0-8-7\",\"0-8-8\",\"0-9\",\"0-9-0\",\"0-10\",\"0-10-0\"]" : null,
+          quyen: staffPosition === "Admin" ? "[\"0-0\",\"0-0-0\",\"0-0-1\",\"0-0-2\",\"0-1\",\"0-1-0\",\"0-1-1\",\"0-1-2\",\"0-2\",\"0-2-0\",\"0-3\",\"0-3-0\",\"0-3-1\",\"0-3-2\",\"0-3-3\",\"0-3-4\",\"0-3-5\",\"0-4\",\"0-4-0\",\"0-4-1\",\"0-4-2\",\"0-5\",\"0-5-0\",\"0-5-1\",\"0-5-2\",\"0-6\",\"0-6-0\",\"0-6-1\",\"0-6-2\",\"0-6-3\",\"0-7\",\"0-7-0\",\"0-7-1\",\"0-7-2\",\"0-7-3\",\"0-7-4\",\"0-7-5\",\"0-8\",\"0-8-0\",\"0-8-1\",\"0-8-2\",\"0-8-3\",\"0-8-4\",\"0-8-5\",\"0-8-6\",\"0-8-7\",\"0-8-8\",\"0-9\",\"0-9-0\",\"0-10\",\"0-10-0\"]" : null,
           diaChi: staffAddress,
           chiChu: staffNote,
           userName: acountName,
@@ -719,13 +730,13 @@ function Staff(props) {
 
     dispatch(updateStaff({ id: body.id, body }));
     setCheckedKeys(checkedKeysValue);
-    if(findUser) {
-         localStorage.setItem("quyen", findUser.quyen)
-    }else{
+    if (findUser) {
+      localStorage.setItem("quyen", findUser.quyen)
+    } else {
       console.log("Vào đây 1");
 
     }
-  
+
   };
 
   const onSelect = (selectedKeysValue, info) => {
@@ -734,7 +745,7 @@ function Staff(props) {
   };
 
   const searchUser = (text) => {
-    
+
     setTimeout(() => {
       dispatch(searchStaff(text))
     }, 500)
@@ -777,12 +788,12 @@ function Staff(props) {
             />
           </div> */}
           <div className="staff-manager__button-create-new">
-            {quyen1 === "0-5-0" ?  <Button2
+            {quyen1 === "0-5-0" ? <Button2
               name={"Thêm mới nhân viên"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
             /> : null}
-           
+
           </div>
         </div>
         <div className="staff-manager__content">
@@ -881,11 +892,10 @@ function Staff(props) {
                 }}
                 autoFocus
               />
-              {statusAction}
               {statusAction === "UPDATE" ? null : <>
                 <Input
                   label={"Tài khoản"}
-                  value={acountName}
+                  value = {acountName}
                   onChange={(val) => {
                     setAcountName(val);
                   }}
@@ -893,8 +903,8 @@ function Staff(props) {
                 />
                 <Input
                   label={"Mật khẩu"}
+                  value = {password}
                   type="password"
-                  value={password}
                   onChange={(val) => {
                     setPassword(val);
                   }}
