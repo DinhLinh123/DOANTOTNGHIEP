@@ -110,13 +110,17 @@
                     margin-right: 8px;
                 }
             }
+
+            &-many{
+                margin-left: auto;
+            }
         }
 
         &-content {
             background-color: #fff;
             width: 1000px;
             height: 500px;
-            margin: 24px auto 0 auto;
+            margin: 0px auto 0 auto;
             position: relative;
     
             &-drag {
@@ -137,6 +141,16 @@
                     cursor: pointer;
                 }
             }
+        }
+
+        &-many-table{
+            display: flex;
+            width: 1000px;
+            margin: 0 auto;
+            height: 40px;
+            align-items: center;
+            justify-content: flex-start;
+            color: #e74c3c;
         }
     }
 }

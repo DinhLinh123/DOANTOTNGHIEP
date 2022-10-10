@@ -44,7 +44,7 @@
 
                           &__menu {
                             position: absolute;
-                            right: 100px;
+                            left: -152px;
                             top: 6px;
                             z-index: 4;
                             width: 150px;
@@ -89,7 +89,7 @@
 
                       .ant-table-cell-fix-right-first {
                         padding: 0 16px;
-                        width: 70px;
+                        // width: 70px;
                       }
                     }
                   }

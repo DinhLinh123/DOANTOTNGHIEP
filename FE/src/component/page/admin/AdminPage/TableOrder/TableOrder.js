@@ -24,6 +24,9 @@ import baseApi from "../../../../../api/baseApi";
 import { API_AREA, API_TABLE } from "../../../../base/common/endpoint";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import CheckBox from "../../../../base/CheckBox/CheckBox";
+import Button2 from "../../../../base/Button/Button";
+import Popup from "../../../../base/Popup/Popup";
 
 TableOrder.propTypes = {};
 
@@ -34,6 +37,9 @@ function TableOrder(props) {
   const [index, setIndex] = useState(0);
   const [listArea, setlistArea] = useState([]);
   const [list, setList] = useState([])
+  const [isMerge, setIsMerge] = useState(false)
+  const [listMerge, setListMerge] = useState([])
+  const [showPopupWarningChoose, setShowPopupWarningChoose] = useState({show: false, idBan: -1});
 
   useEffect(()=>{
     callApiAllGetArea()
@@ -91,19 +97,36 @@ function TableOrder(props) {
   function callApiGetTable(areaID) {
     let param= {
       "idKhuVuc": areaID
+    }
+    baseApi.get(
+        (res) => {
+            setList(res.data)
+        },
+        (err) => { },
+        null,
+        API_TABLE.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
+        {},
+        {}
+    )
   }
-  baseApi.get(
-      (res) => {
-          setList(res.data)
-      },
-      (err) => { },
-      null,
-      API_TABLE.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param)),
-      {},
-      {}
-  )
-    
+
+  function mergeTable(idBan) {
+    if(!listMerge?.includes(idBan)){
+      let _listMerge = [...listMerge]
+      _listMerge.push(idBan)
+      setListMerge(_listMerge)
+    }
+    else{
+        let _listMerge = listMerge?.filter((_item)=>{return _item != idBan})
+        setListMerge(_listMerge)
+    }
+    setShowPopupWarningChoose({show: false, idBan: -1})
   }
+
+  useEffect(()=>{
+    console.log(listMerge)
+  },[listMerge])
+
   return (
     <div className="area-order-container">
       <div
@@ -123,7 +146,6 @@ function TableOrder(props) {
             <div className="area-order-container__page-note-item-status"
               style={{backgroundColor: '#dcdde1'}}
             >
-
             </div>
             <div className="area-order-container__page-note-item-text">
               Bàn trống
@@ -133,7 +155,6 @@ function TableOrder(props) {
             <div className="area-order-container__page-note-item-status"
               style={{backgroundColor: '#c23616'}}
             >
-
             </div>
             <div className="area-order-container__page-note-item-text">
               Bàn đang hoạt động
@@ -149,8 +170,31 @@ function TableOrder(props) {
               Bàn đã được đặt
             </div>
           </div>
+          <div className="area-order-container__page-note-item">
+            <div className="area-order-container__page-note-item-status"
+              style={{backgroundColor: '#95a5a6'}}
+            >
+
+            </div>
+            <div className="area-order-container__page-note-item-text">
+              Bàn được chọn để gộp
+            </div>
+          </div>
+
+          <div className="area-order-container__page-note-many">
+            <div className="area-order-container__page-note-many-choose">
+              <CheckBox label={"Gộp bàn"} checked={isMerge} onChange={()=>setIsMerge(!isMerge)}/>
+            </div>
+          </div>
         </div>
-        <div className="area-order-container__page-content" style={{ height: '600px', width: '1000px', position: 'relative' }}>
+
+        {isMerge && 
+          <div className="area-order-container__page-many-table">
+            Đã chọn: {listMerge?.length} bàn
+          </div>
+        }
+
+        <div className="area-order-container__page-content" style={{ height: '600px', width: '1000px', position: 'relative', marginTop: isMerge? "0px":'24px' }}>
           <div className="area-order-container__page-content-drag" style={{ height: '600px', width: '1000px', position: 'absolute', top: '0' }}>
             {list.map((item) => {
               return (
@@ -159,17 +203,24 @@ function TableOrder(props) {
                     className="area-order-container__page-content-drag-item"
                     style={{
                       borderRadius: item?.kieuDang == 0 ? '50%' : '8px',
-                      backgroundColor: item.trangThai == 0 ? '#dcdde1' : item.trangThai == 1 ? '#c23616' : '#fbc531',
+                      // backgroundColor: '#fff',
+                      backgroundColor: listMerge?.includes(item.id)?'#95a5a6':item.trangThai == 0 ? '#dcdde1' : item.trangThai == 1 ? '#c23616' : '#fbc531',
                       color: item.trangThai == 0 ? '#000' : item.trangThai == 1 ? '#fff' : '#fff',
                       position: 'absolute', top: '8px', left: '8px'
                     }}
                     onClick={() => {
-                      // if (item.status == 0) {
+                      if (!isMerge) {
                         window.open(`/admin/table/${item.id}/order`, "_self")
-                      // }
-                      // else {
-                      //   return;
-                      // }
+                      }
+                      else {
+                        if(item.trangThai == 1 && !listMerge?.includes( item.id)){
+                          setShowPopupWarningChoose({show: true, idBan: item.id})
+                        }
+                        else{
+                          mergeTable(item.id)
+                          
+                        }
+                      }
                     }}
                   >
                     {item?.name}
@@ -180,6 +231,26 @@ function TableOrder(props) {
           </div>
         </div>
       </div>
+      <Popup
+        title={"Cảnh báo"}
+        show={showPopupWarningChoose.show}
+        onClickClose={() => setShowPopupWarningChoose({show: false, idBan: -1})}
+        button={[
+          <Button2
+            name={"Hủy"}
+            onClick={() => setShowPopupWarningChoose({show: false, idBan: -1})}
+          />,
+          <Button2
+            name={"Gộp bàn"}
+            onClick={() => mergeTable(showPopupWarningChoose.idBan)}
+          />,
+        ]}
+        width={600}
+        className={"menu-popup-detail"}
+        body={
+          <div style={{ marginTop: '24px', fontSize: '16px', }}>Lưu ý: Bàn đang hoạt động bạn có chắc muốn gộp bàn không?</div>
+        }
+      />
     </div>
   );
 }

@@ -126,9 +126,9 @@ function TableBase(props) {
       //     renderMoreOption(col)
       // },
       title: "",
-      key: "operation",
-      fixed: "right",
-      width: "5%",
+      key: 'operation',
+      fixed: 'right',
+      width: 100,
       render: (_, col) => renderMoreOption(col),
     };
 

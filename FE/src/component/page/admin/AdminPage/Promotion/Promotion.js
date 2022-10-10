@@ -3,6 +3,7 @@ import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
   ONE_DAY,
+  PART_SWAGGER,
   SORT_TYPE,
   TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
@@ -19,7 +20,7 @@ import TimePicker from "../../../../base/TimePicker/TimePicker";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import { useDispatch } from "react-redux";
 import baseApi from "../../../../../api/baseApi";
-import { API_MENU, API_PROMOTION } from "../../../../base/common/endpoint";
+import { API_MENU, API_PROMOTION, UPLOAD_FILE } from "../../../../base/common/endpoint";
 import commonFunction from "../../../../base/common/commonFunction";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 import RadioCheck from "../../../../base/Radio/Radio";
@@ -139,25 +140,28 @@ function Promotion(props) {
     {
       title: "Xóa",
       onSelect: (item) => {
-        setIsShowPopupComfirmDelete({show: true, item: item?.item})
+        setIsShowPopupComfirmDelete({ show: true, item: item?.item })
       },
     },
   ];
 
   function handleEdit(item) {
-     setIdFood(item?.idDoAn);
-     setPromotionName(item?.name);
-     setPromotionDescribe(item?.noiDung);
-     setPromotionType(item?.loaiUuDai);
-     setPromotionStatus(item?.trangThai);
-     setPromotionNote(item?.noiDung);
-     setPromotionUnit(item?.donViTinh);
-     setMoneyPromotion(item?.giaTri)
+    setIdFood(item?.idDoAn);
+    setPromotionName(item?.name);
+    setPromotionDescribe(item?.noiDung);
+    setPromotionType(item?.loaiUuDai);
+    setPromotionStatus(item?.trangThai);
+    setPromotionNote(item?.noiDung);
+    setPromotionUnit(item?.donViTinh);
+    setMoneyPromotion(item?.giaTri)
     setPromotionDetail(item)
-    setIsShowPopupAddnew({show: true,
+    setIsShowPopupAddnew({
+      show: true,
       title: "Sửa ưu đãi",
       key: 1,
-      id: item?.id })
+      id: item?.id
+    })
+    setImages(item?.anh)
   }
 
 
@@ -176,7 +180,7 @@ function Promotion(props) {
     return <div>{item?.noiDung}</div>;
   }
   function columnImage(item) {
-    return <div>{item?.image}</div>;
+    return <div style={{width: '100px', height:'100px', display: 'flex','align-items': 'center'}}><img src={item?.anh} style={{width: '100%', maxHeight: '100%'}}/></div>;
   }
   function columnType(item) {
     switch (item?.loaiUuDai) {
@@ -187,7 +191,7 @@ function Promotion(props) {
       default:
         break;
     }
-    
+
   }
   function columnUnit(item) {
     switch (item?.donViTinh) {
@@ -264,13 +268,13 @@ function Promotion(props) {
     dispatch(changeLoadingApp(true));
     let body = {
       "name": promotionName,
-      "anh": "",
+      "anh": images,
       "noiDung": promotionDescribe,
       "giaTri": moneyPromotion,
       "loaiUuDai": promotionType,
       "donViTinh": promotionUnit,
       "trangThai": promotionStatus,
-      "idDoAn": idFood == '' ? "00000000-0000-0000-0000-000000000000": idFood,
+      "idDoAn": idFood == '' ? "00000000-0000-0000-0000-000000000000" : idFood,
       "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       "createdByUserName": "string",
       "createdOnDate": "2022-08-21T09:28:19.003Z"
@@ -295,17 +299,16 @@ function Promotion(props) {
   }
 
   function callApiUpdatePromotion() {
-    debugger
     dispatch(changeLoadingApp(true));
     let body = promotionDetail
-      body.name= promotionName;
-      body.anh= "";    
-      body.noiDung= promotionDescribe;
-      body.giaTri= moneyPromotion;
-      body.loaiUuDai= promotionType;
-      body.donViTinh= promotionUnit;
-      body.trangThai= promotionStatus;
-      body.idDoAn= idFood == '' ? "00000000-0000-0000-0000-000000000000": idFood;
+    body.name = promotionName;
+    body.anh = images;
+    body.noiDung = promotionDescribe;
+    body.giaTri = moneyPromotion;
+    body.loaiUuDai = promotionType;
+    body.donViTinh = promotionUnit;
+    body.trangThai = promotionStatus;
+    body.idDoAn = idFood == '' ? "00000000-0000-0000-0000-000000000000" : idFood;
     baseApi.put(
       (res) => {
         dispatch(changeLoadingApp(false));
@@ -347,15 +350,16 @@ function Promotion(props) {
   }
 
   useEffect(() => {
-    if(isShowPopupAddnew.show){
+    if (isShowPopupAddnew.show) {
       baseApi.get(
         (res) => {
-          let data =res.data?.map((item)=>
-          { return({
-            value: item.id,
-            label: item.name,
-          })}
-         )
+          let data = res.data?.map((item) => {
+            return ({
+              value: item.id,
+              label: item.name,
+            })
+          }
+          )
           setListMenu(data)
         },
         () => {
@@ -440,9 +444,9 @@ function Promotion(props) {
             <Button2
               name={"Lưu"}
               onClick={() => {
-                if(isShowPopupAddnew.key === 0){
+                if (isShowPopupAddnew.key === 0) {
                   callApiAddPromotion()
-                }else{
+                } else {
                   callApiUpdatePromotion()
                 }
               }}
@@ -481,7 +485,20 @@ function Promotion(props) {
                   maxImage={1}
                   images={images}
                   setImages={(val) => {
-                    setImages(val);
+                    debugger
+                    let img = val[0].file
+                    let formData = new FormData();
+                    formData.append('files', img)
+                    baseApi.post(
+                      (res) => {
+                        setImages(PART_SWAGGER+res.data[0]);
+                      },
+                      () => { debugger},
+                      null,
+                      UPLOAD_FILE,
+                      {},
+                      formData
+                    )
                   }}
                 />
               </div>

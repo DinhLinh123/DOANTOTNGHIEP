@@ -594,8 +594,8 @@ function Spending(props) {
                       setOfferChoose(item)
                       handleChooseVoucher(item, moneyTotal)
                     }}
+                    style={{backgroundImage: `url("${item?.anh}")`}}
                   >
-                    <img src={item?.anh} />
                   </div>
                   <div className="pay-offer-container__list-item-title"
                     onClick={() => {
