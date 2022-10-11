@@ -23,7 +23,7 @@ function* postDataChickens({ payload }) {
     }
 }
 
-function* getDataChickens({payload}) {
+function* getDataChickens({ payload }) {
 
     try {
         const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/getbykieu/Qu%E1%BA%A3n%20l%C3%BD%20h%C3%B3a%20%C4%91%C6%A1n%20b%E1%BA%BFp`)
@@ -56,10 +56,30 @@ function* deleteDataKitchens({ payload }) {
     }
 }
 
+function* updateDataKitchens({ payload }) {
+
+    try {
+        const res = yield axios.put(`${URL_API}/PhieuNhapVatTu/${payload.id}`, payload)
+        if (res) {
+            yield put(actions.updateKitchenSuccess(payload))
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thành công")
+        }
+        else {
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thất bại")
+        }
+    } catch (error) {
+        yield put(actions.updateKitchenFail(error))
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa hóa đơn bếp thất bại")
+
+
+    }
+}
+
+
 
 export function* watchingChickens() {
     yield takeLatest(types.POST_CHICKEN, postDataChickens)
     yield takeLatest(types.GET_CHICKEN, getDataChickens)
     yield takeLatest(types.DELETE_CHICKEN, deleteDataKitchens)
-
+    yield takeLatest(types.EDIT_CHICKEN, updateDataKitchens)
 }

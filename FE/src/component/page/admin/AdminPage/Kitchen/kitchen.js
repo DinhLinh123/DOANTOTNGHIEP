@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
-import { MENU_TAB_ADMIN, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
+import { MENU_TAB_ADMIN, PART_SWAGGER, TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import AdminPage from "../AdminPage";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -12,15 +12,18 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import { Tooltip } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
 import commonFunction from "../../../../base/common/commonFunction";
-import { deleteKitchens, getChickens, postChickens } from "../../../../../reudux/action/kitchensAction";
+import { deleteKitchens, getChickens, postChickens, updateKitchen } from "../../../../../reudux/action/kitchensAction";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment"
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { URL_API } from "../../../../../utils/urpapi";
+import baseApi from "../../../../../api/baseApi";
+import { UPLOAD_FILE } from "../../../../base/common/endpoint";
 
 function Kitchen(props) {
   const [sortType, setSortType] = useState();
+  const [status, setStatus] = useState("ADD")
   const [textSearch, setTextSearch] = useState("")
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [itemBill, setItemBill] = useState("");
@@ -28,9 +31,13 @@ function Kitchen(props) {
   const [listItems, setListItems] = useState([
     { name: "", unit: "", amount: "", unitprice: "" },
   ]);
-  const [itemImage, setItemImage] = useState("");
   const [itemNote, setItemNote] = useState("");
-  
+  const [images, setImages] = useState([]);
+  console.log("imagesimagesimages", images);
+  const [idKitchen, setIdKitchen] = useState();
+
+
+
 
   const COLUMN_TABLE_INDEX_MENU = {
     BILL: "namebill",
@@ -115,6 +122,7 @@ function Kitchen(props) {
         [COLUMN_TABLE_INDEX_MENU.DATAENTRYPERSON]: columnDataentryperson(item),
         // [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
         key: item?.id,
+        item: item
       };
     });
     return [...listData];
@@ -180,20 +188,28 @@ function Kitchen(props) {
     },
     {
       title: "Sửa",
-      onSelect: () => {
-        alert("Sửa");
+      onSelect: (item) => {
+        setStatus("UPDATE")
+        setIsShowPopupAddnew(true)
+        setItemBill(item?.item?.name)
+        setItemBillDate(item?.item?.ngayHoaDon)
+        setImages(item?.item?.anh)
+        setListItems(JSON.parse(item?.item?.matHangs))
+        setItemNote(item?.item?.ghiChu)
+        setIdKitchen(item?.item?.id)
+        setImages(item?.item?.hinhAnh)
       },
     },
     {
       title: "Xóa",
       onSelect: (item) => {
-        if(quyen3 === "0-3-5"){
+        if (quyen3 === "0-3-5") {
           dispatch(deleteKitchens(item.key))
         }
-        else{
+        else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa hóa đơn")
         }
-        
+
       },
     },
   ];
@@ -314,42 +330,54 @@ function Kitchen(props) {
   }
 
   const dispatch = useDispatch();
-  const { dataChickens } = useSelector(state => state.chickensReducer)
-  console.log("dataChickens", dataChickens);
+  const { dataChickens, loading } = useSelector(state => state.chickensReducer)
 
   useEffect(() => {
     dispatch(getChickens({
       textSearch
     }))
-  }, [dispatch, textSearch])
+  }, [dispatch, textSearch, loading])
 
   const onSubmitSave = () => {
     setIsShowPopupAddnew(false)
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
-    const body = {
-      name: itemBill,
-      ngayHoaDon: date.toISOString(itemBillDate),
-      kieu: "Quản lý hóa đơn bếp",
-      matHangs: JSON.stringify(listItems),
-      tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
-      createdByUserName: userName.userName,
-      createdOnDate: date,
-      ghiChu: itemNote
-    };
-    console.log("body", body);
-    dispatch(postChickens(body))
+    if (status === "ADD") {
+      const body = {
+        name: itemBill,
+        ngayHoaDon: date.toISOString(itemBillDate),
+        kieu: "Quản lý hóa đơn bếp",
+        hinhAnh: images,
+        matHangs: JSON.stringify(listItems),
+        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        createdByUserName: userName.userName,
+        createdOnDate: date,
+        ghiChu: itemNote
+      };
+      dispatch(postChickens(body))
+      
+    } else {
+      const body = {
+        id: idKitchen,
+        name: itemBill,
+        ngayHoaDon: date.toISOString(itemBillDate),
+        kieu: "Quản lý hóa đơn bếp",
+        hinhAnh: images,
+        matHangs: JSON.stringify(listItems),
+        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        createdByUserName: userName.userName,
+        createdOnDate: date,
+        ghiChu: itemNote
+      };
+      dispatch(updateKitchen(body))
+    }
     setItemBill("")
     setItemBillDate("")
     setListItems([
       { name: "", unit: "", amount: "", unitprice: "" },
     ])
     setItemNote("")
-  }
-
-  const onSubmitImage = async (val) => {
-    setItemImage(val);
-    await axios.post(`${URL_API}/UploadFile`, {data: val[0].file.name})
+    setImages([])
   }
 
   return (
@@ -358,13 +386,13 @@ function Kitchen(props) {
         <div className="Kitchen-manager__filter">
           <div className="Kitchen-manager__filter-search">
             <div className="Kitchen-manager__filter-search-name">
-              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"}  onChange={(val) => setTextSearch(val)} />
+              <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} onChange={(val) => setTextSearch(val)} />
             </div>
             <div className="Kitchen-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn 1"} onChange= {(val) => {
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn 1"} onChange={(val) => {
                 const date = new Date();
                 setTextSearch(date.toISOString(val))
-              }}/>
+              }} />
             </div>
           </div>
           <div className="Kitchen-manager__filter -create-new">
@@ -373,7 +401,7 @@ function Kitchen(props) {
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
             /> : null}
-            
+
           </div>
         </div>
         <div className="Kitchen-manager__content">
@@ -456,9 +484,22 @@ function Kitchen(props) {
               <div>
                 <ImageUpload
                   maxImage={1}
-                  images={itemImage}
+                  images={images}
                   setImages={(val) => {
-                    onSubmitImage(val)
+                    debugger
+                    let img = val[0].file
+                    let formData = new FormData();
+                    formData.append('files', img)
+                    baseApi.post(
+                      (res) => {
+                        setImages(PART_SWAGGER + res.data[0]);
+                      },
+                      () => { debugger },
+                      null,
+                      UPLOAD_FILE,
+                      {},
+                      formData
+                    )
                   }}
                 />
               </div>

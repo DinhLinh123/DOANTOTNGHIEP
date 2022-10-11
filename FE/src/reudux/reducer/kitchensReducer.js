@@ -1,7 +1,8 @@
 import * as types from "../constant/kitchensType"
 
 const initalState = {
-    dataChickens: []
+    dataChickens: [],
+    loading: false,
 }
 export default function chickensReducer(state = initalState, action) {
     switch (action.type) {
@@ -46,6 +47,22 @@ export default function chickensReducer(state = initalState, action) {
                 dataChickens: state.dataChickens.filter((item) => item.id !== action.payload)
             }
         case types.DELETE_CHICKEN_FAIL:
+            return {
+                ...state,
+                dataChickens: state.dataChickens
+            }
+
+        case types.EDIT_CHICKEN:
+            return {
+                ...state,
+                loading: true
+            }
+        case types.EDIT_CHICKEN_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+        case types.EDIT_CHICKEN_FAIL:
             return {
                 ...state,
                 dataChickens: state.dataChickens

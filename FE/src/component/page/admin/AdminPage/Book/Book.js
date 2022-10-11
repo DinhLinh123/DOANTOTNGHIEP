@@ -317,7 +317,7 @@ function Book(props) {
     );
   }
   function columnPhone(item) {
-    return <div>{item?.khachHang?.soDienThoai}</div>;
+    return <div>{item?.khachHang?.soDienThoai ?? "xxxx"}</div>;
   }
   function columnAdults(item) {
     return <div>{item?.soNguoiLon}</div>;

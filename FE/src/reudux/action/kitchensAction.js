@@ -58,5 +58,25 @@ export const deleteKitchensFail = (data) => ({
     payload: data
 })
 
+// 
+export const updateKitchen = (data) => ({
+
+    type: types.EDIT_CHICKEN,
+    payload: data
+})
+
+export const updateKitchenSuccess = (data) => ({
+
+    type: types.EDIT_CHICKEN_SUCCESS,
+    payload: data
+})
+
+export const updateKitchenFail = (data) => ({
+
+    type: types.EDIT_CHICKEN_FAIL,
+    payload: data
+})
+
+
 
 

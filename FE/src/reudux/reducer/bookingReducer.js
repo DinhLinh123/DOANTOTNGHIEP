@@ -27,9 +27,10 @@ export default function bookingReducer(state = initalState, action ) {
                 ...state,
             }
         case types.POST_BOOKING_SUCCESS:
+            console.log("action.payloadaction.payload", action.payload);
             return{
                 ...state,
-            dataBooking: [...state.dataBooking, action.payload]
+            dataBooking: [...state.dataBooking, action.payload.data]
             }
         case types.POST_BOOKING_FAIL:
             return{

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
+  PART_SWAGGER,
   SORT_TYPE,
   TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
@@ -22,6 +23,8 @@ import moment from "moment";
 import commonFunction from "../../../../base/common/commonFunction";
 import axios from "axios";
 import { URL_API } from "../../../../../utils/urpapi";
+import baseApi from "../../../../../api/baseApi";
+import { UPLOAD_FILE } from "../../../../base/common/endpoint";
 
 function Spending(props) {
   const [sortType, setSortType] = useState();
@@ -32,8 +35,7 @@ function Spending(props) {
   const [listItems, setListItems] = useState([
     { name: "", unit: "", amount: "", unitprice: "" },
   ]);
-  const [itemImage, setItemImage] = useState("");
-  console.log("itemImageitemImage", itemImage);
+  const [images, setImages] = useState([]);
   const [itemNote, setItemNote] = useState("");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [textSearch, setTextSearch] = useState("")
@@ -336,12 +338,11 @@ function Spending(props) {
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
     if (statusAction === "ADD") {
-      const res = axios.post(`${URL_API}/UploadFile`, { files: itemImage[0] })
-      console.log("itemImageitemImageitemImage", itemImage);
       const body = {
         name: itemBill,
         ngayHoaDon: date.toISOString(itemBillDate),
         // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
+        anh: images,
         matHang: JSON.stringify(listItems),
         tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
         createdByUserName: userName.userName,
@@ -489,9 +490,22 @@ function Spending(props) {
               <div>
                 <ImageUpload
                   maxImage={1}
-                  images={itemImage}
+                  images={images}
                   setImages={(val) => {
-                    setItemImage(val);
+                    debugger
+                    let img = val[0].file
+                    let formData = new FormData();
+                    formData.append('files', img)
+                    baseApi.post(
+                      (res) => {
+                        setImages(PART_SWAGGER + res.data[0]);
+                      },
+                      () => { debugger },
+                      null,
+                      UPLOAD_FILE,
+                      {},
+                      formData
+                    )
                   }}
                 />
               </div>
