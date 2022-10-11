@@ -333,15 +333,15 @@ function Spending(props) {
     return total;
   }
 
-
+  console.log("new Date()", new Date());
   const onSubmitSave = async () => {
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
     if (statusAction === "ADD") {
       const body = {
         name: itemBill,
-        ngayHoaDon: date.toISOString(itemBillDate),
-        // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
+        ngayHoaDon: moment(itemBillDate).format("YYYY-MM-DDT00:00:00.000"),
+        // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0)
         anh: images,
         matHang: JSON.stringify(listItems),
         tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
@@ -359,8 +359,8 @@ function Spending(props) {
       const body = {
         id: idSpending,
         name: itemBill,
-        ngayHoaDon: date.toISOString(itemBillDate),
-        // ngayHoaDon: `${date.getDate(itemBillDate)}-${date.getMonth(itemBillDate)}-${date.getFullYear(itemBillDate)}`,
+        ngayHoaDon: moment(itemBillDate).format("YYYY-MM-DDT00:00:00.000"),
+        // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0),
         matHang: JSON.stringify(listItems),
         tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
         createdByUserName: userName.userName,
@@ -390,11 +390,10 @@ function Spending(props) {
             </div>
             <div className="spending-manager__filter-search-date">
               <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}
-              // onChange = {val => {
-              //   const date = new Date();
-              //   console.log(date.setHours(0,0,0,0));
-              //   setTextSearch(date.toISOString(val))
-              // }} 
+                onChange={val => {
+                  const date = moment(val).format("YYYY-MM-DDT00:00:00")
+                  setTextSearch(date)
+                }}
               />
             </div>
           </div>
