@@ -164,7 +164,12 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.NgayHoaDon != null)
                 {
-                    query = query.Where((x) => x.NgayHoaDon.Equals(filter.NgayHoaDon));
+                    query = query.Where(
+                        (x) =>
+                        (x.NgayHoaDon.Year == filter.NgayHoaDon.Value.Year) &&
+                        (x.NgayHoaDon.Month == filter.NgayHoaDon.Value.Month) &&
+                        (x.NgayHoaDon.Day == filter.NgayHoaDon.Value.Day)
+                        );
                 }
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
@@ -197,5 +202,5 @@ namespace ManagerRestaurant.API.Controllers
             public DateTime? NgayHoaDon { get; set; }
         }
     }
-   
+
 }

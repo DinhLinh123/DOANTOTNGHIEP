@@ -14,7 +14,7 @@ namespace Infratructure.Datatables
         public string NoiDung { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
-        public DateTime? CreatedOnDate { get; set; }
+        public DateTime? CreatedOnDate { get; set; } = DateTime.Now;
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
     }
