@@ -268,7 +268,7 @@ namespace ManagerRestaurant.API.Controllers
                 datBan.IdBan = item.IdBan;
                 datBan.SoTreEm = item.SoTreEm;
                 datBan.GhiChu = item.GhiChu;
-                datBan.TrangThai = 0;
+                datBan.TrangThai =  item.TrangThai;
                 datBan.CreatedByUserId = idKH;
                 datBan.CreatedByUserName = item.TenKhachHang;
                 datBan.CreatedOnDate = DateTime.Now;

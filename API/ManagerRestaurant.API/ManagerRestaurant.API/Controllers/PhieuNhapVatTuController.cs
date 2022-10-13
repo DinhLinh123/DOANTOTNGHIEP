@@ -229,6 +229,11 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.Kieu.Contains(filter.TextSearch));
                 }
+                if (filter.Kieu != null && filter.Kieu.Length > 0)
+                {
+                    query = query.Where((x) => x.Kieu.Equals(filter.Kieu));
+                }
+
                 if (filter.NgayHoaDon != null)
                 {
                     query = query.Where((x) => x.CreatedOnDate.Equals(filter.NgayHoaDon));
@@ -264,6 +269,7 @@ namespace ManagerRestaurant.API.Controllers
         class PhieuNhapVatTuFilter : BaseFilter
         {
             public DateTime? NgayHoaDon { get; set; }
+            public string Kieu { get; set; }
         }
     }
 }

@@ -28,6 +28,7 @@ namespace ManagerRestaurant.API.Models
         public DateTime GioDen { get; set; }
         public DateTime ThoiGian { get; set; }
         public int SoNguoiLon { get; set; }
+        public int TrangThai { get; set; } = 0;
         public int SoTreEm { get; set; }
         public string GhiChu { get; set; }
         public Guid? IdBan { get; set; } = Guid.Empty;
