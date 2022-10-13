@@ -7,6 +7,7 @@ import commonFunction from "../../../../base/common/commonFunction";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import "./kitchenDetail.scss"
+import moment from "moment"
 
 function KitchenDetail(props) {
     const [sortType, setSortType] = useState();
@@ -57,7 +58,7 @@ function KitchenDetail(props) {
     const data =
     {
         key: "1",
-        billName: "HD01",
+        billName: "HD012",
         billDate: "27/08/2022",
         image: "",
         listItems: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
@@ -88,7 +89,7 @@ function KitchenDetail(props) {
             setKitchenDetail(res.data.data)
         }
         getChickensDetail()
-    }, [])
+    }, [kitchenID])
 
     function columnSerial(idx) {
         return <div>{idx}</div>;
@@ -143,11 +144,11 @@ function KitchenDetail(props) {
             <div className="kitchenDetail-manager">
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Tên hóa đơn</span>
-                    <span className="kitchenDetail-manager__item-content">{data.billName}</span>
+                    <span className="kitchenDetail-manager__item-content">{kitchenDetail.name}</span>
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ngày hóa đơn</span>
-                    <span className="kitchenDetail-manager__item-content">{data.billDate}</span>
+                    <span className="kitchenDetail-manager__item-content">{moment(kitchenDetail.ngayHoaDon).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchenDetail-manager__table">
                     <div className="kitchenDetail-manager__table-title">Danh sách mặt hàng</div>
@@ -173,16 +174,18 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ảnh hóa đơn</span>
-                    <span className="kitchenDetail-manager__item-content"></span>
+                    <span className="kitchenDetail-manager__item-content">
+                        {kitchenDetail?.hinhAnh ? <img src={kitchenDetail?.hinhAnh} alt="" width={150}/> : "Không có"}
+                    </span>
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ghi chú</span>
                     <span className="kitchenDetail-manager__item-content">{data.note}</span>
                 </div>
-                <div className="kitchenDetail-manager__item">
+                {/* <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Trạng thái</span>
                     <span className="kitchenDetail-manager__item-content">{data.status}</span>
-                </div>
+                </div> */}
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Người nhập</span>
                     <span className="kitchenDetail-manager__item-content">{kitchenDetail?.createdByUserName}</span>

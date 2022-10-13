@@ -24,9 +24,10 @@ function* postDataChickens({ payload }) {
 }
 
 function* getDataChickens({ payload }) {
+    console.log("payloadpayload", payload);
 
     try {
-        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/getbykieu/Qu%E1%BA%A3n%20l%C3%BD%20h%C3%B3a%20%C4%91%C6%A1n%20b%E1%BA%BFp`)
+        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/filter?_filter={"kieu":"Quản lý hóa đơn bếp","TextSearch" : "${payload.textSearch}","NgayHoaDon":"${payload.textSearchTime}"}`)
         if (res) {
             yield put(actions.getChickensSuccess(res.data))
         }

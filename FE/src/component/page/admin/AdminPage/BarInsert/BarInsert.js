@@ -20,6 +20,9 @@ function BarInsert(props) {
     const [idData, setIdData] = useState()
     const [statusAction, setStatusAction] = useState("")
     const [textSearch, setTextSearch] = useState("")
+    const [textSearchGroup, setTextSearchGroup] = useState("")
+    const [textSearchTime, setTextSearchTime] = useState("")
+
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
@@ -175,7 +178,7 @@ function BarInsert(props) {
                 } else {
                     commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa mặt hàng")
                 }
-                
+
             },
         },
         {
@@ -183,7 +186,7 @@ function BarInsert(props) {
             onSelect: (item) => {
                 if (quyen3 === "0-4-2") {
                     disptach(deleteBars(item.key))
-                    
+
                 } else {
                     commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa mặt hàng")
                 }
@@ -208,9 +211,10 @@ function BarInsert(props) {
         disptach(getBars({
             PageSize: 1,
             Page: 10,
-            textSearch
+            textSearch,
+            textSearchTime,
         }))
-    }, [disptach, loading, textSearch])
+    }, [disptach, loading, textSearch, textSearchTime])
 
 
     function columnCode(item) {
@@ -241,7 +245,7 @@ function BarInsert(props) {
         return <div>{item?.createdByUserName}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.createdOnDate}</div>;
+        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -327,8 +331,8 @@ function BarInsert(props) {
                 <div className="barInsert-manager__filter">
                     <div className="barInsert-manager__filter-code">
                         <InputField
-                            label={"Mã mặt hàng/ Tên mặt hàng"}
-                            placeholder={"Mã mặt hàng/Tên mặt hàng"}
+                            label={"Tên mặt hàng"}
+                            placeholder={"Tên mặt hàng"}
                             onChange={(val) => setTextSearch(val)}
                         />
                     </div>
@@ -361,7 +365,10 @@ function BarInsert(props) {
                             placeholder="dd/MM/yyyy"
                             label={"Ngày nhập"}
                             width={"100%"}
-                            onChange={(val) => setTextSearch(val)}
+                            onChange={(val) => {
+                                const date = moment(val).format("YYYY-MM-DDT00:00:00")
+                                setTextSearchTime(date)
+                            }}
 
                         />
                     </div>
@@ -375,7 +382,7 @@ function BarInsert(props) {
                         />
                     </div> */}
                     <div className="barInsert-manager__button-create-new">
-                        {quyen1 === "0-4-0" ?  <Button2
+                        {quyen1 === "0-4-0" ? <Button2
                             name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => handleClickAddnew()}

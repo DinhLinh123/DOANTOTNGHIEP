@@ -157,7 +157,7 @@ function ManagerFeedback(props) {
         return <div>{item?.noiDung}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.date}</div>;
+        return <div>{item?.createdOnDate}</div>;
     }
 
     function convertDataTable(dataTable) {

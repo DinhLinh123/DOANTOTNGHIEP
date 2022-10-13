@@ -7,10 +7,10 @@ import { URL_API } from "../../utils/urpapi"
 import commonFunction from "../../component/base/common/commonFunction"
 import { TYPE_MESSAGE } from "../../component/base/common/commonConstant"
 
-function* getDataBars({payload}) {
+function* getDataBars({ payload }) {
 
     try {
-        const res = yield axios.get(`${URL_API}/Bars/filter?_filter={"PageSize":"10","TextSearch":"${payload.textSearch}"}`)
+        const res = yield axios.get(`${URL_API}/Bars/filter?_filter={"TextSearch":"${payload.textSearch}","NhomMatHang":"","NgayNhap" : "${payload.textSearchTime}"}`)
         if (res) {
             yield put(actions.getBarsSuccess(res))
         }

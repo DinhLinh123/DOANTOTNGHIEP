@@ -69,12 +69,12 @@ function Area(props) {
         {
             title: "Sửa",
             onSelect: (item) => {
-                if(quyen2 === "0-7-2"){
+                if(quyen2 === "0-7-1"){
                     setAreaDetail(item.item)
                     setIsShowPopupAddNew({ show: true, title: 'Sửa Khu vực', key: 1 })
                     setAreaName(item.item.name)
                 }else{
-                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa khu vực")
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa khu vực 1")
                 }
                
             },
@@ -82,7 +82,7 @@ function Area(props) {
         {
             title: "Xóa",
             onSelect: (item) => {
-                if(quyen3 === "0-7-3"){
+                if(quyen3 === "0-7-2"){
                     setIsShowPopupConfirmDelete({ show: true, item: item.item })
                 }else{
                     commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa khu vực")

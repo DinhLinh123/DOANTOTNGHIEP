@@ -17,6 +17,8 @@ import { getBars } from "../../../../../reudux/action/barsAction";
 
 function BarList(props) {
     const [textSearch, setTextSearch] = useState("")
+    const [textSearchTime, setTextSearchTime] = useState("")
+
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
@@ -156,7 +158,8 @@ function BarList(props) {
         disptach(getBars({
             PageSize: 1,
             Page: 10,
-            textSearch
+            textSearch,
+            textSearchTime
         }))
     },[disptach, textSearch])
 
@@ -228,8 +231,8 @@ function BarList(props) {
                 <div className="barlist-manager__filter">
                     <div className="barlist-manager__filter-code">
                         <InputField
-                            label={"Mã mặt hàng/Tên mặt hàng"}
-                            placeholder={"Mã mặt hàng/Tên mặt hàng"}
+                            label={"Tên mặt hàng"}
+                            placeholder={"Tên mặt hàng"}
                             onChange = {(val) => setTextSearch(val)}
                         //width={"20%"} 
                         />

@@ -25,6 +25,8 @@ function Kitchen(props) {
   const [sortType, setSortType] = useState();
   const [status, setStatus] = useState("ADD")
   const [textSearch, setTextSearch] = useState("")
+  const [textSearchTime, setTextSearchTime] = useState("")
+
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [itemBill, setItemBill] = useState("");
   const [itemBillDate, setItemBillDate] = useState("");
@@ -96,7 +98,7 @@ function Kitchen(props) {
     return <div>{count?.length}</div>;
   }
   function columnBillDate(item) {
-    return <div>{moment(item?.billdate).format("DD-MM-YYYY")}</div>;
+    return <div>{moment(item?.ngayHoaDon).format("DD-MM-YYYY")}</div>;
   }
   function columnTotalmoney(item) {
     return <div>{item?.tongSoTien}</div>;
@@ -334,9 +336,10 @@ function Kitchen(props) {
 
   useEffect(() => {
     dispatch(getChickens({
-      textSearch
+      textSearch,
+      textSearchTime
     }))
-  }, [dispatch, textSearch, loading])
+  }, [dispatch, textSearch, loading, textSearchTime])
 
   const onSubmitSave = () => {
     setIsShowPopupAddnew(false)
@@ -355,7 +358,7 @@ function Kitchen(props) {
         ghiChu: itemNote
       };
       dispatch(postChickens(body))
-      
+
     } else {
       const body = {
         id: idKitchen,
@@ -389,9 +392,10 @@ function Kitchen(props) {
               <Input label={"Tên hóa đơn"} placeholder={"Tên hóa đơn"} onChange={(val) => setTextSearch(val)} />
             </div>
             <div className="Kitchen-manager__filter-search-date">
-              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn 1"} onChange={(val) => {
-                const date = new Date();
-                setTextSearch(date.toISOString(val))
+              <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"} onChange={(val) => {
+                const formatDate = moment(val).format("YYYY-MM-DD")
+                const date = new Date(formatDate);
+                setTextSearchTime(date.toISOString())
               }} />
             </div>
           </div>

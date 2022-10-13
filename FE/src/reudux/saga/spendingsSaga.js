@@ -23,7 +23,7 @@ function* postDataSpending({ payload }) {
 function* getDataSpending({ payload }) {
 
     try {
-        const res = yield axios.get(`${URL_API}/ChiTieuTrongNgay/filter?_filter={"TextSearch" : "${payload.textSearch}"}`)
+        const res = yield axios.get(`${URL_API}/ChiTieuTrongNgay/filter?_filter={"TextSearch" : "${payload.textSearch}", "NgayHoaDon" : "${payload.textSearchTime}"}`)
         if (res) {
             yield put(actions.getSpendingSuccess(res.data))
         }

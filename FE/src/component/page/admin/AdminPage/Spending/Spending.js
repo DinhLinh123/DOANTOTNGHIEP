@@ -39,6 +39,8 @@ function Spending(props) {
   const [itemNote, setItemNote] = useState("");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [textSearch, setTextSearch] = useState("")
+  const [textSearchTime, setTextSearchTime] = useState("")
+
   const COLUMN_TABLE_INDEX_MENU = {
     BILL: "namebill",
     AMOUNT: "amount",
@@ -377,8 +379,8 @@ function Spending(props) {
   console.log("loadingloading", loading);
 
   useEffect(() => {
-    dispatch(getSpending({ textSearch }));
-  }, [dispatch, textSearch, loading]);
+    dispatch(getSpending({ textSearch, textSearchTime }));
+  }, [dispatch, textSearch, loading, textSearchTime]);
 
   return (
     <AdminPage title={"Quản lý chi tiêu"} index={MENU_TAB_ADMIN.SPENDING}>
@@ -392,7 +394,7 @@ function Spending(props) {
               <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}
                 onChange={val => {
                   const date = moment(val).format("YYYY-MM-DDT00:00:00")
-                  setTextSearch(date)
+                  setTextSearchTime(date)
                 }}
               />
             </div>

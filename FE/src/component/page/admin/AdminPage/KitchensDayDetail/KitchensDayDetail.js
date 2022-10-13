@@ -1,10 +1,14 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { URL_API } from "../../../../../utils/urpapi";
 import { MENU_TAB_ADMIN } from "../../../../base/common/commonConstant";
 import commonFunction from "../../../../base/common/commonFunction";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
-import "./kitchensDayDetail.scss"
+import "./kitchensDayDetail.scss";
+import moment from "moment"
 
 function KitchensDayDetail(props) {
     const [sortType, setSortType] = useState();
@@ -38,6 +42,29 @@ function KitchensDayDetail(props) {
             width: "20%",
         },
     ];
+
+    const [kitchenDayDetail, setKitchenDayDetail] = useState({
+        key: "1",
+        billName: "HD01",
+        billDate: "27/08/2022",
+        image: "",
+        matHangs: '[{"name":"Giấy bạc", "unit":"Bọc", "amount": "2", "unitprice": "50000"}, {"name":"Kẹo", "unit":"Ăn", "amount": "10", "unitprice": "25000"}]',
+        note: "ghi chú",
+        status: "Đã duyệt",
+        person: "Linhdtt",
+        date: "27/08/2022",
+
+    });
+
+    const {kitchenDayID} = useParams()
+    useEffect(() => {
+
+        const getChickensDetail = async () => {
+            const res = await axios.get(`${URL_API}/PhieuNhapVatTu/${kitchenDayID}`)
+            setKitchenDayDetail(res.data.data)
+        }
+        getChickensDetail()
+    }, [kitchenDayID])
 
     const data =
     {
@@ -86,14 +113,14 @@ function KitchensDayDetail(props) {
             <div className="kitchensDayDetail-manager">
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable">Ngày sử dụng</span>
-                    <span className="kitchensDayDetail-manager__item-content">{data.billDate}</span>
+                    <span className="kitchensDayDetail-manager__item-content">{moment(kitchenDayDetail.ngayHoaDon).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchensDayDetail-manager__table">
                     <div className="kitchensDayDetail-manager__table-title">Danh sách nguyên liệu/Thực phẩm</div>
                     <div className="kitchensDayDetail-manager__table-content">
                         <TableBase
                             columns={columns}
-                            data={convertDataTable(JSON.parse(data?.listItems))}
+                            data={convertDataTable(JSON.parse(kitchenDayDetail?.matHangs))}
                             loading={false}
                             //hasMoreOption
                             setObjectSort={(field, order) => {
@@ -108,15 +135,15 @@ function KitchensDayDetail(props) {
                 </div>
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable">Ghi chú</span>
-                    <span className="kitchensDayDetail-manager__item-content">{data.note}</span>
+                    <span className="kitchensDayDetail-manager__item-content">{kitchenDayDetail?.ghiChu ?? "Chưa có"}</span>
                 </div>
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable">Người nhập</span>
-                    <span className="kitchensDayDetail-manager__item-content">{data.person}</span>
+                    <span className="kitchensDayDetail-manager__item-content">{kitchenDayDetail.createdByUserName}</span>
                 </div>
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable">Ngày nhập</span>
-                    <span className="kitchensDayDetail-manager__item-content">{data.date}</span>
+                    <span className="kitchensDayDetail-manager__item-content">{moment(kitchenDayDetail.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchensDayDetail-manager__item">
                     <span className="kitchensDayDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>quay lại</span>
