@@ -325,10 +325,16 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => (x.GioDen >= filter.TimeEnd && x.GioDen <= filter.TimeEnd));
                 }
-                //if (filter.MaTheLoai != Guid.Empty)
-                //{
-                //    query = query.Where((x) => x.MaTheLoai == filter.MaTheLoai);
-                //}
+                if (filter.GioDen != null)
+                {
+                    query = query.Where(
+                        (x) =>
+                        (x.GioDen.Value.Year == filter.GioDen.Value.Year) &&
+                        (x.GioDen.Value.Month == filter.GioDen.Value.Month) &&
+                        (x.GioDen.Value.Day == filter.GioDen.Value.Day)
+                        );
+                }
+
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
                     query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
@@ -361,5 +367,6 @@ namespace ManagerRestaurant.API.Controllers
     {
         public DateTime? TimeStart { get; set; }
         public DateTime? TimeEnd { get; set; }
+        public DateTime? GioDen { get; set; }
     }
 }

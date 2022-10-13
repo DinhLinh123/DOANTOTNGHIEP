@@ -58,7 +58,7 @@ namespace ManagerRestaurant.API.Controllers
             try
             {
                 List<PhieuNhapVatTuModel> data = new List<PhieuNhapVatTuModel>();
-                var d = await _context.PhieuNhapVatTu.Where(x=>x.Kieu.Contains(kieu)).ToListAsync();
+                var d = await _context.PhieuNhapVatTu.Where(x => x.Kieu.Contains(kieu)).ToListAsync();
                 foreach (var item in d)
                 {
                     data.Add(CovenerPhieu(item));
@@ -227,7 +227,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.Kieu.Contains(filter.TextSearch));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.Kieu.Contains(filter.TextSearch) || x.MatHangs.Contains(filter.NhomMatHang));
                 }
                 if (filter.Kieu != null && filter.Kieu.Length > 0)
                 {
@@ -236,7 +236,12 @@ namespace ManagerRestaurant.API.Controllers
 
                 if (filter.NgayHoaDon != null)
                 {
-                    query = query.Where((x) => x.CreatedOnDate.Equals(filter.NgayHoaDon));
+                    query = query.Where(
+                        (x) =>
+                        (x.NgayHoaDon.Year == filter.NgayHoaDon.Value.Year) &&
+                        (x.NgayHoaDon.Month == filter.NgayHoaDon.Value.Month) &&
+                        (x.NgayHoaDon.Day == filter.NgayHoaDon.Value.Day)
+                        );
                 }
 
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
@@ -270,6 +275,7 @@ namespace ManagerRestaurant.API.Controllers
         {
             public DateTime? NgayHoaDon { get; set; }
             public string Kieu { get; set; }
+            public string NhomMatHang { get; set; }
         }
     }
 }

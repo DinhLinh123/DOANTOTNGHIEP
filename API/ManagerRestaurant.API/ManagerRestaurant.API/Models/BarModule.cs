@@ -29,7 +29,7 @@ namespace ManagerRestaurant.API.Models
         public float ThanhTien { get; set; }
         public Guid? CreatedByUserId { get; set; }
         public string CreatedByUserName { get; set; }
-        public DateTime? CreatedOnDate { get; set; } 
+        public DateTime? CreatedOnDate { get; set; } = DateTime.Now;
     }
     public class BarUpdateModule
     {

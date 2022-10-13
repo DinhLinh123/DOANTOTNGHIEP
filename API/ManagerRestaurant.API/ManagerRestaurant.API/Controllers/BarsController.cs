@@ -135,7 +135,7 @@ namespace ManagerRestaurant.API.Controllers
                     await _context.SaveChangesAsync();
                     return new Responsive(200, "Thêm mới thành công", bar);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -179,6 +179,15 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.TenMatHang.Contains(filter.TextSearch));
                 }
+                if (filter.NgayNhap != null)
+                {
+                    query = query.Where(
+                        (x) =>
+                        (x.CreatedOnDate.Value.Year == filter.NgayNhap.Value.Year) &&
+                        (x.CreatedOnDate.Value.Month == filter.NgayNhap.Value.Month) &&
+                        (x.CreatedOnDate.Value.Day == filter.NgayNhap.Value.Day)
+                        );
+                }
                 if (filter.PageNumber > 0 && filter.PageSize > 0)
                 {
                     query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
@@ -208,6 +217,7 @@ namespace ManagerRestaurant.API.Controllers
 
         class BarFilter : BaseFilter
         {
+            public DateTime? NgayNhap { get; set; }
         }
     }
 }
