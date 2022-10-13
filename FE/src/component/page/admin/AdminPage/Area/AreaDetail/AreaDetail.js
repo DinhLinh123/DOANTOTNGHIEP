@@ -151,6 +151,7 @@ function AreaDetail(props) {
         body.name = tableName;
         body.soNguoiToiDa = adults;
         body.kieuDang = tableType.toString();
+        console.log("0-7-40-7-40-7-4")
 
         baseApi.put(
             (res) => {
