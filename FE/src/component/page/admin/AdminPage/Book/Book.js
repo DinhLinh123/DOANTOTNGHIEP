@@ -20,7 +20,9 @@ import Dropdown from "../../../../base/Dropdown/Dropdown";
 import { useEffect } from "react";
 import {
   deleteBooking,
+  editTable,
   getBooking,
+  getTable,
   postBooking,
   searchBooking,
   updateBooking,
@@ -32,7 +34,6 @@ function Book(props) {
   const [idBooking, setIdBooking] = useState();
   const [sortType, setSortType] = useState();
   const [status, setStatus] = useState("ADD");
-  console.log("sortType", sortType);
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
   const [bookName, setBookName] = useState("");
@@ -42,6 +43,7 @@ function Book(props) {
   const [bookChild, setBookChild] = useState();
   const [bookDate, setBookDate] = useState();
   const [bookTime, setBookTime] = useState();
+  const [name, setName] = useState()
   const dataTable = [
     {
       value: "1",
@@ -78,7 +80,6 @@ function Book(props) {
     CLIENT: "client",
     ACTION: "action",
   };
-  console.log("bookName", bookName, bookPhone);
   const COLUMN_TABLE_INDEX_MENU = {
     NAME: "name",
     PHONE: "phone",
@@ -88,6 +89,7 @@ function Book(props) {
     NOTE: "note",
     TIME: "time",
     PEOPLE: "people",
+    STATUS_BOOK: "status"
   };
   const columns_setup = [
     {
@@ -164,6 +166,11 @@ function Book(props) {
     {
       title: "Người nhập",
       dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
+      width: "150px",
+    },
+    {
+      title: "Trang thái",
+      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS_BOOK,
       width: "150px",
     },
   ];
@@ -252,14 +259,23 @@ function Book(props) {
       people: "LinhDTT",
     },
   ];
-
   const OPTION_MORE_TABLE = [
     {
       title: "Xếp bàn",
-      onSelect: () => {
-        if(quyen4 === "0-6-3"){
+      onSelect: (item) => {
+        if (quyen4 === "0-6-3") {
           setIsShowPopupSetup(true);
-        }else{
+          setName(item.name)
+          // console.log("item.name.props.children[1].props.children", item);
+          setIdBooking(item.id);
+          setBookName(item?.name);
+          setBookPhone(item?.phone?.props?.children);
+          setBookAdults(item?.adults?.props?.children);
+          setBookChild(item?.child?.props?.children);
+          setBookDate(item?.date?.props?.children);
+          setBookTime(item?.time?.props?.children);
+          setBookNote(item?.note?.props?.children);
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xếp bàn")
         }
       },
@@ -269,8 +285,8 @@ function Book(props) {
       onSelect: (item) => {
         if (quyen2 === "0-6-1") {
           setIsShowPopupAddnew(true);
-          setIdBooking(item.name.props.children[1].props.children);
-          setBookName(item?.name?.props?.children[0]);
+          setIdBooking(item.id);
+          setBookName(item?.name);
           setBookPhone(item?.phone?.props?.children);
           setBookAdults(item?.adults?.props?.children);
           setBookChild(item?.child?.props?.children);
@@ -281,44 +297,47 @@ function Book(props) {
         } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa đặt bàn")
         }
-        
+
       },
     },
     {
       title: "Xóa",
       onSelect: (item) => {
-        if(quyen3 === "0-6-2"){
-          const id = item.name.props.children[1].props.children;
-          dispatch(deleteBooking(id));
-        }else{
+        if (quyen3 === "0-6-2") {
+          dispatch(deleteBooking(item.id));
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa đặt bàn")
         }
-        
+
       },
     },
   ];
 
   //Cột bảng Đặt bàn
 
-  const { dataBooking } = useSelector((state) => state.bookingReducer);
+  const { dataBooking, dataXB, loading } = useSelector((state) => state.bookingReducer);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getBooking());
-  }, [dispatch]);
+    dispatch(getTable())
+  }, [dispatch, loading]);
+
 
   function columnName(item) {
     return (
       <div>
-        {item?.khachHang?.name || item?.tenKhachHang}
+        {item?.khachHang?.name ?? bookName}
         <div className="hidden-id">{item.id}</div>
       </div>
     );
   }
+
   function columnPhone(item) {
-    return <div>{item?.khachHang?.soDienThoai ?? "xxxx"}</div>;
+    return <div>{item?.khachHang?.soDienThoai ?? "Chưa có số điện thoại"}</div>;
   }
+
   function columnAdults(item) {
     return <div>{item?.soNguoiLon}</div>;
   }
@@ -338,22 +357,26 @@ function Book(props) {
     return <div>{item?.createdByUserName}</div>;
   }
 
+  function columnStatusBook(item) {
+    return <div>{item.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"} - {item.trangThai}</div>
+  }
+
   // Cột trong bảng xếp bàn
 
   function columnNameTable(item) {
-    return <div>{item?.nametable}</div>;
+    return <div>{item?.name}</div>;
   }
   function columnArea(item) {
-    return <div>{item?.area}</div>;
+    return <div>{item?.tenKhuVuc}</div>;
   }
   function columnDateCheckin(item) {
-    return <div>{item?.date}</div>;
+    return <div>{item?.createdOnDate}</div>;
   }
   function columnStatus(item) {
-    return <div>{item?.status}</div>;
+    return <div>{item?.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"}</div>;
   }
   function columnClient(item) {
-    return <div>{item?.client}</div>;
+    return <div>{item?.createdByUserName}</div>;
   }
   const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
@@ -364,24 +387,82 @@ function Book(props) {
   const quyen3 = quyen?.find((item) => item === "0-6-2")
   const quyen4 = quyen?.find((item) => item === "0-6-3")
 
+  const onSubmitXB = (item) => {
+    const date = new Date()
+    const body = {
+      id: item.id,
+      name: item.name,
+      soNguoiToiDa: item.soNguoiToiDa,
+      loaiBan: item.loaiBan,
+      top: item.top,
+      left: item.left,
+      trangThai: 2,
+      kieuDang: item.kieuDang,
+      idKhuVuc: item.idKhuVuc,
+      createdByUserName: name,
+    }
+
+    const bodyBook = {
+      id: idBooking,
+      trangThai: 1,
+      tenKhachHang: bookName,
+      soDienThoai: bookPhone,
+      soNguoiLon: bookAdults,
+      soTreEm: bookChild,
+      gioDen: date.toISOString(bookTime),
+      ghiChu: bookNote,
+    }
+    dispatch(editTable(body))
+    // dispatch(updateBooking(bodyBook))
+  }
+
+  const onSubmitHXB = (item) => {
+    const date = new Date();
+
+    const body = {
+      id: item.id,
+      name: item.name,
+      soNguoiToiDa: item.soNguoiToiDa,
+      loaiBan: item.loaiBan,
+      top: item.top,
+      left: item.left,
+      trangThai: 0,
+      kieuDang: item.kieuDang,
+      idKhuVuc: item.idKhuVuc,
+      createdByUserName: ""
+    }
+    const bodyBook = {
+      id: idBooking,
+      trangThai: 0,
+      tenKhachHang: bookName,
+      soDienThoai: bookPhone,
+      soNguoiLon: bookAdults,
+      soTreEm: bookChild,
+      thoiGian: date.toISOString(bookDate),
+      gioDen: date.toISOString(bookTime),
+      ghiChu: bookNote,
+    }
+    dispatch(editTable(body))
+    // dispatch(updateBooking(bodyBook))
+  }
   function columnActive(item) {
-    if (item.status_code === 0) {
+    if (item.trangThai === 0) {
       return (
         <div>
           <Button2
             name={"Xếp bàn"}
-            //onClick={() => onChangeTab()}
+            onClick={() => onSubmitXB(item)}
             background="#fa983a"
           />
         </div>
       );
     }
-    if (item.status_code === 2) {
+    if (item.trangThai === 2) {
       return (
         <div>
           <Button2
             name={"Hủy Xếp bàn"}
-            //onClick={() => onChangeTab()}
+            onClick={() => onSubmitHXB(item)}
             background="#fa983a"
           />
         </div>
@@ -401,7 +482,10 @@ function Book(props) {
         [COLUMN_TABLE_INDEX_MENU.TIME]: columnTime(item),
         [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
         [COLUMN_TABLE_INDEX_MENU.PEOPLE]: columnPeople(item),
+        [COLUMN_TABLE_INDEX_MENU.STATUS_BOOK]: columnStatusBook(item),
         key: idx,
+        name: item?.khachHang?.name,
+        id: item?.id
       };
     });
     return [...listData];
@@ -418,6 +502,7 @@ function Book(props) {
         [COLUMN_TABLE_INDEX_TABLE.CLIENT]: columnClient(item),
         [COLUMN_TABLE_INDEX_TABLE.ACTION]: columnActive(item),
         key: idx,
+        id: item.id,
       };
     });
     return [...listDataSetup];
@@ -451,10 +536,8 @@ function Book(props) {
     };
     if (status === "ADD") {
       dispatch(postBooking(body));
-      console.log("thêm mới");
     } else if (status === "UPDATE") {
       const id = idBooking;
-      console.log("update");
       dispatch(
         updateBooking({
           id,
@@ -507,17 +590,17 @@ function Book(props) {
               width={"100%"}
               onChange={(val) => {
                 const date = new Date()
-                  searchBook(date.toISOString(val));
+                searchBook(date.toISOString(val));
               }}
             />
           </div>
           <div className="book-manager__filter-create-new">
-            {quyen1 === "0-6-0" ?    <Button2
+            {quyen1 === "0-6-0" ? <Button2
               name={"Thêm mới đặt bàn"}
               leftIcon={<PlusOutlined />}
               onClick={() => handleClickAddnew()}
             /> : null}
-         
+
           </div>
         </div>
 
@@ -656,7 +739,7 @@ function Book(props) {
                 // onChangePagination={(page, pageSize)=>{}}
                 columns={columns_setup}
                 total={90}
-                data={convertDataTableSetup(data_setup)}
+                data={convertDataTableSetup(dataXB)}
                 loading={false}
                 //hasMoreOption
                 option={OPTION_MORE_TABLE}

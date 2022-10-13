@@ -1,74 +1,126 @@
 import * as types from "../constant/bookingType"
 
 const initalState = {
-    dataBooking: []
+    dataBooking: [],
+    dataXB: [],
+    loading: false
 }
-export default function bookingReducer(state = initalState, action ) {
+export default function bookingReducer(state = initalState, action) {
     switch (action.type) {
 
         case types.GET_BOOKING:
-            return{
+            return {
                 ...state,
             }
         case types.GET_BOOKING_SUCCESS:
-            return{
+            return {
                 ...state,
-            dataBooking: action.payload.data.data
+                dataBooking: action.payload.data.data
             }
 
         case types.GET_BOOKING_FAIL:
-            return{
+            return {
                 ...state,
-            dataBooking: [...state.dataBooking]
+                dataBooking: [...state.dataBooking]
             }
 
         case types.POST_BOOKING:
-            return{
+            return {
                 ...state,
             }
         case types.POST_BOOKING_SUCCESS:
             console.log("action.payloadaction.payload", action.payload);
-            return{
+            return {
                 ...state,
-            dataBooking: [...state.dataBooking, action.payload.data]
+                dataBooking: [...state.dataBooking, action.payload.data]
             }
         case types.POST_BOOKING_FAIL:
-            return{
+            return {
                 ...state,
-            dataBooking: [...state.dataBooking]
+                dataBooking: [...state.dataBooking]
             }
         case types.DELETE_BOOKING:
-                return{
-                    ...state,
-                }
+            return {
+                ...state,
+            }
         case types.DELETE_BOOKING_SUCCESS:
-                return{
-                    ...state,
+            return {
+                ...state,
                 dataBooking: state.dataBooking.filter((item) => item.id !== action.payload)
-                }
+            }
         case types.DELETE_BOOKING_FAIL:
-                return{
-                    ...state,
-                dataBooking: {...state.dataBooking}
-                }
+            return {
+                ...state,
+                dataBooking: { ...state.dataBooking }
+            }
+
+        case types.UPDATE_BOOKING:
+            return {
+                ...state,
+                loading: true
+            }
+        case types.UPDATE_BOOKING_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+        case types.UPDATE_BOOKING_FAIL:
+            return {
+                ...state,
+                dataBooking: state.dataBooking 
+            }
         case types.SEARCH_BOOKING:
-            return{
+            return {
                 ...state,
             }
         case types.SEARCH_BOOKING_SUCCESS:
-            return{
+            return {
                 ...state,
-            dataBooking: action.payload.data
+                dataBooking: action.payload.data
             }
-    
+
         case types.SEARCH_BOOKING_FAIL:
-            return{
+            return {
                 ...state,
-            dataBooking: state.dataBooking
+                dataBooking: state.dataBooking
+            }
+
+        case types.GET_TABLE:
+            return {
+                ...state,
+            }
+        case types.GET_TABLE_SUCCESS:
+            console.log("action.payload.data.data", action.payload.data.data);
+            return {
+                ...state,
+                dataXB: action.payload.data.data
+            }
+
+        case types.GET_TABLE_FAIL:
+            return {
+                ...state,
+                dataXB: state.dataBooking
+            }
+
+        case types.EDIT_TABLE:
+            return {
+                ...state,
+                loading: true
+            }
+        case types.EDIT_TABLE_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+
+        case types.EDIT_TABLE_FAIL:
+            return {
+                ...state,
+                dataXB: state.dataBooking
             }
 
         default:
             return state
     }
-    
+
 }
