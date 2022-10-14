@@ -25,6 +25,7 @@ DatePic.defaultValue = {
 function DatePic(props) {
     const { placeholder, defaultValue, min, max, onChange, value, type, label, className } = props;
 
+
     return (
         <div className={`container-date-picker ${className}`}>
             <div className='container-date-picker__label'>

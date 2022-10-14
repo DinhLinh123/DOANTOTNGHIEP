@@ -10,19 +10,19 @@ import AdminPage from "../AdminPage";
 import "./spendingDetail.scss"
 
 function SpendingDetail(props) {
-    const {spendingID} = useParams();
+    const { spendingID } = useParams();
     const [spendingDetail, setPendingDetail] = useState([]);
     useEffect(() => {
-        const spenDingDetail =  async (id) => {
+        const spenDingDetail = async (id) => {
             try {
                 const res = await axios.get(`${URL_API}/ChiTieuTrongNgay/${id}`)
                 setPendingDetail(res.data)
             } catch (error) {
-                
+
             }
         }
         spenDingDetail(spendingID)
-    },[])
+    }, [])
     const [sortType, setSortType] = useState();
     const COLUMN_TABLE_INDEX_MENU = {
         SERIAL: "serial",
@@ -131,7 +131,7 @@ function SpendingDetail(props) {
             title={"Chi tiết hóa đơn"}
             index={MENU_TAB_ADMIN.SPENDING}
         >
-            {spendingDetail.length === 0 ? null :  <div className="spendingDetail-manager">
+            {spendingDetail.length === 0 ? null : <div className="spendingDetail-manager">
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Tên hóa đơn</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.name}</span>
@@ -144,18 +144,18 @@ function SpendingDetail(props) {
                     <div className="spendingDetail-manager__table-title">Danh sách mặt hàng</div>
                     <div className="spendingDetail-manager__table-content">
                         <TableBase
-                        columns={columns}
-                        data={convertDataTable(JSON.parse(spendingDetail?.matHang))}
-                        loading={false}
-                        //hasMoreOption
-                        setObjectSort={(field, order) => {
-                            setSortType({
-                                field: field,
-                                order: order,
-                            });
-                        }}
-                        isPaging={false}
-                    />
+                            columns={columns}
+                            data={convertDataTable(JSON.parse(spendingDetail?.matHang))}
+                            loading={false}
+                            //hasMoreOption
+                            setObjectSort={(field, order) => {
+                                setSortType({
+                                    field: field,
+                                    order: order,
+                                });
+                            }}
+                            isPaging={false}
+                        />
                     </div>
                 </div>
                 <div className="spendingDetail-manager__item">
@@ -164,11 +164,13 @@ function SpendingDetail(props) {
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ảnh hóa đơn</span>
-                    <span className="spendingDetail-manager__item-content"></span>
+                    <span className="spendingDetail-manager__item-content">
+                      {spendingDetail?.anh ? <img src={spendingDetail?.anh} alt="" width={150} /> : "chưa có"}  
+                    </span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ghi chú</span>
-                    <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu ?? "Chưa có"}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Trạng thái</span>
@@ -193,7 +195,7 @@ function SpendingDetail(props) {
                         </div>
                         <div className="spendingDetail-manager__approve-content-date">
                             <div className="spendingDetail-manager__approve-content-date-label">
-                                Ngày phê duyệt: 
+                                Ngày phê duyệt:
                             </div>
                             <div className="spendingDetail-manager__approve-content-date-value">
 
@@ -202,7 +204,7 @@ function SpendingDetail(props) {
                     </div>
                 </div>
             </div>}
-           
+
         </AdminPage>
     )
 

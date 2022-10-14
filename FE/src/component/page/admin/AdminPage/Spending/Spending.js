@@ -388,6 +388,8 @@ function Spending(props) {
             </div>
             <div className="spending-manager__filter-search-date">
               <DatePicker placeholder="dd/MM/yyyy" label={"Ngày hóa đơn"}
+                type="spending"
+                
                 onChange={val => {
                   const date = moment(val).format("YYYY-MM-DDT00:00:00")
                   setTextSearchTime(date)

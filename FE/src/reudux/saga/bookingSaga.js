@@ -23,10 +23,11 @@ function* postDataBooking({ payload }) {
 
 }
 
-function* getBooking() {
+function* getBooking({ payload }) {
 
+    const filterData = payload?.textSearch === "" && payload?.ngayCheckIn === "" ? "" : `filter?_filter={"TextSearch": "${payload.textSearch}","GioDen":"${payload.ngayCheckIn}"}`;
     try {
-        const res = yield axios.get(`${URL_API}/DatBan`)
+        const res = yield axios.get(`${URL_API}/DatBan/${filterData}`)
         if (res) {
             yield put(actions.getBookingSuccess(res))
         }
@@ -85,7 +86,7 @@ function* searchDataBooking({ payload }) {
 function* getTable() {
 
     try {
-        const res = yield axios.get(`${URL_API}/Ban`)
+        const res = yield axios.get(`${URL_API}/PhieuOder`)
         if (res) {
             yield put(actions.getTableSuccess(res))
         }
@@ -100,7 +101,7 @@ function* getTable() {
 function* editTable({ payload }) {
 
     try {
-        const res = yield axios.put(`${URL_API}/Ban/${payload.id}`, payload)
+        const res = yield axios.put(`${URL_API}/PhieuOder/${payload.id}`, payload)
         if (res) {
             yield put(actions.editTableSuccess(res))
         }

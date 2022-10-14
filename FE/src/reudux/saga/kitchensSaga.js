@@ -24,7 +24,6 @@ function* postDataChickens({ payload }) {
 }
 
 function* getDataChickens({ payload }) {
-    console.log("payloadpayload", payload);
 
     try {
         const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/filter?_filter={"kieu":"Quản lý hóa đơn bếp","TextSearch" : "${payload.textSearch}","NgayHoaDon":"${payload.textSearchTime}"}`)

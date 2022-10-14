@@ -48,6 +48,10 @@ function Book(props) {
   const [name, setName] = useState("");
   const [idMKH, setIdMKH] = useState("");
   const [idBan, setIdBan] = useState("");
+  const [ngayCheckIn, setNgayCheckIn] = useState("");
+  const [textSearch, setTextSearch] = useState("");
+
+
 
   console.log("idMKH", idMKH);
 
@@ -154,13 +158,13 @@ function Book(props) {
     },
     {
       title: "Ngày checkin",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
+      dataIndex: COLUMN_TABLE_INDEX_MENU.TIME,
       sorter: true,
       width: "200px",
     },
     {
       title: "Giờ checkin",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.TIME,
+      dataIndex: COLUMN_TABLE_INDEX_MENU.DATE,
       sorter: true,
       width: "100px",
     },
@@ -175,11 +179,11 @@ function Book(props) {
     //   dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
     //   width: "150px",
     // },
-    {
-      title: "Trang thái",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS_BOOK,
-      width: "150px",
-    },
+    // {
+    //   title: "Trang thái",
+    //   dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS_BOOK,
+    //   width: "150px",
+    // },
   ];
   const data_setup = [
     {
@@ -272,12 +276,12 @@ function Book(props) {
       onSelect: (item) => {
         if (quyen4 === "0-6-3") {
           setIsShowPopupSetup(true);
-          setName(item.name)
+          setName(item.nameKH)
           // console.log("item.name.props.children[1].props.children", item);, 
           setIdMKH(item?.IdMKH)
           setIdBan(item?.idBan)
           setIdBooking(item?.id);
-          setBookName(item?.name);
+          setBookName(item?.nameKH);
           setBookPhone(item?.phone?.props?.children);
           setBookAdults(item?.adults?.props?.children);
           setBookChild(item?.child?.props?.children);
@@ -297,7 +301,7 @@ function Book(props) {
           setIdMKH(item?.IdMKH)
           setIdBan(item?.idBan)
           setIdBooking(item?.id);
-          setBookName(item?.name);
+          setBookName(item?.nameKH);
           setBookPhone(item?.phone?.props?.children[0]);
           setBookAdults(item?.adults?.props?.children);
           setBookChild(item?.child?.props?.children);
@@ -327,18 +331,19 @@ function Book(props) {
   //Cột bảng Đặt bàn
 
   const { dataBooking, dataXB, loading } = useSelector((state) => state.bookingReducer);
-console.log("loadingloadingloadingloading", loading);
   const dispatch = useDispatch();
+  console.log("dataXBdataXBdataXB", dataXB);
 
   useEffect(() => {
-    dispatch(getBooking());
+    dispatch(getBooking({ngayCheckIn, textSearch}));
     dispatch(getTable())
-  }, [dispatch, loading]);
+  }, [dispatch, loading, ngayCheckIn, textSearch]);
 
   function columnName(item) {
+    console.log("itemitemitem", item);
     return (
       <div>
-        {item?.khachHang?.name ?? bookName}
+        {item?.tenKhachHang}
         <div className="hidden-id">{item.id}</div>
       </div>
     );
@@ -355,10 +360,10 @@ console.log("loadingloadingloadingloading", loading);
     return <div>{item?.soTreEm}</div>;
   }
   function columnDate(item) {
-    return <div>{moment(item?.thoiGian).format("DD-MM-YYYY")}</div>;
+    return <div>{moment(item?.thoiGian).format("hh:mm")}</div>;
   }
   function columnTime(item) {
-    return <div>{moment(item?.gioDen).format("hh:mm")}</div>;
+    return <div>{moment(item?.gioDen).format("DD-MM-YYYY")}</div>;
   }
   function columnNote(item) {
     return <div>{item?.ghiChu}</div>;
@@ -374,19 +379,19 @@ console.log("loadingloadingloadingloading", loading);
   // Cột trong bảng xếp bàn
 
   function columnNameTable(item) {
-    return <div>{item?.name}</div>;
+    return <div>{item?.ban?.name}</div>;
   }
   function columnArea(item) {
-    return <div>{item?.tenKhuVuc}</div>;
+    return <div>{item?.ban?.tenKhuVuc}</div>;
   }
   function columnDateCheckin(item) {
-    return <div>{item?.createdOnDate}</div>;
+    return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
   }
   function columnStatus(item) {
     return <div>{item?.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"}</div>;
   }
   function columnClient(item) {
-    return <div>{item?.createdByUserName}</div>;
+    return <div>{item?.khachHang?.name}</div>;
   }
   const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
@@ -401,24 +406,27 @@ console.log("loadingloadingloadingloading", loading);
     const date = new Date()
     const body = {
       id: item.id,
-      name: item.name,
-      soNguoiToiDa: item.soNguoiToiDa,
-      loaiBan: item.loaiBan,
-      top: item.top,
-      left: item.left,
+      idBan: item.ban.id,
+      monAns: item?.doAns?.id,
+      idThuNgan: item.idThuNgan,
+      idKhachHang: idMKH,
+      tongTien: item.tongTien,
+      thucThu: item.thucThu,
+      vocher: item.vocher,
+      soTienGiam: item.soTienGiam,
+      trangThaiBan: 2,
       trangThai: 2,
-      kieuDang: item.kieuDang,
-      idKhuVuc: item.idKhuVuc,
-      createdByUserName: name,
+      lastModifiedByUserId: item.lastModifiedByUserId,
+      lastModifiedByUserName: item.lastModifiedByUserName
     }
 
     const bodyBook = {
       id: idBooking,
       trangThai: 1,
       idBan: idBan,
-      maKhackHang: idMKH,
+      KhackHang: idMKH,
       tenKhachHang: bookName,
-      soDienThoai: bookPhone,
+      soDienThoai: bookPhone[0],
       soNguoiLon: bookAdults,
       soTreEm: bookChild,
       gioDen: date.toISOString(bookTime),
@@ -426,31 +434,37 @@ console.log("loadingloadingloadingloading", loading);
       lastModifiedByUserId: "00000000-0000-0000-0000-000000000000",
     }
     dispatch(editTable(body))
+    console.log("bodybodybodybody", bodyBook);
+
     dispatch(updateBooking(bodyBook))
   }
 
   const onSubmitHXB = (item) => {
     const date = new Date();
+    console.log("itemitemitem", item);
 
     const body = {
       id: item.id,
-      name: item.name,
-      soNguoiToiDa: item.soNguoiToiDa,
-      loaiBan: item.loaiBan,
-      top: item.top,
-      left: item.left,
+      idBan: item.ban.id,
+      monAns: [],
+      idThuNgan: item.idThuNgan,
+      khachHang: null,
+      tongTien: item.tongTien,
+      thucThu: item.thucThu,
+      vocher: item.vocher,
+      soTienGiam: item.soTienGiam,
+      trangThaiBan: 0,
       trangThai: 0,
-      kieuDang: item.kieuDang,
-      idKhuVuc: item.idKhuVuc,
-      createdByUserName: ""
+      lastModifiedByUserId: item.lastModifiedByUserId,
+      lastModifiedByUserName: item.lastModifiedByUserName
     }
     const bodyBook = {
       id: idBooking,
       trangThai: 0,
-      idBan: idBan,
+      idBan: "00000000-0000-0000-0000-000000000000",
       maKhackHang: idMKH,
       tenKhachHang: bookName,
-      soDienThoai: bookPhone,
+      soDienThoai: bookPhone[0],
       soNguoiLon: bookAdults,
       soTreEm: bookChild,
       gioDen: date.toISOString(bookTime),
@@ -461,6 +475,7 @@ console.log("loadingloadingloadingloading", loading);
     dispatch(updateBooking(bodyBook))
   }
   function columnActive(item) {
+    console.log("item.ban.trangThaiitem.ban.trangThai", item.ban.trangThai);
     if (item.trangThai === 0) {
       return (
         <div>
@@ -472,7 +487,7 @@ console.log("loadingloadingloadingloading", loading);
         </div>
       );
     }
-    if (item.trangThai === 2) {
+    if (item.trangThai === 2 || item.trangThai === 1) {
       return (
         <div>
           <Button2
@@ -482,7 +497,7 @@ console.log("loadingloadingloadingloading", loading);
           />
         </div>
       );
-    } else return <div></div>;
+    }
   }
 
   function convertDataTable(dataTable) {
@@ -499,7 +514,7 @@ console.log("loadingloadingloadingloading", loading);
         [COLUMN_TABLE_INDEX_MENU.PEOPLE]: columnPeople(item),
         [COLUMN_TABLE_INDEX_MENU.STATUS_BOOK]: columnStatusBook(item),
         key: idx,
-        name: item?.khachHang?.name ?? item?.tenKhachHang,
+        nameKH: item?.khachHang?.name ?? item?.tenKhachHang,
         id: item?.id,
         IdMKH: item?.khachHang?.id,
         idBan: item?.idBan
@@ -549,10 +564,11 @@ console.log("loadingloadingloadingloading", loading);
         soDienThoai: bookPhone,
         soNguoiLon: bookAdults,
         soTreEm: bookChild,
-        thoiGian: date.toISOString(bookDate),
-        gioDen: date.toISOString(bookTime),
+        thoiGian: date.toISOString(bookTime),
+        gioDen: bookDate,
         ghiChu: bookNote,
       };
+      console.log("bodybodybody", body);
       dispatch(postBooking(body));
     } else if (status === "UPDATE") {
       const body = {
@@ -596,19 +612,12 @@ console.log("loadingloadingloadingloading", loading);
         <div className="book-manager__filter">
           <div className="book-manager__filter-name">
             <InputField
-              placeholder={"Tên khách hàng/Số điện thoại"}
+              placeholder={"Tên khách hàng"}
               width={"100%"}
-              label={"Tên khách/Số điện thoại"}
-              onChange={(event) => searchBook(event)}
+              label={"Tên khách"}
+              onChange={(event) => setTextSearch(event)}
             />
           </div>
-          {/* <div className="book-manager__filter-phone">
-            <InputField
-              placeholder={"Số điện thoại"}
-              width={"100%"}
-              label={"Số điện thoại"}
-            />
-          </div> */}
           <div className="book-manager__filter-date">
             <DatePicker
               defaultValue={moment().unix() * 1000}
@@ -616,12 +625,13 @@ console.log("loadingloadingloadingloading", loading);
               // onChange={(val) => {
               //     setStaffDate(val);
               // }}
+              ngayCheckIn = {setNgayCheckIn}
               placeholder="dd/MM/yyyy"
               label={"Ngày checkin"}
               width={"100%"}
               onChange={(val) => {
-                const date = new Date()
-                searchBook(date.toISOString(val));
+                const date = moment(val).format("YYYY-MM-DDT00:00:00")
+                setNgayCheckIn(date);
               }}
             />
           </div>
@@ -704,7 +714,8 @@ console.log("loadingloadingloadingloading", loading);
                 defaultValue={moment().unix() * 1000}
                 min={moment().unix() * 1000 - ONE_DAY}
                 onChange={(val) => {
-                  setBookDate(val);
+                  const date = moment(val).format("YYYY-MM-DDT00:00:00")
+                  setBookDate(date);
                 }}
                 placeholder="dd/MM/yyyy"
                 label={"Ngày đặt bàn"}

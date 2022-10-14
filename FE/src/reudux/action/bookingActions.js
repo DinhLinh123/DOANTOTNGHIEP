@@ -21,10 +21,11 @@ export const postBookingFail = (data) => ({
 })
 
 //  lấy dữ liệu
-export const getBooking = () => (
+export const getBooking = (data) => (
     {
 
         type: types.GET_BOOKING,
+        payload: data
     })
 
 export const getBookingSuccess = (data) => (
