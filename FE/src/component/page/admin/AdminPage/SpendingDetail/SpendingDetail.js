@@ -12,12 +12,10 @@ import "./spendingDetail.scss"
 function SpendingDetail(props) {
     const {spendingID} = useParams();
     const [spendingDetail, setPendingDetail] = useState([]);
-    console.log("spendingDetail", spendingDetail);
     useEffect(() => {
         const spenDingDetail =  async (id) => {
             try {
                 const res = await axios.get(`${URL_API}/ChiTieuTrongNgay/${id}`)
-                console.log("res", res);
                 setPendingDetail(res.data)
             } catch (error) {
                 

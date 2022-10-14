@@ -10,7 +10,6 @@ function* postDataBooking({ payload }) {
 
     try {
         const res = yield axios.post(`${URL_API}/DatBan`, payload)
-        console.log("Thêm bàn", res);
         if (res) {
             yield put(actions.postBookingSuccess(res.data))
             commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm mới đặt bàn thành công")
@@ -59,9 +58,9 @@ function* deleteDataBooking({ payload }) {
 function* updateDataBooking({ payload }) {
 
     try {
-        const res = yield axios.put(`${URL_API}/DatBan/${payload.id}`, payload.body)
+        const res = yield axios.put(`${URL_API}/DatBan/${payload.id}`, payload)
         if (res) {
-            yield put(actions.updateBookingSuccess(res.data))
+            yield put(actions.updateBookingSuccess(res))
             commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa đặt bàn thành công")
         } else {
             commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa đặt bàn thất bại")

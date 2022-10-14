@@ -23,7 +23,6 @@ function* getDataFeedback() {
 
     try {
         const res = yield axios.get(`${URL_API}/YKienDongGop`)
-        console.log("res", res);
         if (res) {
             yield put(actions.getFeedbackSuccess(res))
         }

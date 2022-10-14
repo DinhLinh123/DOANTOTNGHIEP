@@ -75,14 +75,14 @@ export const updateBooking = (data) => (
 export const updateBookingSuccess = (data) => (
     {
 
-        type: types.DELETE_BOOKING_SUCCESS,
+        type: types.UPDATE_BOOKING_SUCCESS,
         payload: data
     })
 
 export const updateBookingFail = (data) => (
     {
 
-        type: types.DELETE_BOOKING_FAIL,
+        type: types.UPDATE_BOOKING_FAIL,
         payload: data
     })
 

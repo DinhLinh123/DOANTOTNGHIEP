@@ -36,16 +36,13 @@ function Staff(props) {
   const [statusAction, setStatusAction] = useState("ADD");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [idStaff, setIdStaff] = useState();
-  console.log("idStaff", idStaff);
   const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
   const [staffCode, setStaffCode] = useState(0);
-  console.log("staffCode", staffCode);
   const [staffName, setStaffName] = useState("");
   const [staffSex, setStaffSex] = useState("Nam");
   const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
   const [staffDate, setStaffDate] = useState(moment().unix() * 1000);
   const [staffPosition, setStaffPosition] = useState("");
-  console.log("staffPosition", staffPosition);
   const [staffPhone, setStaffPhone] = useState("");
   const [staffAddress, setStaffAddress] = useState("");
   const [staffNote, setStaffNote] = useState("");
@@ -204,7 +201,6 @@ function Staff(props) {
           setStaffAddress(item?.address.props.children);
           setStaffNote(item?.note.props.children);
           setAcountName(item?.data.userName)
-          console.log("item?.listTree", item?.listTree);
           if (item?.listTree !== "string") {
             setCheckedKeys(JSON.parse(item?.listTree))
           }
@@ -251,7 +247,6 @@ function Staff(props) {
   ];
   //Phân quyền
 
-  console.log("releUser", role)
   const treeData = [
     {
       title: "Menu",
@@ -557,7 +552,6 @@ function Staff(props) {
   // Select chức vụ
   const { Option } = Select;
   const onChange = (value) => {
-    console.log(`selected ${value}`);
     setStaffPosition(value);
   };
 
@@ -711,8 +705,6 @@ function Staff(props) {
   const onCheck = (checkedKeysValue) => {
     const idUser = localStorage.getItem("infoUser")
     const findUser = dataStaff?.find(item => item.id === idUser)
-    console.log("findUser", findUser);
-    console.log("checkedKeysValuecheckedKeysValue", checkedKeysValue);
     const date = new Date();
     const body = {
       id: idStaff,
@@ -740,7 +732,7 @@ function Staff(props) {
   };
 
   const onSelect = (selectedKeysValue, info) => {
-    console.log("onSelect", info);
+    // console.log("onSelect", info);
     setSelectedKeys(selectedKeysValue);
   };
 

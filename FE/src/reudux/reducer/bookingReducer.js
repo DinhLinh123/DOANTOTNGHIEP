@@ -89,7 +89,6 @@ export default function bookingReducer(state = initalState, action) {
                 ...state,
             }
         case types.GET_TABLE_SUCCESS:
-            console.log("action.payload.data.data", action.payload.data.data);
             return {
                 ...state,
                 dataXB: action.payload.data.data

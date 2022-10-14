@@ -31,19 +31,26 @@ import { useDispatch, useSelector } from "react-redux";
 import commonFunction from "../../../../base/common/commonFunction";
 
 function Book(props) {
-  const [idBooking, setIdBooking] = useState();
+  const [idBooking, setIdBooking] = useState("");
+  console.log("idBookingidBookingidBooking", idBooking);
   const [sortType, setSortType] = useState();
   const [status, setStatus] = useState("ADD");
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
   const [bookName, setBookName] = useState("");
   const [bookPhone, setBookPhone] = useState("");
+  console.log("bookPhonebookPhonebookPhone", bookPhone);
   const [bookNote, setBookNote] = useState("");
-  const [bookAdults, setBookAdults] = useState();
-  const [bookChild, setBookChild] = useState();
-  const [bookDate, setBookDate] = useState();
-  const [bookTime, setBookTime] = useState();
-  const [name, setName] = useState()
+  const [bookAdults, setBookAdults] = useState("");
+  const [bookChild, setBookChild] = useState("");
+  const [bookDate, setBookDate] = useState("");
+  const [bookTime, setBookTime] = useState("");
+  const [name, setName] = useState("");
+  const [idMKH, setIdMKH] = useState("");
+  const [idBan, setIdBan] = useState("");
+
+  console.log("idMKH", idMKH);
+
   const dataTable = [
     {
       value: "1",
@@ -266,8 +273,10 @@ function Book(props) {
         if (quyen4 === "0-6-3") {
           setIsShowPopupSetup(true);
           setName(item.name)
-          // console.log("item.name.props.children[1].props.children", item);
-          setIdBooking(item.id);
+          // console.log("item.name.props.children[1].props.children", item);, 
+          setIdMKH(item?.IdMKH)
+          setIdBan(item?.idBan)
+          setIdBooking(item?.id);
           setBookName(item?.name);
           setBookPhone(item?.phone?.props?.children);
           setBookAdults(item?.adults?.props?.children);
@@ -285,9 +294,11 @@ function Book(props) {
       onSelect: (item) => {
         if (quyen2 === "0-6-1") {
           setIsShowPopupAddnew(true);
-          setIdBooking(item.id);
+          setIdMKH(item?.IdMKH)
+          setIdBan(item?.idBan)
+          setIdBooking(item?.id);
           setBookName(item?.name);
-          setBookPhone(item?.phone?.props?.children);
+          setBookPhone(item?.phone?.props?.children[0]);
           setBookAdults(item?.adults?.props?.children);
           setBookChild(item?.child?.props?.children);
           setBookDate(item?.date?.props?.children);
@@ -316,7 +327,7 @@ function Book(props) {
   //Cột bảng Đặt bàn
 
   const { dataBooking, dataXB, loading } = useSelector((state) => state.bookingReducer);
-
+console.log("loadingloadingloadingloading", loading);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -324,7 +335,6 @@ function Book(props) {
     dispatch(getTable())
   }, [dispatch, loading]);
 
-  console.log("dataBookingdataBookingdataBooking", dataBooking);
   function columnName(item) {
     return (
       <div>
@@ -335,7 +345,7 @@ function Book(props) {
   }
 
   function columnPhone(item) {
-    return <div>{item?.khachHang?.soDienThoai ?? "Chưa có số điện thoại"}</div>;
+    return <div>{item?.khachHang?.soDienThoai ?? "Chưa có số điện thoại"} {item.idMKH}</div>;
   }
 
   function columnAdults(item) {
@@ -358,7 +368,7 @@ function Book(props) {
   }
 
   function columnStatusBook(item) {
-    return <div>{item.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"} - {item.trangThai}</div>
+    return <div>{item.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"}</div>
   }
 
   // Cột trong bảng xếp bàn
@@ -405,15 +415,18 @@ function Book(props) {
     const bodyBook = {
       id: idBooking,
       trangThai: 1,
+      idBan: idBan,
+      maKhackHang: idMKH,
       tenKhachHang: bookName,
       soDienThoai: bookPhone,
       soNguoiLon: bookAdults,
       soTreEm: bookChild,
       gioDen: date.toISOString(bookTime),
       ghiChu: bookNote,
+      lastModifiedByUserId: "00000000-0000-0000-0000-000000000000",
     }
     dispatch(editTable(body))
-    // dispatch(updateBooking(bodyBook))
+    dispatch(updateBooking(bodyBook))
   }
 
   const onSubmitHXB = (item) => {
@@ -434,16 +447,18 @@ function Book(props) {
     const bodyBook = {
       id: idBooking,
       trangThai: 0,
+      idBan: idBan,
+      maKhackHang: idMKH,
       tenKhachHang: bookName,
       soDienThoai: bookPhone,
       soNguoiLon: bookAdults,
       soTreEm: bookChild,
-      thoiGian: date.toISOString(bookDate),
       gioDen: date.toISOString(bookTime),
       ghiChu: bookNote,
+      lastModifiedByUserId: "00000000-0000-0000-0000-000000000000",
     }
     dispatch(editTable(body))
-    // dispatch(updateBooking(bodyBook))
+    dispatch(updateBooking(bodyBook))
   }
   function columnActive(item) {
     if (item.trangThai === 0) {
@@ -485,7 +500,9 @@ function Book(props) {
         [COLUMN_TABLE_INDEX_MENU.STATUS_BOOK]: columnStatusBook(item),
         key: idx,
         name: item?.khachHang?.name ?? item?.tenKhachHang,
-        id: item?.id
+        id: item?.id,
+        IdMKH: item?.khachHang?.id,
+        idBan: item?.idBan
       };
     });
     return [...listData];
@@ -525,24 +542,38 @@ function Book(props) {
   function onChangeTab() {
     setIsShowPopupAddnew(false);
     const date = new Date();
-    const body = {
-      tenKhachHang: bookName,
-      soDienThoai: bookPhone,
-      soNguoiLon: bookAdults,
-      soTreEm: bookChild,
-      thoiGian: date.toISOString(bookDate),
-      gioDen: date.toISOString(bookTime),
-      ghiChu: bookNote,
-    };
+
     if (status === "ADD") {
+      const body = {
+        tenKhachHang: bookName,
+        soDienThoai: bookPhone,
+        soNguoiLon: bookAdults,
+        soTreEm: bookChild,
+        thoiGian: date.toISOString(bookDate),
+        gioDen: date.toISOString(bookTime),
+        ghiChu: bookNote,
+      };
       dispatch(postBooking(body));
     } else if (status === "UPDATE") {
-      const id = idBooking;
+      const body = {
+        id: idBooking,
+        idBan: idBan,
+        maKhachHang: idMKH,
+        tenKhachHang: bookName,
+        soDienThoai: bookPhone,
+        gioDen: date.toISOString(bookTime),
+        thoiGian: date.toISOString(bookDate),
+        soNguoiLon: bookAdults,
+        soTreEm: bookChild,
+        ghiChu: bookNote,
+        lastModifiedByUserId: "00000000-0000-0000-0000-000000000000",
+        lastModifiedByUserName: "string"
+      };
+      console.log("bodybodybodybody", body);
       dispatch(
-        updateBooking({
-          id,
-          body,
-        })
+        updateBooking(
+          body
+        )
       );
     }
     setBookName("");

@@ -41,7 +41,6 @@ export default function feedbackReducer(state = initalState, action) {
                 ...state,
             }
         case types.SEARCH_FEEDBACK_SUCCESS:
-            console.log("action", action.payload.data);
             return {
                 ...state,
                 dataFeedback: action.payload.data.data

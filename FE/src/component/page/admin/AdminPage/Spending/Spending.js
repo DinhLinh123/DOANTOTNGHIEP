@@ -149,14 +149,12 @@ function Spending(props) {
     {
       title: "Chi tiết",
       onSelect: (item) => {
-        console.log("item", item);
         window.open(`/admin/spending/detail/${item.key}`, "_self");
       },
     },
     {
       title: "Sửa",
       onSelect: (item) => {
-        console.log("item", item);
         setStatusAction("UPDATE")
         setIdSpending(item.key)
         setIsShowPopupAddnew(true)
@@ -335,7 +333,6 @@ function Spending(props) {
     return total;
   }
 
-  console.log("new Date()", new Date());
   const onSubmitSave = async () => {
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
@@ -376,7 +373,6 @@ function Spending(props) {
 
   const { dataSpending, loading } = useSelector((state) => state.spendingsReducer);
   const dispatch = useDispatch();
-  console.log("loadingloading", loading);
 
   useEffect(() => {
     dispatch(getSpending({ textSearch, textSearchTime }));
