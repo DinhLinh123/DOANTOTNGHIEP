@@ -39,7 +39,6 @@ function Book(props) {
   const [isShowPopupSetup, setIsShowPopupSetup] = useState(false);
   const [bookName, setBookName] = useState("");
   const [bookPhone, setBookPhone] = useState("");
-  console.log("bookPhonebookPhonebookPhone", bookPhone);
   const [bookNote, setBookNote] = useState("");
   const [bookAdults, setBookAdults] = useState("");
   const [bookChild, setBookChild] = useState("");
@@ -407,7 +406,7 @@ function Book(props) {
     const body = {
       id: item.id,
       idBan: item.ban.id,
-      monAns: item?.doAns?.id,
+      monAns: item?.doAns,
       idThuNgan: item.idThuNgan,
       idKhachHang: idMKH,
       tongTien: item.tongTien,
@@ -446,7 +445,7 @@ function Book(props) {
     const body = {
       id: item.id,
       idBan: item.ban.id,
-      monAns: [],
+      monAns: item.doAns,
       idThuNgan: item.idThuNgan,
       khachHang: null,
       tongTien: item.tongTien,
