@@ -33,7 +33,6 @@ function Menu(props) {
   const [foodUnit, setFoodUnit] = useState("");
   const [foodPrice, setFoodPrice] = useState("");
   const [foodDescribe, setFoodDescribe] = useState("");
-  const [foodImage, setFoodImage] = useState("dfsd");
   const [foodStatus, setFoodStatus] = useState(true);
   const [foodNote, setFoodNote] = useState("");
   const [foodDetail, setFoodDetail] = useState({});
@@ -372,7 +371,7 @@ function Menu(props) {
     let body = {
       "name": foodName,
       "theLoaiDoAn": index.item.name,
-      "linkAnh": foodImage,
+      "linkAnh": images,
       "donGia": foodPrice,
       "maTheLoai": index.item.id,
       "loai": "string",
@@ -777,7 +776,7 @@ function Menu(props) {
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
                       <span className="menu-manager__popup-detail-content-buffet-item-value">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.anh} /></div>
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.linkAnh} /></div>
                       </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
@@ -812,7 +811,7 @@ function Menu(props) {
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
                       <span className="menu-manager__popup-detail-content-buffet-item-value">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.anh} /></div>
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.linkAnh} /></div>
                       </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
