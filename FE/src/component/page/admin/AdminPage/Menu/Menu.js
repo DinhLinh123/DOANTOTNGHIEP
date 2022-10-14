@@ -407,7 +407,7 @@ function Menu(props) {
     dispatch(changeLoadingApp(true))
     let body = foodDetail;
     body.name = foodName
-    body.linkAnh = foodImage
+    body.linkAnh = images
     body.donGia = foodPrice
     body.loai = "string"
     body.ghiChu = foodNote
@@ -687,7 +687,21 @@ function Menu(props) {
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{ color: "red" }}>*</span></div>
                     <div>
-                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => {
+                        let img = val[0].file
+                        let formData = new FormData();
+                        formData.append('files', img)
+                        baseApi.post(
+                          (res) => {
+                            setImages(PART_SWAGGER + res.data[0]);
+                          },
+                          () => { },
+                          null,
+                          UPLOAD_FILE,
+                          {},
+                          formData
+                        )
+                      }} />
                     </div>
                     <Input
                       label={"Ghi chú"}
