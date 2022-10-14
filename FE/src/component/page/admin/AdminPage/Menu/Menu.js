@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
+  PART_SWAGGER,
   SORT_TYPE,
   TYPE_MESSAGE,
 } from "../../../../base/common/commonConstant";
@@ -16,7 +17,7 @@ import Input from "../../../../base/Input/Input";
 import baseApi from "../../../../../api/baseApi"
 import { Tooltip, Upload, Radio } from "antd";
 import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
-import { API_MENU, API_TYPE_FOOD } from "../../../../base/common/endpoint";
+import { API_MENU, API_TYPE_FOOD, UPLOAD_FILE } from "../../../../base/common/endpoint";
 import commonFunction from "../../../../base/common/commonFunction";
 import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
@@ -62,7 +63,7 @@ function Menu(props) {
   const quyen2 = quyen?.find((item) => item === "0-0-1")
   const quyen3 = quyen?.find((item) => item === "0-0-2")
 
-  
+
 
 
   const [images, setImages] = useState([]);
@@ -122,10 +123,10 @@ function Menu(props) {
     {
       title: "Sửa",
       onSelect: (val) => {
-        if(quyen2 === "0-0-1"){
+        if (quyen2 === "0-0-1") {
           setFoodDetail(val.detail)
           handleEditMenu(val.detail)
-        }else{
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa menu")
 
         }
@@ -134,9 +135,9 @@ function Menu(props) {
     {
       title: "Xóa",
       onSelect: (val) => {
-        if(quyen3 === "0-0-2"){
+        if (quyen3 === "0-0-2") {
           setIsShowPopupComfirmDelete({ show: true, item: val.detail })
-        }else{
+        } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa menu")
 
         }
@@ -504,7 +505,7 @@ function Menu(props) {
               }}
             />
           </div> : null}
-          
+
         </div>
         <div className="menu-manager__content">
           <TableBase
@@ -606,7 +607,21 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-content-buffet-image">
                       <div className="menu-manager__popup-content-buffet-image-title">Ảnh</div>
-                      <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
+                      <ImageUpload maxImage={1} images={images} setImages={(val) => {
+                        let img = val[0].file
+                        let formData = new FormData();
+                        formData.append('files', img)
+                        baseApi.post(
+                          (res) => {
+                            setImages(PART_SWAGGER + res.data[0]);
+                          },
+                          () => { },
+                          null,
+                          UPLOAD_FILE,
+                          {},
+                          formData
+                        )
+                      }} />
                     </div>
                     <Input
                       label={"Đơn vị tính"}
@@ -671,7 +686,7 @@ function Menu(props) {
                       onChange={(val) => { setFoodDescribe(val) }}
                       autoFocus
                     />
-                    <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{color: "red"}}>*</span></div>
+                    <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{ color: "red" }}>*</span></div>
                     <div>
                       <ImageUpload maxImage={1} images={images} setImages={(val) => { setImages(val) }} />
                     </div>
@@ -761,7 +776,9 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.linkAnh}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.anh} /></div>
+                      </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
@@ -794,7 +811,9 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">{foodDetail.linkAnh}</span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value">
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.anh} /></div>
+                      </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
