@@ -787,10 +787,12 @@ function Menu(props) {
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
                       <span className="menu-manager__popup-detail-content-buffet-item-value">{commonFunction.numberWithCommas(parseInt(foodDetail.donGia))}</span>
                     </div>
-                    <div className="menu-manager__popup-detail-content-buffet-item">
+                    <div className="menu-manager__popup-detail-content-buffet-item menu-image">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.linkAnh} /></div>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value ">
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"
+                          style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
+                        ></div>
                       </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
@@ -822,10 +824,12 @@ function Menu(props) {
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Giá tiền: </span>
                       <span className="menu-manager__popup-detail-content-buffet-item-value">{commonFunction.numberWithCommas(parseInt(foodDetail.donGia))}</span>
                     </div>
-                    <div className="menu-manager__popup-detail-content-buffet-item">
+                    <div className="menu-manager__popup-detail-content-buffet-item menu-image">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"><img src={foodDetail.linkAnh} /></div>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value ">
+                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"
+                          style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
+                        ></div>
                       </span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">

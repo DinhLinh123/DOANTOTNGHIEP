@@ -124,7 +124,21 @@
 
               &-value {
                 font-weight: bold;
+
+                &-img{
+                  width: 150px;
+                  height: 150px;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-size: contain;
+                }
               }
+
+            }
+
+            
+            .menu-image{
+                height: fit-content;
             }
 
             &-list {
