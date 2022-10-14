@@ -239,7 +239,7 @@ function ManagerFeedback(props) {
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
-                        total={90}
+                        total={dataFeedback?.length}
                         data={convertDataTable(dataFeedback)}
                         loading={false}
                         hasMoreOption

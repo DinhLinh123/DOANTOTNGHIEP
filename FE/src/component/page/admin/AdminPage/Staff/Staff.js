@@ -685,10 +685,6 @@ function Staff(props) {
     setIsShowPopupAddPosition(false);
   }
 
-  useEffect(() => {
-    console.log(staffName);
-  }, [staffName]);
-
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState();
   const [selectedKeys, setSelectedKeys] = useState([]);
@@ -751,16 +747,8 @@ function Staff(props) {
               label={"Mã nhân viên/Tên nhân viên"}
               placeholder={"Mã nhân viên/Tên nhân viên"}
               onChange={(event) => searchUser(event)}
-            //width={"20%"}
             />
           </div>
-          {/* <div className="staff-manager__filter-name">
-            <InputField
-              label={"Tên nhân viên"}
-              placeholder={"Tên nhân viên"}
-              //width={"20%"}
-            />
-          </div> */}
           <div className="staff-manager__filter-position">
             <Dropdown
               listOption={dataPosition}
@@ -770,29 +758,23 @@ function Staff(props) {
               onChange={(item) => searchUser(item)}
             />
           </div>
-        </div>
-        <div className="staff-manager__button">
-          {/* <div className="staff-manager__button-search">
-            <Button2
-              name={"Tìm kiếm"}
-              leftIcon={<SearchOutlined />}
-              //onClick={() => handleClickAddPosition()}
-            />
-          </div> */}
-          <div className="staff-manager__button-create-new">
-            {quyen1 === "0-5-0" ? <Button2
-              name={"Thêm mới nhân viên"}
-              leftIcon={<PlusOutlined />}
-              onClick={() => handleClickAddnew()}
-            /> : null}
 
+          <div className="staff-manager__filter-button">
+            <div className="staff-manager__button-create-new">
+              {quyen1 === "0-5-0" ? <Button2
+                name={"Thêm mới nhân viên"}
+                leftIcon={<PlusOutlined />}
+                onClick={() => handleClickAddnew()}
+              /> : null}
+
+            </div>
           </div>
         </div>
         <div className="staff-manager__content">
           <TableBase
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
-            total={90}
+            total={dataStaff?.length}
             data={convertDataTable(dataStaff)}
             loading={false}
             hasMoreOption

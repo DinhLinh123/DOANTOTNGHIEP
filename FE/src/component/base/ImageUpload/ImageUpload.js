@@ -11,7 +11,7 @@ import { Tooltip } from "antd";
 
 ImageUpload.propTypes = {
   maxImage: PropTypes.number,
-  images: PropTypes.array,
+  images: PropTypes.string,
   setImages: PropTypes.func,
 };
 
@@ -41,6 +41,7 @@ function ImageUpload(props) {
       onChange={onChange}
       maxNumber={maxImage}
       dataURLKey="data_url"
+      
     >
       {({
         imageList,
@@ -54,22 +55,22 @@ function ImageUpload(props) {
         // write your building UI
         <div className="upload__image-wrapper">
           {/* <button onClick={onImageRemoveAll}>Remove all images</button> */}
-          {imageList.map((image, index) => (
+          {images?.length> 0 && (
             <div
-              key={index}
+              key={0}
               className="image-item"
-              onMouseEnter={() => setShowOption({ show: true, index: index })}
+              onMouseEnter={() => setShowOption({ show: true, index: 0 })}
               onMouseLeave={() => setShowOption({ show: false, index: -1 })}
             >
               <div className="image-item__img">
                 <img src={images} alt="" />
               </div>
-              {showOption.show && showOption.index === index && (
+              {showOption.show && showOption.index === 0 && (
                 <div className="image-item__btn-wrapper">
                   <div className="image-item__btn-wrapper-update">
                     <Tooltip title={"Sửa ảnh"}>
                       <RetweetOutlined
-                        onClick={() => onImageUpdate(index)}
+                        onClick={() => onImageUpdate(0)}
                         style={{
                           color: "#ecf0f1",
                           zIndex: "1",
@@ -82,7 +83,7 @@ function ImageUpload(props) {
                   <div className="image-item__btn-wrapper-delete">
                     <Tooltip title={"Xóa ảnh"}>
                       <DeleteOutlined
-                        onClick={() => onImageRemove(index)}
+                        onClick={() => onImageRemove(0)}
                         style={{
                           color: "#ecf0f1",
                           zIndex: "1",
@@ -95,8 +96,8 @@ function ImageUpload(props) {
                 </div>
               )}
             </div>
-          ))}
-          {imageUpload?.length === maxImage ? (
+          )}
+          { images?.length > 0 ? (
             ""
           ) : (
             <div

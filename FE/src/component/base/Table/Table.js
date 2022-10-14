@@ -175,7 +175,13 @@ function TableBase(props) {
       {isPaging && <div className="table-container__paging">
         <Pagination
           total={total}
-          showTotal={(total, range) => `${range[0]}-${range[1]} của ${total}`}
+          showTotal={(total, range) => {
+            return(
+              <div>
+                 Tổng <strong>{total}</strong> bản ghi
+              </div>
+            )
+          }}
           defaultPageSize={20}
           defaultCurrent={1}
           onChange={(page, pageSize) => {

@@ -1,21 +1,26 @@
 .menu-manager {
   height: 100%;
+
   &__filter {
     display: flex;
     margin-bottom: 24px;
     align-items: baseline;
+
     &-search {
       display: flex;
       width: 100%;
+
       &-name {
         margin-right: 20px;
         width: 35%;
       }
+
       &-position {
         margin-right: 20px;
         width: 35%;
         text-align: left;
       }
+
       &-button {
         margin-right: 20px;
         //width: 35%;
@@ -80,12 +85,14 @@
                 }
               }
             }
+
             &-image {
               &-title {
                 font-weight: bold;
                 padding-bottom: 10px;
                 font-size: 16px;
-                .p{
+
+                .p {
                   color: red;
                 }
               }
@@ -124,6 +131,35 @@
 
               &-value {
                 font-weight: bold;
+
+                &-img{
+                  width: 150px;
+                  height: 150px;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-size: contain;
+                }
+              }
+
+            }
+
+            
+            .menu-image{
+                height: fit-content;
+            }
+
+
+
+            .menu-image {
+              height: fit-content !important;
+
+              &__value {
+
+                width: 150px;
+                height: 150px;
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
               }
             }
 

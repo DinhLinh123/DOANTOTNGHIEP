@@ -46,7 +46,7 @@ function Promotion(props) {
   const [textSearch, setTextSearch] = useState("");
   const [moneyPromotion, setMoneyPromotion] = useState(0);
   const [idFood, setIdFood] = useState('');
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState('');
   const [isShowPopupComfirmDelete, setIsShowPopupComfirmDelete] = useState({ show: false, item: '' });
   const [listMenu, setListMenu] = useState([]);
 
@@ -88,7 +88,7 @@ function Promotion(props) {
       title: "Đơn vị tính",
       dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
       sorter: true,
-      width: "100px",
+      width: "200px",
     },
     {
       title: "Giá ưu đãi",
@@ -104,7 +104,7 @@ function Promotion(props) {
       title: "Trạng thái",
       dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
       sorter: true,
-      width: "100px",
+      width: "150px",
     },
   ];
 
@@ -485,15 +485,17 @@ function Promotion(props) {
                   maxImage={1}
                   images={images}
                   setImages={(val) => {
-                    debugger
+                    dispatch(changeLoadingApp(true))
                     let img = val[0].file
                     let formData = new FormData();
                     formData.append('files', img)
                     baseApi.post(
                       (res) => {
                         setImages(PART_SWAGGER+res.data[0]);
+                        dispatch(changeLoadingApp(false))
                       },
-                      () => { debugger},
+                      () => { 
+                        dispatch(changeLoadingApp(false))},
                       null,
                       UPLOAD_FILE,
                       {},
