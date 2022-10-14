@@ -31,7 +31,8 @@ import {
   CoffeeOutlined,
   GroupOutlined,
   TeamOutlined,
-  BarChartOutlined
+  BarChartOutlined,
+  HddOutlined
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Menu from "./Menu/Menu";
@@ -214,6 +215,11 @@ function AdminPage(props) {
       link: MENU_TAB_ADMIN.PROMOTION,
       icon: <ShoppingOutlined />,
       title: "Ưu đãi",
+    },
+    {
+      link: MENU_TAB_ADMIN.ODER,
+      icon: <HddOutlined />,
+      title: "Oder",
     },
   ];
 
