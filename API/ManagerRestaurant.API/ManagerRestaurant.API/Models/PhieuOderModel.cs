@@ -60,6 +60,7 @@ namespace ManagerRestaurant.API.Models
         public float ThucThu { get; set; }
         public string Vocher { get; set; }
         public float SoTienGiam { get; set; }
+        public int TrangThaiBan { get; set; } = 0;
         public int TrangThai { get; set; }
         public Guid? LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }

@@ -227,7 +227,7 @@ namespace ManagerRestaurant.API.Controllers
                 }
                 if (filter.TextSearch != null && filter.TextSearch.Length > 0)
                 {
-                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.Kieu.Contains(filter.TextSearch) || x.MatHangs.Contains(filter.NhomMatHang));
+                    query = query.Where((x) => x.Name.Contains(filter.TextSearch) || x.Kieu.Contains(filter.TextSearch) || x.MatHangs.Contains(filter.MatHang));
                 }
                 if (filter.Kieu != null && filter.Kieu.Length > 0)
                 {
@@ -275,7 +275,7 @@ namespace ManagerRestaurant.API.Controllers
         {
             public DateTime? NgayHoaDon { get; set; }
             public string Kieu { get; set; }
-            public string NhomMatHang { get; set; }
+            public string MatHang { get; set; }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace ManagerRestaurant.API.Models
         public Guid Id { get; set; }
         public Guid IdBan { get; set; }
         public KhachHangModel KhachHang { get; set; }
+        public string TenKhachHang { get; set; }
         public DateTime GioDen { get; set; }
         public DateTime ThoiGian { get; set; }
         public int SoNguoiLon { get; set; }

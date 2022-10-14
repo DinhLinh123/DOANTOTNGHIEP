@@ -179,6 +179,10 @@ namespace ManagerRestaurant.API.Controllers
                 {
                     query = query.Where((x) => x.TenMatHang.Contains(filter.TextSearch));
                 }
+                if (filter.NhomMatHang != null && filter.NhomMatHang.Length > 0)
+                {
+                    query = query.Where((x) => x.NhomMatHang.Contains(filter.NhomMatHang));
+                }
                 if (filter.NgayNhap != null)
                 {
                     query = query.Where(
@@ -218,6 +222,7 @@ namespace ManagerRestaurant.API.Controllers
         class BarFilter : BaseFilter
         {
             public DateTime? NgayNhap { get; set; }
+            public string NhomMatHang { get; set; }
         }
     }
 }

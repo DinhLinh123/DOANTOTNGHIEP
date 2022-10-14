@@ -47,6 +47,7 @@ namespace ManagerRestaurant.API.Controllers
                                                SoDienThoai = s.SoDienThoai
                                            }).FirstOrDefaultAsync(),
                         GioDen = item.GioDen.Value,
+                        TenKhachHang = item.TenKhachHang,
                         ThoiGian = item.ThoiGian,
                         SoNguoiLon = item.SoNguoiLon,
                         SoTreEm = item.SoTreEm,
@@ -107,6 +108,7 @@ namespace ManagerRestaurant.API.Controllers
                     GioDen = item.GioDen.Value,
                     ThoiGian = item.ThoiGian,
                     SoNguoiLon = item.SoNguoiLon,
+                    TenKhachHang = item.TenKhachHang,
                     SoTreEm = item.SoTreEm,
                     GhiChu = item.GhiChu,
                     TrangThai = item.TrangThai,
@@ -180,6 +182,7 @@ namespace ManagerRestaurant.API.Controllers
                     datBan.SoNguoiLon = item.SoNguoiLon;
                     datBan.SoTreEm = item.SoTreEm;
                     datBan.GhiChu = item.GhiChu;
+                    datBan.TrangThai = item.TrangThai;
                     datBan.LastModifiedByUserId = item.LastModifiedByUserId;
                     datBan.LastModifiedByUserName = item.LastModifiedByUserName;
 
