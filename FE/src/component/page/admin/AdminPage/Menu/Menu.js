@@ -134,7 +134,7 @@ function Menu(props) {
     {
       title: "Xóa",
       onSelect: (val) => {
-        if(quyen2 === "0-0-3"){
+        if(quyen3 === "0-0-2"){
           setIsShowPopupComfirmDelete({ show: true, item: val.detail })
         }else{
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa menu")

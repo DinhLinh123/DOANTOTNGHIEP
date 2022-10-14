@@ -163,11 +163,11 @@ function Book(props) {
       sorter: true,
       width: "200px",
     },
-    {
-      title: "Người nhập",
-      dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
-      width: "150px",
-    },
+    // {
+    //   title: "Người nhập",
+    //   dataIndex: COLUMN_TABLE_INDEX_MENU.PEOPLE,
+    //   width: "150px",
+    // },
     {
       title: "Trang thái",
       dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS_BOOK,
@@ -324,7 +324,7 @@ function Book(props) {
     dispatch(getTable())
   }, [dispatch, loading]);
 
-
+  console.log("dataBookingdataBookingdataBooking", dataBooking);
   function columnName(item) {
     return (
       <div>
@@ -484,7 +484,7 @@ function Book(props) {
         [COLUMN_TABLE_INDEX_MENU.PEOPLE]: columnPeople(item),
         [COLUMN_TABLE_INDEX_MENU.STATUS_BOOK]: columnStatusBook(item),
         key: idx,
-        name: item?.khachHang?.name,
+        name: item?.khachHang?.name ?? item?.tenKhachHang,
         id: item?.id
       };
     });

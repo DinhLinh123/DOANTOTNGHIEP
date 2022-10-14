@@ -13,7 +13,7 @@ import DatePicker from "../../../../base/DatePicker/DatePicker";
 import moment from "moment";
 import Dropdown from "../../../../base/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { getFeedback, searchFeedback } from "../../../../../reudux/action/feedbackAction";
+import { deleteFeedback, getFeedback, searchFeedback } from "../../../../../reudux/action/feedbackAction";
 
 function ManagerFeedback(props) {
     const [sortType, setSortType] = useState();
@@ -110,16 +110,16 @@ function ManagerFeedback(props) {
     ]
 
     const OPTION_MORE_TABLE = [
-        {
-            title: "Sửa",
-            onSelect: () => {
-                alert("Sửa");
-            },
-        },
+        // {
+        //     title: "Sửa",
+        //     onSelect: () => {
+        //         alert("Sửa");
+        //     },
+        // },
         {
             title: "Xóa",
-            onSelect: () => {
-                alert("Xóa");
+            onSelect: (item) => {
+                dispatch(deleteFeedback(item.id))
             },
         },
     ];
@@ -157,7 +157,7 @@ function ManagerFeedback(props) {
         return <div>{item?.noiDung}</div>;
     }
     function columnDate(item) {
-        return <div>{item?.createdOnDate}</div>;
+        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
 
     function convertDataTable(dataTable) {
@@ -170,6 +170,7 @@ function ManagerFeedback(props) {
                 [COLUMN_TABLE_INDEX_MENU.CONTENT]: columnContent(item),
                 [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
                 key: idx,
+                id: item.id
             };
         });
         return [...listData];
@@ -241,7 +242,7 @@ function ManagerFeedback(props) {
                         total={90}
                         data={convertDataTable(dataFeedback)}
                         loading={false}
-                        //hasMoreOption
+                        hasMoreOption
                         option={OPTION_MORE_TABLE}
                         setObjectSort={(field, order) => {
                             setSortType({

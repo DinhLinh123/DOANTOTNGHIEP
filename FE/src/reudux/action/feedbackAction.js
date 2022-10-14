@@ -55,3 +55,23 @@ export const searchFeedbackFail = (data) => ({
     type: types.SEARCH_FEEDBACK_FAIL,
     payload: data
 })
+
+// Xóa
+export const deleteFeedback = (data) => ({
+
+    type: types.DELETE_FEEDBACK,
+    payload: data
+})
+
+export const deleteFeedbackSuccess = (data) => ({
+
+    type: types.DELETE_FEEDBACK_SUCCESS,
+    payload: data
+})
+
+export const deleteFeedbackFail = (data) => ({
+
+    type: types.DELETE_FEEDBACK_FAIL,
+    payload: data
+})
+
