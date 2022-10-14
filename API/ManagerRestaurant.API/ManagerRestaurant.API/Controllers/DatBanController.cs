@@ -153,9 +153,9 @@ namespace ManagerRestaurant.API.Controllers
                             return res;
                         }
                     }
-                    if (item.MaKhachHang!= Guid.Empty)
+                    if (item.TenKhachHang != String.Empty)
                     {
-                        var kh = _context.KhachHang.Find(item.MaKhachHang);
+                        var kh = _context.KhachHang.Where(x => x.Name.Equals(item.TenKhachHang.Trim())).FirstOrDefault();
                         if (kh == null)
                         {
                             var khachhang = new KhachHang();
@@ -172,6 +172,13 @@ namespace ManagerRestaurant.API.Controllers
                         else
                         {
                             idkh = kh.Id;
+                            kh.Name = item.TenKhachHang;
+                            kh.SoDienThoai = item.SoDienThoai;
+                            kh.CreatedByUserId = Guid.Empty;
+                            kh.CreatedByUserName = "";
+                            kh.CreatedOnDate = DateTime.Now;
+                            //create new khach hang
+                            await _context.SaveChangesAsync();
                         }
                     }
                     
