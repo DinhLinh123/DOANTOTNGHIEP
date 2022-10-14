@@ -21,10 +21,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteSpending, editSpending, getSpending, postSpending } from "../../../../../reudux/action/spendingsAction";
 import moment from "moment";
 import commonFunction from "../../../../base/common/commonFunction";
-import axios from "axios";
-import { URL_API } from "../../../../../utils/urpapi";
-import baseApi from "../../../../../api/baseApi";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import { UPLOAD_FILE } from "../../../../base/common/endpoint";
+import baseApi from "../../../../../api/baseApi";
 
 function Spending(props) {
   const [sortType, setSortType] = useState();

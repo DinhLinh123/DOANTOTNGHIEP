@@ -1,29 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import Button2 from "../../../../base/Button/Button";
 import {
   MENU_TAB_ADMIN,
   PART_SWAGGER,
   SORT_TYPE,
-  TYPE_MESSAGE,
+  TYPE_MESSAGE
 } from "../../../../base/common/commonConstant";
 import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
-import "./menu.scss";
-import Popup from "../../../../base/Popup/Popup";
-import Input from "../../../../base/Input/Input";
-import baseApi from "../../../../../api/baseApi"
-import { Tooltip, Upload, Radio } from "antd";
-import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
-import { API_MENU, API_TYPE_FOOD, UPLOAD_FILE } from "../../../../base/common/endpoint";
-import commonFunction from "../../../../base/common/commonFunction";
+import { Radio, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
+import baseApi from "../../../../../api/baseApi";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
-import RadioCheck from "../../../../base/Radio/Radio";
+import commonFunction from "../../../../base/common/commonFunction";
+import { API_MENU, API_TYPE_FOOD, UPLOAD_FILE } from "../../../../base/common/endpoint";
+import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
+import Input from "../../../../base/Input/Input";
 import ModalConfirm from "../../../../base/ModalConfirm/ModalConfirm";
-import Dropdown from "../../../../base/Dropdown/Dropdown";
+import Popup from "../../../../base/Popup/Popup";
+import "./menu.scss";
 
 function Menu(props) {
   const [sortType, setSortType] = useState();
@@ -39,9 +37,6 @@ function Menu(props) {
   const [dataTable, setDataTable] = useState([]);
   const [dataTotal, setDataTotal] = useState(0);
   const [textSearch, setTextSearch] = useState("");
-  const [nameTypeFood, setNameTypeFood] = useState('');
-  const [isManyTypeFood, setIsManyTypeFood] = useState(0);
-  const [isShowPopupAddNewTypeFood, setIsShowPopupAddNewTypeFood] = useState(false);
 
   const [showPopupWarningChangeTab, setShowPopupWarningChangeTab] = useState({
     show: false,
@@ -53,6 +48,7 @@ function Menu(props) {
   const [isShowPopupDetail, setIsShowPopupDetail] = useState({ show: false, isMany: -1 });
   const [isShowPopupWarningCategory, setIsShowPopupWarningCategory] = useState(false);
   const [listMenu, setListMenu] = useState([]);
+  const [images, setImages] = useState('');
 
   const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
@@ -61,11 +57,6 @@ function Menu(props) {
   const quyen1 = quyen?.find((item) => item === "0-0-0")
   const quyen2 = quyen?.find((item) => item === "0-0-1")
   const quyen3 = quyen?.find((item) => item === "0-0-2")
-
-
-
-
-  const [images, setImages] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -134,7 +125,7 @@ function Menu(props) {
     {
       title: "Xóa",
       onSelect: (val) => {
-        if (quyen3 === "0-0-2") {
+        if (quyen2 === "0-0-3") {
           setIsShowPopupComfirmDelete({ show: true, item: val.detail })
         } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa menu")
@@ -210,9 +201,6 @@ function Menu(props) {
     });
     return [...listData];
   }
-
-  // useEffect(() => { if (isShowPopupAddnew.show && isShowPopupAddnew.key == 0) { callGetTypeFood() } }, [isShowPopupAddnew])
-  useEffect(() => { console.log(index) }, [index])
 
   function callGetTypeFood() {
 
@@ -361,7 +349,7 @@ function Menu(props) {
     setListFood(JSON.parse(item.danhSachMonAn))
     setFoodDescribe(item.ghiChu)
     setFoodNote(item.ghiChu)
-    setImages([])
+    setImages(item.linkAnh)
     setFoodStatus(item.trangThai)
     // setIsShowPopupDetail({ show: false, index: -1 })
   }
@@ -607,14 +595,18 @@ function Menu(props) {
                     <div className="menu-manager__popup-content-buffet-image">
                       <div className="menu-manager__popup-content-buffet-image-title">Ảnh</div>
                       <ImageUpload maxImage={1} images={images} setImages={(val) => {
+                        dispatch(changeLoadingApp(true))
                         let img = val[0].file
                         let formData = new FormData();
                         formData.append('files', img)
                         baseApi.post(
                           (res) => {
                             setImages(PART_SWAGGER + res.data[0]);
+                            dispatch(changeLoadingApp(false))
                           },
-                          () => { },
+                          () => {
+                            dispatch(changeLoadingApp(false))
+                          },
                           null,
                           UPLOAD_FILE,
                           {},
@@ -688,14 +680,18 @@ function Menu(props) {
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{ color: "red" }}>*</span></div>
                     <div>
                       <ImageUpload maxImage={1} images={images} setImages={(val) => {
+                        dispatch(changeLoadingApp(true))
                         let img = val[0].file
                         let formData = new FormData();
                         formData.append('files', img)
                         baseApi.post(
                           (res) => {
                             setImages(PART_SWAGGER + res.data[0]);
+                            dispatch(changeLoadingApp(false))
                           },
-                          () => { },
+                          () => {
+                            dispatch(changeLoadingApp(false))
+                          },
                           null,
                           UPLOAD_FILE,
                           {},
@@ -789,11 +785,9 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item menu-image">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value ">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"
-                          style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
-                        ></div>
-                      </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value menu-image__value"
+                        style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
+                      ></span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
@@ -826,11 +820,9 @@ function Menu(props) {
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item menu-image">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Ảnh: </span>
-                      <span className="menu-manager__popup-detail-content-buffet-item-value ">
-                        <div className="menu-manager__popup-detail-content-buffet-item-value-img"
-                          style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
-                        ></div>
-                      </span>
+                      <span className="menu-manager__popup-detail-content-buffet-item-value menu-image__value"
+                        style={{backgroundImage: `url("${foodDetail.linkAnh}")`}}
+                      ></span>
                     </div>
                     <div className="menu-manager__popup-detail-content-buffet-item">
                       <span className="menu-manager__popup-detail-content-buffet-item-label">Mô tả: </span>
