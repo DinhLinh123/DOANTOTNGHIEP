@@ -8,7 +8,7 @@ import ud5 from "../../../../../image/ud5.jpg";
 import ud6 from "../../../../../image/ud6.png";
 import logo1 from "../../../../../image/logo1.png";
 import InputField from "../../../../base/Input/Input";
-import { SearchOutlined, PlusOutlined, MinusOutlined, CloseOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined, MinusOutlined, CloseOutlined, LeftOutlined} from "@ant-design/icons";
 import commonFunction from "../../../../base/common/commonFunction";
 import Button2 from "../../../../base/Button/Button";
 import { Tooltip } from "antd";
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import Popup from "../../../../base/Popup/Popup";
 import { TYPE_MESSAGE } from "../../../../base/common/commonConstant";
+
 function Order(props) {
 
   const [index, setIndex] = useState(1)
@@ -177,7 +178,7 @@ function Order(props) {
           null,
           _table
         )
-        // window.open(`/admin/tables`, "_self")
+        window.open(`/admin/tables`, "_self")
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm phiếu oder thành công!")
       },
       () => {
@@ -197,8 +198,8 @@ function Order(props) {
       "idBan": tableID,
       "tongTien": renderTotalCount(),
       "monAns": orderSelected,
-      "idThuNgan": phieu.thuNgan == null ? "00000000-0000-0000-0000-000000000000": phieu.thuNgan,
-      "idKhachHang": phieu.khachHang == null ? "00000000-0000-0000-0000-000000000000": phieu.khachHang,
+      "idThuNgan": phieu.thuNgan == null ? "00000000-0000-0000-0000-000000000000" : phieu.thuNgan,
+      "idKhachHang": phieu.khachHang == null ? "00000000-0000-0000-0000-000000000000" : phieu.khachHang,
       "thucThu": 0,
       "vocher": "string",
       "soTienGiam": 0,
@@ -208,6 +209,7 @@ function Order(props) {
     }
     baseApi.put(
       (res) => {
+        window.open(`/admin/tables`, "_self")
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Cập nhật phiếu oder thành công!")
       },
       () => {
@@ -224,6 +226,11 @@ function Order(props) {
     <div className="order-page-container">
       <div className="order-page-container__food-list">
         <div className="order-page-container__food-list__top">
+          <div className="order-page-container__food-list__top-back"
+            onClick={() => { window.open('/admin/tables', '_self') }}
+          >
+            <LeftOutlined style={{color: '#ffffff'}}/>
+          </div>
           <div className="order-page-container__food-list__top__logo">
             {
               logo.map((item) => {

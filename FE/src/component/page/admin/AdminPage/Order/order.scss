@@ -10,6 +10,14 @@
             background-color: #01a3a4;
             display: flex;
 
+            &-back{
+                display: flex;
+                align-items: center;
+                width: 100px;
+                justify-content: center;
+                cursor: pointer;
+            }
+
             &__logo {
                 width: 30%;
                 height: 80px;

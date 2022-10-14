@@ -102,6 +102,11 @@
                 align-items: center;
                 margin-right: 24px;
 
+                &-back{
+                    cursor: pointer;
+                    
+                }
+
                 &-status{
                     width: 24px;
                     height: 24px;
