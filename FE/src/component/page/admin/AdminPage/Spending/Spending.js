@@ -187,7 +187,8 @@ function Spending(props) {
     );
   }
   function columnTotalmoney(item) {
-    return <div>{item?.tongSoTien}</div>;
+    parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10)
+    return <div>{commonFunction.numberWithCommas(item?.tongSoTien,10)}</div>;
   }
   function columnDataentrydate(item) {
     return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
