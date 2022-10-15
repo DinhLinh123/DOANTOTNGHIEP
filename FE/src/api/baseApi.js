@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient'
 
-//lekhoe
+
 const generateQueryParam = function (objParam) {
     if (objParam) {
         let keys = Object.keys(objParam);
