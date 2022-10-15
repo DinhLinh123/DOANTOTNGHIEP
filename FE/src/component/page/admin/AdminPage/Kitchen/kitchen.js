@@ -490,6 +490,7 @@ function Kitchen(props) {
                   maxImage={1}
                   images={images}
                   setImages={(val) => {
+                    debugger
                     let img = val[0].file
                     let formData = new FormData();
                     formData.append('files', img)
@@ -497,7 +498,7 @@ function Kitchen(props) {
                       (res) => {
                         setImages(PART_SWAGGER + res.data[0]);
                       },
-                      () => { },
+                      () => { debugger },
                       null,
                       UPLOAD_FILE,
                       {},

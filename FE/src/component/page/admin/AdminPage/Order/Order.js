@@ -171,7 +171,7 @@ function Order(props) {
         let _table = table;
         _table.trangThai = 1;
         baseApi.put(
-          () => {},
+          () => { },
           () => { },
           null,
           API_TABLE.UPDATE_BY_ID + tableID,
@@ -209,8 +209,6 @@ function Order(props) {
     }
     baseApi.put(
       (res) => {
-        // let _table = table;
-        // _table.trangThai = 1;
         window.open(`/admin/tables`, "_self")
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Cập nhật phiếu oder thành công!")
       },
