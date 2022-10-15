@@ -329,6 +329,8 @@ function Spending(props) {
     data?.map((item) => {
       total += item?.amount * item?.unitprice
     })
+    console.log("datadatadatadata", data, total);
+
     return total;
   }
 
@@ -342,11 +344,12 @@ function Spending(props) {
         // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0)
         anh: images,
         matHang: JSON.stringify(listItems),
-        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        tongSoTien: renderTotalMoney(listItems),
         createdByUserName: userName.userName,
         createdOnDate: date
       };
       setIsShowPopupAddnew(false);
+      console.log("bodybodybody", body);
       dispatch(postSpending(body))
       setListItems([
         { name: "", unit: "", amount: "", unitprice: "" },
@@ -360,7 +363,7 @@ function Spending(props) {
         ngayHoaDon: moment(itemBillDate).format("YYYY-MM-DDT00:00:00.000"),
         // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0),
         matHang: JSON.stringify(listItems),
-        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
         createdOnDate: date
       };
