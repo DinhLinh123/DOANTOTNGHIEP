@@ -1,40 +1,38 @@
+import {
+  EditOutlined, TagsOutlined
+} from "@ant-design/icons";
+import { Tooltip } from "antd";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import baseApi from "../../../../../api/baseApi";
+import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import Button2 from "../../../../base/Button/Button";
 import {
-  MENU_TAB_ADMIN,
-  SORT_TYPE,
-  TYPE_MESSAGE,
+  MENU_TAB_ADMIN, TYPE_MESSAGE
 } from "../../../../base/common/commonConstant";
-import InputField from "../../../../base/Input/Input";
-import TableBase from "../../../../base/Table/Table";
-import AdminPage from "../AdminPage";
-import { PlusOutlined, DeleteOutlined, TagsOutlined, EditOutlined } from "@ant-design/icons";
-import "./pay.scss";
-import Popup from "../../../../base/Popup/Popup";
-import Input from "../../../../base/Input/Input";
-import ImageUpload from "../../../../base/ImageUpload/ImageUpload";
-import DatePicker from "../../../../base/DatePicker/DatePicker";
-import { Tooltip } from "antd";
-import { changeAccount } from "../../../../../reudux/action/accountAction";
 import commonFunction from "../../../../base/common/commonFunction";
-import { API_AREA, API_MENU, API_OFFER, API_ORDER, API_TABLE, API_TYPE_FOOD } from "../../../../base/common/endpoint";
-import baseApi from "../../../../../api/baseApi";
-import ud1 from "../../../../../image/ud1.jpg";
-import ud2 from "../../../../../image/ud2.jpg";
-import ud3 from "../../../../../image/ud3.jpg";
-import ud4 from "../../../../../image/ud4.jpg";
-import ud5 from "../../../../../image/ud5.jpg";
-import ud6 from "../../../../../image/ud6.png";
-import { useDispatch } from "react-redux";
-import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
+import {
+  API_AREA,
+  API_MENU,
+  API_OFFER,
+  API_ORDER,
+  API_TABLE,
+  API_TYPE_FOOD
+} from "../../../../base/common/endpoint";
+import InputField from "../../../../base/Input/Input";
+import Popup from "../../../../base/Popup/Popup";
 import RadioCheck from "../../../../base/Radio/Radio";
+import AdminPage from "../AdminPage";
+import "./pay.scss";
 
 function Spending(props) {
   const dispatch = useDispatch();
   const [listTable, setListTable] = useState([]);
-  const [listMenu, setListMenu] = useState([])
-  const [listType, setListType] = useState([])
-  const [orderSelected, setoOrderSelected] = useState([]);
+  const [listMenu, setListMenu] = useState([]);
+  const [listType, setListType] = useState([]);
+  const [orderSelected, setOrderSelected] = useState([]);
   const [table, setTable] = useState();
   const [order, setOrder] = useState();
   const [displayLine2ChooseOrder, setDisplayLine2ChooseOrder] = useState({
@@ -46,60 +44,72 @@ function Spending(props) {
   const [showPopupPayMethod, setShowPopupPayMethod] = useState(false);
   const [offerDetail, setOfferDetail] = useState({});
   const [offerChoose, setOfferChoose] = useState({});
-  const [tableID, setTableID] = useState('');
+  const [tableID, setTableID] = useState("");
   const [moneyCustomer, setMoneyCustomer] = useState();
   const [payMethod, setPayMethod] = useState(0);
   const [listArea, setListArea] = useState([]);
   const [listOffer, setListOffer] = useState([]);
-  const [showPopupEditFood, setShowPopupEditFood] = useState({ show: false, key: -1, item: '', action: -1 });
+  const [showPopupEditFood, setShowPopupEditFood] = useState({
+    show: false,
+    key: -1,
+    item: "",
+    action: -1,
+  });
   const [showPopupWarningChoose, setShowPopupWarningChoose] = useState(false);
-  const [index, setIndex] = useState(1)
-  const [moneyVoucher, setMoneyVoucher] = useState(0)
-  const [moneyMust, setMoneyMust] = useState(0)
-  const [moneyTotal, setMoneyTotal] = useState(0)
+  const [index, setIndex] = useState(1);
+  const [moneyVoucher, setMoneyVoucher] = useState(0);
+  const [moneyMust, setMoneyMust] = useState(0);
+  const [moneyTotal, setMoneyTotal] = useState(0);
+
+  const [showPopupExport, setShowPopupExport] = useState(false);
 
   //lấy danh sách các ưu đãi
   useEffect(() => {
     if (showPopupOffer) {
       let param = {
-        "trangThai": 0
-      }
-      dispatch(changeLoadingApp(true))
+        trangThai: 0,
+      };
+      dispatch(changeLoadingApp(true));
       baseApi.get(
         (res) => {
           setListOffer(res?.data);
-          dispatch(changeLoadingApp(false))
+          dispatch(changeLoadingApp(false));
         },
-        () => { dispatch(changeLoadingApp(false)) },
+        () => {
+          dispatch(changeLoadingApp(false));
+        },
         null,
         API_OFFER.GET_BY_FILTER + encodeURIComponent(JSON.stringify(param))
       );
     }
-  }, [showPopupOffer])
-
+  }, [showPopupOffer]);
 
   //lấy chi tiết bàn
   useEffect(() => {
     if (tableID) {
-      dispatch(changeLoadingApp(true))
+      dispatch(changeLoadingApp(true));
       baseApi.get(
         (res) => {
           setTable(res?.data);
           baseApi.get(
             (res) => {
               setOrder(res?.data);
-              setoOrderSelected(res?.data?.doAns)
-              setOfferChoose({})
-              setMoneyVoucher(0)
-              dispatch(changeLoadingApp(false))
+              setOrderSelected(res?.data?.doAns);
+              setOfferChoose({});
+              setMoneyVoucher(0);
+              dispatch(changeLoadingApp(false));
             },
-            () => { setoOrderSelected([])},
+            () => {
+              setOrderSelected([]);
+            },
             null,
             API_ORDER.GET_BY_ID_TABLE + tableID
-          )
-          dispatch(changeLoadingApp(false))
+          );
+          dispatch(changeLoadingApp(false));
         },
-        () => { dispatch(changeLoadingApp(false)) },
+        () => {
+          dispatch(changeLoadingApp(false));
+        },
         null,
         API_TABLE.GET_BY_ID + tableID
       );
@@ -107,13 +117,15 @@ function Spending(props) {
   }, [tableID]);
 
   function callApiGetAreaAndTable() {
-    dispatch(changeLoadingApp(true))
+    dispatch(changeLoadingApp(true));
     baseApi.get(
       (res) => {
-        dispatch(changeLoadingApp(false))
+        dispatch(changeLoadingApp(false));
         setListArea(res);
       },
-      () => { dispatch(changeLoadingApp(false)) },
+      () => {
+        dispatch(changeLoadingApp(false));
+      },
       null,
       API_AREA.GET_ALL
     );
@@ -121,20 +133,22 @@ function Spending(props) {
     //lấy danh sách bàn
     baseApi.get(
       (res) => {
-        dispatch(changeLoadingApp(false))
+        dispatch(changeLoadingApp(false));
         setListTable(res?.data);
       },
-      () => { dispatch(changeLoadingApp(false)) },
+      () => {
+        dispatch(changeLoadingApp(false));
+      },
       null,
       API_TABLE.GET_ALL
     );
 
-    callGetTypeFood()
+    callGetTypeFood();
   }
 
   //lấy danh sách khu vực
   useEffect(() => {
-    callApiGetAreaAndTable()
+    callApiGetAreaAndTable();
   }, []);
 
   function handleClickDelete(item) {
@@ -142,54 +156,55 @@ function Spending(props) {
     let _list = [...orderSelected];
     let newList = _list.filter((l) => l.id !== item.id);
 
-    setoOrderSelected(newList);
+    setOrderSelected(newList);
   }
   function handleClickUpCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
     _list[a].soLuong += 1;
-    setoOrderSelected(_list);
+    setOrderSelected(_list);
   }
 
   function handleClickDownCount(item) {
     let _list = [...orderSelected];
     let a = _list?.findIndex((l) => l.id === item.id);
     _list[a].soLuong -= 1;
-    setoOrderSelected(_list);
+    setOrderSelected(_list);
   }
 
   useEffect(() => {
-    renderTotalCount()
-  }, [orderSelected])
+    renderTotalCount();
+  }, [orderSelected]);
 
   function renderTotalCount() {
     let total = 0;
     orderSelected?.map((item) => {
       total += parseInt(item?.donGia) * parseInt(item?.soLuong);
     });
-    setMoneyTotal(total)
-    handleChooseVoucher(offerChoose, total)
+    setMoneyTotal(total);
+    handleChooseVoucher(offerChoose, total);
   }
 
   function renderMoneyReturn(moneyCustomer) {
     if (moneyCustomer) {
-      let _moneyMust = JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust
+      let _moneyMust =
+        JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust;
       let _return = parseInt(moneyCustomer) - _moneyMust;
-      return _return
+      return _return;
     }
-    return 0
+    return 0;
   }
 
   //thực hiện thanh toán
   function callApiPay() {
-    dispatch(changeLoadingApp(true))
-    let body = order
-    body.doAns = orderSelected
-    body.tongTien = moneyTotal
-    body.thucThu = moneyMust
-    body.soTienGiam = moneyVoucher
-    body.idBan = tableID
-    body.trangThai= 1
+    dispatch(changeLoadingApp(true));
+    let body = order;
+    body.doAns = orderSelected;
+    body.tongTien = moneyTotal;
+    body.thucThu = moneyMust;
+    body.soTienGiam = moneyVoucher;
+    body.idBan = tableID;
+    body.trangThai = 1;
     baseApi.put(
       (res) => {
         // let _table = table;
@@ -202,14 +217,17 @@ function Spending(props) {
         //   null,
         //   _table
         // )
-        callApiGetAreaAndTable()
-        setShowPopupPayMethod(false)
-        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công")
-        dispatch(changeLoadingApp(false))
+        
+        setOrderSelected([]);
+        callApiGetAreaAndTable();
+        setShowPopupPayMethod(false);
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công");
+        dispatch(changeLoadingApp(false));
+        setShowPopupExport(true);
       },
       () => {
-        dispatch(changeLoadingApp(false))
-        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thanh toán thất bại")
+        dispatch(changeLoadingApp(false));
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Thanh toán thất bại");
       },
       null,
       API_ORDER.UPDATE_BY_ID + order?.id,
@@ -221,117 +239,129 @@ function Spending(props) {
   function callGetTypeFood() {
     baseApi.get(
       (res) => {
-        setListType(res)
-        setIndex(res[0]?.id)
+        setListType(res);
+        setIndex(res[0]?.id);
       },
-      () => {
-      },
+      () => {},
       null,
       API_TYPE_FOOD.GET_ALL,
       null,
       {}
-    )
+    );
   }
 
   function callGetAllFood() {
-    dispatch(changeLoadingApp(true))
+    dispatch(changeLoadingApp(true));
     let param = {
-      "maTheLoai": index
-    }
-    let endpoint = encodeURIComponent(JSON.stringify(param))
+      maTheLoai: index,
+    };
+    let endpoint = encodeURIComponent(JSON.stringify(param));
     if (index?.length > 0) {
       baseApi.get(
         (res) => {
-          dispatch(changeLoadingApp(false))
-          setListMenu(res.data)
+          dispatch(changeLoadingApp(false));
+          setListMenu(res.data);
         },
         () => {
-          dispatch(changeLoadingApp(false))
+          dispatch(changeLoadingApp(false));
         },
         null,
         API_MENU.GET_BY_FILTER + endpoint,
         null,
         {}
-      )
+      );
     }
-    dispatch(changeLoadingApp(false))
+    dispatch(changeLoadingApp(false));
   }
 
   useEffect(() => {
     if (showPopupEditFood.show) {
-      callGetAllFood()
+      callGetAllFood();
     }
-  }, [showPopupEditFood, index])
+  }, [showPopupEditFood, index]);
 
   function handldChangeFood(val) {
     if (showPopupEditFood.action === 0) {
       let _list = [...orderSelected];
-      let a = _list?.findIndex((l) => l.id === val.id)
+      let a = _list?.findIndex((l) => l.id === val.id);
       if (a == -1) {
-        val.soLuong = 1
-        _list.push(val)
+        val.soLuong = 1;
+        _list.push(val);
+      } else {
+        setShowPopupWarningChoose(true);
       }
-      else {
-        setShowPopupWarningChoose(true)
-      }
-      setoOrderSelected(_list)
-      setShowPopupEditFood({ show: false, key: -1, item: '', action: -1 })
-    }
-    else {
-      let _list = [...orderSelected]
-      let _listID = _list.map((item) => { return item.id })
-      let _index = _listID.indexOf(val.id)
+      setOrderSelected(_list);
+      setShowPopupEditFood({ show: false, key: -1, item: "", action: -1 });
+    } else {
+      let _list = [...orderSelected];
+      let _listID = _list.map((item) => {
+        return item.id;
+      });
+      let _index = _listID.indexOf(val.id);
       if (_index == -1) {
-
-        val.soLuong = showPopupEditFood.item?.soLuong
-        _list.splice(showPopupEditFood.key, 1, val)
-        setoOrderSelected(_list)
-        setShowPopupEditFood({ show: false })
-      }
-      else {
-        setShowPopupWarningChoose(true)
+        val.soLuong = showPopupEditFood.item?.soLuong;
+        _list.splice(showPopupEditFood.key, 1, val);
+        setOrderSelected(_list);
+        setShowPopupEditFood({ show: false });
+      } else {
+        setShowPopupWarningChoose(true);
       }
     }
   }
 
   function handleChooseVoucher(val, total) {
-
     if (val?.loaiUuDai === 0) {
       if (val?.donViTinh === 0) {
-        let moneyVoucher = total * (val?.giaTri / 100)
-        setMoneyVoucher(moneyVoucher)
+        let moneyVoucher = total * (val?.giaTri / 100);
+        setMoneyVoucher(moneyVoucher);
         let money = total - moneyVoucher;
-        setMoneyMust(money)
+        setMoneyMust(money);
       }
       if (val?.donViTinh === 1) {
-        setMoneyVoucher(val?.giaTri)
-        setMoneyMust(total - val?.giaTri)
+        setMoneyVoucher(val?.giaTri);
+        setMoneyMust(total - val?.giaTri);
       }
     } else {
       let moneyInFood = 0;
-      if(val?.idDoAn !="" || val?.idDoAn != "00000000-0000-0000-0000-000000000000")
-      {
+      if (
+        val?.idDoAn != "" ||
+        val?.idDoAn != "00000000-0000-0000-0000-000000000000"
+      ) {
         orderSelected?.map((item) => {
           if (item.id === val?.idDoAn) {
-            moneyInFood = item.donGia * item.soLuong
+            moneyInFood = item.donGia * item.soLuong;
           }
-        })
+        });
       }
 
       if (val?.donViTinh === 0) {
-        let moneyVoucher = moneyInFood * (val?.giaTri / 100)
-        setMoneyVoucher(moneyVoucher)
+        let moneyVoucher = moneyInFood * (val?.giaTri / 100);
+        setMoneyVoucher(moneyVoucher);
         let money = total - moneyVoucher;
-        setMoneyMust(money)
+        setMoneyMust(money);
       }
       if (val?.donViTinh === 1) {
-        setMoneyVoucher(val?.giaTri)
-        setMoneyMust(total - val?.giaTri)
+        setMoneyVoucher(val?.giaTri);
+        setMoneyMust(total - val?.giaTri);
       }
     }
   }
 
+  function exportFile() {
+    // lấy phần tử bảng theo id
+    const input = document.getElementById("export-file");
+    // sử dụng hàm html2canvas hàm này đẻ chuop một phần tử html thành ảnh
 
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "JPEG", 0, 0);
+      pdf.save("download.pdf");
+    });
+    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xuất file thành công");
+    setShowPopupExport(false)
+    setOrderSelected([]);
+  }
 
   return (
     <AdminPage title={"Thanh toán hóa đơn"} index={MENU_TAB_ADMIN.PAY}>
@@ -352,16 +382,18 @@ function Spending(props) {
                               _item.trangThai == 0
                                 ? "#dcdde1"
                                 : _item.trangThai == 1
-                                  ? "#c23616"
-                                  : "#fbc531",
+                                ? "#c23616"
+                                : "#fbc531",
                             color:
                               _item.trangThai == 0
                                 ? "#000"
                                 : _item.trangThai == 1
-                                  ? "#fff"
-                                  : "#fff",
+                                ? "#fff"
+                                : "#fff",
                           }}
-                          onClick={() => { setTableID(_item?.id) }}
+                          onClick={() => {
+                            setTableID(_item?.id);
+                          }}
                         >
                           {_item?.name}
                         </div>
@@ -380,7 +412,18 @@ function Spending(props) {
                 Món đã chọn{`(${orderSelected?.length || 0})`}
               </div>
               <div className="pay-manager__bill-dish-top-add">
-                <Button2 name={"thêm món ăn"} background={'#0abde3'} onClick={() => { setShowPopupEditFood({ show: true, key: -1, item: '', action: 0 }) }} />
+                <Button2
+                  name={"thêm món ăn"}
+                  background={"#0abde3"}
+                  onClick={() => {
+                    setShowPopupEditFood({
+                      show: true,
+                      key: -1,
+                      item: "",
+                      action: 0,
+                    });
+                  }}
+                />
               </div>
               <div className="pay-manager__bill-dish-top-table">
                 Bàn: {table?.name}
@@ -458,20 +501,21 @@ function Spending(props) {
                             }}
                           >
                             <div className="food-edit">
-                              <Tooltip
-                                title={"Sửa món ăn"}
-                                placement="bottom"
-                              >
+                              <Tooltip title={"Sửa món ăn"} placement="bottom">
                                 <Button2
                                   onClick={() => {
-                                    setShowPopupEditFood({ show: true, key: key, item: item, action: 1 })
+                                    setShowPopupEditFood({
+                                      show: true,
+                                      key: key,
+                                      item: item,
+                                      action: 1,
+                                    });
                                   }}
                                   leftIcon={<EditOutlined />}
                                 />
                               </Tooltip>{" "}
                             </div>
                             <div className="food-count">
-
                               <div className="food-count-button">
                                 <Tooltip
                                   title={"Giảm số lượng"}
@@ -540,7 +584,9 @@ function Spending(props) {
                   className="pay-manager__bill-dish-footer-offer-choose"
                   onClick={() => setShowPopupOffer(true)}
                 >
-                  {JSON.stringify(offerChoose) !== '{}' ? offerChoose.name : "Chọn voucher"}
+                  {JSON.stringify(offerChoose) !== "{}"
+                    ? offerChoose.name
+                    : "Chọn voucher"}
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-money-offer">
@@ -556,12 +602,20 @@ function Spending(props) {
                   Tiền phải trả
                 </div>
                 <div className="pay-manager__bill-dish-footer-money-choose">
-                  {commonFunction.numberWithCommas(JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust)}(đ)
+                  {commonFunction.numberWithCommas(
+                    JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
+                  )}
+                  (đ)
                 </div>
               </div>
               <div className="pay-manager__bill-dish-footer-confirm">
                 <div className="pay-manager__bill-dish-footer-confirm-pay">
-                  <Button2 name={"Thanh toán"} disabled={moneyMust === 0 && moneyTotal === 0} background={'#0984e3'} onClick={() => setShowPopupPayMethod(true)} />
+                  <Button2
+                    name={"Thanh toán"}
+                    disabled={moneyMust === 0 && moneyTotal === 0 || table.trangThai == 2}
+                    background={"#0984e3"}
+                    onClick={() => setShowPopupPayMethod(true)}
+                  />
                 </div>
               </div>
             </div>
@@ -588,29 +642,31 @@ function Spending(props) {
             {listOffer?.map((item) => {
               return (
                 <div className="pay-offer-container__list-item">
-                  <div className="pay-offer-container__list-item-img"
+                  <div
+                    className="pay-offer-container__list-item-img"
                     onClick={() => {
-                      setShowPopupOffer(false)
-                      setOfferChoose(item)
-                      handleChooseVoucher(item, moneyTotal)
+                      setShowPopupOffer(false);
+                      setOfferChoose(item);
+                      handleChooseVoucher(item, moneyTotal);
                     }}
-                    style={{backgroundImage: `url("${item?.anh}")`}}
-                  >
-                  </div>
-                  <div className="pay-offer-container__list-item-title"
+                    style={{ backgroundImage: `url("${item?.anh}")` }}
+                  ></div>
+                  <div
+                    className="pay-offer-container__list-item-title"
                     onClick={() => {
-                      setShowPopupOffer(false)
-                      setOfferChoose(item)
-                      handleChooseVoucher(item, moneyTotal)
+                      setShowPopupOffer(false);
+                      setOfferChoose(item);
+                      handleChooseVoucher(item, moneyTotal);
                     }}
                   >
                     {item?.name}
                   </div>
-                  <div className="pay-offer-container__list-item-more"
+                  <div
+                    className="pay-offer-container__list-item-more"
                     onClick={() => {
-                      setShowPopupOffer(false)
-                      setOfferChoose(item)
-                      handleChooseVoucher(item, moneyTotal)
+                      setShowPopupOffer(false);
+                      setOfferChoose(item);
+                      handleChooseVoucher(item, moneyTotal);
                     }}
                   >
                     {commonFunction.smartText(35, item?.noiDung)}
@@ -665,7 +721,7 @@ function Spending(props) {
           <Button2
             name={"Thanh toán"}
             onClick={() => callApiPay()}
-            background={'#0984e3'}
+            background={"#0984e3"}
           />,
         ]}
         width={600}
@@ -676,32 +732,48 @@ function Spending(props) {
                 Tiền phải thanh toán
               </div>
               <div className="popup-pay__request-label">
-                {commonFunction.numberWithCommas(JSON.stringify(offerChoose) == '{}' ? moneyTotal : moneyMust)}(đ)
+                {commonFunction.numberWithCommas(
+                  JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
+                )}
+                (đ)
               </div>
             </div>
             <div className="popup-pay__method">
               <RadioCheck
                 title={"Chọn phương thức thanh toán"}
-                listOption={[{ label: "Tiền mặt", value: 0 }, { label: "Chuyển khoản/Quẹt thẻ", value: 1 }]}
-                onChange={(val) => { setPayMethod(val) }}
+                listOption={[
+                  { label: "Tiền mặt", value: 0 },
+                  { label: "Chuyển khoản/Quẹt thẻ", value: 1 },
+                ]}
+                onChange={(val) => {
+                  setPayMethod(val);
+                }}
                 valueDefault={payMethod}
               />
             </div>
-            {
-              payMethod === 0 &&
+            {payMethod === 0 && (
               <>
                 <div className="popup-pay__customer">
                   <div className="popup-pay__customer-input">
                     <InputField
                       label={"Tiền khách đưa"}
-                      type={'number'}
+                      type={"number"}
                       value={moneyCustomer}
                       onChange={(val) => setMoneyCustomer(val)}
                     />
-                  </div><div className="popup-pay__customer-radio">
+                  </div>
+                  <div className="popup-pay__customer-radio">
                     <RadioCheck
-                      listOption={[{ label: "200.000", value: 200000 }, { label: "500.000", value: 500000 }, { label: "1.000.000", value: 1000000 }, { label: "1.500.000", value: 1500000 }, { label: "2.000.000", value: 2000000 }]}
-                      onChange={(val) => { setMoneyCustomer(val) }}
+                      listOption={[
+                        { label: "200.000", value: 200000 },
+                        { label: "500.000", value: 500000 },
+                        { label: "1.000.000", value: 1000000 },
+                        { label: "1.500.000", value: 1500000 },
+                        { label: "2.000.000", value: 2000000 },
+                      ]}
+                      onChange={(val) => {
+                        setMoneyCustomer(val);
+                      }}
                       valueDefault={moneyCustomer}
                     />
                   </div>
@@ -711,58 +783,81 @@ function Spending(props) {
                     Tiền trả lại khách
                   </div>
                   <div className="popup-pay__return-label">
-                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}(đ)
+                    {commonFunction.numberWithCommas(
+                      renderMoneyReturn(moneyCustomer)
+                    )}
+                    (đ)
                   </div>
                 </div>
               </>
-            }
-
-
+            )}
           </div>
         }
       />
       <Popup
         title={"Sửa món ăn"}
         show={showPopupEditFood.show}
-        onClickClose={() => setShowPopupEditFood({ show: false, key: -1, item: '' })}
+        onClickClose={() =>
+          setShowPopupEditFood({ show: false, key: -1, item: "" })
+        }
         button={[
           <Button2
             name={"Đóng"}
-            onClick={() => setShowPopupEditFood({ show: false, key: -1, item: '' })}
+            onClick={() =>
+              setShowPopupEditFood({ show: false, key: -1, item: "" })
+            }
           />,
         ]}
         width={800}
         body={
           <div className="popup-edit-food">
             <div className="popup-edit-food__list">
-              {listMenu && listMenu?.length > 0 ? listMenu?.map((item) => {
-                return (<div className="popup-edit-food__list-item" onClick={(e) => { e.stopPropagation(); handldChangeFood(item) }}>
-                  <div className="popup-edit-food__list-item-img">
-                    <img src={item.linkAnh} alt="" />
-                  </div>
-                  <div className="popup-edit-food__list-item-title">
-                    {commonFunction.smartText(40, item?.name)}
-                  </div>
-                  <div className="popup-edit-food__list-item-money">
-                    {commonFunction.numberWithCommas(parseInt(item?.donGia))}đ
-                  </div>
-                </div>)
-              }) : null}
-
+              {listMenu && listMenu?.length > 0
+                ? listMenu?.map((item) => {
+                    return (
+                      <div
+                        className="popup-edit-food__list-item"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handldChangeFood(item);
+                        }}
+                      >
+                        <div className="popup-edit-food__list-item-img">
+                          <img src={item.linkAnh} alt="" />
+                        </div>
+                        <div className="popup-edit-food__list-item-title">
+                          {commonFunction.smartText(40, item?.name)}
+                        </div>
+                        <div className="popup-edit-food__list-item-money">
+                          {commonFunction.numberWithCommas(
+                            parseInt(item?.donGia)
+                          )}
+                          đ
+                        </div>
+                      </div>
+                    );
+                  })
+                : null}
             </div>
             <div className="popup-edit-food__choose">
-              {
-                listType?.map((item, key) => {
-                  return (
-                    <div className={`popup-edit-food__choose__children ${index == item.id ? 'order-selected' : ''}`}
-                      style={{ width: `calc(100% / ${listType?.length})`, borderLeft: key != 0 ? '1px solid #fff' : '' }}
-                      onClick={() => { setIndex(item.id) }}
-                    >
-                      {item.name}
-                    </div>
-                  )
-                })
-              }
+              {listType?.map((item, key) => {
+                return (
+                  <div
+                    className={`popup-edit-food__choose__children ${
+                      index == item.id ? "order-selected" : ""
+                    }`}
+                    style={{
+                      width: `calc(100% / ${listType?.length})`,
+                      borderLeft: key != 0 ? "1px solid #fff" : "",
+                    }}
+                    onClick={() => {
+                      setIndex(item.id);
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                );
+              })}
             </div>
           </div>
         }
@@ -781,7 +876,59 @@ function Spending(props) {
         width={600}
         className={"menu-popup-detail"}
         body={
-          <div style={{ marginTop: '24px', fontSize: '16px', }}>Món ăn đã có trong danh sách, bạn có thể thay đổi số lượng</div>
+          <div style={{ marginTop: "24px", fontSize: "16px" }}>
+            Món ăn đã có trong danh sách, bạn có thể thay đổi số lượng
+          </div>
+        }
+      />
+      <Popup
+        title={"Xuất hóa đơn"}
+
+        show={showPopupExport}
+        onClickClose={() => {
+          setOrderSelected([]);
+          setShowPopupExport(false)
+        }}
+        button={[
+          <Button2 name={"Hủy"} onClick={() => {
+            setOrderSelected([]);
+            setShowPopupExport(false)
+          }} />,
+          <Button2 name={"Xuất hóa đơn"} onClick={() => exportFile()} />,
+        ]}
+        width={600}
+        className={"menu-popup-detail"}
+        body={
+          <div id={"export-file"}>
+            <div>Hóa đơn</div>
+            <table width={"100%"} boder={1}>
+              <tr>
+                <td>Tên món</td>
+                <td>Số lượng</td>
+                <td>Đơn giá</td>
+                <td>Thành tiền</td>
+              </tr>
+              {orderSelected?.map((item) => {
+                return (
+                  <tr>
+                    <td>{item?.name}</td>
+                    <td>{item?.soLuong}</td>
+                    <td>{item?.donGia}</td>
+                    <td>{item?.donGia * item?.soLuong}</td>
+                  </tr>
+                );
+              })}
+              <tr>
+                <td>Tổng tiền</td>
+                <td>
+                  {commonFunction.numberWithCommas(
+                    JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
+                  )}
+                  (đ)
+                </td>
+              </tr>
+            </table>
+          </div>
         }
       />
     </AdminPage>

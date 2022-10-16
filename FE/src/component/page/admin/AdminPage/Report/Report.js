@@ -192,6 +192,7 @@ function Report(props) {
                 let time = `${moment().startOf('date').format('YYYY/MM/DD')} ~ ${moment()
                     .endOf('date')
                     .format('YYYY/MM/DD')}`;
+                    debugger
                 let start = time.slice(0, 10)
                 let end = time.slice(13, 23)
                 setTimeStart(start)
@@ -260,13 +261,14 @@ function Report(props) {
 
     function callApiGetRevenueAndExpenditure() {
         dispatch(changeLoadingApp(true))
-        console.log(timeStart)
-        console.log(timeEnd)
         let param = {
-            "TimeStart": moment(timeStart).toISOString(),
-            "TimeEnd": moment(timeEnd).toISOString(),
+            "TimeStart": moment(timeStart).toISOString("-7"),
+            "TimeEnd": moment(timeEnd).toISOString("-7"),
             "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
         }
+        let a = moment(timeStart).startOf('date').toISOString()
+        let b = moment(timeStart).endOf('date').toISOString()
+        debugger
         baseApi.get(
             (res) => {
                 let data = res?.data?.map((item) => {
@@ -354,9 +356,9 @@ function Report(props) {
         )
     }
 
-    useEffect(() => {
-        console.log(dataLineChart)
-    }, [dataLineChart])
+    // useEffect(() => {
+    //     console.log(dataLineChart)
+    // }, [dataLineChart])
     return (
         <AdminPage title={"Báo cáo"} index={MENU_TAB_ADMIN.REPORT}>
             <div className="report-container">
