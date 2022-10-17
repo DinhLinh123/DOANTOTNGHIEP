@@ -296,8 +296,10 @@ function Order(props) {
                       handleChooseFood(item);
                     }}
                   >
-                    <div className="order-page-container__food-list__list-item-img">
-                      <img src={item.linkAnh} alt="" />
+                    <div className="order-page-container__food-list__list-item-img"
+                      style={{backgroundImage: `url("${item.linkAnh}")`}}
+                    >
+                      {/* <img src={item.linkAnh} alt="" /> */}
                     </div>
                     <div className="order-page-container__food-list__list-item-title">
                       {commonFunction.smartText(40, item?.name)}

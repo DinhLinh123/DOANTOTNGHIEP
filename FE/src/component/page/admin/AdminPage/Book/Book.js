@@ -339,7 +339,6 @@ function Book(props) {
   }, [dispatch, loading, ngayCheckIn, textSearch]);
 
   function columnName(item) {
-    console.log("itemitemitem", item);
     return (
       <div>
         {item?.tenKhachHang}
@@ -440,7 +439,6 @@ function Book(props) {
 
   const onSubmitHXB = (item) => {
     const date = new Date();
-    console.log("itemitemitem", item);
 
     const body = {
       id: item.id,

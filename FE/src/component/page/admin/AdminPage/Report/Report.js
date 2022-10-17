@@ -192,7 +192,6 @@ function Report(props) {
                 let time = `${moment().startOf('date').format('YYYY/MM/DD')} ~ ${moment()
                     .endOf('date')
                     .format('YYYY/MM/DD')}`;
-                    debugger
                 let start = time.slice(0, 10)
                 let end = time.slice(13, 23)
                 setTimeStart(start)
@@ -261,99 +260,109 @@ function Report(props) {
 
     function callApiGetRevenueAndExpenditure() {
         dispatch(changeLoadingApp(true))
-        let param = {
-            "TimeStart": moment(timeStart).toISOString("-7"),
-            "TimeEnd": moment(timeEnd).toISOString("-7"),
-            "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
+        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+
+        if (timeStart != '' && timeEnd != '') {
+            let a = (new Date(moment(timeStart).startOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let b = (new Date(moment(timeEnd).endOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let param = {
+                "TimeStart": a,
+                "TimeEnd": b,
+                "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
+            }
+            baseApi.get(
+                (res) => {
+                    let data = res?.data?.map((item) => {
+                        switch (typeFilter) {
+                            case TYPE_FILTER.DATE:
+                            case TYPE_FILTER.WEEK:
+                            case TYPE_FILTER.MONTH:
+                                return ({
+                                    ngay: moment(item?.ngay).format('DD/MM/YYYY'),
+                                    soThu: item?.soThu,
+                                    soChi: item?.soChi
+
+                                })
+                            case TYPE_FILTER.QUARTER:
+                            case TYPE_FILTER.YEAR:
+                                return ({
+                                    ngay: moment(item?.ngay).format('MM/YYYY'),
+                                    soThu: item?.soThu,
+                                    soChi: item?.soChi
+
+                                })
+
+                            default:
+                                break;
+                        }
+
+                    })
+                    setDataLineChart(data)
+                    dispatch(changeLoadingApp(false))
+                },
+                () => {
+                    dispatch(changeLoadingApp(false))
+                },
+                null,
+                API_REVENUE_AND_EXPENDITURE.GET + encodeURIComponent(JSON.stringify(param)),
+                null,
+                {}
+            )
         }
-        let a = moment(timeStart).startOf('date').toISOString()
-        let b = moment(timeStart).endOf('date').toISOString()
-        debugger
-        baseApi.get(
-            (res) => {
-                let data = res?.data?.map((item) => {
-                    switch (typeFilter) {
-                        case TYPE_FILTER.DATE:
-                        case TYPE_FILTER.WEEK:
-                        case TYPE_FILTER.MONTH:
-                            return ({
-                                ngay: moment(item?.ngay).format('DD/MM/YYYY'),
-                                soThu: item?.soThu,
-                                soChi: item?.soChi
 
-                            })
-                        case TYPE_FILTER.QUARTER:
-                        case TYPE_FILTER.YEAR:
-                            return ({
-                                ngay: moment(item?.ngay).format('MM/YYYY'),
-                                soThu: item?.soThu,
-                                soChi: item?.soChi
-
-                            })
-
-                        default:
-                            break;
-                    }
-
-                })
-                setDataLineChart(data)
-                dispatch(changeLoadingApp(false))
-            },
-            () => {
-                dispatch(changeLoadingApp(false))
-            },
-            null,
-            API_REVENUE_AND_EXPENDITURE.GET + encodeURIComponent(JSON.stringify(param)),
-            null,
-            {}
-        )
     }
 
     function callApiGetReportFood() {
         dispatch(changeLoadingApp(true))
-        let param = {
-            "TimeStart": moment(timeStart).toISOString(),
-            "TimeEnd": moment(timeEnd).toISOString(),
-            "PageSize": pageSize,
+        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+
+        if (timeStart != '' && timeEnd != '') {
+            let a = (new Date(moment(timeStart).startOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let b = (new Date(moment(timeEnd).endOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let param = {
+                "TimeStart": a,
+                "TimeEnd": b,
+                "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
+            }
+            baseApi.get(
+                (res) => {
+                    let data = res?.data?.map((item) => {
+                        switch (typeFilter) {
+                            case TYPE_FILTER.DATE:
+                            case TYPE_FILTER.WEEK:
+                            case TYPE_FILTER.MONTH:
+                                return ({
+                                    ngay: moment(item?.ngay).format('DD/MM/YYYY'),
+                                    soThu: item?.soThu,
+                                    soChi: item?.soChi
+
+                                })
+                            case TYPE_FILTER.QUARTER:
+                            case TYPE_FILTER.YEAR:
+                                return ({
+                                    ngay: moment(item?.ngay).format('MM/YYYY'),
+                                    soThu: item?.soThu,
+                                    soChi: item?.soChi
+
+                                })
+
+                            default:
+                                break;
+                        }
+
+                    })
+                    setDataBarChart(data)
+                    dispatch(changeLoadingApp(false))
+                },
+                () => {
+                    dispatch(changeLoadingApp(false))
+                },
+                null,
+                API_REPORT_FOOD.GET + encodeURIComponent(JSON.stringify(param)),
+                null,
+                {}
+            )
         }
-        baseApi.get(
-            (res) => {
-                let data = res?.data?.map((item) => {
-                    switch (typeFilter) {
-                        case TYPE_FILTER.DATE:
-                        case TYPE_FILTER.WEEK:
-                        case TYPE_FILTER.MONTH:
-                            return ({
-                                ngay: moment(item?.ngay).format('DD/MM/YYYY'),
-                                soThu: item?.soThu,
-                                soChi: item?.soChi
-
-                            })
-                        case TYPE_FILTER.QUARTER:
-                        case TYPE_FILTER.YEAR:
-                            return ({
-                                ngay: moment(item?.ngay).format('MM/YYYY'),
-                                soThu: item?.soThu,
-                                soChi: item?.soChi
-
-                            })
-
-                        default:
-                            break;
-                    }
-
-                })
-                setDataBarChart(data)
-                dispatch(changeLoadingApp(false))
-            },
-            () => {
-                dispatch(changeLoadingApp(false))
-            },
-            null,
-            API_REPORT_FOOD.GET + encodeURIComponent(JSON.stringify(param)),
-            null,
-            {}
-        )
     }
 
     // useEffect(() => {
