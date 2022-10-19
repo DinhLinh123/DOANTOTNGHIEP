@@ -20,6 +20,7 @@ function BarInsert(props) {
     const [idData, setIdData] = useState()
     const [statusAction, setStatusAction] = useState("")
     const [textSearch, setTextSearch] = useState("")
+    const [textSearchNMH, setTextSearchNMH] = useState("")
     const [textSearchGroup, setTextSearchGroup] = useState("")
     const [textSearchTime, setTextSearchTime] = useState("")
 
@@ -92,11 +93,11 @@ function BarInsert(props) {
             dataIndex: COLUMN_TABLE_INDEX_MENU.INTOMONEY,
             width: "200px",
         },
-        {
-            title: "Ghi chú",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
-            width: "250px",
-        },
+        // {
+        //     title: "Ghi chú",
+        //     dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+        //     width: "250px",
+        // },
         {
             title: "Người nhập",
             dataIndex: COLUMN_TABLE_INDEX_MENU.PERSON,
@@ -140,11 +141,11 @@ function BarInsert(props) {
     ];
     const dataDrinks = [
         {
-            value: "Nước ngọt",
+            value: "Rượu",
             label: "Rượu"
         },
         {
-            value: "Nước ngọt",
+            value: "bia",
             label: "bia"
         },
         {
@@ -213,8 +214,9 @@ function BarInsert(props) {
             Page: 10,
             textSearch,
             textSearchTime,
+            textSearchNMH
         }))
-    }, [disptach, loading, textSearch, textSearchTime])
+    }, [disptach, loading, textSearch, textSearchTime, textSearchNMH])
 
 
     function columnCode(item) {
@@ -238,15 +240,17 @@ function BarInsert(props) {
     function columnIntoMoney(item) {
         return <div>{item?.thanhTien}</div>;
     }
-    function columnNote(item) {
-        return <div>{item?.note}</div>;
-    }
+    // function columnNote(item) {
+    //     return <div>{item?.note}</div>;
+    // }
     function columnPerson(item) {
         return <div>{item?.createdByUserName}</div>;
     }
     function columnDate(item) {
         return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
     }
+
+    console.log("drinksGroup", drinksGroup);
 
     function convertDataTable(dataTable) {
         let listData;
@@ -259,7 +263,7 @@ function BarInsert(props) {
                 [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
                 [COLUMN_TABLE_INDEX_MENU.UNITPRICE]: columnUnitPrice(item),
                 [COLUMN_TABLE_INDEX_MENU.INTOMONEY]: columnIntoMoney(item),
-                [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
+                // [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
                 [COLUMN_TABLE_INDEX_MENU.PERSON]: columnPerson(item),
                 [COLUMN_TABLE_INDEX_MENU.DATE]: columnDate(item),
                 key: item?.id,
@@ -331,7 +335,7 @@ function BarInsert(props) {
                 <div className="barInsert-manager__filter">
                     <div className="barInsert-manager__filter-code">
                         <InputField
-                            label={"Tên mặt hàng"}
+                            label={"Tên mặt hàng "}
                             placeholder={"Tên mặt hàng"}
                             onChange={(val) => setTextSearch(val)}
                         />
@@ -349,9 +353,9 @@ function BarInsert(props) {
                         <Dropdown
                             listOption={dataDrinks}
                             placeholder={"Chọn nhóm mặt hàng"}
-                            title={"Nhóm mặt hàng"}
-                            onChange={(val) => setTextSearch(val)}
-
+                            title={"Nhóm mặt hàng 1"}
+                            onChange={(val) => {setTextSearchNMH(val)}}
+                            value = {textSearchNMH}
                         />
                     </div>
                     <div className="barInsert-manager__filter-date">
@@ -429,27 +433,28 @@ function BarInsert(props) {
                         <div className="barInsert-manager__popup">
                             <Input
                                 label={"Mã mặt hàng"}
-                                defaultValue={drinksCode}
+                                // defaultValue={drinksCode}
+                                value = {drinksCode}
+                                placeholder = "Nhập mã mặt hàng"
                                 onChange={(val) => {
                                     setDrinksCode(val);
                                 }}
                                 autoFocus
                             />
-                            <Dropdown
-                                listOption={dataDrinks}
-                                placeholder={"Nhập hoặc chọn tên mặt hàng"}
-                                title={"Tên mặt hàng"}
-                                defaultValue={drinksName}
+                            <Input
+                                label={"Tên mặt hàng"}
+                                // defaultValue={amountDrinks}
+                                placeholder="Nhập tên mặt hàng"
                                 value={drinksName}
                                 onChange={(val) => { setDrinksName(val) }}
+                                autoFocus
                             />
                             <Dropdown
                                 listOption={dataDrinks}
                                 placeholder={"Chọn nhóm mặt hàng"}
                                 title={"Nhóm mặt hàng"}
-                                defaultValue={drinksGroup}
-                                value={drinksGroup}
-
+                                // defaultValue={drinksGroup}
+                                value = {drinksGroup}
                                 onChange={(val) => { setDrinksGroup(val) }}
                             />
                             <Input

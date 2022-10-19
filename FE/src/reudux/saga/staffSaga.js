@@ -23,10 +23,10 @@ function * postDataStaff({payload}){
     }
 }
 
-function * getDataStaff(){
+function * getDataStaff({payload}){
 
     try {
-        const res = yield axios.get(`${URL_API}/User`)
+        const res = yield axios.get(`${URL_API}/User/filter?_filter={"TextSearch":"${payload.TextSearch}","ChucVu":"${payload.ChucVu}"}`)
         if(res){
             yield put(actions.getStaffSuccess(res.data))
         }

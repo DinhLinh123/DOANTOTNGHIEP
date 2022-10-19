@@ -19,9 +19,10 @@ export const postStaffFail = (data) => ({
 })
 
 // 
-export const getStaff = () => ({
+export const getStaff = (data) => ({
 
-    type: types.GET_STAFF
+    type: types.GET_STAFF,
+    payload: data
 })
 
 export const getStaffSuccess = (data) => ({

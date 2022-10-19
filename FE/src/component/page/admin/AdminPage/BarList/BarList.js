@@ -18,21 +18,22 @@ import { getBars } from "../../../../../reudux/action/barsAction";
 function BarList(props) {
     const [textSearch, setTextSearch] = useState("")
     const [textSearchTime, setTextSearchTime] = useState("")
+    const [textSearchNMH, setTextSearchNMH] = useState("")
 
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [isShowPopupAddPosition, setIsShowPopupAddPosition] = useState(false);
-    const [drinksCode, setDrinksCode] = useState(""); 
+    const [drinksCode, setDrinksCode] = useState("");
     const [drinksGroup, setDrinksGroup] = useState("");
     const [drinksName, setDrinksName] = useState("");
     const [staffSex, setStaffSex] = useState(1);
     const [staffDate, setStaffDate] = useState(moment().unix()
-    * 1000);
+        * 1000);
     const [staffPosition, setStaffPosition] = useState(1);
     const [amountDrinks, setAmountDrinks] = useState("");
-    const [unitDrinks, setUnitDrinks] = useState(""); 
-    const [unitPriceDrinks, setUnitPriceDrinks] = useState(""); 
-    
+    const [unitDrinks, setUnitDrinks] = useState("");
+    const [unitPriceDrinks, setUnitPriceDrinks] = useState("");
+
 
     // Thêm mới chức vụ
     const [PositionCode, setPositionCode] = useState("");
@@ -75,11 +76,11 @@ function BarList(props) {
             dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
             width: "200px",
         },
-        {
-            title: "Ghi chú",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
-            width: "250px",
-        },
+        // {
+        //     title: "Ghi chú",
+        //     dataIndex: COLUMN_TABLE_INDEX_MENU.NOTE,
+        //     width: "250px",
+        // },
     ];
 
     const data = [
@@ -109,19 +110,19 @@ function BarList(props) {
             person: "Linhdtt",
             date: "12/12/2022"
         },
-        
+
     ];
     const dataDrinks = [
         {
-            value: "1",
+            value: "Rượu",
             label: "Rượu"
         },
         {
-            value: "2",
-            label: "bia"
+            value: "Bia",
+            label: "Bia"
         },
         {
-            value: "3",
+            value: "Nước ngọt",
             label: "Nước ngọt"
         },
     ]
@@ -151,7 +152,7 @@ function BarList(props) {
         console.log('search:', value);
     };
 
-    const {dataBars} = useSelector(state => state.barsReducer)
+    const { dataBars } = useSelector(state => state.barsReducer)
     const disptach = useDispatch()
 
     useEffect(() => {
@@ -159,11 +160,12 @@ function BarList(props) {
             PageSize: 1,
             Page: 10,
             textSearch,
-            textSearchTime
+            textSearchTime,
+            textSearchNMH
         }))
-    },[disptach, textSearch])
+    }, [disptach, textSearch, textSearchTime, textSearchNMH])
 
-    
+
     function columnCode(item) {
         return <div>{item?.maMatHang}</div>;
     }
@@ -179,9 +181,9 @@ function BarList(props) {
     function columnUnit(item) {
         return <div>{item?.donVi}</div>;
     }
-    function columnNote(item) {
-        return <div>{item?.note}</div>;
-    }
+    // function columnNote(item) {
+    //     return <div>{item?.note}</div>;
+    // }
 
     function convertDataTable(dataTable) {
         let listData;
@@ -192,7 +194,7 @@ function BarList(props) {
                 [COLUMN_TABLE_INDEX_MENU.GROUP]: columnGroup(item),
                 [COLUMN_TABLE_INDEX_MENU.AMOUNT]: columnAmount(item),
                 [COLUMN_TABLE_INDEX_MENU.UNIT]: columnUnit(item),
-                [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
+                // [COLUMN_TABLE_INDEX_MENU.NOTE]: columnNote(item),
                 key: idx,
             };
         });
@@ -233,7 +235,7 @@ function BarList(props) {
                         <InputField
                             label={"Tên mặt hàng"}
                             placeholder={"Tên mặt hàng"}
-                            onChange = {(val) => setTextSearch(val)}
+                            onChange={(val) => setTextSearch(val)}
                         //width={"20%"} 
                         />
                     </div>
@@ -245,13 +247,15 @@ function BarList(props) {
                         />
                     </div> */}
                     <div className="barlist-manager__filter-position">
-                            <Dropdown 
-                                listOption={dataDrinks} 
-                                placeholder={"Chọn nhóm mặt hàng"} 
-                                title={"Nhóm mặt hàng"}
-                            />
+                        <Dropdown
+                            listOption={dataDrinks}
+                            placeholder={"Chọn nhóm mặt hàng"}
+                            title={"Nhóm mặt hàng"}
+                            onChange = {(val) => setTextSearchNMH(val)}
+                            value = {textSearchNMH}
+                        />
                     </div>
-                    
+
                 </div>
                 {/* <div className="barlist-manager__button">
                     <div className="barlist-manager__button-search">
@@ -279,7 +283,7 @@ function BarList(props) {
                         }}
                     />
                 </div>
-                
+
             </div>
         </AdminPage>
 

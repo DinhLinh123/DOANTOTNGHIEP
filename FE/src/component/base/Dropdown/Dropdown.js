@@ -28,7 +28,7 @@ Dropdown.defaultProps = {
 };
 
 function Dropdown(props) {
-  const { listOption, title, placeholder, onChange, style, defaultValue } =
+  const { listOption, title, placeholder, onChange, style, defaultValue, value } =
     props;
 
   return (
@@ -50,6 +50,7 @@ function Dropdown(props) {
         onChange={(e) => onChange(e)}
         style={{ ...style }}
         defaultValue={defaultValue}
+        value = {value ?? ""}
       >
         {listOption?.map((item) => {
           return <Option value={item.value}>{item.label}</Option>;

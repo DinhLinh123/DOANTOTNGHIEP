@@ -48,6 +48,10 @@ function Staff(props) {
   const [staffNote, setStaffNote] = useState("");
   const [acountName, setAcountName] = useState("")
   const [password, setPassword] = useState("")
+  const [searchUser, setSearchUser] = useState({
+    TextSearch: "",
+    ChucVu: ""
+  })
   const [permission, setPermission] = useState([]);
   // Thêm mới chức vụ
   const [PositionCode, setPositionCode] = useState("");
@@ -540,14 +544,14 @@ function Staff(props) {
   const { dataStaff, loading } = useSelector((state) => state.staffReducer);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getStaff());
-  }, [dispatch, loading]);
+    dispatch(getStaff(searchUser));
+  }, [dispatch, loading, searchUser]);
 
-  useEffect(() => {
-    if (staffPosition) {
-      dispatch(searchStaff(staffPosition));
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (staffPosition) {
+  //     dispatch(searchStaff(staffPosition));
+  //   }
+  // }, [dispatch]);
 
   // Select chức vụ
   const { Option } = Select;
@@ -732,12 +736,6 @@ function Staff(props) {
     setSelectedKeys(selectedKeysValue);
   };
 
-  const searchUser = (text) => {
-
-    setTimeout(() => {
-      dispatch(searchStaff(text))
-    }, 500)
-  }
   return (
     <AdminPage title={"Quản lý nhân viên"} index={MENU_TAB_ADMIN.STAFF}>
       <div className="staff-manager">
@@ -746,7 +744,7 @@ function Staff(props) {
             <InputField
               label={"Mã nhân viên/Tên nhân viên"}
               placeholder={"Mã nhân viên/Tên nhân viên"}
-              onChange={(event) => searchUser(event)}
+              onChange={(event) => setSearchUser({ ...searchUser, TextSearch: event })}
             />
           </div>
           <div className="staff-manager__filter-position">
@@ -755,7 +753,11 @@ function Staff(props) {
               placeholder={"Chọn chức vụ"}
               title={"Chức vụ"}
               setStaffPosition={setStaffPosition}
-              onChange={(item) => searchUser(item)}
+              onChange={(item) => {
+                setPositionName(item)
+                setSearchUser({ ...searchUser, TextSearch: item })
+              }}
+              value={PositionName}
             />
           </div>
 
@@ -869,7 +871,7 @@ function Staff(props) {
               {statusAction === "UPDATE" ? null : <>
                 <Input
                   label={"Tài khoản"}
-                  value = {acountName}
+                  value={acountName}
                   onChange={(val) => {
                     setAcountName(val);
                   }}
@@ -877,7 +879,7 @@ function Staff(props) {
                 />
                 <Input
                   label={"Mật khẩu"}
-                  value = {password}
+                  value={password}
                   type="password"
                   onChange={(val) => {
                     setPassword(val);

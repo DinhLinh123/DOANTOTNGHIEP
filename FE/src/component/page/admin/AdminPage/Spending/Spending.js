@@ -142,6 +142,12 @@ function Spending(props) {
   const quyen3 = quyen?.find((item) => item === "0-1-2")
 
   function handleClickAddnew(type) {
+    setListItems([
+      { name: "", unit: "", amount: "", unitprice: "" },
+    ])
+    setItemBill()
+    setImages([])
+    setItemNote("")
     setIsShowPopupAddnew(true);
   }
   const OPTION_MORE_TABLE = [
@@ -218,9 +224,6 @@ function Spending(props) {
     return [...listData];
   }
 
-  function handleClickAddnew(type) {
-    setIsShowPopupAddnew(true);
-  }
   //thêm nhiều mặt hàng
 
   function ChangeNameItems(val, index) {
@@ -330,7 +333,6 @@ function Spending(props) {
     data?.map((item) => {
       total += item?.amount * item?.unitprice
     })
-    console.log("datadatadatadata", data, total);
 
     return total;
   }
@@ -350,12 +352,13 @@ function Spending(props) {
         createdOnDate: date
       };
       setIsShowPopupAddnew(false);
-      console.log("bodybodybody", body);
       dispatch(postSpending(body))
       setListItems([
         { name: "", unit: "", amount: "", unitprice: "" },
       ])
       setItemBill()
+      setImages([])
+      setItemNote("")
       commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm chi tiêu thành công")
     } else {
       const body = {
@@ -364,12 +367,18 @@ function Spending(props) {
         ngayHoaDon: moment(itemBillDate).format("YYYY-MM-DDT00:00:00.000"),
         // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0),
         matHang: JSON.stringify(listItems),
+        anh: images,
         tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
         createdOnDate: date
       };
       dispatch(editSpending(body))
       setIsShowPopupAddnew(false);
+      setListItems([
+        { name: "", unit: "", amount: "", unitprice: "" },
+      ])
+      setItemBill()
+      setImages([])
     }
 
   };

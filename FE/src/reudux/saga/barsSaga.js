@@ -9,8 +9,10 @@ import { TYPE_MESSAGE } from "../../component/base/common/commonConstant"
 
 function* getDataBars({ payload }) {
 
+    console.log("payloadpayloadpayloadpayload", payload);
+
     try {
-        const res = yield axios.get(`${URL_API}/Bars/filter?_filter={"TextSearch":"${payload.textSearch}","NhomMatHang":"","NgayNhap" : "${payload.textSearchTime}"}`)
+        const res = yield axios.get(`${URL_API}/Bars/filter?_filter={"TextSearch":"${payload.textSearch}","NhomMatHang":"${payload?.textSearchNMH === undefined ? "" : payload?.textSearchNMH}","NgayNhap" : "${payload.textSearchTime}"}`)
         if (res) {
             yield put(actions.getBarsSuccess(res))
         }
