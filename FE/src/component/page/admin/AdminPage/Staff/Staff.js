@@ -233,7 +233,9 @@ function Staff(props) {
           setStaffNote(item?.note.props.children);
           setAcountName(item?.data.userName)
           setPassword(item?.data.password)
-
+          if (item?.listTree !== "string") {
+            setCheckedKeys(JSON.parse(item?.listTree))
+          }
         } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nhân viên")
         }
@@ -672,6 +674,7 @@ function Staff(props) {
         ngaySinh: date.toISOString(staffDate),
         chucVu: staffPosition,
         soDienThoai: staffPhone,
+        quyen : JSON.stringify(checkedKeys),
         diaChi: staffAddress,
         chiChu: staffNote,
         userName: acountName,
