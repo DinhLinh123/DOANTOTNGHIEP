@@ -467,4 +467,99 @@
       background-color: #006266;
     }
   }
+
+}
+
+
+.menu-popup-detail{
+
+  .ant-modal-content{
+    .ant-modal-body{
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &__container{
+    margin: 24px;
+  }
+
+  &__table{
+    
+    border: 1px solid #000;
+  }
+  &__header{
+    font-weight: bold;
+    padding: 8px;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+  }
+
+  &__tr{
+    border: 1px dashed #000;
+  }
+
+  &__td{
+    // border-left: 1px dashed #000;
+    // border-right: 1px dashed #000;
+    padding: 8px;
+  }
+
+  .money{
+    text-align: right;
+  }
+
+  &__footer{
+    border-top: 1px solid #000;
+    font-weight: bold;
+
+    td{
+
+      padding: 8px;
+    }
+  }
+  
+  &__title{
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+  }
+
+  &__info{
+    width: 100%;
+    margin: 8px 0;
+
+    &-item{
+      display: flex;
+      align-items: center;
+
+      &-title{
+        width: 150px;
+      }
+
+      &-value{
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__promotion{
+    width: 100%;
+    margin: 8px 0;
+
+    &-customer{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #000;
+      margin: 16px 0;
+      padding-bottom: 4px;
+
+      &-value{
+        font-weight: bold;
+      }
+    }
+  }
 }

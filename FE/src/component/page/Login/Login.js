@@ -28,7 +28,7 @@ function Login() {
   const [passWord, setPassWard] = useState('');
   const [passWordConFirm, setPassWardConFirm] = useState('');
   const [disabled, setDisabled] = useState(false);
-  const roleType = useSelector(state=>state.account.accountInfo)
+  const roleType = useSelector(state => state.account.accountInfo)
   const [isDangerMoreInput, setIsDangerMoreInput] = useState(false);
   const [isDangerMoreInputPassConfirm, setIsDangerMoreInputPassConfirm] = useState(false);
   const [isCreateNewAccount, setIsCreateNewAccount] = useState(false);
@@ -49,25 +49,25 @@ function Login() {
   },
     [passWord, userName])
 
-    function onsubmit() {
-      let obj = {
-        userName: userName,
-        userAvatar: passWord,
-        roleType: 'admin'
-      }
-      localStorage.setItem( 'roleType', JSON.stringify(obj))
-
-      let account = JSON.parse(localStorage.getItem('roleType'));
-      dispatch(changeAccount({
-        userName: account.userName,
-        userAvatar: account.userAvatar,
-        roleType: account.roleType
-      }))
-      
-
-
-      window.open("/admin/report", '_self')
+  function onsubmit() {
+    let obj = {
+      userName: userName,
+      userAvatar: passWord,
+      roleType: 'admin'
     }
+    localStorage.setItem('roleType', JSON.stringify(obj))
+
+    let account = JSON.parse(localStorage.getItem('roleType'));
+    dispatch(changeAccount({
+      userName: account.userName,
+      userAvatar: account.userAvatar,
+      roleType: account.roleType
+    }))
+
+
+
+    window.open("/admin/report", '_self')
+  }
 
   function onBlurInputPass() {
     if (passWord?.length == 0) {
@@ -89,45 +89,57 @@ function Login() {
 
   }
 
- async function onClickSubmit() {
-     let obj = {
-        userName: userName,
-        userAvatar: passWord,
-        roleType: 'admin'
-      }
-      localStorage.setItem( 'roleType', JSON.stringify(obj))
+  async function onClickSubmit() {
+    //  let obj = {
+    //     userName: userName,
+    //     userAvatar: passWord,
+    //     roleType: 'admin'
+    //   }
+    //   localStorage.setItem( 'roleType', JSON.stringify(obj))
+
+    // let account = JSON.parse(localStorage.getItem('roleType'));
+    // dispatch(changeAccount({
+    //   userName: account.userName,
+    //   userAvatar: account.userAvatar,
+    //   roleType: account.roleType
+    // }))
+
+    const body = {
+      userName: userName,
+      password: passWord
+    }
+    const res = await axios.post(`http://backend1002-001-site1.atempurl.com/Login`, body)
+    // console.log(res.data.data);
+    if (res.data.data) {
+      let obj = {
+            userName: res.data.data.fullName,
+            userAvatar: '',
+            roleType: res.data.data.chucVu
+          }
+      localStorage.setItem('roleType', JSON.stringify(obj ))
+      localStorage.setItem('infoUser', res.data.data.id)
+      localStorage.setItem('quyen', res.data.data.quyen)
 
       let account = JSON.parse(localStorage.getItem('roleType'));
       dispatch(changeAccount({
-        userName: account.userName,
-        userAvatar: account.userAvatar,
-        roleType: account.roleType
+        userName: account.fullName,
+        userAvatar: '',
+        roleType: account.chucVu
       }))
 
-      const body = {
-        userName: userName,
-        password: passWord
-      }
-      const res = await axios.post(`http://backend1002-001-site1.atempurl.com/Login`, body)
-      console.log(res.data.data);
-      if(res.data.data){
-        localStorage.setItem( 'infoUser', res.data.data.id)
-        localStorage.setItem( 'quyen', res.data.data.quyen)
-
-        window.open("/admin/report", '_self')
-      }else{
-        setError("Sai tài khoản hoặc mật khẩu!")
-      }
+      window.open("/admin/report", '_self')
+    } else {
+      setError("Sai tài khoản hoặc mật khẩu!")
+    }
 
   }
 
   function onClickRigister() {
-    if(passWord != passWordConFirm)
-    {
+    if (passWord != passWordConFirm) {
       setIsDangerMoreInputPassConfirm(true)
       setMesInputPassConfirm("Mật khẩu không trùng khớp. Vui lòng nhập lại")
     }
-    else{
+    else {
       setMesInputPassConfirm('')
     }
 
@@ -161,7 +173,7 @@ function Login() {
                     status={isDangerMoreInput && "error"}
                     onBlur={() => onBlurInputPass()}
                     onPressEnter={() => onClickSubmit()}
-                    
+
                   />
                   {isDangerMoreInput && <div className="data-login-system__container-right-login-input-mes">Trường này không được bỏ trống</div>}
                   {error}
@@ -223,10 +235,10 @@ function Login() {
                     onBlur={() => onBlurInputPassConfirm()}
                     onPressEnter={() => onClickRigister()}
                   />
-                  {isDangerMoreInputPassConfirm && <div className="data-login-system__container-right-login-input-mes">{mesInputPassConfirm?.length == 0 ? 'Trường này không được bỏ trống':mesInputPassConfirm}</div>}
+                  {isDangerMoreInputPassConfirm && <div className="data-login-system__container-right-login-input-mes">{mesInputPassConfirm?.length == 0 ? 'Trường này không được bỏ trống' : mesInputPassConfirm}</div>}
 
                 </div>
-                
+
                 <div className="data-login-system__container-right-login-submit">
                   <Button name={"Đăng ký"} background={"#1cc0a9"} onClick={() => { onClickRigister() }} style={{ width: '100%' }} disabled={disabled} />
                 </div>

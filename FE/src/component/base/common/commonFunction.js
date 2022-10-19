@@ -2,6 +2,7 @@ import { message, Tooltip } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { TYPE_MESSAGE } from './commonConstant';
+import moment from "moment";
 
 
 function useOutsideAlerter(ref, onclickClose) {
@@ -51,15 +52,13 @@ function numberWithCommas(x) {
 }
 
 const messages = (type, title) => {
-  if(type == TYPE_MESSAGE.SUCCESS)
-  {
+  if (type == TYPE_MESSAGE.SUCCESS) {
     message.success({
       content: title,
       className: 'message-success',
     })
   }
-  if(type == TYPE_MESSAGE.ERROR)
-  {
+  if (type == TYPE_MESSAGE.ERROR) {
     message.error({
       content: title,
       className: 'message-error',
@@ -67,4 +66,10 @@ const messages = (type, title) => {
   }
 };
 
-export default { useOutsideAlerter, smartText, numberWithCommas, messages }
+function getTimeNow(format) {
+  let now = new Date()
+  let date = moment(now).format(format)
+  return date
+}
+
+export default { useOutsideAlerter, smartText, numberWithCommas, messages, getTimeNow}
