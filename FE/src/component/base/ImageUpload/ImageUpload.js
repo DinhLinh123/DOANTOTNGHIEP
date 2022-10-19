@@ -30,7 +30,12 @@ function ImageUpload(props) {
     setImages(imageList);
     setImageUpload(imageList)
   };
-  useEffect(()=>{console.log(images)},[images])
+  useEffect(() => { 
+    if(images?.length == 0)
+    {
+      setImageUpload([])
+    }
+  }, [images])
 
   const [showOption, setShowOption] = useState({ show: false, index: -1 });
 
@@ -41,7 +46,7 @@ function ImageUpload(props) {
       onChange={onChange}
       maxNumber={maxImage}
       dataURLKey="data_url"
-      
+
     >
       {({
         imageList,
@@ -55,7 +60,7 @@ function ImageUpload(props) {
         // write your building UI
         <div className="upload__image-wrapper">
           {/* <button onClick={onImageRemoveAll}>Remove all images</button> */}
-          {images?.length> 0 && (
+          {images?.length > 0 && (
             <div
               key={0}
               className="image-item"
@@ -83,7 +88,10 @@ function ImageUpload(props) {
                   <div className="image-item__btn-wrapper-delete">
                     <Tooltip title={"Xóa ảnh"}>
                       <DeleteOutlined
-                        onClick={() => onImageRemove(0)}
+                        onClick={() => {
+                          onImageRemove(0)
+                          setImages([])
+                        }}
                         style={{
                           color: "#ecf0f1",
                           zIndex: "1",
@@ -97,9 +105,7 @@ function ImageUpload(props) {
               )}
             </div>
           )}
-          { images?.length > 0 ? (
-            ""
-          ) : (
+          {images?.length <= 0 && (
             <div
               className="add-image"
               style={isDragging ? { color: "red" } : undefined}

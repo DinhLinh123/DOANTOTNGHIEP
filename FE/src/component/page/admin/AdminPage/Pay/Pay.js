@@ -218,7 +218,7 @@ function Spending(props) {
         //   _table
         // )
         
-        setOrderSelected([]);
+        // setOrderSelected([]);
         callApiGetAreaAndTable();
         setShowPopupPayMethod(false);
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công");

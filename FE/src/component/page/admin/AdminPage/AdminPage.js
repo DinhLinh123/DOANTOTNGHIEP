@@ -165,11 +165,11 @@ function AdminPage(props) {
       icon: <ShoppingCartOutlined />,
       title: "Chi tiêu",
     },
-    {
-      link: MENU_TAB_ADMIN.TURNOVER,
-      icon: <DollarCircleOutlined />,
-      title: "Doanh thu",
-    },
+    // {
+    //   link: MENU_TAB_ADMIN.TURNOVER,
+    //   icon: <DollarCircleOutlined />,
+    //   title: "Doanh thu",
+    // },
     {
       link: MENU_TAB_ADMIN.KITCHEN,
       icon: <ShopOutlined />,

@@ -523,6 +523,7 @@ function Menu(props) {
               name={"Đóng"}
               onClick={() => {
                 resetValue()
+                setImages([])
                 setIsShowPopupAddnew({ show: false, title: '', key: -1 })
               }}
             />,

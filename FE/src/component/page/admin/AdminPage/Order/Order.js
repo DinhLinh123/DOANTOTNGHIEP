@@ -35,6 +35,7 @@ import { TYPE_MESSAGE } from "../../../../base/common/commonConstant";
 function Order(props) {
   const [index, setIndex] = useState(1);
   const [orderSelected, setoOrderSelected] = useState([]);
+  const [orderSelectedTemporary, setoOrderSelectedTemporary] = useState([]);
   const [table, setTable] = useState("");
   const [displayLine2ChooseOrder, setDisplayLine2ChooseOrder] = useState({
     show: false,
