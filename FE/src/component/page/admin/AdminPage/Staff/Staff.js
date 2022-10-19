@@ -231,6 +231,9 @@ function Staff(props) {
           setStaffPhone(item?.phone.props.children);
           setStaffAddress(item?.address.props.children);
           setStaffNote(item?.note.props.children);
+          setAcountName(item?.data.userName)
+          setPassword(item?.data.password)
+
         } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nhân viên")
         }
@@ -671,6 +674,8 @@ function Staff(props) {
         soDienThoai: staffPhone,
         diaChi: staffAddress,
         chiChu: staffNote,
+        userName: acountName,
+        password: password,
       };
       dispatch(updateStaff({ id: body.id, body }));
     }
@@ -868,24 +873,24 @@ function Staff(props) {
                 }}
                 autoFocus
               />
-              {statusAction === "UPDATE" ? null : <>
-                <Input
-                  label={"Tài khoản"}
-                  value={acountName}
-                  onChange={(val) => {
-                    setAcountName(val);
-                  }}
-                  autoFocus
-                />
-                <Input
-                  label={"Mật khẩu"}
-                  value={password}
-                  type="password"
-                  onChange={(val) => {
-                    setPassword(val);
-                  }}
-                  autoFocus
-                /></>}
+
+              <Input
+                label={"Tài khoản"}
+                value={acountName}
+                onChange={(val) => {
+                  setAcountName(val);
+                }}
+                autoFocus
+              />
+              <Input
+                label={"Mật khẩu"}
+                value={password}
+                type="password"
+                onChange={(val) => {
+                  setPassword(val);
+                }}
+                autoFocus
+              />
 
               <Input
                 label={"Ghi chú"}
