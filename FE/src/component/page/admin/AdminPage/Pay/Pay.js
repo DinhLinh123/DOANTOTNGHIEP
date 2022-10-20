@@ -365,6 +365,7 @@ function Spending(props) {
     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xuất file thành công");
     setShowPopupExport(false)
     setOrderSelected([]);
+    setOfferChoose({})
   }
 
   // useEffect(() => {
