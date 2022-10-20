@@ -24,13 +24,14 @@ namespace ManagerRestaurant.API.Controllers
         }
 
         // GET: api/ChiTieuTrongNgay
-        [HttpGet("thuchi/{filter}")]
-        public Responsive GetThongKeThuChi(string filter)
+        [HttpGet("thuchi")]
+        public Responsive GetThongKeThuChi([FromQuery]FilterThongKe filter)
         {
             Responsive res = new Responsive();
             try
             {
-                var f = JsonConvert.DeserializeObject<FilterThongKe>(filter);
+                //var f = JsonConvert.DeserializeObject<FilterThongKe>(filter);
+                var f = filter;
                 if (f.isMonth == null)
                 {
                     res.Code = 204;
@@ -131,13 +132,13 @@ namespace ManagerRestaurant.API.Controllers
 
         }
         // GET: api/ChiTieuTrongNgay
-        [HttpGet("monan/{filter}")]
-        public async Task<Responsive> GetThongKeMonAn(string filter)
+        [HttpGet("monan")]
+        public async Task<Responsive> GetThongKeMonAn([FromQuery]FilterThongKe f)
         {
             Responsive res = new Responsive();
             try
             {
-                var f = JsonConvert.DeserializeObject<FilterThongKe>(filter);
+                //var f = JsonConvert.DeserializeObject<FilterThongKe>(filter);
                 var phieuOder = (from s in _context.PhieuOder where (s.ThoiGianThanhToan >= f.TimeStart && s.ThoiGianThanhToan <= f.TimeEnd && s.TrangThai == 1) select s.Id).ToList();
 
                 var listDoAn = new List<Guid>();
