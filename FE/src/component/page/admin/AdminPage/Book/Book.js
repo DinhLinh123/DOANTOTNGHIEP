@@ -644,7 +644,7 @@ function Book(props) {
           <TableBase
             // onChangePagination={(page, pageSize)=>{}}
             columns={columns}
-            total={90}
+            total={dataBooking?.length}
             data={convertDataTable(dataBooking)}
             loading={false}
             hasMoreOption
@@ -775,7 +775,7 @@ function Book(props) {
               <TableBase
                 // onChangePagination={(page, pageSize)=>{}}
                 columns={columns_setup}
-                total={90}
+                total={dataXB?.length}
                 data={convertDataTableSetup(dataXB)}
                 loading={false}
                 //hasMoreOption

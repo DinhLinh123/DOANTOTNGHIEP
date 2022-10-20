@@ -831,8 +831,10 @@ function Spending(props) {
                         handldChangeFood(item);
                       }}
                     >
-                      <div className="popup-edit-food__list-item-img">
-                        <img src={item.linkAnh} alt="" />
+                      <div className="popup-edit-food__list-item-img"
+                        style={{backgroundImage: `url("${item.linkAnh}")`}}
+                      >
+                        {/* <img src={item.linkAnh} alt="" /> */}
                       </div>
                       <div className="popup-edit-food__list-item-title">
                         {commonFunction.smartText(40, item?.name)}

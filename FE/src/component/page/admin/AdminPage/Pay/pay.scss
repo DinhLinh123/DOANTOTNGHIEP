@@ -322,15 +322,16 @@
 }
 
 .pay-offer-container__list {
-  margin: 50px 0;
-  padding: 0 50px;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-gap: 24px;
+  margin: 24px 0;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
 
   &-item {
-    width: 268px;
-    height: fit-content;
+    width: calc((100% - 48px) / 3);
+    margin: 8px;
+    height: 350px;
     border-radius: 24px;
     padding: 6px;
     box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%),
@@ -339,10 +340,10 @@
     cursor: pointer;
 
     &-img {
-      height: 250px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+      height: 220px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
     }
 
     &-title {
@@ -399,26 +400,26 @@
   &__list {
     margin: 20px 0;
     padding: 0 2%;
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    grid-gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
     overflow-y: auto;
     height: calc(100vh - 56px - 253px);
 
 
     &-item {
-      // width: 272px;
-      height: fit-content;
+      width: calc((100% - 48px) / 3);
+      margin: 8px;
+      height: 300px;
       border-radius: 10px;
-      padding: 2px;
+      padding: 8px;
       box-shadow: 0 0 2.2px rgb(0 0 0 / 22%), 0 6.7px 5.3px rgb(0 0 0 / 15%), 0 12.5px 10px rgb(0 0 0 / 0%), 0 22.3px 17.9px rgb(0 0 0 / 0%), 0 41.8px 33.4px rgb(0 0 0 / 0%), 0 100px 80px rgb(0 0 0 / 0%);
       cursor: pointer;
 
       &-img {
-        img {
-          width: 100%;
-          border-radius: 10px;
-        }
+        height: calc(100% - 93px);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
       }
 
       &-title {
@@ -471,55 +472,56 @@
 }
 
 
-.menu-popup-detail{
+.menu-popup-detail {
 
-  .ant-modal-content{
-    .ant-modal-body{
+  .ant-modal-content {
+    .ant-modal-body {
       margin: 0;
       padding: 0;
     }
   }
 
-  &__container{
+  &__container {
     margin: 24px;
   }
 
-  &__table{
-    
+  &__table {
+
     border: 1px solid #000;
   }
-  &__header{
+
+  &__header {
     font-weight: bold;
     padding: 8px;
     border-bottom: 1px solid #000;
     border-top: 1px solid #000;
   }
 
-  &__tr{
+  &__tr {
     border: 1px dashed #000;
   }
 
-  &__td{
+  &__td {
     // border-left: 1px dashed #000;
     // border-right: 1px dashed #000;
     padding: 8px;
   }
 
-  .money{
+  .money {
     text-align: right;
   }
 
-  &__footer{
+  &__footer {
     border-top: 1px solid #000;
     font-weight: bold;
 
-    td{
+    td {
 
       padding: 8px;
     }
   }
-  
-  &__title{
+
+  &__title {
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -527,29 +529,29 @@
     margin: 16px 0;
   }
 
-  &__info{
+  &__info {
     width: 100%;
     margin: 8px 0;
 
-    &-item{
+    &-item {
       display: flex;
       align-items: center;
 
-      &-title{
+      &-title {
         width: 150px;
       }
 
-      &-value{
+      &-value {
         font-weight: bold;
       }
     }
   }
 
-  &__promotion{
+  &__promotion {
     width: 100%;
     margin: 8px 0;
 
-    &-customer{
+    &-customer {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -557,7 +559,7 @@
       margin: 16px 0;
       padding-bottom: 4px;
 
-      &-value{
+      &-value {
         font-weight: bold;
       }
     }
