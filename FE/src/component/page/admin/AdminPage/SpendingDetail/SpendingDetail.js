@@ -173,10 +173,7 @@ function SpendingDetail(props) {
                     <span className="spendingDetail-manager__item-lable">Ghi chú</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu ?? "Không có ghi chú"}</span>
                 </div>
-                {/* <div className="spendingDetail-manager__item">
-                    <span className="spendingDetail-manager__item-lable">Trạng thái</span>
-                    <span className="spendingDetail-manager__item-content">{spendingDetail?.trangThaiHienTai}</span>
-                </div> */}
+                
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Người nhập</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.createdByUserName}</span>

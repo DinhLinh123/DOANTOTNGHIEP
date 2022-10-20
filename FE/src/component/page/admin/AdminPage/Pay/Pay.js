@@ -5,7 +5,7 @@ import { Tooltip } from "antd";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import baseApi from "../../../../../api/baseApi";
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction";
 import Button2 from "../../../../base/Button/Button";
@@ -60,8 +60,9 @@ function Spending(props) {
   const [moneyVoucher, setMoneyVoucher] = useState(0);
   const [moneyMust, setMoneyMust] = useState(0);
   const [moneyTotal, setMoneyTotal] = useState(0);
-
   const [showPopupExport, setShowPopupExport] = useState(false);
+
+  const roleType = useSelector((state) => state.account.accountInfo);
 
   //lấy danh sách các ưu đãi
   useEffect(() => {
@@ -207,18 +208,17 @@ function Spending(props) {
     body.trangThai = 1;
     baseApi.put(
       (res) => {
-        // let _table = table;
-        // _table.trangThai = 0;
-        // baseApi.put(
-        //   () => { },
-        //   () => { },
-        //   null,
-        //   API_TABLE.UPDATE_BY_ID + table?.id,
-        //   null,
-        //   _table
-        // )
-        
-        // setOrderSelected([]);
+        let _table = table;
+        _table.trangThai = 0;
+        baseApi.put(
+          () => { },
+          () => { },
+          null,
+          API_TABLE.UPDATE_BY_ID + table?.id,
+          null,
+          _table
+        )
+
         callApiGetAreaAndTable();
         setShowPopupPayMethod(false);
         commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thanh toán thành công");
@@ -242,7 +242,7 @@ function Spending(props) {
         setListType(res);
         setIndex(res[0]?.id);
       },
-      () => {},
+      () => { },
       null,
       API_TYPE_FOOD.GET_ALL,
       null,
@@ -363,6 +363,10 @@ function Spending(props) {
     setOrderSelected([]);
   }
 
+  useEffect(() => {
+    console.log(table)
+  }, [table]);
+
   return (
     <AdminPage title={"Thanh toán hóa đơn"} index={MENU_TAB_ADMIN.PAY}>
       <div className="pay-manager">
@@ -382,14 +386,14 @@ function Spending(props) {
                               _item.trangThai == 0
                                 ? "#dcdde1"
                                 : _item.trangThai == 1
-                                ? "#c23616"
-                                : "#fbc531",
+                                  ? "#c23616"
+                                  : "#fbc531",
                             color:
                               _item.trangThai == 0
                                 ? "#000"
                                 : _item.trangThai == 1
-                                ? "#fff"
-                                : "#fff",
+                                  ? "#fff"
+                                  : "#fff",
                           }}
                           onClick={() => {
                             setTableID(_item?.id);
@@ -614,7 +618,8 @@ function Spending(props) {
                     name={"Thanh toán"}
                     disabled={moneyMust === 0 && moneyTotal === 0 || table.trangThai == 2}
                     background={"#0984e3"}
-                    onClick={() => setShowPopupPayMethod(true)}
+                    onClick={() =>
+                      setShowPopupPayMethod(true)}
                   />
                 </div>
               </div>
@@ -814,38 +819,37 @@ function Spending(props) {
             <div className="popup-edit-food__list">
               {listMenu && listMenu?.length > 0
                 ? listMenu?.map((item) => {
-                    return (
-                      <div
-                        className="popup-edit-food__list-item"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handldChangeFood(item);
-                        }}
-                      >
-                        <div className="popup-edit-food__list-item-img">
-                          <img src={item.linkAnh} alt="" />
-                        </div>
-                        <div className="popup-edit-food__list-item-title">
-                          {commonFunction.smartText(40, item?.name)}
-                        </div>
-                        <div className="popup-edit-food__list-item-money">
-                          {commonFunction.numberWithCommas(
-                            parseInt(item?.donGia)
-                          )}
-                          đ
-                        </div>
+                  return (
+                    <div
+                      className="popup-edit-food__list-item"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handldChangeFood(item);
+                      }}
+                    >
+                      <div className="popup-edit-food__list-item-img">
+                        <img src={item.linkAnh} alt="" />
                       </div>
-                    );
-                  })
+                      <div className="popup-edit-food__list-item-title">
+                        {commonFunction.smartText(40, item?.name)}
+                      </div>
+                      <div className="popup-edit-food__list-item-money">
+                        {commonFunction.numberWithCommas(
+                          parseInt(item?.donGia)
+                        )}
+                        đ
+                      </div>
+                    </div>
+                  );
+                })
                 : null}
             </div>
             <div className="popup-edit-food__choose">
               {listType?.map((item, key) => {
                 return (
                   <div
-                    className={`popup-edit-food__choose__children ${
-                      index == item.id ? "order-selected" : ""
-                    }`}
+                    className={`popup-edit-food__choose__children ${index == item.id ? "order-selected" : ""
+                      }`}
                     style={{
                       width: `calc(100% / ${listType?.length})`,
                       borderLeft: key != 0 ? "1px solid #fff" : "",
@@ -874,7 +878,6 @@ function Spending(props) {
           />,
         ]}
         width={600}
-        className={"menu-popup-detail"}
         body={
           <div style={{ marginTop: "24px", fontSize: "16px" }}>
             Món ăn đã có trong danh sách, bạn có thể thay đổi số lượng
@@ -896,38 +899,120 @@ function Spending(props) {
           }} />,
           <Button2 name={"Xuất hóa đơn"} onClick={() => exportFile()} />,
         ]}
-        width={600}
+        width={800}
         className={"menu-popup-detail"}
         body={
-          <div id={"export-file"}>
-            <div>Hóa đơn</div>
-            <table width={"100%"} boder={1}>
-              <tr>
-                <td>Tên món</td>
-                <td>Số lượng</td>
-                <td>Đơn giá</td>
-                <td>Thành tiền</td>
+          <div id={"export-file"} className="menu-popup-detail__container">
+            <div className="menu-popup-detail__title">HÓA ĐƠN THANH TOÁN</div>
+            <div className="menu-popup-detail__info">
+              <div className="menu-popup-detail__info-item">
+                <div className="menu-popup-detail__info-item-title">
+                  Ngày thanh toán:
+                </div>
+                <div className="menu-popup-detail__info-item-value">
+                  {commonFunction.getTimeNow("DD/MM/YYYY HH:mm")}
+                </div>
+              </div>
+
+              <div className="menu-popup-detail__info-item">
+                <div className="menu-popup-detail__info-item-title">
+                  Bàn:
+                </div>
+                <div className="menu-popup-detail__info-item-value">
+                  {table?.name || ''}
+                </div>
+              </div>
+
+              <div className="menu-popup-detail__info-item">
+                <div className="menu-popup-detail__info-item-title">
+                  Thu ngân:
+                </div>
+                <div className="menu-popup-detail__info-item-value">
+                  {roleType.userName}
+                </div>
+              </div>
+            </div>
+            <table width={"100%"} className="menu-popup-detail__table">
+              <tr className="menu-popup-detail__tr">
+                <td className="menu-popup-detail__header">Tên món</td>
+                <td className="menu-popup-detail__header">Số lượng</td>
+                <td className="menu-popup-detail__header money">Đơn giá</td>
+                <td className="menu-popup-detail__header money">Thành tiền</td>
               </tr>
               {orderSelected?.map((item) => {
                 return (
-                  <tr>
-                    <td>{item?.name}</td>
-                    <td>{item?.soLuong}</td>
-                    <td>{item?.donGia}</td>
-                    <td>{item?.donGia * item?.soLuong}</td>
+                  <tr className="menu-popup-detail__tr">
+                    <td className="menu-popup-detail__td">{item?.name}</td>
+                    <td className="menu-popup-detail__td">{item?.soLuong}</td>
+                    <td className="menu-popup-detail__td money">{commonFunction.numberWithCommas(item?.donGia)}</td>
+                    <td className="menu-popup-detail__td money">{commonFunction.numberWithCommas(item?.donGia * item?.soLuong)}</td>
                   </tr>
                 );
               })}
-              <tr>
+              <tr className="menu-popup-detail__footer">
                 <td>Tổng tiền</td>
-                <td>
+                <td colSpan={3} className="money">
+                {commonFunction.numberWithCommas(moneyTotal)}(đ)
+                </td>
+              </tr>
+            </table>
+
+            {payMethod == 0 ?
+              <div className="menu-popup-detail__promotion">
+
+                <div className="menu-popup-detail__promotion-customer">
+                  <div className="menu-popup-detail__promotion-customer-title">
+                    Khuyết mãi:
+                  </div>
+                  <div className="menu-popup-detail__promotion-customer-value">
+                    {commonFunction.numberWithCommas(moneyVoucher)}(đ)
+                  </div>
+                </div>
+                <div className="menu-popup-detail__promotion-customer">
+                  <div className="menu-popup-detail__promotion-customer-title">
+                    Tiền phải trả:
+                  </div>
+                  <div className="menu-popup-detail__promotion-customer-value">
                   {commonFunction.numberWithCommas(
                     JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
                   )}
                   (đ)
-                </td>
-              </tr>
-            </table>
+                  </div>
+                </div>
+                <div className="menu-popup-detail__promotion-customer">
+                  <div className="menu-popup-detail__promotion-customer-title">
+                    Tiền mặt khách đưa:
+                  </div>
+                  <div className="menu-popup-detail__promotion-customer-value">
+                    {commonFunction.numberWithCommas(moneyCustomer  || 0)}(đ)
+                  </div>
+                </div>
+
+                <div className="menu-popup-detail__promotion-customer">
+                  <div className="menu-popup-detail__promotion-customer-title">
+                    Tiền trả lại:
+                  </div>
+                  <div className="menu-popup-detail__promotion-customer-value">
+                    {commonFunction.numberWithCommas(renderMoneyReturn(moneyCustomer))}(đ)
+                  </div>
+                </div>
+              </div>
+              :
+              <div className="menu-popup-detail__promotion">
+                {JSON.stringify(offerChoose) == "{}"  && 
+                  <div className="menu-popup-detail__promotion-customer">
+                  <div className="menu-popup-detail__promotion-customer-title">
+                    Khuyết mãi:
+                  </div>
+                  <div className="menu-popup-detail__promotion-customer-value">
+                    {commonFunction.numberWithCommas(moneyVoucher)}(đ)
+                  </div>
+                </div>
+                }
+                
+                Chuyển khoản
+              </div>
+            }
           </div>
         }
       />
