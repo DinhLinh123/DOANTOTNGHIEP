@@ -195,7 +195,7 @@ function KitchenDetail(props) {
                     <span className="kitchenDetail-manager__item-content">{moment(kitchenDetail.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchenDetail-manager__item">
-                    <span className="kitchenDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens`, "_self")}>quay lại</span>
+                    <span className="kitchenDetail-manager__item-back" onClick={() => window.open(`/admin/kitchens`, "_self")}>Quay lại</span>
                 </div>
             </div>
         </AdminPage>

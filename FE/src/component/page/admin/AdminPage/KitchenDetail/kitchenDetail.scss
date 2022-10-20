@@ -1,4 +1,7 @@
 .kitchenDetail-manager {
+    height: 100%;
+    overflow-y: auto;
+    
     &__item {
         text-align: left;
         margin-bottom: 20px;
@@ -9,6 +12,11 @@
 
         &-content {
             font-weight: bold;
+        }
+
+        &-back{
+            font-weight: bold;
+            text-decoration: underline;
         }
     }
     &__table{

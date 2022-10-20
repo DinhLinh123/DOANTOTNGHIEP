@@ -270,7 +270,7 @@ function BarList(props) {
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}
                         columns={columns}
-                        total={90}
+                        total={dataBars?.length}
                         data={convertDataTable(dataBars)}
                         loading={false}
                         //hasMoreOption

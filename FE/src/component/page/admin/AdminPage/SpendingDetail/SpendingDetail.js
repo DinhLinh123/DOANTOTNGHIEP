@@ -183,7 +183,7 @@ function SpendingDetail(props) {
                     <span className="spendingDetail-manager__item-content">{moment(spendingDetail?.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="spendingDetail-manager__item" >
-                    <span className="spendingDetail-manager__item-lable" onClick={() => window.open(`/admin/spendings`, "_self")}>Quay lại</span>
+                    <span className="spendingDetail-manager__item-back" onClick={() => window.open(`/admin/spendings`, "_self")}>Quay lại</span>
                 </div>
                 {/* <div className="spendingDetail-manager__approve">
                     <div className="spendingDetail-manager__approve-title">Quản lý phê duyệt</div>

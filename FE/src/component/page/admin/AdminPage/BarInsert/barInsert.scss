@@ -32,6 +32,10 @@
             text-align: left;
             width: 23%;
         }
+
+        &-create{
+            margin-left: auto;
+        }
     
     }
     &__button{
@@ -49,7 +53,7 @@
     }
 
     &__content{
-        height: calc(100% - 165px);
+        height: calc(100% - 109px);
     }
     &__popup{
         &-intoMoney{

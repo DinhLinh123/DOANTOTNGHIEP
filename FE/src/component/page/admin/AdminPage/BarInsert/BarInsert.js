@@ -376,16 +376,7 @@ function BarInsert(props) {
 
                         />
                     </div>
-                </div>
-                <div className="barInsert-manager__button">
-                    {/* <div className="barInsert-manager__button-search">
-                        <Button2
-                            name={"Tìm kiếm"}
-                            leftIcon={<SearchOutlined />}
-                        //onClick={() => handleClickAddPosition()}
-                        />
-                    </div> */}
-                    <div className="barInsert-manager__button-create-new">
+                    <div className="barInsert-manager__filter-create">
                         {quyen1 === "0-4-0" ? <Button2
                             name={"Thêm mới mặt hàng"}
                             leftIcon={<PlusOutlined />}
@@ -393,6 +384,7 @@ function BarInsert(props) {
                         /> : null}
                     </div>
                 </div>
+               
                 <div className="barInsert-manager__content">
                     <TableBase
                         // onChangePagination={(page, pageSize)=>{}}

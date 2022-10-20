@@ -108,7 +108,7 @@ function KitchensDayDetail(props) {
     return (
         <AdminPage
             title={"Chi tiết nguyên liệu/Thực phẩm yêu cầu"}
-            index={MENU_TAB_ADMIN.KITCHEN}
+            index={MENU_TAB_ADMIN.KITCHEN_DAY}
         >
             <div className="kitchensDayDetail-manager">
                 <div className="kitchensDayDetail-manager__item">
@@ -146,7 +146,7 @@ function KitchensDayDetail(props) {
                     <span className="kitchensDayDetail-manager__item-content">{moment(kitchenDayDetail.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchensDayDetail-manager__item">
-                    <span className="kitchensDayDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>quay lại</span>
+                    <span className="kitchensDayDetail-manager__item-back" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>Quay lại</span>
                 </div>
 
             </div>

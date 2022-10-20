@@ -538,6 +538,11 @@ function Book(props) {
   }
 
   function handleClickAddnew(type) {
+    setBookName("");
+    setBookPhone("");
+    setBookAdults("");
+    setBookChild("");
+    setBookNote("");
     setIsShowPopupAddnew(true);
   }
   function onChangeTab() {
@@ -620,12 +625,11 @@ function Book(props) {
               // onChange={(val) => {
               //     setStaffDate(val);
               // }}
-              // ngayCheckIn = {setNgayCheckIn}
+              ngayCheckIn = {setNgayCheckIn}
               placeholder="dd/MM/yyyy"
               label={"Ngày checkin"}
               width={"100%"}
               onChange={(val) => {
-                debugger
                 const date = moment(val).format("YYYY-MM-DDT00:00:00")
                 setNgayCheckIn(date);
               }}
@@ -751,7 +755,7 @@ function Book(props) {
                     defaultValue={moment().unix() * 1000}
                     //min={moment().unix() * 1000 - ONE_DAY}
                     // onChange={(val) => {
-                    //     setStaffDate(val);
+                    //     setNgayCheckIn(val);
                     // }}
                     placeholder="dd/MM/yyyy"
                     label={"Ngày checkin"}
