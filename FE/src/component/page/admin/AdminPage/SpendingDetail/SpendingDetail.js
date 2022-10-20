@@ -8,6 +8,7 @@ import InputField from "../../../../base/Input/Input";
 import TableBase from "../../../../base/Table/Table";
 import AdminPage from "../AdminPage";
 import "./spendingDetail.scss"
+import moment from "moment"
 
 function SpendingDetail(props) {
     const { spendingID } = useParams();
@@ -138,7 +139,7 @@ function SpendingDetail(props) {
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ngày hóa đơn</span>
-                    <span className="spendingDetail-manager__item-content">{data.billDate}</span>
+                    <span className="spendingDetail-manager__item-content">{moment(spendingDetail?.ngayHoaDon).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="spendingDetail-manager__table">
                     <div className="spendingDetail-manager__table-title">Danh sách mặt hàng</div>
@@ -165,26 +166,29 @@ function SpendingDetail(props) {
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ảnh hóa đơn</span>
                     <span className="spendingDetail-manager__item-content">
-                      {spendingDetail?.anh ? <img src={spendingDetail?.anh} alt="" width={150} /> : "chưa có"}  
+                        {spendingDetail?.anh ? <img src={spendingDetail?.anh} alt="" width={150} /> : "Không có ảnh hóa đơn"}
                     </span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ghi chú</span>
-                    <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu ?? "Chưa có"}</span>
+                    <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu ?? "Không có ghi chú"}</span>
                 </div>
-                <div className="spendingDetail-manager__item">
+                {/* <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Trạng thái</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.trangThaiHienTai}</span>
-                </div>
+                </div> */}
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Người nhập</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.createdByUserName}</span>
                 </div>
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Ngày nhập</span>
-                    <span className="spendingDetail-manager__item-content">{data.date}</span>
+                    <span className="spendingDetail-manager__item-content">{moment(spendingDetail?.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
-                <div className="spendingDetail-manager__approve">
+                <div className="spendingDetail-manager__item" >
+                    <span className="spendingDetail-manager__item-lable" onClick={() => window.open(`/admin/spendings`, "_self")}>Quay lại</span>
+                </div>
+                {/* <div className="spendingDetail-manager__approve">
                     <div className="spendingDetail-manager__approve-title">Quản lý phê duyệt</div>
                     <div className="spendingDetail-manager__approve-content">
                         <div className="spendingDetail-manager__approve-content-text">
@@ -202,7 +206,7 @@ function SpendingDetail(props) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>}
 
         </AdminPage>

@@ -352,7 +352,7 @@ function Kitchen(props) {
         kieu: "Quản lý hóa đơn bếp",
         hinhAnh: images,
         matHangs: JSON.stringify(listItems),
-        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
         createdOnDate: date,
         ghiChu: itemNote

@@ -163,9 +163,11 @@ function Spending(props) {
         setStatusAction("UPDATE")
         setIdSpending(item.key)
         setIsShowPopupAddnew(true)
-        setItemBill(item.data.name)
-        setItemBillDate(item.data.ngayHoaDon)
+        setItemBill(item?.data?.name)
+        setItemBillDate(item?.data?.ngayHoaDon)
         setListItems(JSON.parse(item?.data?.matHang))
+        setImages(item?.data?.anh)
+        setItemNote(item?.data?.ghiChu)
       },
     },
     {
@@ -348,6 +350,7 @@ function Spending(props) {
         anh: images,
         matHang: JSON.stringify(listItems),
         tongSoTien: renderTotalMoney(listItems),
+        ghiChu: itemNote,
         createdByUserName: userName.userName,
         createdOnDate: date
       };
@@ -368,6 +371,7 @@ function Spending(props) {
         // ngayHoaDon: new Date(itemBillDate.getFullYear(), itemBillDate.GetMonth(), itemBillDate.getDate(),0,0,0,0),
         matHang: JSON.stringify(listItems),
         anh: images,
+        ghiChu: itemNote,
         tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
         createdOnDate: date
