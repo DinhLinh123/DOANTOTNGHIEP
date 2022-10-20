@@ -336,7 +336,7 @@ function Book(props) {
   useEffect(() => {
     dispatch(getBooking({ngayCheckIn, textSearch}));
     dispatch(getTable())
-  }, [dispatch, loading, ngayCheckIn, textSearch]);
+  }, [ngayCheckIn, textSearch]);
 
   function columnName(item) {
     return (
@@ -620,11 +620,12 @@ function Book(props) {
               // onChange={(val) => {
               //     setStaffDate(val);
               // }}
-              ngayCheckIn = {setNgayCheckIn}
+              // ngayCheckIn = {setNgayCheckIn}
               placeholder="dd/MM/yyyy"
               label={"Ngày checkin"}
               width={"100%"}
               onChange={(val) => {
+                debugger
                 const date = moment(val).format("YYYY-MM-DDT00:00:00")
                 setNgayCheckIn(date);
               }}

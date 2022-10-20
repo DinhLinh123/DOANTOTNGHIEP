@@ -731,7 +731,7 @@ function Spending(props) {
             name={"Thanh toán"}
             onClick={() => callApiPay()}
             background={"#0984e3"}
-            disabled={moneyCustomer < moneyTotal}
+            disabled={moneyCustomer < moneyMust}
           />,
         ]}
         width={600}
