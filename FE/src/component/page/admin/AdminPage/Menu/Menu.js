@@ -125,7 +125,7 @@ function Menu(props) {
     {
       title: "Xóa",
       onSelect: (val) => {
-        if (quyen2 === "0-0-3") {
+        if (quyen3 === "0-0-2") {
           setIsShowPopupComfirmDelete({ show: true, item: val.detail })
         } else {
           commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa menu")
@@ -619,25 +619,25 @@ function Menu(props) {
                       label={"Đơn vị tính"}
                       value={foodUnit}
                       onChange={(val) => { setFoodUnit(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <Input
                       label={"Giá tiền"}
                       value={foodPrice}
                       onChange={(val) => { setFoodPrice(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <Input
                       label={"Mô tả"}
                       value={foodDescribe}
                       onChange={(val) => { setFoodDescribe(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <Input
                       label={"Ghi chú"}
                       value={foodNote}
                       onChange={(val) => { setFoodNote(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} defaultValue={foodStatus}>
@@ -655,28 +655,28 @@ function Menu(props) {
                       onChange={(val) => {
                         setFoodName(val);
                       }}
-                      autoFocus
+                      // autoFocus
                       required
                     />
                     <Input
                       label={"Đơn vị tính"}
                       defaultValue={foodUnit}
                       onChange={(val) => { setFoodUnit(val) }}
-                      autoFocus
+                      // autoFocus
                       required
                     />
                     <Input
                       label={"Giá tiền"}
                       defaultValue={foodPrice}
                       onChange={(val) => { setFoodPrice(val) }}
-                      autoFocus
+                      // autoFocus
                       required
                     />
                     <Input
                       label={"Mô tả"}
                       defaultValue={foodDescribe}
                       onChange={(val) => { setFoodDescribe(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Ảnh <span style={{ color: "red" }}>*</span></div>
                     <div>
@@ -704,7 +704,7 @@ function Menu(props) {
                       label={"Ghi chú"}
                       defaultValue={foodNote}
                       onChange={(val) => { setFoodNote(val) }}
-                      autoFocus
+                      // autoFocus
                     />
                     <div className="menu-manager__popup-content_privateDish_status">Trạng thái</div>
                     <Radio.Group onChange={(val) => { setFoodStatus(val.target.value) }} value={foodStatus}>

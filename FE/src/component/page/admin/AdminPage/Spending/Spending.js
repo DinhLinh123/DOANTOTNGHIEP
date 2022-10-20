@@ -340,6 +340,8 @@ function Spending(props) {
   }
 
   const onSubmitSave = async () => {
+    // debugger
+    dispatch(changeLoadingApp(true))
     const userName = JSON.parse(localStorage.getItem("roleType"))
     const date = new Date();
     if (statusAction === "ADD") {
@@ -363,6 +365,7 @@ function Spending(props) {
       setImages([])
       setItemNote("")
       commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm chi tiêu thành công")
+      dispatch(changeLoadingApp(false))
     } else {
       const body = {
         id: idSpending,
@@ -383,6 +386,7 @@ function Spending(props) {
       ])
       setItemBill()
       setImages([])
+      dispatch(changeLoadingApp(false))
     }
 
   };

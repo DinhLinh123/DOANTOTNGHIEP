@@ -229,7 +229,7 @@ function Area(props) {
             <div className="area-manager">
                 <div className="area-manager__filter">
                     <div className="area-manager__filter-search">
-                        <InputField placeholder={"Tìm kiếm theo từ khóa"} width={400} onChange={(val) => {
+                        <InputField placeholder={"Tìm tên khu vực"} width={400} onChange={(val) => {
                             setTimeout(() => {
                                 setTextSearch(val)
                             }, 200);
@@ -241,7 +241,8 @@ function Area(props) {
                             name={"Thêm mới Khu vực"}
                             leftIcon={<PlusOutlined />}
                             onClick={() => setIsShowPopupAddNew({ show: true, title: 'Thêm mới Khu vực', key: 0 })}
-                        /> : null}
+                        /> 
+                         : null}
                        
                     </div>
                 </div>

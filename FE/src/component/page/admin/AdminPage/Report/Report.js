@@ -488,7 +488,7 @@ function Report(props) {
                             <div className="report-container__content-chart-customer">
                                 <div className="report-container__content-chart-spending-header">
                                     <div className="report-container__content-chart-spending-header-label">
-                                        Biểu đồ thống kê chi tiêu
+                                        Biểu đồ thống kê món ăn được gọi nhiều nhất
                                     </div>
                                     <div className="report-container__content-chart-spending-header-filter">
                                         <div className="report-container__content-chart-spending-header-filter-label">
