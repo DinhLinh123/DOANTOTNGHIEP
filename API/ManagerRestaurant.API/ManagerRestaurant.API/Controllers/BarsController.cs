@@ -25,15 +25,11 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/Bars
         [HttpGet]
-        public async Task<Responsive> GetBar()
+        public async Task<ActionResult<IEnumerable<Bar>>> GetBar()
         {
-            var res = new Responsive();
-            var data = await _context.Bar.ToListAsync();
-            List<Bar> Resutl = new List<Bar>();
-            //mã, tên, nhóm, đơn vị tính
-            
-            return res;
+            return await _context.Bar.ToListAsync();
         }
+
 
         // GET: api/Bars/5
         [HttpGet("{id}")]
