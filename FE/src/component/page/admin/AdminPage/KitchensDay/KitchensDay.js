@@ -23,8 +23,10 @@ function KitchensDay(props) {
     const [sortType, setSortType] = useState();
     const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
     const [itemUseDate, setItemUseDate] = useState("");
+    console.log("itemUseDateitemUseDateitemUseDate", itemUseDate);
     const [listItems, setListItems] = useState([{ name: "", unit: "", amount: "", unitprice: "" }]);
     const [itemNote, setItemNote] = useState("");
+    const [search, setSearch] = useState("")
 
     const COLUMN_TABLE_INDEX_MENU = {
         USENAME: "usename",
@@ -57,7 +59,7 @@ function KitchensDay(props) {
     ];
 
     function columnUseName(item) {
-        return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
+        return <div>{moment(item?.ngayHoaDon).format("DD-MM-YYYY")}</div>;
     }
     function columnAmount(item) {
         const count = JSON.parse(item?.matHangs)
@@ -134,18 +136,18 @@ function KitchensDay(props) {
         {
             title: "Sửa",
             onSelect: (item) => {
-                if(quyen2 === "0-3-1"){
+                if (quyen2 === "0-3-1") {
                     setStatusAction("UPDATE")
                     setIdKitchendays(item.key)
                     setIsShowPopupAddnew(true)
                     setItemUseDate(item.data.ngayHoaDon)
                     setListItems(JSON.parse(item?.data?.matHangs))
                     setItemNote(item.data.ghiChu)
-                }else{
+                } else {
                     commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa nguyên liêu")
 
                 }
-            
+
             },
         },
         {
@@ -153,9 +155,9 @@ function KitchensDay(props) {
             onSelect: (item) => {
                 if (quyen3 === "0-3-2") {
                     dispatch(deleteKitChensDay(item.key))
-                    
+
                 } else {
-                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa nguyên liêu") 
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền xóa nguyên liêu")
                 }
             },
         },
@@ -165,8 +167,8 @@ function KitchensDay(props) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getKitChensDay())
-    }, [dispatch, loading])
+        dispatch(getKitChensDay(search))
+    }, [dispatch, loading, search])
     function handleClickAddnew(type) {
         setIsShowPopupAddnew(true);
         setStatusAction("ADD")
@@ -186,7 +188,7 @@ function KitchensDay(props) {
         const date = new Date();
         if (statusAction === "ADD") {
             const body = {
-                ngayHoaDon: date.toISOString(itemUseDate),
+                ngayHoaDon: itemUseDate,
                 kieu: "Yêu cầu nguyên liệu",
                 matHangs: JSON.stringify(listItems),
                 tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
@@ -195,10 +197,11 @@ function KitchensDay(props) {
             };
 
             dispatch(postKitChensDay(body))
+            // console.log("bodybodybody", body, itemUseDate);
         } else {
             const body = {
                 id: idKitchenDays,
-                ngayHoaDon: date.toISOString(itemUseDate),
+                ngayHoaDon: itemUseDate,
                 kieu: "Yêu cầu nguyên liệu",
                 matHangs: JSON.stringify(listItems),
                 tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
@@ -311,15 +314,15 @@ function KitchensDay(props) {
             <div className="kitchensDay-manager">
                 <div className="kitchensDay-manager__filter">
                     <div className="kitchensDay-manager__filter-search">
-                        <DatePicker placeholder="dd/MM/yyyy" label={"Ngày sử dụng"} />
+                        <DatePicker placeholder="dd/MM/yyyy" label={"Ngày sử dụng"} onChange={(val) => setSearch(moment(val).format("YYYY-MM-DDT00:00:00"))} />
                     </div>
                     <div className="kitchensDay-manager__filter-create-new">
-                      {quyen1 === "0-3-0" ?   
-                      <Button2
-                            name={"Thêm mới"}
-                            leftIcon={<PlusOutlined />}
-                            onClick={() => handleClickAddnew()}
-                        /> : null}
+                        {quyen1 === "0-3-0" ?
+                            <Button2
+                                name={"Thêm mới"}
+                                leftIcon={<PlusOutlined />}
+                                onClick={() => handleClickAddnew()}
+                            /> : null}
                     </div>
                 </div>
                 <div className="kitchensDay-manager__content">
@@ -364,10 +367,10 @@ function KitchensDay(props) {
                                 <DatePicker
                                     defaultValue={itemUseDate}
                                     onChange={(val) => {
-                                        setItemUseDate(val);
+                                        setItemUseDate(moment(val).format("YYYY-MM-DDT00:00:00"));
                                     }}
                                     placeholder="dd/MM/yyyy"
-                                    label={"Ngày sử dụng"}
+                                    label={"Ngày sử dụng "}
                                 />
                             </div>
                             <div className="kitchensDay-manager__popup-buttonAdd">

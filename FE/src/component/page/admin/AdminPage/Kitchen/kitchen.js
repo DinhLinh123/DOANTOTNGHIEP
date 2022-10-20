@@ -30,6 +30,7 @@ function Kitchen(props) {
   const [isShowPopupAddnew, setIsShowPopupAddnew] = useState(false);
   const [itemBill, setItemBill] = useState("");
   const [itemBillDate, setItemBillDate] = useState("");
+  console.log("itemBillDateitemBillDate", itemBillDate);
   const [listItems, setListItems] = useState([
     { name: "", unit: "", amount: "", unitprice: "" },
   ]);
@@ -101,7 +102,7 @@ function Kitchen(props) {
     return <div>{moment(item?.ngayHoaDon).format("DD-MM-YYYY")}</div>;
   }
   function columnTotalmoney(item) {
-    return <div>{item?.tongSoTien}</div>;
+    return <div>{commonFunction.numberWithCommas(item?.tongSoTien,10)}</div>;
   }
   function columnDataentrydate(item) {
     return <div>{moment(item?.createdOnDate).format("DD-MM-YYYY")}</div>;
@@ -348,17 +349,17 @@ function Kitchen(props) {
     if (status === "ADD") {
       const body = {
         name: itemBill,
-        ngayHoaDon: date.toISOString(itemBillDate),
+        ngayHoaDon: moment(itemBillDate).format("YYYY-MM-DDT00:00:00"),
         kieu: "Quản lý hóa đơn bếp",
         hinhAnh: images,
         matHangs: JSON.stringify(listItems),
         tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
-        createdOnDate: date,
+        createdOnDate: date.toISOString(),
         ghiChu: itemNote
       };
       dispatch(postChickens(body))
-
+      // console.log("bodybodybodybody", body, itemBillDate);
     } else {
       const body = {
         id: idKitchen,
@@ -367,7 +368,7 @@ function Kitchen(props) {
         kieu: "Quản lý hóa đơn bếp",
         hinhAnh: images,
         matHangs: JSON.stringify(listItems),
-        tongSoTien: parseInt(commonFunction.numberWithCommas(renderTotalMoney((listItems))), 10),
+        tongSoTien: renderTotalMoney((listItems)),
         createdByUserName: userName.userName,
         createdOnDate: date,
         ghiChu: itemNote

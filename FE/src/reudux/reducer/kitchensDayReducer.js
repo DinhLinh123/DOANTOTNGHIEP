@@ -14,7 +14,7 @@ export default function chickensDayReducer(state = initalState, action) {
         case types.POST_KITCHEN_DAY_SUCCESS:
             return {
                 ...state,
-                dataChickensDay: [...state.dataChickensDay, action.payload.data]
+                dataChickensDay: [ action.payload.data, ...state.dataChickensDay]
             }
         case types.POST_KITCHEN_DAY_FAIL:
             return {

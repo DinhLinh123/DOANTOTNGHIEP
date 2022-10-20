@@ -33,6 +33,8 @@ function Booking(props) {
     * 1000);
   const [timeBooking, setTimeBooking] = useState()
   const [disabledButton, setDisabledButton] = useState(true);
+  const [bookDate, setBookDate] = useState("");
+  const [bookTime, setBookTime] = useState("");
 
   const dispatch = useDispatch()
   function onSubmit() {
@@ -40,13 +42,14 @@ function Booking(props) {
     if (adults > 0) {
       const body = {
         tenKhachHang: customerName,
-        soDienThoai:customerNamePhone,
+        soDienThoai: customerNamePhone,
         soNguoiLon: adults,
-        soTreEm : children,
-        thoiGian: date.toISOString(dateBooking),
-        gioDen:  date.toISOString(timeBooking),
-        ghiChu: ""
+        soTreEm: children,
+        thoiGian: date.toISOString(bookTime),
+        gioDen: bookDate,
+        ghiChu: note
       }
+      console.log(" setBookTime(val); setBookTime(val);", body);
       dispatch(postBooking(body))
       setCustomerName("")
       setCustomerPhone("")
@@ -73,7 +76,7 @@ function Booking(props) {
               thực tốt nhất tại House of Hongdae BBQ.
             </div>
             <div className="booking-container__book-left-img">
-              <img src={banner5} alt = ""/>
+              <img src={banner5} alt="" />
             </div>
           </div>
           <div className="booking-container__book-right">
@@ -108,7 +111,7 @@ function Booking(props) {
             </div>
             <div className="booking-container__book-right-item">
               <Input
-                defaultValue={adults}
+                value={adults}
                 onChange={(val) => {
                   setAdults(val);
                 }}
@@ -122,7 +125,7 @@ function Booking(props) {
             </div>
             <div className="booking-container__book-right-item">
               <Input
-                defaultValue={children}
+                value={children}
                 onChange={(val) => {
                   setChildren(val);
                 }}
@@ -140,7 +143,8 @@ function Booking(props) {
                   defaultValue={dateBooking}
                   min={moment().unix() * 1000 - ONE_DAY}
                   onChange={(val) => {
-                    setDateBooking(val);
+                    const date = moment(val).format("YYYY-MM-DDT00:00:00")
+                    setBookDate(date);
                   }}
                   placeholder="dd/MM/yyyy"
                   label={"Ngày"}
@@ -152,11 +156,11 @@ function Booking(props) {
                   label={"Giờ"}
                   defaultValue={timeBooking}
                   onChange={(val) => {
-                    setTimeBooking(val);
+                    setBookTime(val);
                   }}
                 />
               </div>
-              
+
             </div>
             <div className="booking-container__book-right-item">
               <Input
@@ -166,9 +170,6 @@ function Booking(props) {
                 }}
                 //type={"number"}
                 label={"Ghi chú"}
-                setDangerNote={(val) => {
-                  setNote(val);
-                }}
               />
             </div>
             <div className="booking-container__book-right-button">

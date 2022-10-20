@@ -148,7 +148,7 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ngày hóa đơn</span>
-                    <span className="kitchenDetail-manager__item-content">{moment(kitchenDetail.ngayHoaDon).format("DD-MM-YYYY")}</span>
+                    <span className="kitchenDetail-manager__item-content">{moment(kitchenDetail?.ngayHoaDon).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchenDetail-manager__table">
                     <div className="kitchenDetail-manager__table-title">Danh sách mặt hàng</div>
@@ -180,7 +180,7 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ghi chú</span>
-                    <span className="kitchenDetail-manager__item-content">{data.note}</span>
+                    <span className="kitchenDetail-manager__item-content">{kitchenDetail?.ghiChu ??  "Không có ghi chú"}</span>
                 </div>
                 {/* <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Trạng thái</span>
@@ -192,10 +192,10 @@ function KitchenDetail(props) {
                 </div>
                 <div className="kitchenDetail-manager__item">
                     <span className="kitchenDetail-manager__item-lable">Ngày nhập</span>
-                    <span className="kitchenDetail-manager__item-content">{data.date}</span>
+                    <span className="kitchenDetail-manager__item-content">{moment(kitchenDetail.createdOnDate).format("DD-MM-YYYY")}</span>
                 </div>
                 <div className="kitchenDetail-manager__item">
-                    <span className="kitchenDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens-days`, "_self")}>quay lại</span>
+                    <span className="kitchenDetail-manager__item-lable" onClick={() => window.open(`/admin/kitchens`, "_self")}>quay lại</span>
                 </div>
             </div>
         </AdminPage>

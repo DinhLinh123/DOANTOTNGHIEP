@@ -235,10 +235,10 @@ function BarInsert(props) {
         return <div>{item?.donVi}</div>;
     }
     function columnUnitPrice(item) {
-        return <div>{item?.donGia}</div>;
+        return <div>{commonFunction.numberWithCommas(item?.donGia, 10)}</div>;
     }
     function columnIntoMoney(item) {
-        return <div>{item?.thanhTien}</div>;
+        return <div>{commonFunction.numberWithCommas(item?.thanhTien, 10)}</div>;
     }
     // function columnNote(item) {
     //     return <div>{item?.note}</div>;
@@ -353,9 +353,9 @@ function BarInsert(props) {
                         <Dropdown
                             listOption={dataDrinks}
                             placeholder={"Chọn nhóm mặt hàng"}
-                            title={"Nhóm mặt hàng 1"}
-                            onChange={(val) => {setTextSearchNMH(val)}}
-                            value = {textSearchNMH}
+                            title={"Nhóm mặt hàng"}
+                            onChange={(val) => { setTextSearchNMH(val) }}
+                            value={textSearchNMH}
                         />
                     </div>
                     <div className="barInsert-manager__filter-date">
@@ -434,8 +434,8 @@ function BarInsert(props) {
                             <Input
                                 label={"Mã mặt hàng"}
                                 // defaultValue={drinksCode}
-                                value = {drinksCode}
-                                placeholder = "Nhập mã mặt hàng"
+                                value={drinksCode}
+                                placeholder="Nhập mã mặt hàng"
                                 onChange={(val) => {
                                     setDrinksCode(val);
                                 }}
@@ -454,7 +454,7 @@ function BarInsert(props) {
                                 placeholder={"Chọn nhóm mặt hàng"}
                                 title={"Nhóm mặt hàng"}
                                 // defaultValue={drinksGroup}
-                                value = {drinksGroup}
+                                value={drinksGroup}
                                 onChange={(val) => { setDrinksGroup(val) }}
                             />
                             <Input

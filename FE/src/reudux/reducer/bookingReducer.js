@@ -11,11 +11,14 @@ export default function bookingReducer(state = initalState, action) {
         case types.GET_BOOKING:
             return {
                 ...state,
+                loading: true,
             }
         case types.GET_BOOKING_SUCCESS:
             return {
                 ...state,
-                dataBooking: action.payload.data.data
+                dataBooking: action.payload.data.data,
+                loading: false,
+
             }
 
         case types.GET_BOOKING_FAIL:

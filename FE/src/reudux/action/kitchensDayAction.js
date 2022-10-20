@@ -1,8 +1,9 @@
 import * as types from "../constant/kitchensDayType"
 
-export const getKitChensDay = () => ({
+export const getKitChensDay = (data) => ({
 
-    type: types.GET_KIETCHEN_DAY
+    type: types.GET_KIETCHEN_DAY,
+    payload: data
 })
 
 export const getKitChensDaySuccess = (data) => ({

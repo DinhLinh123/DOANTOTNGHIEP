@@ -14,7 +14,7 @@ export default function chickensReducer(state = initalState, action) {
         case types.POST_CHICKEN_SUCCESS:
             return {
                 ...state,
-                dataChickens: [...state.dataChickens, action.payload.data]
+                dataChickens: [action.payload.data, ...state.dataChickens]
             }
         case types.POST_CHICKEN_FAIL:
             return {

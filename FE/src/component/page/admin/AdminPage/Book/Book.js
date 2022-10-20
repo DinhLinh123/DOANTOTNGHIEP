@@ -342,7 +342,7 @@ function Book(props) {
     return (
       <div>
         {item?.tenKhachHang}
-        <div className="hidden-id">{item.id}</div>
+        {/* <div className="hidden-id">{item?.id}</div> */}
       </div>
     );
   }
@@ -565,7 +565,6 @@ function Book(props) {
         gioDen: bookDate,
         ghiChu: bookNote,
       };
-      console.log("bodybodybody", body);
       dispatch(postBooking(body));
     } else if (status === "UPDATE") {
       const body = {
@@ -574,15 +573,14 @@ function Book(props) {
         maKhachHang: idMKH,
         tenKhachHang: bookName,
         soDienThoai: bookPhone,
-        gioDen: date.toISOString(bookTime),
-        thoiGian: date.toISOString(bookDate),
+        thoiGian: date.toISOString(bookTime),
+        gioDen: bookDate,
         soNguoiLon: bookAdults,
         soTreEm: bookChild,
         ghiChu: bookNote,
         lastModifiedByUserId: "00000000-0000-0000-0000-000000000000",
         lastModifiedByUserName: "string"
       };
-      console.log("bodybodybodybody", body);
       dispatch(
         updateBooking(
           body
@@ -617,7 +615,7 @@ function Book(props) {
           </div>
           <div className="book-manager__filter-date">
             <DatePicker
-              defaultValue={moment().unix() * 1000}
+              // defaultValue={moment().unix() * 1000}
               // min={moment().unix() * 1000 - ONE_DAY}
               // onChange={(val) => {
               //     setStaffDate(val);
@@ -708,7 +706,7 @@ function Book(props) {
                 autoFocus
               />
               <DatePicker
-                defaultValue={moment().unix() * 1000}
+                // defaultValue={moment().unix() * 1000}
                 min={moment().unix() * 1000 - ONE_DAY}
                 onChange={(val) => {
                   const date = moment(val).format("YYYY-MM-DDT00:00:00")

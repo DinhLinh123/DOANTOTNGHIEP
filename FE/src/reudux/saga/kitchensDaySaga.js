@@ -23,10 +23,10 @@ function* postDataKitchensDay({ payload }) {
     }
 }
 
-function* getDatakitChensDay() {
+function* getDatakitChensDay({payload}) {
 
     try {
-        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/filter?_filter={"kieu":"Yêu cầu nguyên liệu"}`)
+        const res = yield axios.get(`${URL_API}/PhieuNhapVatTu/filter?_filter={"kieu":"Yêu cầu nguyên liệu","NgayHoaDon": "${payload}"}`)
         if (res) {
             yield put(actions.getKitChensDaySuccess(res.data))
         }
