@@ -72,6 +72,10 @@ const API_REVENUE_AND_EXPENDITURE = {
     GET: PART +  '/BaoCaoThongKe/thuchi/'
 };
 
+const API_GET_BILL = {
+    GET: PART +  '/PhieuOder/filter'
+};
+
 const API_REPORT_FOOD = {
     GET: PART +  '/BaoCaoThongKe/monan/'
 };
@@ -89,5 +93,6 @@ export {
     API_OFFER,
     API_REVENUE_AND_EXPENDITURE,
     API_REPORT_FOOD,
-    UPLOAD_FILE
+    UPLOAD_FILE,
+    API_GET_BILL
 };

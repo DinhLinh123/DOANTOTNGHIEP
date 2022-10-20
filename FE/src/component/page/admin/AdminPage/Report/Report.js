@@ -9,12 +9,13 @@ import $ from "jquery";
 import TableBase from "../../../../base/Table/Table"
 import Dropdown from "../../../../base/Dropdown/Dropdown"
 import moment from "moment";
-import { API_REPORT_FOOD, API_REVENUE_AND_EXPENDITURE } from "../../../../base/common/endpoint"
+import { API_GET_BILL, API_REPORT_FOOD, API_REVENUE_AND_EXPENDITURE } from "../../../../base/common/endpoint"
 import { changeLoadingApp } from "../../../../../reudux/action/loadingAction"
 import { useDispatch } from "react-redux"
 import baseApi from "../../../../../api/baseApi"
 import InputField from "../../../../base/Input/Input"
 import noDataimg from "../../../../../image/nodatachart.png"
+import commonFunction from "../../../../base/common/commonFunction"
 
 const MENU_TAB = {
     CHART: "chart",
@@ -33,10 +34,10 @@ const { RangePicker } = DatePicker;
 
 const COLUMN_TABLE_INDEX_MENU = {
     NAME: "name",
-    UNIT: "unit",
-    PRICE: "price",
-    IMAGE: "image",
-    STATUS: "status",
+    TOTAL: "total",
+    PROMOTION: "promotion",
+    REAL_MONEY: "realMoney",
+    TIME: "time",
     CATEGORY: "category",
     DESCRIBE: "describe"
 };
@@ -49,79 +50,36 @@ function Report(props) {
     const [timeEnd, setTimeEnd] = useState("")
     const [dataLineChart, setDataLineChart] = useState([])
     const [dataBarChart, setDataBarChart] = useState([])
+    const [dataBills, setDataBills] = useState([])
     const [pageSize, setPageSize] = useState(5)
 
-    const data = [
-        {
-            name: 'Page A',
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: 'Page B',
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: 'Page C',
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: 'Page D',
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: 'Page E',
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: 'Page F',
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: 'Page G',
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
     const columns = [
+        // {
+        //     title: "Tên",
+        //     dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
+        //     sorter: true,
+        //     width: "200px",
+        // },
         {
-            title: "Tên",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.NAME,
-            sorter: true,
-            width: "200px",
-        },
-        {
-            title: "Đơn vị tính",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.UNIT,
+            title: "Tổng tiền",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.TOTAL,
             //sorter: true,
             width: "200px",
         },
         {
-            title: "Thể loại",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.CATEGORY,
+            title: "Khuyễn mãi",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.PROMOTION,
             width: "200px",
         },
         {
-            title: "Giá tiền",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.PRICE,
+            title: "Tiền phải trả",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.REAL_MONEY,
             width: "200px",
-            sorter: true
+            // sorter: true
         },
         {
-            title: "Trạng thái",
-            dataIndex: COLUMN_TABLE_INDEX_MENU.STATUS,
+            title: "Thời gian thanh toán",
+            dataIndex: COLUMN_TABLE_INDEX_MENU.TIME,
             width: "200px",
         },
     ];
@@ -250,9 +208,22 @@ function Report(props) {
     }, [typeFilter])
 
     useEffect(() => {
-        callApiGetRevenueAndExpenditure()
-        callApiGetReportFood()
+        if(menuTab === MENU_TAB.CHART){
+            callApiGetRevenueAndExpenditure()
+            callApiGetReportFood()
+        }else{
+            callApiGetBill()
+        }
     }, [timeStart, timeEnd])
+
+    useEffect(() => {
+        if(menuTab === MENU_TAB.CHART){
+            callApiGetRevenueAndExpenditure()
+            callApiGetReportFood()
+        }else{
+            callApiGetBill()
+        }
+    }, [menuTab])
 
     useEffect(() => {
         callApiGetReportFood()
@@ -265,11 +236,7 @@ function Report(props) {
         if (timeStart != '' && timeEnd != '') {
             let a = (new Date(moment(timeStart).startOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
             let b = (new Date(moment(timeEnd).endOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
-            let param = {
-                "TimeStart": a,
-                "TimeEnd": b,
-                "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
-            }
+            let param = `?TimeStart=${a}&TimeEnd=${b}&isMonth=${(typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR)}&PageSize=25`;
             baseApi.get(
                 (res) => {
                     let data = res?.data?.map((item) => {
@@ -304,9 +271,39 @@ function Report(props) {
                     dispatch(changeLoadingApp(false))
                 },
                 null,
-                API_REVENUE_AND_EXPENDITURE.GET + encodeURIComponent(JSON.stringify(param)),
+                API_REVENUE_AND_EXPENDITURE.GET + param,
                 null,
                 {}
+            )
+        }
+
+    }
+
+    function callApiGetBill() {
+        dispatch(changeLoadingApp(true))
+        let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+
+        if (timeStart != '' && timeEnd != '') {
+            let a = (new Date(moment(timeStart).startOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let b = (new Date(moment(timeEnd).endOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
+            let body = {
+                "endTime": b,
+                "startTime": a,
+                "pageNumber": 1,
+                "pageSize": 10
+              }
+            baseApi.post(
+                (res) => {
+                    setDataBills(res?.data)
+                    dispatch(changeLoadingApp(false))
+                },
+                () => {
+                    dispatch(changeLoadingApp(false))
+                },
+                null,
+                API_GET_BILL.GET,
+                null,
+                body
             )
         }
 
@@ -319,11 +316,7 @@ function Report(props) {
         if (timeStart != '' && timeEnd != '') {
             let a = (new Date(moment(timeStart).startOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
             let b = (new Date(moment(timeEnd).endOf('day').unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
-            let param = {
-                "TimeStart": a,
-                "TimeEnd": b,
-                "isMonth": (typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR),
-            }
+            let param = `?TimeStart=${a}&TimeEnd=${b}&isMonth=${(typeFilter === TYPE_FILTER.QUARTER || typeFilter === TYPE_FILTER.YEAR)}&PageSize=${pageSize}`;
             baseApi.get(
                 (res) => {
                     let data = res?.data?.map((item) => {
@@ -358,12 +351,47 @@ function Report(props) {
                     dispatch(changeLoadingApp(false))
                 },
                 null,
-                API_REPORT_FOOD.GET + encodeURIComponent(JSON.stringify(param)),
+                API_REPORT_FOOD.GET + param,
                 null,
                 {}
             )
         }
     }
+    function columnTotal(item) {
+        return(<div>{commonFunction.numberWithCommas(item?.tongTien) }</div>)
+    }
+
+    function columnPromotion(item) {
+        return(<div>{commonFunction.numberWithCommas(item?.soTienGiam)}</div>)
+    }
+
+    function columnRealMoney(item) {
+        return(<div>{commonFunction.numberWithCommas(item?.thucThu)}</div>)
+    }
+
+    function columnTime(item) {
+        let time = moment(item?.thoiGianThanhToan).format("DD/MM/YYYY")
+        return(<div>{time}</div>)
+    }
+
+
+    function convertDataTable(dataTable) {
+        let listData;
+        listData = dataTable.map((item, idx) => {
+          return {
+            detail: item,
+            // [COLUMN_TABLE_INDEX_MENU.NAME]: columnName(item),
+            [COLUMN_TABLE_INDEX_MENU.TOTAL]: columnTotal(item),
+            [COLUMN_TABLE_INDEX_MENU.PROMOTION]: columnPromotion(item),
+            [COLUMN_TABLE_INDEX_MENU.REAL_MONEY]: columnRealMoney(item),
+            [COLUMN_TABLE_INDEX_MENU.TIME]: columnTime(item),
+            // [COLUMN_TABLE_INDEX_MENU.STATUS]: columnStatus(item),
+            key: idx,
+            item
+          };
+        });
+        return [...listData];
+      }
 
     // useEffect(() => {
     //     console.log(dataLineChart)
@@ -508,12 +536,12 @@ function Report(props) {
                         menuTab === MENU_TAB.BILL &&
                         <div className="report-container__content-bill">
                             <TableBase
-                                // onChangePagination={(page, pageSize)=>{}}
+                                onChangePagination={(page, pageSize)=>{}}
                                 columns={columns}
-                                // total={dataTotal}
-                                // data={convertDataTable(dataTable)}
-                                // loading={false}
-                                hasMoreOption
+                                total={dataBills?.length}
+                                data={convertDataTable(dataBills)}
+                                loading={false}
+                                // hasMoreOption
                             // option={OPTION_MORE_TABLE}
                             // setObjectSort={(field, order) => {
                             //     setSortType({

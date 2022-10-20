@@ -26,6 +26,7 @@ import Popup from "../../../../base/Popup/Popup";
 import RadioCheck from "../../../../base/Radio/Radio";
 import AdminPage from "../AdminPage";
 import "./pay.scss";
+import moment from "moment";
 
 function Spending(props) {
   const dispatch = useDispatch();
@@ -199,12 +200,15 @@ function Spending(props) {
   //thực hiện thanh toán
   function callApiPay() {
     dispatch(changeLoadingApp(true));
+    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    let time = (new Date(moment().unix() * 1000 - tzoffset)).toISOString().slice(0, -1);
     let body = order;
     body.doAns = orderSelected;
     body.tongTien = moneyTotal;
     body.thucThu = moneyMust;
     body.soTienGiam = moneyVoucher;
     body.idBan = tableID;
+    body.thoiGianThanhToan = time;
     body.trangThai = 1;
     baseApi.put(
       (res) => {
@@ -363,9 +367,9 @@ function Spending(props) {
     setOrderSelected([]);
   }
 
-  useEffect(() => {
-    console.log(table)
-  }, [table]);
+  // useEffect(() => {
+  //   console.log(table)
+  // }, [table]);
 
   return (
     <AdminPage title={"Thanh toán hóa đơn"} index={MENU_TAB_ADMIN.PAY}>
@@ -890,11 +894,13 @@ function Spending(props) {
         show={showPopupExport}
         onClickClose={() => {
           setOrderSelected([]);
+          setOfferChoose({})
           setShowPopupExport(false)
         }}
         button={[
           <Button2 name={"Hủy"} onClick={() => {
             setOrderSelected([]);
+            setOfferChoose({})
             setShowPopupExport(false)
           }} />,
           <Button2 name={"Xuất hóa đơn"} onClick={() => exportFile()} />,
@@ -952,7 +958,7 @@ function Spending(props) {
               <tr className="menu-popup-detail__footer">
                 <td>Tổng tiền</td>
                 <td colSpan={3} className="money">
-                {commonFunction.numberWithCommas(moneyTotal)}(đ)
+                  {commonFunction.numberWithCommas(moneyTotal)}(đ)
                 </td>
               </tr>
             </table>
@@ -973,10 +979,10 @@ function Spending(props) {
                     Tiền phải trả:
                   </div>
                   <div className="menu-popup-detail__promotion-customer-value">
-                  {commonFunction.numberWithCommas(
-                    JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
-                  )}
-                  (đ)
+                    {commonFunction.numberWithCommas(
+                      JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
+                    )}
+                    (đ)
                   </div>
                 </div>
                 <div className="menu-popup-detail__promotion-customer">
@@ -984,7 +990,7 @@ function Spending(props) {
                     Tiền mặt khách đưa:
                   </div>
                   <div className="menu-popup-detail__promotion-customer-value">
-                    {commonFunction.numberWithCommas(moneyCustomer  || 0)}(đ)
+                    {commonFunction.numberWithCommas(moneyCustomer || 0)}(đ)
                   </div>
                 </div>
 
@@ -999,18 +1005,28 @@ function Spending(props) {
               </div>
               :
               <div className="menu-popup-detail__promotion">
-                {JSON.stringify(offerChoose) == "{}"  && 
+                {JSON.stringify(offerChoose) != "{}" &&
                   <div className="menu-popup-detail__promotion-customer">
+                    <div className="menu-popup-detail__promotion-customer-title">
+                      Khuyết mãi:
+                    </div>
+                    <div className="menu-popup-detail__promotion-customer-value">
+                      {commonFunction.numberWithCommas(moneyVoucher)}(đ)
+                    </div>
+                  </div>
+                }
+
+                <div className="menu-popup-detail__promotion-customer">
                   <div className="menu-popup-detail__promotion-customer-title">
-                    Khuyết mãi:
+                    Chuyển khoản:
                   </div>
                   <div className="menu-popup-detail__promotion-customer-value">
-                    {commonFunction.numberWithCommas(moneyVoucher)}(đ)
+                    {commonFunction.numberWithCommas(
+                      JSON.stringify(offerChoose) == "{}" ? moneyTotal : moneyMust
+                    )}
+                    (đ)
                   </div>
                 </div>
-                }
-                
-                Chuyển khoản
               </div>
             }
           </div>

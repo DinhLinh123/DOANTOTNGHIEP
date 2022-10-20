@@ -148,6 +148,9 @@ function TableBase(props) {
     }
     return columnsList;
   }
+  useEffect(()=>{
+    console.log(data)
+  },[data])
 
 
   return (
