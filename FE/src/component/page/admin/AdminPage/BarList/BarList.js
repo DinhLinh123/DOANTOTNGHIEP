@@ -154,7 +154,7 @@ function BarList(props) {
 
     const { dataBars } = useSelector(state => state.barsReducer)
     const disptach = useDispatch()
-
+   
     useEffect(() => {
         disptach(getBars({
             PageSize: 1,
@@ -251,8 +251,8 @@ function BarList(props) {
                             listOption={dataDrinks}
                             placeholder={"Chọn nhóm mặt hàng"}
                             title={"Nhóm mặt hàng"}
-                            onChange = {(val) => setTextSearchNMH(val)}
-                            value = {textSearchNMH}
+                            onChange={(val) => setTextSearchNMH(val)}
+                            value={textSearchNMH}
                         />
                     </div>
 

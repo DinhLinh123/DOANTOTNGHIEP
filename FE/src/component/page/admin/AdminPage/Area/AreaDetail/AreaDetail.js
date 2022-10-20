@@ -160,7 +160,7 @@ function AreaDetail(props) {
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa bàn ăn thành công")
                 }
                 else {
-                    commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền sửa bàn")
+                    commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa bàn")
                 }
                
             },
