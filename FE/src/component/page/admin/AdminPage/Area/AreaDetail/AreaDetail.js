@@ -16,6 +16,9 @@ import { API_AREA, API_TABLE } from "../../../../../base/common/endpoint";
 import { useParams } from "react-router-dom";
 import commonFunction from "../../../../../base/common/commonFunction";
 import ModalConfirm from "../../../../../base/ModalConfirm/ModalConfirm";
+import {
+  LeftOutlined
+} from "@ant-design/icons";
 
 function AreaDetail(props) {
 
@@ -67,7 +70,7 @@ function AreaDetail(props) {
     const getQuyen = JSON.parse(localStorage.getItem("quyen"))
 
     const quyen = getQuyen
-  
+
     const quyen1 = quyen?.find((item) => item === "0-7-3")
     const quyen2 = quyen?.find((item) => item === "0-7-4")
     const quyen3 = quyen?.find((item) => item === "0-7-5")
@@ -102,19 +105,19 @@ function AreaDetail(props) {
 
         baseApi.post(
             (res) => {
-                
-                if(quyen1 === "0-7-3"){
+
+                if (quyen1 === "0-7-3") {
                     dispatch(changeLoadingApp(false))
                     setShowPopupAddNew({ show: false, title: '', key: -1 })
                     let _listTable = [...list]
-    
+
                     _listTable.push(res.data)
                     setList(_listTable)
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Thêm bàn thành công")
-                }else{
+                } else {
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền thêm bàn thành công")
                 }
-               
+
             },
             () => {
                 dispatch(changeLoadingApp(false))
@@ -155,14 +158,14 @@ function AreaDetail(props) {
 
         baseApi.put(
             (res) => {
-                if(quyen2 === "0-7-4"){
+                if (quyen2 === "0-7-4") {
                     setShowPopupAddNew({ show: false, title: '', key: -1 })
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Sửa bàn ăn thành công")
                 }
                 else {
                     commonFunction.messages(TYPE_MESSAGE.ERROR, "Không có quyền sửa bàn")
                 }
-               
+
             },
             () => {
                 setShowPopupAddNew({ show: false, title: '', key: -1 })
@@ -178,16 +181,16 @@ function AreaDetail(props) {
     function deleteTable() {
         baseApi.delete(
             (res) => {
-                if(quyen3 === "0-7-5"){
+                if (quyen3 === "0-7-5") {
                     setShowPopupAddNew({ show: false, title: '', key: -1 })
                     setIsShowPopupComfirmDelete({ show: false, item: '' })
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa bàn ăn thành công")
                     callApiGetTableInArea()
-                }else {
+                } else {
                     commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Không có quyền xóa bàn")
 
                 }
-               
+
             },
             () => {
                 setShowPopupAddNew({ show: false, title: '', key: -1 })
@@ -207,6 +210,11 @@ function AreaDetail(props) {
         >
             <div className="area-detail">
                 <div className="area-detail__header">
+                    <div className="area-detail__header-back"
+                        onClick={() => { window.open('/admin/areas', '_self') }}
+                    >
+                        <LeftOutlined />
+                    </div>
                     <div className="area-detail__header-name">
                         <div className="area-detail__header-name-label">
                             Tên khu vực:

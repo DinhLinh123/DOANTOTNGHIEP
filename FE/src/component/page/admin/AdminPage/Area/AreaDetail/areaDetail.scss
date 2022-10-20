@@ -7,6 +7,11 @@
         align-items: center;
         height: 36px;
 
+        &-back{
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
         &-name {
             display: flex;
             align-items: center;
