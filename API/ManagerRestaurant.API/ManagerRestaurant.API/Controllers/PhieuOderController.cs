@@ -168,10 +168,11 @@ namespace ManagerRestaurant.API.Controllers
                 res.Code = 204;
                 res.Mess = "Invalid data";
                 return res;
-            }            try
+            }
+            try
             {
                 var phieuOder = _context.PhieuOder.Find(id);
-               if (phieuOder != null)
+                if (phieuOder != null)
                 {
                     if (item.IdBan == Guid.Empty)
                     {
@@ -195,13 +196,14 @@ namespace ManagerRestaurant.API.Controllers
                     phieuOder.TrangThai = item.TrangThai;
                     phieuOder.LastModifiedByUserId = item.LastModifiedByUserId;
                     phieuOder.LastModifiedByUserName = item.LastModifiedByUserName;
-                    if (item.TrangThai == 1) { 
+                    if (item.TrangThai == 1)
+                    {
                         var ban = await _context.Ban.FindAsync(item.IdBan);
                         ban.TrangThai = 0;
                         phieuOder.ThoiGianThanhToan = DateTime.Now;
                         await _context.SaveChangesAsync();
                     }
-                    
+
                     //delete all order old
                     _context.Oder.RemoveRange(_context.Oder.Where(x => x.IdPhieuOder == phieuOder.Id));
 
@@ -349,53 +351,46 @@ namespace ManagerRestaurant.API.Controllers
             return NoContent();
         }
 
-        //[HttpGet("filter")]
-        //public async Task<Responsive> GetFilterPhieuOder([FromQuery] string _filter)
-        //{
-        //    try
-        //    {
-
-        //        var filter = JsonConvert.DeserializeObject<PhieuOderFilter>(_filter);
-        //        var query = from s in _context.PhieuOder select s;
-        //        if (filter.Id != Guid.Empty)
-        //        {
-        //            query = query.Where((x) => x.Id == filter.Id);
-        //        }
-        //        if (filter.TextSearch.Length > 0)
-        //        {
-        //            query = query.Where((x) => x.Name.Contains(filter.TextSearch));
-        //        }
-
-        //        if (filter.PageNumber > 0 && filter.PageSize > 0)
-        //        {
-        //            query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
-        //        }
-
-        //        var data = await query.ToListAsync();
-
-        //        var mes = "";
-        //        if (data.Count == 0)
-        //        {
-        //            mes = "Not data";
-        //        }
-        //        else
-        //        {
-        //            mes = "Get success";
-        //        }
-
-        //        var res = new Responsive(200, mes, data);
-        //        return res;
-        //    }
-        //    catch (Exception err)
-        //    {
-        //        var res = new Responsive(500, err.Message, err.ToString());
-        //        return res;
-        //    }
-        //}
-
-        class PhieuOderFilter : BaseFilter
+        [HttpPost("filter")]
+        public async Task<Responsive> GetFilterPhieuOder(PhieuOderFilter filter)
         {
-            public Guid? IdBan { get; set; }
+            try
+            {
+                var query = from s in _context.PhieuOder select s;
+                query = query.Where(x => x.ThoiGianThanhToan >= filter.StartTime && x.ThoiGianThanhToan <= filter.EndTime);
+                if (filter.PageNumber > 0 && filter.PageSize > 0)
+                {
+                    query = query.Skip(filter.PageSize * (filter.PageNumber - 1)).Take(filter.PageSize);
+                }
+
+                var data = await query.ToListAsync();
+
+                var mes = "";
+                if (data.Count == 0)
+                {
+                    mes = "Not data";
+                }
+                else
+                {
+                    mes = "Get success";
+                }
+
+                var res = new Responsive(200, mes, data);
+                return res;
+            }
+            catch (Exception err)
+            {
+                var res = new Responsive(500, err.Message, err.ToString());
+                return res;
+            }
+        }
+
+        public class PhieuOderFilter
+        {
+            public DateTime EndTime { get; set; }
+            public DateTime StartTime { get; set; }
+            public int PageNumber { get; set; } = 1;
+            public int PageSize { get; set; } = 20;
         }
     }
 }

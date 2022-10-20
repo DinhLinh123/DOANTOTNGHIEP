@@ -287,6 +287,9 @@ namespace ManagerRestaurant.API.Controllers
                 _context.DatBan.Add(datBan);
 
                 var status = await _context.SaveChangesAsync();
+
+                //send email
+
                 return new Responsive(200, "Create success", datBan);
 
             }

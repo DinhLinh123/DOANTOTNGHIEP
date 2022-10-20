@@ -25,9 +25,14 @@ namespace ManagerRestaurant.API.Controllers
 
         // GET: api/Bars
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bar>>> GetBar()
+        public async Task<Responsive> GetBar()
         {
-            return await _context.Bar.ToListAsync();
+            var res = new Responsive();
+            var data = await _context.Bar.ToListAsync();
+            List<Bar> Resutl = new List<Bar>();
+            //mã, tên, nhóm, đơn vị tính
+            
+            return res;
         }
 
         // GET: api/Bars/5
@@ -106,7 +111,7 @@ namespace ManagerRestaurant.API.Controllers
                     obj.MaMatHang = item.MaMatHang;
                     obj.TenMatHang = item.TenMatHang;
                     obj.NhomMatHang = item.NhomMatHang;
-                    obj.SoLuong = item.SoLuong;
+                    obj.SoLuong = obj.SoLuong + item.SoLuong;
                     obj.DonVi = item.DonVi;
                     obj.DonGia = item.DonGia;
                     obj.ThanhTien = item.ThanhTien;
