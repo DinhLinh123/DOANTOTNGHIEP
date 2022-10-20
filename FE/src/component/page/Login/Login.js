@@ -182,9 +182,9 @@ function Login() {
                   <Button name={"Đăng nhập"} background={"#1cc0a9"} onClick={() => { onClickSubmit() }} style={{ width: '100%' }} disabled={disabled} />
                 </div>
 
-                <div className="data-login-system__container-right-login-more">
+                {/* <div className="data-login-system__container-right-login-more">
                   <Button name={"Đăng ký mới"} onClick={() => { setIsCreateNewAccount(true) }} style={{ width: '150px' }} className={"button-login-more"} />
-                </div>
+                </div> */}
               </div>
             </>
             :

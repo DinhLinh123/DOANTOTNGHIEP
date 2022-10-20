@@ -1013,8 +1013,6 @@ function Spending(props) {
                 Chuyển khoản
               </div>
             }
-
-
           </div>
         }
       />
