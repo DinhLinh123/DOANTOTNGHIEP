@@ -39,15 +39,15 @@ function* deleteDataSpending({ payload }) {
         const res = yield axios.delete(`${URL_API}/ChiTieuTrongNgay/${payload}`)
         if (res) {
             yield put(actions.deleteSpendingSuccess(payload))
-            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa chi tiêu thành công")
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa hóa đơn chi tiêu thành công")
         } else {
-            commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa chi tiêu thất bại")
+            commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa hóa đơn chi tiêu thất bại")
 
 
         }
     } catch (error) {
         yield put(actions.deleteSpendingFail(error))
-        commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa chi tiêu thất bại")
+        commonFunction.messages(TYPE_MESSAGE.ERROR, "Xóa hóa đơn chi tiêu thất bại")
     }
 }
 

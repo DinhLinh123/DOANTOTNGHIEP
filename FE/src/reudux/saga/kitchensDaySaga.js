@@ -43,14 +43,14 @@ function* deleteDataKitchensDay({ payload }) {
         const res = yield axios.delete(`${URL_API}/PhieuNhapVatTu/${payload}`)
         if (res) {
             yield put(actions.deleteKitChensDaySuccess(payload))
-            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa hóa đơn bếp thành công")
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa yêu cầu nguyên liệu thành công")
         }
         else {
-            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa hóa đơn bếp thất bại")
+            commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa yêu cầu nguyên liệu thất bại")
         }
     } catch (error) {
         yield put(actions.deleteKitChensDayFail(error))
-        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa hóa đơn bếp thất bại")
+        commonFunction.messages(TYPE_MESSAGE.SUCCESS, "Xóa yêu cầu nguyên liệu thất bại")
 
 
     }

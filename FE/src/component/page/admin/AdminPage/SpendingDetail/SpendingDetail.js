@@ -172,10 +172,7 @@ function SpendingDetail(props) {
                     <span className="spendingDetail-manager__item-lable">Ghi chú</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.ghiChu ?? "Chưa có"}</span>
                 </div>
-                <div className="spendingDetail-manager__item">
-                    <span className="spendingDetail-manager__item-lable">Trạng thái</span>
-                    <span className="spendingDetail-manager__item-content">{spendingDetail?.trangThaiHienTai}</span>
-                </div>
+                
                 <div className="spendingDetail-manager__item">
                     <span className="spendingDetail-manager__item-lable">Người nhập</span>
                     <span className="spendingDetail-manager__item-content">{spendingDetail?.createdByUserName}</span>
@@ -184,25 +181,7 @@ function SpendingDetail(props) {
                     <span className="spendingDetail-manager__item-lable">Ngày nhập</span>
                     <span className="spendingDetail-manager__item-content">{data.date}</span>
                 </div>
-                <div className="spendingDetail-manager__approve">
-                    <div className="spendingDetail-manager__approve-title">Quản lý phê duyệt</div>
-                    <div className="spendingDetail-manager__approve-content">
-                        <div className="spendingDetail-manager__approve-content-text">
-                            <InputField label={"Nội dung phê duyệt"} />
-                        </div>
-                        <div className="spendingDetail-manager__approve-content-text">
-
-                        </div>
-                        <div className="spendingDetail-manager__approve-content-date">
-                            <div className="spendingDetail-manager__approve-content-date-label">
-                                Ngày phê duyệt:
-                            </div>
-                            <div className="spendingDetail-manager__approve-content-date-value">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>}
 
         </AdminPage>
