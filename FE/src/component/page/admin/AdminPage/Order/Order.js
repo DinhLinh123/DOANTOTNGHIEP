@@ -237,7 +237,21 @@ function Order(props) {
     };
     baseApi.put(
       (res) => {
-        window.open(`/admin/tables`, "_self");
+        let _table = table;
+        _table.trangThai = 1;
+        baseApi.put(
+          () => {
+            window.open(`/admin/tables`, "_self");
+          },
+          () => {
+            debugger;
+          },
+          null,
+          API_TABLE.UPDATE_BY_ID + tableID,
+          null,
+          _table
+        );
+        
         commonFunction.messages(
           TYPE_MESSAGE.SUCCESS,
           "Cập nhật phiếu oder thành công!"
