@@ -348,7 +348,7 @@ function Book(props) {
   }
 
   function columnPhone(item) {
-    return <div>{item?.khachHang?.soDienThoai ?? "Chưa có số điện thoại"} {item.idMKH}</div>;
+    return <div>{item?.khachHang?.soDienThoai}</div>;
   }
 
   function columnAdults(item) {
@@ -371,7 +371,7 @@ function Book(props) {
   }
 
   function columnStatusBook(item) {
-    return <div>{item.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"}</div>
+    return <div>{item?.trangThai === 0 ? "Chưa xếp bàn" : "Đã xếp bàn"}</div>
   }
 
   // Cột trong bảng xếp bàn
@@ -435,6 +435,12 @@ function Book(props) {
     console.log("bodybodybodybody", bodyBook);
 
     dispatch(updateBooking(bodyBook))
+    
+    setBookName("");
+    setBookPhone("");
+    setBookAdults("");
+    setBookChild("");
+    setBookNote("");
   }
 
   const onSubmitHXB = (item) => {
@@ -537,12 +543,12 @@ function Book(props) {
     return [...listDataSetup];
   }
 
-  function handleClickAddnew(type) {
-    setBookName("");
-    setBookPhone("");
-    setBookAdults("");
-    setBookChild("");
-    setBookNote("");
+    function handleClickAddnew(type) {
+      setBookName("");
+      setBookPhone("");
+      setBookAdults("");
+      setBookChild("");
+      setBookNote("");
     setIsShowPopupAddnew(true);
   }
   function onChangeTab() {
@@ -564,8 +570,8 @@ function Book(props) {
       const body = {
         tenKhachHang: bookName,
         soDienThoai: bookPhone,
-        soNguoiLon: bookAdults,
-        soTreEm: bookChild,
+        soNguoiLon: parseInt(bookAdults),
+        soTreEm: parseInt(bookChild),
         thoiGian: date.toISOString(bookTime),
         gioDen: bookDate,
         ghiChu: bookNote,
@@ -597,15 +603,24 @@ function Book(props) {
     setBookAdults("");
     setBookChild("");
     setBookNote("");
+    
+    dispatch(getBooking({ngayCheckIn, textSearch}));
   }
 
   const closeTab = () => {
+    
+    setBookName("");
+    setBookPhone("");
+    setBookAdults("");
+    setBookChild("");
+    setBookNote("");
     setIsShowPopupAddnew(false);
   };
 
   const searchBook = (text) => {
     dispatch(searchBooking(text))
   }
+  
   return (
     <AdminPage title={"Quản lý đặt bàn"} index={MENU_TAB_ADMIN.BOOK}>
       <div className="book-manager">
