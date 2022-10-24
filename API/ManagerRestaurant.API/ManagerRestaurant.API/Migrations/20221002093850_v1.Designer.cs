@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagerRestaurant.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220820163512_v2")]
-    partial class v2
+    [Migration("20221002093850_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -391,6 +391,9 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<DateTime>("NgayHoaDon")
                         .HasColumnType("datetime2");
 
+                    b.Property<float>("TongSoTien")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("PhieuNhapVatTu");
@@ -400,9 +403,6 @@ namespace ManagerRestaurant.API.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedByUserId")
@@ -449,7 +449,7 @@ namespace ManagerRestaurant.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BanId");
+                    b.HasIndex("IdBan");
 
                     b.ToTable("PhieuOder");
                 });
@@ -522,8 +522,8 @@ namespace ManagerRestaurant.API.Migrations
                     b.Property<string>("LastModifiedByUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaNV")
-                        .HasColumnType("int");
+                    b.Property<string>("MaNV")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2");
@@ -766,7 +766,9 @@ namespace ManagerRestaurant.API.Migrations
                 {
                     b.HasOne("Infratructure.Datatables.Ban", "Ban")
                         .WithMany()
-                        .HasForeignKey("BanId");
+                        .HasForeignKey("IdBan")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Ban");
                 });

@@ -3,10 +3,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ManagerRestaurant.API.Migrations
 {
-    public partial class init : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Bar",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MaMatHang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenMatHang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NhomMatHang = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoLuong = table.Column<int>(type: "int", nullable: false),
+                    DonVi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonGia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThanhTien = table.Column<float>(type: "real", nullable: false),
+                    CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModifiedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bar", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ChiTieuTrongNgay",
                 columns: table => new
@@ -108,6 +131,7 @@ namespace ManagerRestaurant.API.Migrations
                     MatHangs = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HinhAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GhiChu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TongSoTien = table.Column<float>(type: "real", nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedByUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -162,7 +186,7 @@ namespace ManagerRestaurant.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MaNV = table.Column<int>(type: "int", nullable: false),
+                    MaNV = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -296,7 +320,6 @@ namespace ManagerRestaurant.API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdBan = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdThuNgan = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdKhachHang = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Vocher = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -315,11 +338,11 @@ namespace ManagerRestaurant.API.Migrations
                 {
                     table.PrimaryKey("PK_PhieuOder", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PhieuOder_Ban_BanId",
-                        column: x => x.BanId,
+                        name: "FK_PhieuOder_Ban_IdBan",
+                        column: x => x.IdBan,
                         principalTable: "Ban",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -375,13 +398,16 @@ namespace ManagerRestaurant.API.Migrations
                 column: "IdPhieuOder");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhieuOder_BanId",
+                name: "IX_PhieuOder_IdBan",
                 table: "PhieuOder",
-                column: "BanId");
+                column: "IdBan");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Bar");
+
             migrationBuilder.DropTable(
                 name: "ChiTieuTrongNgay");
 
